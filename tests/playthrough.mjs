@@ -28,13 +28,14 @@ export async function playthrough(b,url,W,H,touch=true){
  if(got){await wait(pg,900);await P('ok');await wait(pg,300);await shot('battle');await fight()}
  for(const[[cx,cy],d]of[[[18,2],'up'],[[2,7],'left'],[[4,11],'right']]){await tp((cx+.5)*T2,(cy+.5)*T2+10,d);await P('ok');await flush()}
  await tp(6.5*T2,6.7*T2,'up');await wait(pg,200);await shot('reeds_tal');await hold('ArrowUp',500);await flush();
+ await tp(11.5*T2,9.5*T2+6,'right');await hold('ArrowRight',400);await wait(pg,200);await shot('reeds_camp');await flush();
  await tp(18.5*T2,11.6*T2,'down');await hold('ArrowDown',600);await wait(pg,500);await shot('temple_intro');await flush();await wait(pg,2700);
  await tp(12.5*T2,11*T2,'up');await wait(pg,300);await shot('temple');
  await tp(10.5*T2,5.3*T2,'up');await wait(pg,200);await shot('temple_boss');await P('ok');await flush();await wait(pg,400);await shot('battle_boss');await fight();
- await wait(pg,300);await shot('dawn');await flush();await wait(pg,1300);
- const mode=await E('G.mode'),party=await E("G.party.map(p=>p.n+' Lv'+p.lv)"),errors=await jsErrors();await shot('end');await ctx.close();
- const ok=mode==='end'&&errors.length===0&&got;
- console.log(`[playthrough ${tag}] mode=${mode} encounter=${got} party=${party.join(',')} errors=${JSON.stringify(errors)} → ${ok?'PASS':'FAIL'}`);return ok}
+ await wait(pg,300);await shot('dawn');await flush();await tp(24.6*T,10.4*T,'up');await P('ok');await wait(pg,150);await shot('cure');await flush();await wait(pg,1300);
+ const mode=await E('G.mode'),party=await E("G.party.map(p=>p.n+' Lv'+p.lv)"),errors=await jsErrors(),fl=await E('JSON.parse(JSON.stringify(G.flags))');await shot('end');await ctx.close();
+ const ok=mode==='end'&&errors.length===0&&got&&!!fl.camp&&!!fl.cure&&!!fl.tal&&!!fl.boss;
+ console.log(`[playthrough ${tag}] mode=${mode} encounter=${got} party=${party.join(',')} flags=${Object.keys(fl||{}).join('+')} errors=${JSON.stringify(errors)} → ${ok?'PASS':'FAIL'}`);return ok}
 if(import.meta.url===`file://${process.argv[1]}`){const s=await serve(),b=await launch();const a=process.argv.slice(2);
  const runs=a.length?[[+a[0],+a[1],a[2]!=='0']]:[[390,664,true],[844,390,true]];let ok=true;
  for(const[W,H,t]of runs)ok=await playthrough(b,process.env.URL||s.url,W,H,t)&&ok;await b.close();s.close();process.exit(ok?0:1)}

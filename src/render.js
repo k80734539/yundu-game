@@ -29,18 +29,19 @@ function drawWorld(now){const t=now/1000;
   for(const l of M.lights)light(l[0],l[1],l[2],l[3]);light(G.x,G.y-20,110,'rgba(255,210,140,.16)');
   if(!G.flags.tal&&M.id=='reeds')for(const o of M.obj)if(o.tal)light(o.x,o.y-16,60+Math.sin(t*3)*8,'rgba(190,90,255,.55)');
   if(M.flies)for(const f of M.flies){const x=f.x+Math.sin(t*f.v+f.p)*30,y=f.y+Math.cos(t*f.v*1.3+f.p)*20,a=.5+.5*Math.sin(t*3+f.p);light(x,y,9,'rgba(220,255,140,'+(.6*a)+')');X.fillStyle='rgba(255,255,200,'+a+')';X.fillRect(x-1,y-1,2,2)}
+  for(const o of M.obj)if(o.fire){for(let i=0;i<3;i++){const fl=Math.sin(t*9+i*2)*3;X.fillStyle=['rgba(255,90,30,.85)','rgba(255,170,60,.85)','rgba(255,240,170,.9)'][i];X.beginPath();X.ellipse(o.x+fl*.4,o.y-10-i*3,9-i*3,15-i*4+fl,0,0,7);X.fill()}light(o.x,o.y-14,46+Math.sin(t*7)*6,'rgba(255,150,60,.5)')}
   X.globalCompositeOperation='source-over';
   X.fillStyle='rgba(190,200,230,.05)';for(let i=0;i<6;i++){X.beginPath();X.ellipse(cx+((i*190+t*14)%(VW+400))-200,cy+VH*(i+.5)/6,200,26,0,0,7);X.fill()}}
  else{X.fillStyle=G.flags.dawn?'rgba(255,140,70,.16)':'rgba(255,150,80,.08)';X.fillRect(cx,cy,VW,VH);X.globalCompositeOperation='lighter';for(const l of M.lights)light(l[0],l[1],l[2],l[3]);X.globalCompositeOperation='source-over'}
  // HUD
  UI();const fs=FS();X.font=fs+'px '+FONT;const nm=M.name,nw=X.measureText(nm).width+28;box(SA.l+8,SA.t+8,nw,fs+16,.9);txt(nm,SA.l+22,SA.t+8+fs+4,fs,'#f3dfa0');
- const f=G.flags;let goal='';if(M.id=='village'&&!f.dawn)goal=!f.chief||!f.quest?'目標：和村長、阿婆談話':'目標：到渡口搭船';if(M.id=='reeds')goal=f.tal?'目標：前往出口（牌坊）':'目標：調查妖氣來源';if(M.id=='temple')goal='目標：查看神龕';
+ const f=G.flags;let goal='';if(M.id=='village'&&!f.dawn)goal=!f.chief||!f.quest?'目標：和村長、阿婆談話':'目標：到渡口搭船';if(M.id=='village'&&f.dawn&&!f.cure)goal='目標：把河珠交給阿婆';if(M.id=='reeds')goal=!f.tal?'目標：調查妖氣來源':!f.camp?'目標：到中央空地的營火歇息':'目標：前往出口（牌坊）';if(M.id=='temple')goal='目標：查看神龕';
  if(goal&&!(G.dlg&&dlgTop())){const gs=fs-2;X.font=gs+'px '+FONT;const gw=X.measureText(goal).width+24;let gx=SW-SA.r-8-gw,gy=SA.t+8;if(gx<SA.l+16+nw){gx=SA.l+8;gy=SA.t+fs+30}box(gx,gy,gw,gs+16,.9);txt(goal,gx+12,gy+gs+4,gs,'#cfe')}
  {const bo=M.obj.find(o=>o.boat);if(M.id=='village'&&!f.dawn&&bo&&!G.dlg){const im=I.boat,sx=(bo.x-cx)*WS,sy=(bo.y-im.height*bo.s*.8-cy)*WS,bob=Math.sin(t*5)*4;
   const L=SA.l+30,R=SW-SA.r-30,Tp=SA.t+fs*2+40,Bt=SH-SA.b-(JOY.touch?190:30);
   if(sx>L&&sx<R&&sy>Tp&&sy<Bt){txt('▼ 渡船',sx,sy-6+bob,fs+2,'#ffe9a8','center')}
   else{const ax=Math.max(L+20,Math.min(R-20,sx)),ay=Math.max(Tp,Math.min(Bt,sy)),an=Math.atan2(sy-ay,sx-ax);X.save();X.translate(ax,ay);X.fillStyle='rgba(0,0,0,.55)';X.beginPath();X.arc(0,0,fs*1.7,0,7);X.fill();X.rotate(an);X.fillStyle='#ffe9a8';X.beginPath();X.moveTo(fs*1.5+bob/2,0);X.lineTo(fs*.6,-fs*.7);X.lineTo(fs*.6,fs*.7);X.fill();X.restore();txt('渡船',ax,ay+fs*.4,fs-2,'#fff','center')}}}
- txt('v13',SW-SA.r-6,SH-SA.b-4,Math.max(10,fs-6),'rgba(255,255,255,.6)','right');
+ txt('v14',SW-SA.r-6,SH-SA.b-4,Math.max(10,fs-6),'rgba(255,255,255,.6)','right');
  const at=now-G.lt;if(M.id=='temple'&&at<2600){X.globalAlpha=Math.min(1,Math.max(0,1-(at-1600)/1000));X.fillStyle='#000';X.fillRect(0,0,SW,SH);cover(I.ext);const fs2=fs+6;box(SW/2-80,SH*.7,160,fs2+22);txt('河神廟',SW/2,SH*.7+fs2+6,fs2,'#f3dfa0','center');X.globalAlpha=1}}
 function dlgTop(){return JOY.touch&&SW>SH}
 function drawBoat(now){UI();X.fillStyle='#000';X.fillRect(0,0,SW,SH);const c=cover(I.night,.5,.62),t=now/1000,b=Math.sin(t*1.5)*2;

@@ -24,5 +24,5 @@ function drawDlg(){const d=G.dlg,[n,t]=d.l[d.i],pk=PORT[n];UI();const fs=FS(),po
  const h=Math.max(ps+24,(n?fs+12:0)+lines.length*(fs+8)+26);
  const y=top?SA.t+8:JOY.touch?SH-SA.b-200-h:SH-SA.b-12-h;
  box(bx,y,w,h,.95);if(pk&&I['pt_'+pk]){X.drawImage(I['pt_'+pk],bx+12,y+12,ps,ps);X.strokeStyle='#c9b26b';X.lineWidth=1.5;X.strokeRect(bx+12,y+12,ps,ps)}
- let yy=y+fs+12;if(n){txt('【'+n+'】',tx,yy,fs,'#f3dfa0');yy+=fs+12}lines.forEach(l=>{txt(l,tx,yy,fs);yy+=fs+8});
+ let yy=y+fs+12;const sys=n=='提示'||n=='系統';if(n){txt(sys?'◆ '+n:'【'+n+'】',tx,yy,fs,sys?'#8fd0ff':'#f3dfa0');yy+=fs+12}lines.forEach(l=>{txt(l,tx,yy,fs,sys?'#cfe8ff':undefined);yy+=fs+8});
  txt('▼',bx+w-22,y+h-10+Math.sin(tm()*3)*2,fs-4,'#c9b26b')}
