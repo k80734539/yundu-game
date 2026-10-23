@@ -8,6 +8,7 @@
     "test": "node tests/run-all.mjs",
     "test:play": "node tests/playthrough.mjs",
     "test:touch": "node tests/touch-battle.mjs",
+    "test:motion": "node tests/attack-motion.mjs",
     "test:fx": "node tests/fx.mjs",
     "test:screens": "node tests/screens.mjs",
     "compare": "node tests/compare.mjs"

@@ -15,6 +15,7 @@ npx playwright install chromium      # 或改用系統 Chrome：export CHROME_PA
 | `npm run test:play [-- W H touch]` | 第一章完整通關（村莊→夜渡戰→蘆葦蕩→河神廟 Boss→結局） |
 | `npm run test:touch` | 用 `touchscreen.tap` 操作底部戰鬥面板；確認戰鬥中搖桿隱藏、戰後恢復 |
 | `npm run test:screens` | 5 尺寸截圖：title / dialog / village / dock / battle_menu |
+| `npm run test:motion` | 五尺寸青舟普攻：選定目標、340 ms 命中、650 ms 復位、擊倒、快速略過、旋轉及其他技能時間 |
 | `npm run test:fx [-- --all]` | 11 種戰鬥特效定格截圖（預設直+橫，`--all` = 5 尺寸） |
 | `npm run compare -- <baselineDir>` | 逐像素比對 `fx/`、`screens/` 與 baseline |
 | `npm run serve` | 本機預覽 http://127.0.0.1:8080/ |
@@ -29,3 +30,5 @@ npx playwright install chromium      # 或改用系統 Chrome：export CHROME_PA
 - 視覺回歸流程：改動前 `OUT_DIR=/tmp/base npm run test:screens && OUT_DIR=/tmp/base npm run test:fx -- --all`，改完再跑一次（不設 OUT_DIR），然後 `npm run compare -- /tmp/base`。若改動本來就會改畫面（例如版本號），差異只應出現在預期位置。
 - 也可對線上或其他版本測試：`URL=https://k80734539.github.io/yundu-game/ npm run test:screens`（play/touch/fx/screens 皆支援 `URL`）。
 - 測試掛勾（在 `src/main.js`）：`G_()`、`press(k)`、`TP(x,y,dir)`、`M_()`、`__sb(enemies,opt)` 開戰、`__ex(pend,target)` 執行指令、`__ep()` 敵方行動、`mk(...)` 建角色。請保留。
+
+`npm test` 同時執行 `attack-motion.mjs`，定格截圖放 `tests/out/attack-motion/<尺寸>/`。青舟普攻是顯示原型，使用現有角色圖與 Canvas 竹篙；傷害與回合規則不變。
