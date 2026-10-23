@@ -10,3 +10,8 @@ Walk sprites for 青舟, 白苓, 雲纖, 村長, 阿婆: original hand-made pixe
 Fences, temple stone floor/walls, red pillars, altar, lanterns: original, drawn procedurally in code.
 Battle backgrounds, portraits, temple title painting: original images generated for this project. Not derived from 仙劍 / 古劍.
 Code, story, UI: original.
+
+Chapter 1 polish (v15): Lin / Zhou map sprites and matching portraits, six-frame campfire atlas,
+Qingzhou startled and Bailing reflective portrait variants: original AI-assisted art generated
+with OpenAI image_gen for this project, referencing only existing project character art.
+No new third-party asset pack used. Prompts and processing notes: docs/art/ch1-polish.md.

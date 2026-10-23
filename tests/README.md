@@ -16,6 +16,7 @@ npx playwright install chromium      # 或改用系統 Chrome：export CHROME_PA
 | `npm run test:touch` | 用 `touchscreen.tap` 操作底部戰鬥面板；確認戰鬥中搖桿隱藏、戰後恢復 |
 | `npm run test:screens` | 5 尺寸截圖：title / dialog / village / dock / battle_menu |
 | `npm run test:fx [-- --all]` | 11 種戰鬥特效定格截圖（預設直+橫，`--all` = 5 尺寸） |
+| `npm run test:polish` | 390x664／844x390：新 NPC、營火、救人、河伯消散、雲纖降下、黎明漸亮與回退檢查 |
 | `npm run test:save` | 存檔：選單→存檔→重新整理→繼續遊戲，比對位置/道具/旗標；壞檔、戰鬥中不能存（直+橫） |
 | `npm run compare -- <baselineDir>` | 逐像素比對 `fx/`、`screens/` 與 baseline |
 | `npm run serve` | 本機預覽 http://127.0.0.1:8080/ |
@@ -23,6 +24,8 @@ npx playwright install chromium      # 或改用系統 Chrome：export CHROME_PA
 尺寸：直式 390x664、375x553、430x750；橫式 664x390、844x390（皆 `isMobile + hasTouch`）。
 
 輸出在 `tests/out/`（已 gitignore）。任何 `pageerror`、`console.error`、或遊戲 `frame()` 捕捉到的 `window.__err` 都會讓測試 FAIL（exit 1）。
+
+`npm test` 包含上述演出檢查。`tests/out/polish/<尺寸>/` 會保存 `camp`、`yunxian`、`lin`、`zhou` 等截圖；測試同時確認演出不修改台詞資料、戰鬥數值、玩家與 NPC 碰撞座標，且快速跳過對話能正常進入戰鬥。
 
 ## 注意
 - 測試內建 http 伺服器；**不要用 file://** 開遊戲（`maps.js` 對碰撞遮罩 `getImageData`，file:// 會讓 canvas 被污染）。

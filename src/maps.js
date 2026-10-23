@@ -37,8 +37,8 @@ function buildVillage(){const W=30*T,H=22*T;M={id:'village',W,H,T,obj:[],sol:[],
   npc('wang',12*T,16.6*T,'王大叔',()=>{if(ph==1&&!f.ferry){f.ferry=1;say(S.wang1.concat(S.wang1Hint))}else say(P(S.wang1r,S.wang2,S.wang3))});
   npc('chief',13.6*T,8.3*T,'村長',()=>{if(ph==1&&!f.chief){f.chief=1;say(S.chief1)}else say(P(S.chief1r,S.chief2,S.chief3))},()=>!f.chief);
   npc('granny',24.6*T,9.4*T,'阿婆',()=>{if(ph==3)return cure();if(!f.quest){f.quest=1;G.party[0].arm=3;G.inv.魚乾+=3;say(S.granny1.concat(S.granny1Get))}else say(S.granny2)},()=>!f.quest||(ph==3&&!f.cure));
-  npc('granny',6.6*T,16.2*T,'林嬸',()=>say(P(S.lin1,S.lin2,S.lin3)));
-  npc('wang',19.6*T,16.9*T,'老周',()=>say(P(S.zhou1,S.zhou2,S.zhou3)));
+  npc('lin',6.6*T,16.2*T,'林嬸',()=>say(P(S.lin1,S.lin2,S.lin3),null,'lin'));
+  npc('zhou',19.6*T,16.9*T,'老周',()=>say(P(S.zhou1,S.zhou2,S.zhou3),null,'zhou'));
   M.inter.push({x:5*T,y:6.6*T,r:36,act:()=>say(P(S.home1,S.home2,S.home3))});
   M.inter.push({x:27*T,y:6.7*T,r:30,act:()=>say(ph==2?S.stone2:ph==1?S.stone1:[['','小石頭睡得正香，阿婆守在床邊。']])});
   if(!f.dawn){M.inter.push({x:17.6*T,y:19.9*T,r:44,act:boardBoat});
