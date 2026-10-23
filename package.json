@@ -11,6 +11,7 @@
     "test:fx": "node tests/fx.mjs",
     "test:polish": "node tests/polish.mjs",
     "test:screens": "node tests/screens.mjs",
+    "test:save": "node tests/save.mjs",
     "compare": "node tests/compare.mjs"
   },
   "devDependencies": {
