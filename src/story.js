@@ -3,7 +3,7 @@
 // ---------- story ----------
 function newGame(){G={mode:'map',party:[mk('陳青舟','qz',60,12,10,3,4,['橫掃'])],inv:{魚乾:1,清心草:0},flags:{},opened:{},dlg:null,B:null};
  loadMap('village',5*T,7.6*T,'down');say(S.open.concat(S.openHint()))}
-function saveCP(o){G.cp=JSON.stringify({o,party:G.party,inv:G.inv,flags:G.flags,opened:G.opened})}
+function saveCP(o){G.cp=JSON.stringify({o,party:G.party,inv:G.inv,flags:G.flags,opened:G.opened});autoSave(o)}
 function heal(){G.party.forEach(p=>{p.hp=p.mhp;p.mp=p.mmp;p.st=''})}
 function retry(){const s=JSON.parse(G.cp);Object.assign(G,{party:s.party,inv:s.inv,flags:s.flags,opened:s.opened,B:null,dlg:null});
  if(s.o.boat){startNight()}else{loadMap(s.o.map,s.o.x,s.o.y,s.o.dir);heal();say(S.retry)}}

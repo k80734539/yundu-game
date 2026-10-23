@@ -10,6 +10,7 @@
     "test:touch": "node tests/touch-battle.mjs",
     "test:fx": "node tests/fx.mjs",
     "test:screens": "node tests/screens.mjs",
+    "test:save": "node tests/save.mjs",
     "compare": "node tests/compare.mjs"
   },
   "devDependencies": {
