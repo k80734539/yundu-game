@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><link rel="icon" href="data:,"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>雲渡仙緣 第一章 v8</title>
+<!doctype html><html lang="zh-Hant"><head><link rel="icon" href="data:,"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>雲渡仙緣 第一章 v9</title>
 <style>html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;background:#000;touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 #c{position:fixed;left:0;top:0;width:100vw;height:100vh;display:block}
 #tip{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(6px + env(safe-area-inset-bottom));color:#ccc;font:13px sans-serif;background:rgba(0,0,0,.5);padding:3px 10px;border-radius:8px}.touch #tip{display:none}</style></head><body>
@@ -301,7 +301,7 @@ function drawWorld(now){const t=now/1000;
   const L=SA.l+30,R=SW-SA.r-30,Tp=SA.t+fs*2+40,Bt=SH-SA.b-(JOY.touch?190:30);
   if(sx>L&&sx<R&&sy>Tp&&sy<Bt){txt('▼ 渡船',sx,sy-6+bob,fs+2,'#ffe9a8','center')}
   else{const ax=Math.max(L+20,Math.min(R-20,sx)),ay=Math.max(Tp,Math.min(Bt,sy)),an=Math.atan2(sy-ay,sx-ax);X.save();X.translate(ax,ay);X.fillStyle='rgba(0,0,0,.55)';X.beginPath();X.arc(0,0,fs*1.7,0,7);X.fill();X.rotate(an);X.fillStyle='#ffe9a8';X.beginPath();X.moveTo(fs*1.5+bob/2,0);X.lineTo(fs*.6,-fs*.7);X.lineTo(fs*.6,fs*.7);X.fill();X.restore();txt('渡船',ax,ay+fs*.4,fs-2,'#fff','center')}}}
- txt('v8',SW-SA.r-6,SH-SA.b-4,Math.max(10,fs-6),'rgba(255,255,255,.6)','right');
+ txt('v9',SW-SA.r-6,SH-SA.b-4,Math.max(10,fs-6),'rgba(255,255,255,.6)','right');
  const at=now-G.lt;if(M.id=='temple'&&at<2600){X.globalAlpha=Math.min(1,Math.max(0,1-(at-1600)/1000));X.fillStyle='#000';X.fillRect(0,0,SW,SH);cover(I.ext);const fs2=fs+6;box(SW/2-80,SH*.7,160,fs2+22);txt('河神廟',SW/2,SH*.7+fs2+6,fs2,'#f3dfa0','center');X.globalAlpha=1}}
 function dlgTop(){return JOY.touch&&SW>SH}
 function drawDlg(){const d=G.dlg,[n,t]=d.l[d.i],pk=PORT[n];UI();const fs=FS(),port=SW>SH,top=dlgTop();
@@ -319,16 +319,24 @@ function drawBoat(now){UI();X.fillStyle='#000';X.fillRect(0,0,SW,SH);const c=cov
  X.fillStyle='rgba(200,210,230,.07)';for(let i=0;i<6;i++){X.beginPath();X.ellipse(((i*230+t*18)%(SW+500))-250,SH*(i+.5)/6,260,30,0,0,7);X.fill()}
  const fs=FS();box(SA.l+8,SA.t+8,fs*3+20,fs+16,.9);txt('夜河',SA.l+22,SA.t+fs+12,fs,'#f3dfa0')}
 function drawBattle(now){const B=G.B,t=now/1000;UI();X.fillStyle='#000';X.fillRect(0,0,SW,SH);cover(I[B.opt.bg||'bg_reeds'],.5,.6);X.fillStyle='rgba(0,0,20,.22)';X.fillRect(0,0,SW,SH);
- const port=SH>SW,fs=FS(),u=Math.min(SW,SH)/400,n=B.en.length;const ent=Math.min(1,(now-G.bT)/400);
+ const port=SH>SW,fs=port&&SH<640?Math.min(FS(),13):FS(),u=Math.min(SW,SH)/400,n=B.en.length;const ent=Math.min(1,(now-G.bT)/400);
  let ey=port?SH*.42:SH*.56;const pw=port?Math.min(184,(SW-SA.l-SA.r-24)/2):Math.min(210,(SW-SA.l-SA.r-420)/2),ph=fs*4+34;
- let py=port?ey+70*u:SH-SA.b-ph-8;const px0=SW/2-pw-4;if(port){const mb=SH-SA.b-(JOY.touch?200:10),mt=mb-((SH<640?2:3)*(fs+12)+16);py=Math.min(py,mt-ph-10);ey=Math.min(ey,py-fs*2-22)}let es=1;if(port){const top=SA.t+fs*2+14,need=(B.en.some(e=>e.boss)?260:135)*u;if(ey-top<need)es=Math.max(.4,(ey-top)/need)}
+ let py=port?ey+70*u:SH-SA.b-ph-8;const px0=SW/2-pw-4;if(port){const mb=SH-SA.b-(JOY.touch?(SH<640?168:200):10),mt=mb-((SH<640?2:3)*(fs+12)+16);py=Math.min(py,mt-ph-10);ey=Math.min(ey,py-fs*2-22)}const ps=port?Math.min(1.25*u,(SH<640?.7:1.05)*u+.15):1.5*u,rowH=66*ps;if(port)ey=Math.min(ey,py-8-rowH-fs-18);const ecx=port?SW/2:SA.l+(SW-SA.l-SA.r)*.42;let es=1;if(port){const top=SA.t+fs*2+14,need=.75*(B.en.some(e=>e.boss)?260:135)*u;if(ey-top<need)es=Math.max(.3,(ey-top)/need)}
  // enemies
- const spc=Math.min(170*u,(SW-40)/Math.max(n,1));
- B.en.forEach((e,i)=>{if(e.hp<=0)return;const im=I[e.e],s=(e.boss?(port?.95:.78):e.e=='lu'?.72:.75)*u*es,w=im.width*s,h=im.height*s,x=SW/2+(i-(n-1)/2)*spc,y=ey-(port?0:0),bob=Math.sin(t*2.2+e.ph)*3*u;
+ const spc=Math.min(170*u,(port?SW-40:SW*.5)/Math.max(n,1));
+ B.en.forEach((e,i)=>{if(e.hp<=0)return;const im=I[e.e],s=(e.boss?(port?.95:.78):e.e=='lu'?.72:.75)*u*es,w=im.width*s,h=im.height*s,x=ecx+(i-(n-1)/2)*spc,y=ey,bob=Math.sin(t*2.2+e.ph)*3*u;
   const fx=B.fx.find(f=>f.t==e&&now-f.at<500);X.fillStyle='rgba(0,0,0,.35)';X.beginPath();X.ellipse(x,y,w*.38,8*u,0,0,7);X.fill();
   X.save();X.globalAlpha=ent;if(fx&&Math.floor((now-fx.at)/70)%2)X.globalAlpha=.4;X.drawImage(im,x-w/2+(fx?Math.sin(now/20)*3:0),y-h+bob,w,h);X.restore();
   const bw=Math.min(90,w*.9);txt(e.n,x,y+fs+6,fs-2,'#fff','center');X.fillStyle='#400';X.fillRect(x-bw/2,y+fs+12,bw,6);X.fillStyle='#e44';X.fillRect(x-bw/2,y+fs+12,bw*e.hp/e.mhp,6);
   if(B.ph=='target'&&B.tk=='E'&&B.sel==i)txt('▼',x,y-h-6+Math.sin(t*8)*3,fs+6,'#ff0','center')});
+ // party sprites
+ const np=G.party.length,PP=i=>port?[SW/2+(i-(np-1)/2)*Math.min(pw+8,90*u),py-8]:[SA.l+(SW-SA.l-SA.r)*.77+i*52*u-(np-1)*20*u,SH*.40+i*34*u];
+ G.party.forEach((p,i)=>{const [x,y]=PP(i),hf=B.fx.find(f=>f.t==p&&now-f.at<500),act=i==B.ai&&B.ph!='msg',lunge=B.ph=='msg'&&i==B.ai&&B.fx.some(f=>B.en.includes(f.t)&&now-f.at<350);
+  const d=port?'up':'left',fr=lunge?1:(act?Math.floor(t*4)%2*2:0),im=I[p.e+'_'+d+fr]||I[p.e+'_'+d+'0'];if(!im)return;const w=im.width*ps,h=im.height*ps;
+  let dx=0,dy=0;if(lunge){if(port)dy=-14*u;else dx=-22*u}if(hf)dx+=Math.sin(now/20)*4;
+  X.fillStyle='rgba(0,0,0,.35)';X.beginPath();X.ellipse(x,y-2,w*.3,6*u,0,0,7);X.fill();
+  X.save();X.globalAlpha=ent*(p.hp>0?1:.35);if(hf&&Math.floor((now-hf.at)/70)%2)X.globalAlpha*=.4;X.drawImage(im,x-w/2+dx,y-h+dy,w,h);X.restore();
+  if(act)txt('▼',x,y-h-4+Math.sin(t*6)*2,fs-2,'#ff0','center')});
  // damage popups
  B.fx=B.fx.filter(f=>now-f.at<900);
  // party
@@ -339,7 +347,7 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();X.fillStyle='#000';X.fillRe
   const bw=pw-20-fs*3.2,yb=y+fs*2.6+14;txt('HP',x+10,yb+fs-4,fs-4,'#cfc');txt(p.hp+'/'+p.mhp,x+pw-10,yb+fs-4,fs-4,'#fff','right');X.fillStyle='#300';X.fillRect(x+10,yb+fs,pw-20,5);X.fillStyle='#4c4';X.fillRect(x+10,yb+fs,(pw-20)*p.hp/p.mhp,5);
   txt('MP',x+10,yb+fs*2,fs-4,'#cdf');txt(p.mp+'/'+p.mmp,x+pw-10,yb+fs*2,fs-4,'#fff','right');X.fillStyle='#003';X.fillRect(x+10,yb+fs*2+4,pw-20,5);X.fillStyle='#48f';X.fillRect(x+10,yb+fs*2+4,(pw-20)*p.mp/p.mmp,5);
   if(B.ph=='target'&&B.tk=='A'&&B.sel==i)txt('▼',x+pw/2,y-6+Math.sin(t*8)*3,fs+6,'#ff0','center')});
- for(const f of B.fx){const a=(now-f.at)/900;let x,y;const ei=B.en.indexOf(f.t);if(ei>=0){x=SW/2+(ei-(n-1)/2)*spc;y=ey-90*u}else{const pi=G.party.indexOf(f.t);x=px0+pi*(pw+8)+pw/2;y=py-10}X.globalAlpha=1-a;X.lineWidth=4;X.strokeStyle='#000';X.font='bold '+(fs+8)+'px '+FONT;X.textAlign='center';X.strokeText(f.d,x,y-a*30);X.fillStyle=ei>=0?'#fff':'#f88';X.fillText(f.d,x,y-a*30);X.textAlign='left';X.globalAlpha=1}
+ for(const f of B.fx){const a=(now-f.at)/900;let x,y;const ei=B.en.indexOf(f.t);if(ei>=0){x=ecx+(ei-(n-1)/2)*spc;y=ey-90*u*es}else{const pi=G.party.indexOf(f.t),q=PP(pi);x=q[0];y=q[1]-rowH*.8}X.globalAlpha=1-a;X.lineWidth=4;X.strokeStyle='#000';X.font='bold '+(fs+8)+'px '+FONT;X.textAlign='center';X.strokeText(f.d,x,y-a*30);X.fillStyle=ei>=0?'#fff':'#f88';X.fillText(f.d,x,y-a*30);X.textAlign='left';X.globalAlpha=1}
  // messages / commands
  const mw=Math.min(SW-SA.l-SA.r-16,640),mx=(SW-mw)/2,my=SA.t+8;
  if(B.ph=='msg'){const mk=B.msgs.length+(B.msgs[0]||'');if(B.mk!==mk){B.mk=mk;B.mT=now}else if(now-B.mT>1500){B.mk=null;press('ok')}X.font=fs+'px '+FONT;const ls=wrap(B.msgs[0]||'',mw-28).slice(0,3);box(mx,my,mw,ls.length*(fs+8)+22,.93);ls.forEach((l,j)=>txt(l,mx+14,my+fs+10+j*(fs+8),fs));txt('▼',mx+mw-20,my+ls.length*(fs+8)+14,fs-5,'#c9b26b')}
@@ -350,7 +358,7 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();X.fillStyle='#000';X.fillRe
   if(B.ph=='target')L=[B.tk=='E'?'選擇敵人':'選擇隊友','◀▶ 切換','B 取消'];
   box(mx,my,mw,fs+20,.93);txt(u2.n+' 的行動'+(info?'：'+info:''),mx+14,my+fs+8,fs,'#ffd');
   const lh=fs+12;let cw,cx,cy,cols=1;
-  if(port){cols=SH<640?3:2;cw=SW-SA.l-SA.r-20;cx=SA.l+10;const rows=Math.ceil(L.length/cols),chh=rows*lh+16,lim=SH-SA.b-(JOY.touch?205:10)-chh;cy=Math.min(py+ph+10,lim);cy=Math.max(cy,my+fs+26)}
+  if(port){cols=SH<640?3:2;cw=SW-SA.l-SA.r-20;cx=SA.l+10;const rows=Math.ceil(L.length/cols),chh=rows*lh+16,lim=SH-SA.b-(JOY.touch?(SH<640?168:205):10)-chh;cy=Math.min(py+ph+10,lim);cy=Math.max(cy,my+fs+26)}
   else{cw=fs*7.5;cx=SA.l+10;cy=my+fs+30}
   const rows=Math.ceil(L.length/cols),chh=rows*lh+16,colw=cw/cols;
   box(cx,cy,cw,chh,.95);L.forEach((l,i)=>{const c=i%cols,r=Math.floor(i/cols);txt((i==B.sel&&B.ph!='target'?'▶ ':'　')+l,cx+12+c*colw,cy+8+lh*r+fs+2,fs,i==B.sel&&B.ph!='target'?'#ffe9a8':'#fff')})}}
@@ -360,7 +368,7 @@ function drawTitle(now){UI();X.fillStyle='#000';X.fillRect(0,0,SW,SH);const c=co
  X.save();X.shadowColor='#000';X.shadowBlur=12;txt('雲渡仙緣',SW/2,ty,big,'#f3dfa0','center');txt('第一章〈夜渡〉',SW/2,ty+big*.75,big*.38,'#cfe','center');X.restore();
  if(G.cred){X.fillStyle='rgba(0,0,20,.82)';X.fillRect(0,0,SW,SH);const L=CREDITS;L.forEach((l,i)=>txt(l,SW/2,SA.t+60+i*(fs+12),i?fs-1:fs+4,i?'#e8e8f0':'#f3dfa0','center'));return}
  if(Math.floor(t*1.6)%2)txt(JOY.touch?'按 A 開始':'按 Enter／空白鍵 開始',SW/2,SH-SA.b-(JOY.touch?230:70),fs+3,'#fff','center');
- txt('版本 v8',SW-SA.r-8,SA.t+fs+4,fs-3,'#cde','right');txt(JOY.touch?'B：素材來源 CREDITS':'C／Esc：素材來源 CREDITS',SW/2,SH-SA.b-(JOY.touch?200:40),fs-3,'#cde','center');
+ txt('版本 v9',SW-SA.r-8,SA.t+fs+4,fs-3,'#cde','right');txt(JOY.touch?'B：素材來源 CREDITS':'C／Esc：素材來源 CREDITS',SW/2,SH-SA.b-(JOY.touch?200:40),fs-3,'#cde','center');
  if(!ready)txt('載入中…',SW/2,SH/2,fs,'#fff','center')}
 const CREDITS=['【CREDITS 素材來源】','','角色、場景、道具、敵人、立繪、背景：','本作原創 AI 生成手繪風素材','（色鍵去背後合成）','','程式、劇情：《雲渡仙緣》原創','','按 B／C／Esc 返回'];
 function drawOver(){UI();X.fillStyle='#200';X.fillRect(0,0,SW,SH);const fs=FS();txt('勝敗乃兵家常事',SW/2,SH*.42,fs*2,'#f88','center');txt('按 A／確定 重新挑戰',SW/2,SH*.42+fs*3,fs,'#fff','center')}
