@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><link rel="icon" href="data:,"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>雲渡仙緣 第一章 v9</title>
+<!doctype html><html lang="zh-Hant"><head><link rel="icon" href="data:,"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>雲渡仙緣 第一章 v10</title>
 <style>html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;background:#000;touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 #c{position:fixed;left:0;top:0;width:100vw;height:100vh;display:block}
 #tip{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(6px + env(safe-area-inset-bottom));color:#ccc;font:13px sans-serif;background:rgba(0,0,0,.5);padding:3px 10px;border-radius:8px}.touch #tip{display:none}</style></head><body>
@@ -22,8 +22,8 @@ const JOY={x:0,y:0,on:false,onA:null,onB:null,touch:('ontouchstart' in window)||
    if(e.touches.length==0){jid=null;btn.A.id=btn.B.id=null;upd()}}
  ov.addEventListener('touchstart',st,{passive:false});ov.addEventListener('touchmove',mv,{passive:false});ov.addEventListener('touchend',en,{passive:false});ov.addEventListener('touchcancel',en,{passive:false});
  const reset=()=>{jid=null;btn.A.id=btn.B.id=null;upd()};addEventListener('blur',reset);document.addEventListener('visibilitychange',reset);
- JOY._reset=reset;
- (function draw(){requestAnimationFrame(draw);c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,W,H);
+ JOY._reset=reset;JOY.hidden=false;JOY.hide=h=>{JOY.hidden=h;ov.style.pointerEvents=h?'none':'auto';reset()};
+ (function draw(){requestAnimationFrame(draw);c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,W,H);if(JOY.hidden)return;
   let bx=ax,by=ay,al=.5;if(jid===null){bx=sa('l')+90;by=H-sa('b')-90;al=.22}
   c.globalAlpha=al;c.fillStyle='#000';c.strokeStyle='#fff';c.lineWidth=2;c.beginPath();c.arc(bx,by,R,0,7);c.fill();c.globalAlpha=al+.2;c.stroke();
   c.fillStyle='#e8e8f0';c.beginPath();c.arc(bx+JOY.x*R,by+JOY.y*R,24,0,7);c.fill();
@@ -301,7 +301,7 @@ function drawWorld(now){const t=now/1000;
   const L=SA.l+30,R=SW-SA.r-30,Tp=SA.t+fs*2+40,Bt=SH-SA.b-(JOY.touch?190:30);
   if(sx>L&&sx<R&&sy>Tp&&sy<Bt){txt('▼ 渡船',sx,sy-6+bob,fs+2,'#ffe9a8','center')}
   else{const ax=Math.max(L+20,Math.min(R-20,sx)),ay=Math.max(Tp,Math.min(Bt,sy)),an=Math.atan2(sy-ay,sx-ax);X.save();X.translate(ax,ay);X.fillStyle='rgba(0,0,0,.55)';X.beginPath();X.arc(0,0,fs*1.7,0,7);X.fill();X.rotate(an);X.fillStyle='#ffe9a8';X.beginPath();X.moveTo(fs*1.5+bob/2,0);X.lineTo(fs*.6,-fs*.7);X.lineTo(fs*.6,fs*.7);X.fill();X.restore();txt('渡船',ax,ay+fs*.4,fs-2,'#fff','center')}}}
- txt('v9',SW-SA.r-6,SH-SA.b-4,Math.max(10,fs-6),'rgba(255,255,255,.6)','right');
+ txt('v10',SW-SA.r-6,SH-SA.b-4,Math.max(10,fs-6),'rgba(255,255,255,.6)','right');
  const at=now-G.lt;if(M.id=='temple'&&at<2600){X.globalAlpha=Math.min(1,Math.max(0,1-(at-1600)/1000));X.fillStyle='#000';X.fillRect(0,0,SW,SH);cover(I.ext);const fs2=fs+6;box(SW/2-80,SH*.7,160,fs2+22);txt('河神廟',SW/2,SH*.7+fs2+6,fs2,'#f3dfa0','center');X.globalAlpha=1}}
 function dlgTop(){return JOY.touch&&SW>SH}
 function drawDlg(){const d=G.dlg,[n,t]=d.l[d.i],pk=PORT[n];UI();const fs=FS(),port=SW>SH,top=dlgTop();
@@ -319,56 +319,71 @@ function drawBoat(now){UI();X.fillStyle='#000';X.fillRect(0,0,SW,SH);const c=cov
  X.fillStyle='rgba(200,210,230,.07)';for(let i=0;i<6;i++){X.beginPath();X.ellipse(((i*230+t*18)%(SW+500))-250,SH*(i+.5)/6,260,30,0,0,7);X.fill()}
  const fs=FS();box(SA.l+8,SA.t+8,fs*3+20,fs+16,.9);txt('夜河',SA.l+22,SA.t+fs+12,fs,'#f3dfa0')}
 function drawBattle(now){const B=G.B,t=now/1000;UI();X.fillStyle='#000';X.fillRect(0,0,SW,SH);cover(I[B.opt.bg||'bg_reeds'],.5,.6);X.fillStyle='rgba(0,0,20,.22)';X.fillRect(0,0,SW,SH);
- const port=SH>SW,fs=port&&SH<640?Math.min(FS(),13):FS(),u=Math.min(SW,SH)/400,n=B.en.length;const ent=Math.min(1,(now-G.bT)/400);
- let ey=port?SH*.42:SH*.56;const pw=port?Math.min(184,(SW-SA.l-SA.r-24)/2):Math.min(210,(SW-SA.l-SA.r-420)/2),ph=fs*4+34;
- let py=port?ey+70*u:SH-SA.b-ph-8;const px0=SW/2-pw-4;if(port){const mb=SH-SA.b-(JOY.touch?(SH<640?168:200):10),mt=mb-((SH<640?2:3)*(fs+12)+16);py=Math.min(py,mt-ph-10);ey=Math.min(ey,py-fs*2-22)}const ps=port?Math.min(1.25*u,(SH<640?.7:1.05)*u+.15):1.5*u,rowH=66*ps;if(port)ey=Math.min(ey,py-8-rowH-fs-18);const ecx=port?SW/2:SA.l+(SW-SA.l-SA.r)*.42;let es=1;if(port){const top=SA.t+fs*2+14,need=.75*(B.en.some(e=>e.boss)?260:135)*u;if(ey-top<need)es=Math.max(.3,(ey-top)/need)}
+ const port=SH>SW,fs=port&&SH<640?Math.min(FS(),13):FS(),u=Math.min(SW,SH)/400,n=B.en.length,np=G.party.length,ent=Math.min(1,(now-G.bT)/400);const H=B.hit=[];
+ const u2=G.party[B.ai]||G.party[0];let L=[],info='',back=false;
+ if(B.ph=='cmd')L=['攻擊','技能','道具','防禦','逃跑'];
+ if(B.ph=='skill'){L=u2.skills.map(s=>s+' '+SK[s].mp+'MP');info=SK[u2.skills[B.sel]]?SK[u2.skills[B.sel]].d:'';back=true}
+ if(B.ph=='item'){const ks=Object.keys(G.inv).filter(i=>G.inv[i]>0);L=ks.map(k=>k+'×'+G.inv[k]);info=ks[B.sel]?ITEMS[ks[B.sel]].d:'';back=true}
+ if(B.ph=='target'){L=[B.tk=='E'?'點選敵人':'點選隊友'];back=true}
+ const LL=back?[...L,'◀ 返回']:L;
+ // ---- bottom panel geometry
+ const lh=fs+(port?12:10),cols=port?1:2,nR=port?Math.max(5,LL.length):Math.max(3,Math.ceil(LL.length/2)),rh=fs*2+18;
+ const x0=SA.l+6,pW=SW-SA.l-SA.r-12,mW=port?Math.max(fs*6.6,pW*.36):Math.min(fs*13,pW*.42),ph=Math.max(np*rh+12,nR*lh+16),y0=SH-SA.b-ph-6;
+ const sW=pW-mW-6;
+ // ---- sprites geometry
+ const ps=(port?1.55:1.6)*u*(port&&SH<600?.95:1),sh=66*ps,base=y0-4;
+ const PP=i=>port?[SW/2+(i-(np-1)/2)*Math.min(110*u,(pW)/Math.max(np,1)),base]:[SW-SA.r-70*u-(np-1-i)*80*u,base-(np-1-i)*0];
+ const ecx=port?SW/2:SA.l+(SW-SA.l-SA.r)*.36,ey=port?base-sh-fs-20:base-fs-22,top=SA.t+fs*2+34;
+ const need=.75*(B.en.some(e=>e.boss)?260:135)*u,es=Math.max(.35,Math.min(1,(ey-top)/need));
+ const spc=Math.min(170*u,(port?SW-40:SW*.55)/Math.max(n,1));
  // enemies
- const spc=Math.min(170*u,(port?SW-40:SW*.5)/Math.max(n,1));
  B.en.forEach((e,i)=>{if(e.hp<=0)return;const im=I[e.e],s=(e.boss?(port?.95:.78):e.e=='lu'?.72:.75)*u*es,w=im.width*s,h=im.height*s,x=ecx+(i-(n-1)/2)*spc,y=ey,bob=Math.sin(t*2.2+e.ph)*3*u;
   const fx=B.fx.find(f=>f.t==e&&now-f.at<500);X.fillStyle='rgba(0,0,0,.35)';X.beginPath();X.ellipse(x,y,w*.38,8*u,0,0,7);X.fill();
   X.save();X.globalAlpha=ent;if(fx&&Math.floor((now-fx.at)/70)%2)X.globalAlpha=.4;X.drawImage(im,x-w/2+(fx?Math.sin(now/20)*3:0),y-h+bob,w,h);X.restore();
   const bw=Math.min(90,w*.9);txt(e.n,x,y+fs+6,fs-2,'#fff','center');X.fillStyle='#400';X.fillRect(x-bw/2,y+fs+12,bw,6);X.fillStyle='#e44';X.fillRect(x-bw/2,y+fs+12,bw*e.hp/e.mhp,6);
-  if(B.ph=='target'&&B.tk=='E'&&B.sel==i)txt('▼',x,y-h-6+Math.sin(t*8)*3,fs+6,'#ff0','center')});
+  if(B.ph=='target'&&B.tk=='E'){if(B.sel==i)txt('▼',x,y-h-6+Math.sin(t*8)*3,fs+6,'#ff0','center');H.push({x:x-Math.max(w,60)/2,y:y-h-10,w:Math.max(w,60),h:h+fs+30,fn:()=>{B.sel=i;press('ok')}})}});
  // party sprites
- const np=G.party.length,PP=i=>port?[SW/2+(i-(np-1)/2)*Math.min(pw+8,90*u),py-8]:[SA.l+(SW-SA.l-SA.r)*.77+i*52*u-(np-1)*20*u,SH*.40+i*34*u];
  G.party.forEach((p,i)=>{const [x,y]=PP(i),hf=B.fx.find(f=>f.t==p&&now-f.at<500),act=i==B.ai&&B.ph!='msg',lunge=B.ph=='msg'&&i==B.ai&&B.fx.some(f=>B.en.includes(f.t)&&now-f.at<350);
   const d=port?'up':'left',fr=lunge?1:(act?Math.floor(t*4)%2*2:0),im=I[p.e+'_'+d+fr]||I[p.e+'_'+d+'0'];if(!im)return;const w=im.width*ps,h=im.height*ps;
   let dx=0,dy=0;if(lunge){if(port)dy=-14*u;else dx=-22*u}if(hf)dx+=Math.sin(now/20)*4;
-  X.fillStyle='rgba(0,0,0,.35)';X.beginPath();X.ellipse(x,y-2,w*.3,6*u,0,0,7);X.fill();
+  X.fillStyle='rgba(0,0,0,.35)';X.beginPath();X.ellipse(x,y-3,w*.28,6*u,0,0,7);X.fill();
   X.save();X.globalAlpha=ent*(p.hp>0?1:.35);if(hf&&Math.floor((now-hf.at)/70)%2)X.globalAlpha*=.4;X.drawImage(im,x-w/2+dx,y-h+dy,w,h);X.restore();
-  if(act)txt('▼',x,y-h-4+Math.sin(t*6)*2,fs-2,'#ff0','center')});
- // damage popups
+  if(act||(B.ph=='target'&&B.tk=='A'&&B.sel==i))txt('▼',x,y-h-2+Math.sin(t*6)*2,fs,'#ff0','center');
+  if(B.ph=='target'&&B.tk=='A')H.push({x:x-w/2,y:y-h,w,h,fn:()=>{B.sel=i;press('ok')}})});
  B.fx=B.fx.filter(f=>now-f.at<900);
- // party
- G.party.forEach((p,i)=>{const x=px0+i*(pw+8),y=py,act=i==B.ai&&B.ph!='msg';
-  if(false){const im=I[p.e+'_up0'],s=u*1.35;X.drawImage(im,x+pw-im.width*s-4,y-im.height*s+14-(act?6:0),im.width*s,im.height*s)}
-  box(x,y,pw,ph,.92);if(act){X.strokeStyle='#ff0';X.lineWidth=2;rr(x+3,y+3,pw-6,ph-6,6);X.stroke()}
-  const ic=I['pt_'+p.e],is=fs*2.2;X.drawImage(ic,x+8,y+8,is,is);txt(p.n,x+14+is,y+fs+8,fs,p.hp>0?'#fff':'#888');txt('Lv'+p.lv+(p.st?' 【毒】':'')+(p.guard?' 【防】':''),x+14+is,y+fs*2+10,fs-3,p.st?'#f9a':'#cde');
-  const bw=pw-20-fs*3.2,yb=y+fs*2.6+14;txt('HP',x+10,yb+fs-4,fs-4,'#cfc');txt(p.hp+'/'+p.mhp,x+pw-10,yb+fs-4,fs-4,'#fff','right');X.fillStyle='#300';X.fillRect(x+10,yb+fs,pw-20,5);X.fillStyle='#4c4';X.fillRect(x+10,yb+fs,(pw-20)*p.hp/p.mhp,5);
-  txt('MP',x+10,yb+fs*2,fs-4,'#cdf');txt(p.mp+'/'+p.mmp,x+pw-10,yb+fs*2,fs-4,'#fff','right');X.fillStyle='#003';X.fillRect(x+10,yb+fs*2+4,pw-20,5);X.fillStyle='#48f';X.fillRect(x+10,yb+fs*2+4,(pw-20)*p.mp/p.mmp,5);
-  if(B.ph=='target'&&B.tk=='A'&&B.sel==i)txt('▼',x+pw/2,y-6+Math.sin(t*8)*3,fs+6,'#ff0','center')});
- for(const f of B.fx){const a=(now-f.at)/900;let x,y;const ei=B.en.indexOf(f.t);if(ei>=0){x=ecx+(ei-(n-1)/2)*spc;y=ey-90*u*es}else{const pi=G.party.indexOf(f.t),q=PP(pi);x=q[0];y=q[1]-rowH*.8}X.globalAlpha=1-a;X.lineWidth=4;X.strokeStyle='#000';X.font='bold '+(fs+8)+'px '+FONT;X.textAlign='center';X.strokeText(f.d,x,y-a*30);X.fillStyle=ei>=0?'#fff':'#f88';X.fillText(f.d,x,y-a*30);X.textAlign='left';X.globalAlpha=1}
- // messages / commands
+ // bottom panel
+ box(x0,y0,pW,ph,.94);
+ G.party.forEach((p,i)=>{const x=x0+8,y=y0+6+i*rh,w=sW-10,act=i==B.ai&&B.ph!='msg';
+  if(act){X.fillStyle='rgba(255,230,120,.12)';X.fillRect(x-2,y,w+4,rh-4);X.strokeStyle='#ff0';X.lineWidth=1.5;rr(x-2,y,w+4,rh-4,5);X.stroke()}
+  const is=rh-10;X.globalAlpha=p.hp>0?1:.4;X.drawImage(I['pt_'+p.e],x+2,y+3,is,is);X.globalAlpha=1;const tx=x+is+8,tw=w-is-10;
+  txt(p.n,tx,y+fs+2,fs,p.hp>0?'#fff':'#888');txt('Lv'+p.lv+(p.st?' 毒':'')+(p.guard?' 防':''),tx+X.measureText(p.n).width+6,y+fs+2,fs-4,p.st?'#f9a':'#cde');
+  txt(p.hp+'/'+p.mhp,x+w-2,y+fs+2,fs-3,'#cfc','right');
+  const by=y+fs+8;X.fillStyle='#300';X.fillRect(tx,by,tw,6);X.fillStyle='#4c4';X.fillRect(tx,by,tw*p.hp/p.mhp,6);
+  X.fillStyle='#003';X.fillRect(tx,by+9,tw*.6,4);X.fillStyle='#48f';X.fillRect(tx,by+9,tw*.6*p.mp/p.mmp,4);txt('MP '+p.mp,x+w-2,by+15,fs-5,'#cdf','right');
+  if(B.ph=='target'&&B.tk=='A')H.push({x,y,w,h:rh,fn:()=>{B.sel=i;press('ok')}})});
+ const mx0=x0+pW-mW,colw=(mW-8)/cols;X.strokeStyle='rgba(201,178,107,.5)';X.beginPath();X.moveTo(mx0-3,y0+8);X.lineTo(mx0-3,y0+ph-8);X.stroke();
+ if(B.ph=='msg')txt('點擊繼續 ▶',mx0+mW/2,y0+ph/2+fs/3,fs-2,'rgba(220,220,240,.6)','center');
+ else LL.forEach((l,i)=>{const c=i%cols,r=Math.floor(i/cols),ix=mx0+4+c*colw,iy=y0+8+r*lh,isB=back&&i==LL.length-1,sel=!isB&&i==B.sel&&B.ph!='target';
+  if(sel){X.fillStyle='rgba(255,230,120,.16)';rr(ix,iy,colw-4,lh-2,5);X.fill()}
+  txt((sel?'▶ ':'')+l,ix+8,iy+lh/2+fs*.36,fs,isB?'#9cf':sel?'#ffe9a8':B.ph=='target'?'#ccc':'#fff');
+  H.push({x:ix,y:iy,w:colw-4,h:lh,fn:isB?()=>press('cancel'):B.ph=='target'?()=>{}:()=>{B.sel=i;press('ok')}})});
+ // damage popups
+ for(const f of B.fx){const a=(now-f.at)/900;let x,y;const ei=B.en.indexOf(f.t);if(ei>=0){x=ecx+(ei-(n-1)/2)*spc;y=ey-90*u*es}else{const pi=G.party.indexOf(f.t),q=PP(pi);x=q[0];y=q[1]-sh*.8}X.globalAlpha=1-a;X.lineWidth=4;X.strokeStyle='#000';X.font='bold '+(fs+8)+'px '+FONT;X.textAlign='center';X.strokeText(f.d,x,y-a*30);X.fillStyle=ei>=0?'#fff':'#f88';X.fillText(f.d,x,y-a*30);X.textAlign='left';X.globalAlpha=1}
+ // top bar
  const mw=Math.min(SW-SA.l-SA.r-16,640),mx=(SW-mw)/2,my=SA.t+8;
  if(B.ph=='msg'){const mk=B.msgs.length+(B.msgs[0]||'');if(B.mk!==mk){B.mk=mk;B.mT=now}else if(now-B.mT>1500){B.mk=null;press('ok')}X.font=fs+'px '+FONT;const ls=wrap(B.msgs[0]||'',mw-28).slice(0,3);box(mx,my,mw,ls.length*(fs+8)+22,.93);ls.forEach((l,j)=>txt(l,mx+14,my+fs+10+j*(fs+8),fs));txt('▼',mx+mw-20,my+ls.length*(fs+8)+14,fs-5,'#c9b26b')}
- else{const u2=G.party[B.ai];let L,info='';
-  if(B.ph=='cmd')L=['攻擊','技能','道具','防禦','逃跑'];
-  if(B.ph=='skill'){L=u2.skills.map(s=>s+' '+SK[s].mp+'MP');info=SK[u2.skills[B.sel]].d}
-  if(B.ph=='item'){const ks=Object.keys(G.inv).filter(i=>G.inv[i]>0);L=ks.map(k=>k+'×'+G.inv[k]);info=ks[B.sel]?ITEMS[ks[B.sel]].d:''}
-  if(B.ph=='target')L=[B.tk=='E'?'選擇敵人':'選擇隊友','◀▶ 切換','B 取消'];
-  box(mx,my,mw,fs+20,.93);txt(u2.n+' 的行動'+(info?'：'+info:''),mx+14,my+fs+8,fs,'#ffd');
-  const lh=fs+12;let cw,cx,cy,cols=1;
-  if(port){cols=SH<640?3:2;cw=SW-SA.l-SA.r-20;cx=SA.l+10;const rows=Math.ceil(L.length/cols),chh=rows*lh+16,lim=SH-SA.b-(JOY.touch?(SH<640?168:205):10)-chh;cy=Math.min(py+ph+10,lim);cy=Math.max(cy,my+fs+26)}
-  else{cw=fs*7.5;cx=SA.l+10;cy=my+fs+30}
-  const rows=Math.ceil(L.length/cols),chh=rows*lh+16,colw=cw/cols;
-  box(cx,cy,cw,chh,.95);L.forEach((l,i)=>{const c=i%cols,r=Math.floor(i/cols);txt((i==B.sel&&B.ph!='target'?'▶ ':'　')+l,cx+12+c*colw,cy+8+lh*r+fs+2,fs,i==B.sel&&B.ph!='target'?'#ffe9a8':'#fff')})}}
+ else{X.font=fs+'px '+FONT;const ls=wrap(u2.n+' 的行動'+(info?'：'+info:''),mw-28).slice(0,2);box(mx,my,mw,ls.length*(fs+8)+16,.93);ls.forEach((l,j)=>txt(l,mx+14,my+fs+8+j*(fs+8),fs,'#ffd'))}}
+function bTap(x,y){const B=G.B;if(!B||G.mode!='battle')return;if(B.ph=='msg'){B.mk=null;press('ok');return}
+ const h=(B.hit||[]).slice().reverse().find(r=>x>=r.x&&x<=r.x+r.w&&y>=r.y&&y<=r.y+r.h);if(h)h.fn()}
+{const tp=(x,y)=>{if(G.mode=='battle')bTap(x,y)};cv.addEventListener('touchstart',e=>{if(G.mode!='battle')return;e.preventDefault();const r=cv.getBoundingClientRect();for(const t of e.changedTouches)tp(t.clientX-r.left,t.clientY-r.top)},{passive:false});
+ cv.addEventListener('mousedown',e=>{const r=cv.getBoundingClientRect();tp(e.clientX-r.left,e.clientY-r.top)});}
 function drawTitle(now){UI();X.fillStyle='#000';X.fillRect(0,0,SW,SH);const c=cover(I.night,.5,.62),t=now/1000,b=Math.sin(t*1.5)*2,sc=c.s*1.05;
  for(const[k,x,y,r]of[['qz_right0',490,398,0],['bl_left0',560,395,0]]){const im=I[k];X.drawImage(im,c.ox+x*c.s-im.width*sc/2,c.oy+y*c.s-im.height*sc+2+b,im.width*sc,im.height*sc)}
  const fs=FS(),big=Math.min(SW/6.5,74);const ty=SH*(SH>SW?.24:.3);X.fillStyle='rgba(0,0,0,.35)';rr(SW/2-big*2.6,ty-big-10,big*5.2,big*2.1,14);X.fill();
  X.save();X.shadowColor='#000';X.shadowBlur=12;txt('雲渡仙緣',SW/2,ty,big,'#f3dfa0','center');txt('第一章〈夜渡〉',SW/2,ty+big*.75,big*.38,'#cfe','center');X.restore();
  if(G.cred){X.fillStyle='rgba(0,0,20,.82)';X.fillRect(0,0,SW,SH);const L=CREDITS;L.forEach((l,i)=>txt(l,SW/2,SA.t+60+i*(fs+12),i?fs-1:fs+4,i?'#e8e8f0':'#f3dfa0','center'));return}
  if(Math.floor(t*1.6)%2)txt(JOY.touch?'按 A 開始':'按 Enter／空白鍵 開始',SW/2,SH-SA.b-(JOY.touch?230:70),fs+3,'#fff','center');
- txt('版本 v9',SW-SA.r-8,SA.t+fs+4,fs-3,'#cde','right');txt(JOY.touch?'B：素材來源 CREDITS':'C／Esc：素材來源 CREDITS',SW/2,SH-SA.b-(JOY.touch?200:40),fs-3,'#cde','center');
+ txt('版本 v10',SW-SA.r-8,SA.t+fs+4,fs-3,'#cde','right');txt(JOY.touch?'B：素材來源 CREDITS':'C／Esc：素材來源 CREDITS',SW/2,SH-SA.b-(JOY.touch?200:40),fs-3,'#cde','center');
  if(!ready)txt('載入中…',SW/2,SH/2,fs,'#fff','center')}
 const CREDITS=['【CREDITS 素材來源】','','角色、場景、道具、敵人、立繪、背景：','本作原創 AI 生成手繪風素材','（色鍵去背後合成）','','程式、劇情：《雲渡仙緣》原創','','按 B／C／Esc 返回'];
 function drawOver(){UI();X.fillStyle='#200';X.fillRect(0,0,SW,SH);const fs=FS();txt('勝敗乃兵家常事',SW/2,SH*.42,fs*2,'#f88','center');txt('按 A／確定 重新挑戰',SW/2,SH*.42+fs*3,fs,'#fff','center')}
@@ -376,7 +391,7 @@ function drawEnd(now){UI();X.fillStyle='#000';X.fillRect(0,0,SW,SH);const a=Math
  txt('第一章〈夜渡〉 完',SW/2,SH*.26,fs*2,'#f3dfa0','center');txt('—— 待續：白苓的命運，與倒流的渡雲河 ——',SW/2,SH*.26+fs*2.2,Math.min(fs,SW/26),'#cfe','center');
  const s=Math.min(SW,SH)/260;['qz_down0','bl_down0'].forEach((k,i)=>{const im=I[k];X.drawImage(im,SW/2+(i-.5)*im.width*s*.8-im.width*s/2,SH*.58-im.height*s,im.width*s,im.height*s)});
  txt(G.party.map(p=>p.n+' Lv'+p.lv).join('　'),SW/2,SH*.58+fs*2,fs,'#aaa','center');txt('按 A／確定 回到標題',SW/2,SH*.58+fs*4.5,fs,'#fff','center');X.globalAlpha=1}
-function frame(){requestAnimationFrame(frame);const now=performance.now(),dt=Math.min(3,(now-lastT)/16.667);lastT=now;
+function frame(){requestAnimationFrame(frame);if(JOY.hide){const hb=G.mode=='battle';if(JOY.hidden!==hb)JOY.hide(hb)}const now=performance.now(),dt=Math.min(3,(now-lastT)/16.667);lastT=now;
  try{if(cv.width!=Math.round(innerWidth*K)||cv.height!=Math.round(innerHeight*K))fit();
   if(ready&&G.mode=='map')update(dt);X.setTransform(1,0,0,1,0,0);X.imageSmoothingEnabled=true;X.imageSmoothingQuality='high';
   if(G.mode=='title'||!ready)drawTitle(now);else if(G.mode=='map')drawWorld(now);else if(G.mode=='boat')drawBoat(now);else if(G.mode=='battle')drawBattle(now);else if(G.mode=='over')drawOver();else if(G.mode=='end')drawEnd(now);
