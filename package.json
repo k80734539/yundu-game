@@ -1,0 +1,20 @@
+{
+  "name": "yundu-game",
+  "private": true,
+  "type": "module",
+  "description": "雲渡仙緣 — static canvas RPG for GitHub Pages (no build step). package.json is for tests only.",
+  "scripts": {
+    "serve": "node tests/server.mjs",
+    "test": "node tests/run-all.mjs",
+    "test:play": "node tests/playthrough.mjs",
+    "test:touch": "node tests/touch-battle.mjs",
+    "test:fx": "node tests/fx.mjs",
+    "test:screens": "node tests/screens.mjs",
+    "compare": "node tests/compare.mjs"
+  },
+  "devDependencies": {
+    "pixelmatch": "^5.3.0",
+    "playwright": "^1.48.0",
+    "pngjs": "^7.0.0"
+  }
+}

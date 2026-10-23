@@ -1,0 +1,6 @@
+// npm test：完整通關(直/橫) + 5 尺寸觸控戰鬥 + 5 尺寸截圖 + VFX 定格。任何 JS 錯誤或流程失敗 → exit 1
+import {serve,launch} from './lib.mjs';import {playthrough} from './playthrough.mjs';import {touchBattle} from './touch-battle.mjs';import {screens} from './screens.mjs';import {fx} from './fx.mjs';
+const s=await serve(),b=await launch();let ok=true;
+ok=await playthrough(b,process.env.URL||s.url,390,664,true)&&ok;ok=await playthrough(b,process.env.URL||s.url,844,390,true)&&ok;
+ok=await touchBattle(b,s.url)&&ok;ok=await screens(b,s.url)&&ok;ok=await fx(b,s.url)&&ok;
+await b.close();s.close();console.log(ok?'ALL PASS':'SOME TESTS FAILED');process.exit(ok?0:1)
