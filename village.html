@@ -1,6 +1,6 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><title>蘆花渡 原型</title>
-<style>body{margin:0;background:#141018;color:#ccc;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;touch-action:none;user-select:none}
-canvas{width:100%;max-width:960px;display:block}#pad{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,64px);gap:4px;margin:14px}#pad button{font-size:24px;background:#2c2840;color:#eee;border:1px solid #556;border-radius:10px}p{font-size:13px;margin:6px}
+<!doctype html><html lang="zh-Hant"><head><link rel="icon" href="data:,"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><title>蘆花渡 原型</title>
+<style>html,body{overflow:hidden;overscroll-behavior:none;height:100%}body{margin:0;-webkit-touch-callout:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;background:#141018;color:#ccc;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;touch-action:none;user-select:none}
+canvas{width:100%;max-width:960px;max-height:62vh;object-fit:contain;display:block}#pad{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,64px);gap:4px;margin:14px}#pad,#pad *{touch-action:none}#pad button{font-size:24px;background:#2c2840;color:#eee;border:1px solid #556;border-radius:10px}p{font-size:13px;margin:6px}
 @media(min-width:900px){#pad{display:none}}</style></head><body>
 <canvas id="c" width="640" height="480"></canvas><p>方向鍵 / WASD 移動（自由漫遊原型）</p>
 <div id="pad"><span></span><button data-k="ArrowUp">▲</button><span></span><button data-k="ArrowLeft">◀</button><span></span><button data-k="ArrowRight">▶</button><span></span><button data-k="ArrowDown">▼</button><span></span></div>
@@ -34,11 +34,15 @@ function init(){
  G.bl={x:G.x,y:G.y-20,dir:'down'};
  requestAnimationFrame(loop)}
 const keys={};addEventListener('keydown',e=>{keys[e.key]=1;if(e.key.startsWith('Arrow'))e.preventDefault()});addEventListener('keyup',e=>keys[e.key]=0);
-document.querySelectorAll('[data-k]').forEach(b=>{const k=b.dataset.k,on=e=>{e.preventDefault();keys[k]=1},off=e=>{e.preventDefault();keys[k]=0};b.addEventListener('pointerdown',on);b.addEventListener('pointerup',off);b.addEventListener('pointerleave',off);b.addEventListener('pointercancel',off)});
+const PAD=[...document.querySelectorAll('[data-k]')];function padSync(e){e.preventDefault();PAD.forEach(b=>keys[b.dataset.k]=0);for(const t of e.touches){const el=document.elementFromPoint(t.clientX,t.clientY);const b=el&&el.closest&&el.closest('[data-k]');if(b)keys[b.dataset.k]=1}}
+const pd=document.getElementById('pad');['touchstart','touchmove','touchend','touchcancel'].forEach(n=>pd.addEventListener(n,padSync,{passive:false}));
+let mouseK=null;PAD.forEach(b=>b.addEventListener('mousedown',e=>{mouseK=b.dataset.k;keys[mouseK]=1}));addEventListener('mouseup',()=>{if(mouseK)keys[mouseK]=0;mouseK=null});
+const clearK=()=>{for(const k in keys)keys[k]=0};addEventListener('blur',clearK);document.addEventListener('visibilitychange',clearK);addEventListener('contextmenu',e=>e.preventDefault());
 function blocked(x,y){if(x<12||x>WW-12||y<1.6*T||y>WH-4)return 1;
  const onDock=x>13.2*T&&x<16.8*T&&y<20.6*T;if(y>waterY(x)-4&&!onDock)return 1;
  for(const s of SOL)if(x+8>s[0]&&x-8<s[0]+s[2]&&y>s[1]&&y-6<s[1]+s[3])return 1;return 0}
-function loop(){G.t++;
+function loop(){requestAnimationFrame(loop);try{step()}catch(e){console.error(e)}}
+function step(){G.t++;
  let dx=(keys.ArrowRight||keys.d?1:0)-(keys.ArrowLeft||keys.a?1:0),dy=(keys.ArrowDown||keys.s?1:0)-(keys.ArrowUp||keys.w?1:0);
  const mv=dx||dy;if(mv){const sp=2.4/(dx&&dy?1.414:1);if(!blocked(G.x+dx*sp,G.y))G.x+=dx*sp;if(!blocked(G.x,G.y+dy*sp))G.y+=dy*sp;
   G.dir=Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up');G.f+=.12;G.hist.push([G.x,G.y,G.dir]);if(G.hist.length>14){const h=G.hist.shift();G.bl.x=h[0];G.bl.y=h[1];G.bl.dir=h[2];G.bl.f=G.f-1}}else G.f=0;
@@ -50,8 +54,8 @@ function loop(){G.t++;
  X.strokeStyle='rgba(255,255,255,.35)';X.lineWidth=2;X.beginPath();for(let x=0;x<=WW;x+=8){const y=waterY(x)+2+Math.sin(G.t/20+x/30)*1.5;x?X.lineTo(x,y):X.moveTo(x,y)}X.stroke();
  const L=[];
  for(const o of OBJ){const im=I[o.k];L.push({y:o.flat?-1:o.y,f:()=>{if(!o.flat){X.fillStyle='rgba(20,25,10,.28)';X.beginPath();X.ellipse(o.x,o.y-2,im.width*.4,10,0,0,7);X.fill()}X.drawImage(im,Math.round(o.x-im.width/2),Math.round(o.y-im.height+6))},o})}
- const ch=(k,x,y)=>()=>{X.fillStyle='rgba(0,0,0,.3)';X.beginPath();X.ellipse(x,y-1,13,4,0,0,7);X.fill();const im=I[k];X.drawImage(im,Math.round(x-im.width/2),Math.round(y-im.height+2))};
- const fr=s=>s.f?[0,1,0,2][Math.floor(s.f)%4]:0;
+ const ch=(k,x,y)=>()=>{if(!I[k])k=k.replace(/\d$/,'0');X.fillStyle='rgba(0,0,0,.3)';X.beginPath();X.ellipse(x,y-1,13,4,0,0,7);X.fill();const im=I[k];X.drawImage(im,Math.round(x-im.width/2),Math.round(y-im.height+2))};
+ const fr=s=>s.f>0?[0,1,0,2][Math.floor(s.f)&3]:0;
  for(const n of G.npcs)L.push({y:n.y,f:ch(n.k,n.x,n.y)});
  L.push({y:G.bl.y-.1,f:ch('bl_'+G.bl.dir+(mv?fr(G.bl):0),G.bl.x,G.bl.y)});
  const pk='qz_'+G.dir+fr(G);L.push({y:G.y,f:ch(pk,G.x,G.y)});
@@ -64,6 +68,6 @@ function loop(){G.t++;
  for(const o of OBJ)if(o.light){const gx=o.x+9,gy=o.y-50,r=X.createRadialGradient(gx,gy,0,gx,gy,60);r.addColorStop(0,'rgba(255,170,90,.35)');r.addColorStop(1,'rgba(0,0,0,0)');X.fillStyle=r;X.fillRect(gx-60,gy-60,120,120)}
  X.globalCompositeOperation='source-over';X.restore();
  X.fillStyle='rgba(20,15,30,.7)';X.fillRect(8,8,96,30);X.fillStyle='#f3dfa0';X.font='18px serif';X.fillText('蘆花渡',22,30);
- requestAnimationFrame(loop)}
+ }
 window.G_=()=>G;
 </script></body></html>
