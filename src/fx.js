@@ -7,7 +7,7 @@ function burst(x,y,n,col,sp,o){for(let i=0;i<n;i++){const a=Math.random()*6.283,
 function shake(a,d){if(G.B)G.B.shk={at:performance.now(),a,d:d||300}}
 function flash(d,c,k){if(G.B)G.B.fl={at:performance.now(),d:d||160,c:c||'255,255,255',k:k||.45}}
 const VIMP={slash:110,claw:150,sweep:200,foxfire:330,rain:320,item:160,guard:60,splash:170,leaf:220,tail:190,wave:520,poison:120},VDUR={slash:380,claw:420,sweep:520,foxfire:620,rain:850,item:600,guard:500,splash:500,leaf:520,tail:480,wave:900,poison:500};
-function startFx(sp,now){const B=G.B;if(!B)return;sp.at=now;if(!sp.tg.length)sp.tg=[...new Set(sp.hits.map(h=>h.t))];(B.vx=B.vx||[]).push(sp);const im=VIMP[sp.k]||150;
+function startFx(sp,now){const B=G.B;if(!B)return;sp.at=now;if(!sp.tg.length)sp.tg=[...new Set(sp.hits.map(h=>h.t))];(B.vx=B.vx||[]).push(sp);startBattleMotion(sp,now);const im=VIMP[sp.k]||150;
  sp.hits.forEach((h,i)=>{const at=now+im+(sp.k=='sweep'?i*70:sp.k=='wave'?i*90:0);B.fx.push({t:h.t,d:h.d,crit:h.crit,heal:h.heal,big:h.big,at});if(h.t.hp<=0&&B.en.includes(h.t))h.t.dieAt=at})}
 function glowLine(pts,w,col,a){X.save();X.globalCompositeOperation='lighter';X.lineCap='round';X.lineJoin='round';for(const[k,c]of[[3,col],[1.6,col],[.6,'#fff']]){X.globalAlpha=a*(k==3?.25:k>1?.55:1);X.strokeStyle=c;X.lineWidth=w*k;X.beginPath();pts.forEach((p,i)=>i?X.lineTo(p[0],p[1]):X.moveTo(p[0],p[1]));X.stroke()}X.restore()}
 function arcPts(cx,cy,r,a0,a1,n,sq){const o=[];for(let i=0;i<=n;i++){const a=a0+(a1-a0)*i/n;o.push([cx+Math.cos(a)*r,cy+Math.sin(a)*r*(sq||1)])}return o}
