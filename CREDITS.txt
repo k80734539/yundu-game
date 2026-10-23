@@ -1,0 +1,12 @@
+雲渡仙緣 第一章〈夜渡〉 — CREDITS (v5)
+
+Overworld tiles (grass, dirt paths, water, dock planks, houses, trees, reed tufts, torii) and NPC/enemy sprites
+(王大叔=Villager3, 小水妖=KappaGreen, 蘆葦精=Bamboo, 河伯=Boss DragonBlue head, chests/boat):
+  Ninja Adventure Asset Pack — by Pixel-boy & AAA
+  https://pixel-boy.itch.io/ninja-adventure-asset-pack
+  License: CC0 1.0 Universal (public domain; attribution not required)
+
+Walk sprites for 青舟, 白苓, 雲纖, 村長, 阿婆: original hand-made pixel art for this project (made to match the portraits).
+Fences, temple stone floor/walls, red pillars, altar, lanterns: original, drawn procedurally in code.
+Battle backgrounds, portraits, temple title painting: original images generated for this project. Not derived from 仙劍 / 古劍.
+Code, story, UI: original.
