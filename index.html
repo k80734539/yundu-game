@@ -37,7 +37,7 @@ let SW=640,SH=480,K=1,WS=1,VW=640,VH=480,SA={t:0,r:0,b:0,l:0};
 const probe=document.createElement('div');probe.style.cssText='position:fixed;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)';document.body.appendChild(probe);
 function fit(){K=Math.min(devicePixelRatio||1,2);SW=innerWidth;SH=innerHeight;cv.width=Math.round(SW*K);cv.height=Math.round(SH*K);
  const cs=getComputedStyle(probe);SA={t:parseFloat(cs.paddingTop)||0,r:parseFloat(cs.paddingRight)||0,b:parseFloat(cs.paddingBottom)||0,l:parseFloat(cs.paddingLeft)||0};
- WS=Math.min(SW,SH)/(JOY.touch?380:470);VW=SW/WS;VH=SH/WS}
+ WS=Math.min(SW,SH)/(JOY.touch?(SH>SW?430:380):470);VW=SW/WS;VH=SH/WS}
 fit();addEventListener('resize',fit);addEventListener('orientationchange',()=>setTimeout(fit,200));
 const I={};let toLoad=0,ready=false;
 for(const k in ASSETS){toLoad++;const im=new Image();im.onload=im.onerror=()=>{if(--toLoad==0){ready=true}};im.src=ASSETS[k];I[k]=im}
@@ -72,7 +72,7 @@ function buildVillage(){const W=30*T,H=22*T;M={id:'village',W,H,T,obj:[],sol:[],
  o('willow',3,15.6,1.2,.6);o('willow',27.2,15.4,1.2,.6);o('camphor',9.5,11.4,1,.5);o('camphor',21.5,11.6,1,.5);o('camphor',28,9.6,1,.5);o('camphor',1.6,9.8,1,.5);
  o('well',8,15,2.4,1);o('stall',21.5,15,3.6,1.1);
  for(const[x,y]of[[12.2,8.6],[17.8,8.6],[12.4,14],[17.6,14],[3.6,8.6],[22.6,8.6]]){o('lantern',x,y,.5,.3);M.lights.push([x*T+9,y*T-50,60,'rgba(255,170,90,.35)'])}
- o('dock',15,19.6,0,0,{flat:1});o('boat',18.6,20.2,3,1.2,{flat:1});
+ o('dock',15,19.6,0,0,{flat:1});o('boat',17.4,20.2,3,1.2,{flat:1});
  const[g,c]=cvs(W,H);c.fillStyle=c.createPattern(I.t_grass,'repeat');c.fillRect(0,0,W,H);
  const R=rng(7);blobs(c,R,40,['rgba(40,70,20,.22)','rgba(190,200,90,.16)','rgba(20,50,30,.2)']);
  const[m,mc]=cvs(W,H);mc.strokeStyle='#fff';mc.lineCap=mc.lineJoin='round';mc.filter='blur(5px)';
@@ -88,7 +88,7 @@ function buildVillage(){const W=30*T,H=22*T;M={id:'village',W,H,T,obj:[],sol:[],
  if(!f.dawn){
   npc('wang',12*T,16.6*T,'王大叔',()=>{if(!f.ferry){f.ferry=1;say([['王大叔','青舟，早啊！載我到對岸市集吧。'],['','（青舟熟練地撐著竹篙，小船平穩地渡過了河。）'],['王大叔','你這撐船的手藝，全村第一！對了，村長好像在找你。'],['提示','走到人物面前按 A（空白鍵/Enter）就能對話。去找村長和雜貨鋪阿婆吧。']])}else say([['王大叔','聽說最近河上起怪霧，晚上可別出船。']])});
   npc('chief',13.6*T,8.3*T,'村長',()=>{f.chief=1;say([['村長','青舟啊，最近夜裡河上常起濃霧，已經有兩艘船沒回來了。'],['村長','你記住，天黑以後千萬別出船！'],['陳青舟','知道啦，村長。']])},()=>!f.chief);
-  npc('granny',26.3*T,8.5*T,'阿婆',()=>{if(!f.quest){f.quest=1;G.party[0].arm=3;G.inv.魚乾+=3;say([['阿婆','青舟……我家小石頭發高燒，全身起紅斑，大夫說只有對岸的「青蒿丹」能救。'],['阿婆','可是對岸的藥鋪要走水路，白天船都被官府徵去了……'],['陳青舟','阿婆別急，我今晚就去幫你拿藥！'],['阿婆','這孩子……這個護身符你帶著，還有這些魚乾。'],['','獲得「護身符」（防禦+3，已裝備給陳青舟）！獲得「魚乾」×3！'],['提示','準備好了就走到渡口的棧橋盡頭，登上小船出發。']])}else say([['阿婆','小石頭就拜託你了，路上千萬小心。']])},()=>!f.quest);
+  npc('granny',24.6*T,9.4*T,'阿婆',()=>{if(!f.quest){f.quest=1;G.party[0].arm=3;G.inv.魚乾+=3;say([['阿婆','青舟……我家小石頭發高燒，全身起紅斑，大夫說只有對岸的「青蒿丹」能救。'],['阿婆','可是對岸的藥鋪要走水路，白天船都被官府徵去了……'],['陳青舟','阿婆別急，我今晚就去幫你拿藥！'],['阿婆','這孩子……這個護身符你帶著，還有這些魚乾。'],['','獲得「護身符」（防禦+3，已裝備給陳青舟）！獲得「魚乾」×3！'],['提示','準備好了就走到渡口的棧橋盡頭，登上小船出發。']])}else say([['阿婆','小石頭就拜託你了，路上千萬小心。']])},()=>!f.quest);
   M.inter.push({x:5*T,y:6.6*T,r:36,act:()=>say([['','這是青舟的家。門口掛著父親留下的舊竹篙。']])});
   M.inter.push({x:17.6*T,y:19.9*T,r:44,act:boardBoat});
   M.zones.push({x0:13.4*T,y0:19.7*T,x1:16.8*T,y1:20.7*T,enter:boardBoat});
@@ -262,7 +262,7 @@ function drawObj(o,t){if(o.tal&&G.flags.tal)return;let k=o.k;if(o.chest&&G.opene
  X.drawImage(im,-w/2,-h+6*Math.min(1,s),w,h);X.restore()}
 // ---------- render ----------
 function drawWorld(now){const t=now/1000;
- let cx=M.W>VW?Math.max(0,Math.min(M.W-VW,G.x-VW/2)):(M.W-VW)/2,cy=M.H>VH?Math.max(0,Math.min(M.H-VH,G.y-20-VH/2)):(M.H-VH)/2;
+ let cx=M.W>VW?Math.max(0,Math.min(M.W-VW,G.x-VW/2)):(M.W-VW)/2,cy=M.H>VH?Math.max(0,Math.min(M.H-VH,G.y-20-VH/2+(JOY.touch&&SH>SW?VH*.16:0))):(M.H-VH)/2;
  X.setTransform(K*WS,0,0,K*WS,-cx*K*WS,-cy*K*WS);
  X.fillStyle=M.id=='village'?'#2b4d2a':M.id=='reeds'?'#12180e':'#120e14';X.fillRect(cx-2,cy-2,VW+4,VH+4);
  X.drawImage(M.ground,0,0);
@@ -343,10 +343,11 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();X.fillStyle='#000';X.fillRe
   if(B.ph=='item'){const ks=Object.keys(G.inv).filter(i=>G.inv[i]>0);L=ks.map(k=>k+'×'+G.inv[k]);info=ks[B.sel]?ITEMS[ks[B.sel]].d:''}
   if(B.ph=='target')L=[B.tk=='E'?'選擇敵人':'選擇隊友','◀▶ 切換','B 取消'];
   box(mx,my,mw,fs+20,.93);txt(u2.n+' 的行動'+(info?'：'+info:''),mx+14,my+fs+8,fs,'#ffd');
-  const lh=fs+12,cw=fs*7.5,chh=L.length*lh+16;let cx,cy;
-  if(port){cx=SW-SA.r-cw-10;cy=py+ph+10}else{cx=SA.l+10;cy=my+fs+30}
-  if(!JOY.touch&&!port){cx=SA.l+10;cy=my+fs+30}
-  box(cx,cy,cw,chh,.93);L.forEach((l,i)=>txt((i==B.sel&&B.ph!='target'?'▶ ':'　')+l,cx+12,cy+8+lh*i+fs+2,fs,i==B.sel&&B.ph!='target'?'#ffe9a8':'#fff'))}}
+  const lh=fs+12;let cw,cx,cy,cols=1;
+  if(port){cols=2;cw=SW-SA.l-SA.r-20;cx=SA.l+10;const rows=Math.ceil(L.length/2),chh=rows*lh+16,lim=SH-SA.b-(JOY.touch?205:10)-chh;cy=Math.min(py+ph+8,lim);cy=Math.max(cy,my+fs+26)}
+  else{cw=fs*7.5;cx=SA.l+10;cy=my+fs+30}
+  const rows=Math.ceil(L.length/cols),chh=rows*lh+16,colw=cw/cols;
+  box(cx,cy,cw,chh,.95);L.forEach((l,i)=>{const c=cols==2?i%2:0,r=cols==2?Math.floor(i/2):i;txt((i==B.sel&&B.ph!='target'?'▶ ':'　')+l,cx+12+c*colw,cy+8+lh*r+fs+2,fs,i==B.sel&&B.ph!='target'?'#ffe9a8':'#fff')})}}
 function drawTitle(now){UI();X.fillStyle='#000';X.fillRect(0,0,SW,SH);const c=cover(I.night,.5,.62),t=now/1000,b=Math.sin(t*1.5)*2,sc=c.s*1.05;
  for(const[k,x,y,r]of[['qz_right0',490,398,0],['bl_left0',560,395,0]]){const im=I[k];X.drawImage(im,c.ox+x*c.s-im.width*sc/2,c.oy+y*c.s-im.height*sc+2+b,im.width*sc,im.height*sc)}
  const fs=FS(),big=Math.min(SW/6.5,74);const ty=SH*(SH>SW?.24:.3);X.fillStyle='rgba(0,0,0,.35)';rr(SW/2-big*2.6,ty-big-10,big*5.2,big*2.1,14);X.fill();
