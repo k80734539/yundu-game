@@ -16,6 +16,7 @@ npx playwright install chromium      # 或改用系統 Chrome：export CHROME_PA
 | `npm run test:touch` | 用 `touchscreen.tap` 操作底部戰鬥面板；確認戰鬥中搖桿隱藏、戰後恢復 |
 | `npm run test:screens` | 5 尺寸截圖：title / dialog / village / dock / battle_menu |
 | `npm run test:fx [-- --all]` | 11 種戰鬥特效定格截圖（預設直+橫，`--all` = 5 尺寸） |
+| `npm run test:save` | 存檔：選單→存檔→重新整理→繼續遊戲，比對位置/道具/旗標；壞檔、戰鬥中不能存（直+橫） |
 | `npm run compare -- <baselineDir>` | 逐像素比對 `fx/`、`screens/` 與 baseline |
 | `npm run serve` | 本機預覽 http://127.0.0.1:8080/ |
 
