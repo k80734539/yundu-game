@@ -23,6 +23,8 @@ npx playwright install chromium      # 或改用系統 Chrome：export CHROME_PA
 
 輸出在 `tests/out/`（已 gitignore）。任何 `pageerror`、`console.error`、或遊戲 `frame()` 捕捉到的 `window.__err` 都會讓測試 FAIL（exit 1）。
 
+`npm test` 也會執行 `motion.mjs`：五尺寸驗證青舟／白苓普攻、三種技能的動作時長與特效命中時間、受擊後仰、收勢回原位、快速跳訊息及新戰鬥清除動作；動作截圖在 `tests/out/motion/`。
+
 ## 注意
 - 測試內建 http 伺服器；**不要用 file://** 開遊戲（`maps.js` 對碰撞遮罩 `getImageData`，file:// 會讓 canvas 被污染）。
 - `fx` 與 `screens` 用 `page.clock`（install → pauseAt → runFor）＋固定 `Math.random` 種子，所以可逐像素比對；`play`/`touch` 是即時執行，有隨機性，不做像素比對。

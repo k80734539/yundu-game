@@ -1,6 +1,6 @@
 'use strict';
 // 戰鬥畫面：底部面板(左狀態/右指令)、觸控 bTap
-function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){const a=(now-B.shk.at)/B.shk.d;if(a<1){const k=B.shk.a*(1-a);SX=(Math.random()*2-1)*k;SY=(Math.random()*2-1)*k}else B.shk=null}X.translate(SX,SY);X.fillStyle='#000';X.fillRect(0,0,SW,SH);cover(I[B.opt.bg||'bg_reeds'],.5,.6);X.fillStyle='rgba(0,0,20,.22)';X.fillRect(0,0,SW,SH);
+function drawBattle(now){const B=G.B,t=now/1000;B.motion=(B.motion||[]).filter(a=>now<a.at+a.dur);UI();let SX=0,SY=0;if(B.shk){const a=(now-B.shk.at)/B.shk.d;if(a<1){const k=B.shk.a*(1-a);SX=(Math.random()*2-1)*k;SY=(Math.random()*2-1)*k}else B.shk=null}X.translate(SX,SY);X.fillStyle='#000';X.fillRect(0,0,SW,SH);cover(I[B.opt.bg||'bg_reeds'],.5,.6);X.fillStyle='rgba(0,0,20,.22)';X.fillRect(0,0,SW,SH);
  const port=SH>SW,fs=port&&SH<640?Math.min(FS(),13):FS(),u=Math.min(SW,SH)/400,n=B.en.length,np=G.party.length,ent=Math.min(1,(now-G.bT)/400);const H=B.hit=[];
  const u2=G.party[B.ai]||G.party[0];let L=[],info='',back=false;
  if(B.ph=='cmd')L=['攻擊','技能','道具','防禦','逃跑'];
@@ -25,11 +25,11 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
   const bw=Math.min(90,w*.9);txt(e.n,x,y+fs+6,fs-2,'#fff','center');X.fillStyle='#400';X.fillRect(x-bw/2,y+fs+12,bw,6);X.fillStyle='#e44';X.fillRect(x-bw/2,y+fs+12,bw*e.hp/e.mhp,6);
   if(B.ph=='target'&&B.tk=='E'){if(B.sel==i)txt('▼',x,y-h-6+Math.sin(t*8)*3,fs+6,'#ff0','center');H.push({x:x-Math.max(w,60)/2,y:y-h-10,w:Math.max(w,60),h:h+fs+30,fn:()=>{B.sel=i;press('ok')}})}});
  // party sprites
- G.party.forEach((p,i)=>{const [x,y]=PP(i),hf=B.fx.find(f=>f.t==p&&!f.heal&&now>=f.at&&now-f.at<500),act=i==B.ai&&B.ph!='msg',lunge=B.ph=='msg'&&i==B.ai&&B.fx.some(f=>B.en.includes(f.t)&&now-f.at<450);
-  const d=port?'up':'left',fr=lunge?1:(act?Math.floor(t*4)%2*2:0),im=I[p.e+'_'+d+fr]||I[p.e+'_'+d+'0'];if(!im)return;const w=im.width*ps,h=im.height*ps;
-  let dx=0,dy=0;if(lunge){if(port)dy=-14*u;else dx=-22*u}if(hf)dx+=Math.sin(now/20)*4;
+ G.party.forEach((p,i)=>{const [x,y]=PP(i),hf=B.fx.find(f=>f.t==p&&!f.heal&&now>=f.at&&now-f.at<500),act=i==B.ai&&B.ph!='msg',pose=battlePose(p,now);
+  const d=port?'up':'left',fr=pose?pose.frame:(act?Math.floor(t*4)%2*2:0),im=I[p.e+'_'+d+fr]||I[p.e+'_'+d+'0'];if(!im)return;const w=im.width*ps,h=im.height*ps;
+  let dx=0,dy=0;if(hf&&!pose)dx+=Math.sin(now/20)*4;
   X.fillStyle='rgba(0,0,0,.35)';X.beginPath();X.ellipse(x,y-3,w*.28,6*u,0,0,7);X.fill();
-  X.save();X.globalAlpha=ent*(p.hp>0?1:.35);if(hf&&Math.floor((now-hf.at)/70)%2)X.globalAlpha*=.4;X.drawImage(im,x-w/2+dx,y-h+dy,w,h);X.restore();if(p.guard&&p.hp>0)shield(x+dx,y-h*.5+dy,w*.62,h*.58,.35+Math.sin(t*4)*.1);
+  X.save();X.globalAlpha=ent*(p.hp>0?1:.35);if(hf&&Math.floor((now-hf.at)/70)%2)X.globalAlpha*=.4;if(pose){X.beginPath();X.rect(SA.l,port?ey+fs+22:Math.max(top,y-sh-6),SW-SA.l-SA.r,y0-(port?ey+fs+22:Math.max(top,y-sh-6))-4);X.clip();drawBattleMotion(p,im,x,y,w,h,pose,port,u)}else X.drawImage(im,x-w/2+dx,y-h+dy,w,h);X.restore();if(p.guard&&p.hp>0)shield(x+dx,y-h*.5+dy,w*.62,h*.58,.35+Math.sin(t*4)*.1);
   if(act||(B.ph=='target'&&B.tk=='A'&&B.sel==i))txt('▼',x,y-h-2+Math.sin(t*6)*2,fs,'#ff0','center');
   if(B.ph=='target'&&B.tk=='A')H.push({x:x-w/2,y:y-h,w,h,fn:()=>{B.sel=i;press('ok')}})});
  B.fx=B.fx.filter(f=>now-f.at<1000);
