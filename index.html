@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><link rel="icon" href="data:,"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><title>雲渡仙緣 第一章〈夜渡〉</title>
+<!doctype html><html lang="zh-Hant"><head><link rel="icon" href="data:,"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>雲渡仙緣 第一章 v7</title>
 <style>html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;background:#000;touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 #c{position:fixed;left:0;top:0;width:100vw;height:100vh;display:block}
 #tip{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(6px + env(safe-area-inset-bottom));color:#ccc;font:13px sans-serif;background:rgba(0,0,0,.5);padding:3px 10px;border-radius:8px}.touch #tip{display:none}</style></head><body>
@@ -72,7 +72,7 @@ function buildVillage(){const W=30*T,H=22*T;M={id:'village',W,H,T,obj:[],sol:[],
  o('willow',3,15.6,1.2,.6);o('willow',27.2,15.4,1.2,.6);o('camphor',9.5,11.4,1,.5);o('camphor',21.5,11.6,1,.5);o('camphor',28,9.6,1,.5);o('camphor',1.6,9.8,1,.5);
  o('well',8,15,2.4,1);o('stall',21.5,15,3.6,1.1);
  for(const[x,y]of[[12.2,8.6],[17.8,8.6],[12.4,14],[17.6,14],[3.6,8.6],[22.6,8.6]]){o('lantern',x,y,.5,.3);M.lights.push([x*T+9,y*T-50,60,'rgba(255,170,90,.35)'])}
- o('dock',15,19.6,0,0,{flat:1});o('boat',17.4,20.2,3,1.2,{flat:1});
+ o('dock',15,19.6,0,0,{flat:1});o('boat',17.4,20.3,3,1.2,{s:1.3,boat:1});
  const[g,c]=cvs(W,H);c.fillStyle=c.createPattern(I.t_grass,'repeat');c.fillRect(0,0,W,H);
  const R=rng(7);blobs(c,R,40,['rgba(40,70,20,.22)','rgba(190,200,90,.16)','rgba(20,50,30,.2)']);
  const[m,mc]=cvs(W,H);mc.strokeStyle='#fff';mc.lineCap=mc.lineJoin='round';mc.filter='blur(5px)';
@@ -259,12 +259,13 @@ function drawObj(o,t){if(o.tal&&G.flags.tal)return;let k=o.k;if(o.chest&&G.opene
  X.save();X.translate(o.x,o.y);if(o.sway){X.transform(1,0,Math.sin(t*1.3+o.sway)*.03,1,0,0)}if(o.mir)X.scale(-1,1);
  if(!o.flat&&!o.sway){X.fillStyle='rgba(20,25,10,.25)';X.beginPath();X.ellipse(0,-2,w*.38,Math.max(5,h*.05),0,0,7);X.fill()}
  if(o.tal){X.translate(0,Math.sin(t*2)*2)}
+ if(o.boat){X.translate(0,Math.sin(t*1.6)*2);X.fillStyle='rgba(255,230,150,'+(.22+.1*Math.sin(t*3))+')';X.beginPath();X.ellipse(0,-6,w*.52,h*.32,0,0,7);X.fill();X.strokeStyle='rgba(255,240,190,.55)';X.lineWidth=2;X.beginPath();X.ellipse(0,-4,w*.5,h*.28,0,0,7);X.stroke()}
  X.drawImage(im,-w/2,-h+6*Math.min(1,s),w,h);X.restore()}
 // ---------- render ----------
 function drawWorld(now){const t=now/1000;
- let cx=M.W>VW?Math.max(0,Math.min(M.W-VW,G.x-VW/2)):(M.W-VW)/2,cy=M.H>VH?Math.max(0,Math.min(M.H-VH,G.y-20-VH/2+(JOY.touch&&SH>SW?VH*.16:0))):(M.H-VH)/2;
+ let cx=M.W>VW?Math.max(0,Math.min(M.W-VW,G.x-VW/2)):(M.W-VW)/2,cy=(()=>{const ex=JOY.touch?(SA.b+(SH>SW?190:60))/WS:0;return M.H+ex>VH?Math.max(0,Math.min(M.H+ex-VH,G.y-20-VH*(SH>SW&&JOY.touch?.4:.5))):(M.H+ex-VH)/2})();
  X.setTransform(K*WS,0,0,K*WS,-cx*K*WS,-cy*K*WS);
- X.fillStyle=M.id=='village'?'#2b4d2a':M.id=='reeds'?'#12180e':'#120e14';X.fillRect(cx-2,cy-2,VW+4,VH+4);
+ X.fillStyle=M.id=='village'?'#3a5f63':M.id=='reeds'?'#12180e':'#120e14';X.fillRect(cx-2,cy-2,VW+4,VH+4);
  X.drawImage(M.ground,0,0);
  // water
  if(M.id=='village'){X.save();X.beginPath();X.moveTo(0,M.H);for(let x=0;x<=M.W;x+=8)X.lineTo(x,waterY(x));X.lineTo(M.W,M.H);X.clip();X.fillStyle=X.createPattern(I.t_water,'repeat');X.translate(t*9%128,Math.sin(t)*3);X.fillRect(-128,17*T-128,M.W+256,M.H);X.restore();
@@ -296,6 +297,11 @@ function drawWorld(now){const t=now/1000;
  UI();const fs=FS();X.font=fs+'px '+FONT;const nm=M.name,nw=X.measureText(nm).width+28;box(SA.l+8,SA.t+8,nw,fs+16,.9);txt(nm,SA.l+22,SA.t+8+fs+4,fs,'#f3dfa0');
  const f=G.flags;let goal='';if(M.id=='village'&&!f.dawn)goal=!f.chief||!f.quest?'目標：和村長、阿婆談話':'目標：到渡口搭船';if(M.id=='reeds')goal=f.tal?'目標：前往出口（牌坊）':'目標：調查妖氣來源';if(M.id=='temple')goal='目標：查看神龕';
  if(goal&&!(G.dlg&&dlgTop())){const gs=fs-2;X.font=gs+'px '+FONT;const gw=X.measureText(goal).width+24;let gx=SW-SA.r-8-gw,gy=SA.t+8;if(gx<SA.l+16+nw){gx=SA.l+8;gy=SA.t+fs+30}box(gx,gy,gw,gs+16,.9);txt(goal,gx+12,gy+gs+4,gs,'#cfe')}
+ {const bo=M.obj.find(o=>o.boat);if(M.id=='village'&&!f.dawn&&bo&&!G.dlg){const im=I.boat,sx=(bo.x-cx)*WS,sy=(bo.y-im.height*bo.s*.8-cy)*WS,bob=Math.sin(t*5)*4;
+  const L=SA.l+30,R=SW-SA.r-30,Tp=SA.t+fs*2+40,Bt=SH-SA.b-(JOY.touch?190:30);
+  if(sx>L&&sx<R&&sy>Tp&&sy<Bt){txt('▼ 渡船',sx,sy-6+bob,fs+2,'#ffe9a8','center')}
+  else{const ax=Math.max(L+20,Math.min(R-20,sx)),ay=Math.max(Tp,Math.min(Bt,sy)),an=Math.atan2(sy-ay,sx-ax);X.save();X.translate(ax,ay);X.fillStyle='rgba(0,0,0,.55)';X.beginPath();X.arc(0,0,fs*1.7,0,7);X.fill();X.rotate(an);X.fillStyle='#ffe9a8';X.beginPath();X.moveTo(fs*1.5+bob/2,0);X.lineTo(fs*.6,-fs*.7);X.lineTo(fs*.6,fs*.7);X.fill();X.restore();txt('渡船',ax,ay+fs*.4,fs-2,'#fff','center')}}}
+ txt('v7',SW-SA.r-6,SH-SA.b-4,Math.max(10,fs-6),'rgba(255,255,255,.6)','right');
  const at=now-G.lt;if(M.id=='temple'&&at<2600){X.globalAlpha=Math.min(1,Math.max(0,1-(at-1600)/1000));X.fillStyle='#000';X.fillRect(0,0,SW,SH);cover(I.ext);const fs2=fs+6;box(SW/2-80,SH*.7,160,fs2+22);txt('河神廟',SW/2,SH*.7+fs2+6,fs2,'#f3dfa0','center');X.globalAlpha=1}}
 function dlgTop(){return JOY.touch&&SW>SH}
 function drawDlg(){const d=G.dlg,[n,t]=d.l[d.i],pk=PORT[n];UI();const fs=FS(),port=SW>SH,top=dlgTop();
@@ -354,7 +360,7 @@ function drawTitle(now){UI();X.fillStyle='#000';X.fillRect(0,0,SW,SH);const c=co
  X.save();X.shadowColor='#000';X.shadowBlur=12;txt('雲渡仙緣',SW/2,ty,big,'#f3dfa0','center');txt('第一章〈夜渡〉',SW/2,ty+big*.75,big*.38,'#cfe','center');X.restore();
  if(G.cred){X.fillStyle='rgba(0,0,20,.82)';X.fillRect(0,0,SW,SH);const L=CREDITS;L.forEach((l,i)=>txt(l,SW/2,SA.t+60+i*(fs+12),i?fs-1:fs+4,i?'#e8e8f0':'#f3dfa0','center'));return}
  if(Math.floor(t*1.6)%2)txt(JOY.touch?'按 A 開始':'按 Enter／空白鍵 開始',SW/2,SH-SA.b-(JOY.touch?230:70),fs+3,'#fff','center');
- txt(JOY.touch?'B：素材來源 CREDITS':'C／Esc：素材來源 CREDITS',SW/2,SH-SA.b-(JOY.touch?200:40),fs-3,'#cde','center');
+ txt('版本 v7',SW-SA.r-8,SA.t+fs+4,fs-3,'#cde','right');txt(JOY.touch?'B：素材來源 CREDITS':'C／Esc：素材來源 CREDITS',SW/2,SH-SA.b-(JOY.touch?200:40),fs-3,'#cde','center');
  if(!ready)txt('載入中…',SW/2,SH/2,fs,'#fff','center')}
 const CREDITS=['【CREDITS 素材來源】','','角色、場景、道具、敵人、立繪、背景：','本作原創 AI 生成手繪風素材','（色鍵去背後合成）','','程式、劇情：《雲渡仙緣》原創','','按 B／C／Esc 返回'];
 function drawOver(){UI();X.fillStyle='#200';X.fillRect(0,0,SW,SH);const fs=FS();txt('勝敗乃兵家常事',SW/2,SH*.42,fs*2,'#f88','center');txt('按 A／確定 重新挑戰',SW/2,SH*.42+fs*3,fs,'#fff','center')}
