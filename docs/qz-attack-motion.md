@@ -1,3 +1,5 @@
+> ⚠️ v22 起戰鬥改為斜角站位（見 `docs/art/diag-battle-v22.md`）：本文的演出系統（`QZ_ATTACK`、竹篙、握點）已被 `src/battle_motion.js` 的 `BPLAN` 取代，僅保留作歷史紀錄。
+
 # 陳青舟普通攻擊原型
 
 只處理青舟普通攻擊；白苓、技能、傷害公式、回合與操作均沿用既有程式。v17 使用手繪竹篙與三張獨立攻擊姿勢，圖片來源及提示詞見 `docs/art/qz-attack-v17.md`。
