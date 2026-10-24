@@ -35,4 +35,4 @@ npx playwright install chromium      # 或改用系統 Chrome：export CHROME_PA
 - 也可對線上或其他版本測試：`URL=https://k80734539.github.io/yundu-game/ npm run test:screens`（play/touch/fx/screens 皆支援 `URL`）。
 - 測試掛勾（在 `src/main.js`）：`G_()`、`press(k)`、`TP(x,y,dir)`、`M_()`、`__sb(enemies,opt)` 開戰、`__ex(pend,target)` 執行指令、`__ep()` 敵方行動、`mk(...)` 建角色。請保留。
 
-`npm test` 同時執行 `attack-motion.mjs`，定格截圖放 `tests/out/attack-motion/<尺寸>/`。青舟普攻使用手繪竹篙與三張攻擊姿勢；測試額外驗證握點、拖尾尖端一致、缺圖回退與粒子上限。傷害與回合規則不變。
+`npm test` 同時執行 `qz-sprite.mjs`（v19 青舟／白苓／雲纖 192×192／4 幀 sprite：48 張載入、走路循環、腳底錨點與身高、王大叔舊 72×66 不變；`npm run test:qzsprite`）與 `attack-motion.mjs`，定格截圖放 `tests/out/attack-motion/<尺寸>/`。青舟普攻使用手繪竹篙與三張攻擊姿勢；測試額外驗證握點、拖尾尖端一致、缺圖回退與粒子上限。傷害與回合規則不變。

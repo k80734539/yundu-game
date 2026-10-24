@@ -10,8 +10,18 @@ function cover(im,fx,fy){const s=Math.max(SW/im.width,SH/im.height),w=im.width*s
 function light(x,y,r,col){const g=X.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,0)');X.fillStyle=g;X.fillRect(x-r,y-r,2*r,2*r)}
 const UI=()=>X.setTransform(K,0,0,K,0,0);
 const FS=()=>Math.max(14,Math.min(19,Math.min(SW,SH)/22));
-function spriteKey(k,dir,f){const fr=f>0?[0,1,0,2][Math.floor(f)&3]:0;let key=k+'_'+dir+fr;if(I[key])return key;key=k+'_'+dir+'0';if(I[key])return key;key=k+'_down0';return I[key]?key:k}
-function chr(key,x,y,a){const im=I[key];if(!im?.naturalWidth){X.fillStyle='#647477';X.fillRect(x-8,y-28,16,26);X.beginPath();X.arc(x,y-34,8,0,7);X.fill();return}X.fillStyle='rgba(0,0,0,.32)';X.beginPath();X.ellipse(x,y-1,13,4.5,0,0,7);X.fill();if(a!=null)X.globalAlpha=a;X.drawImage(im,Math.round(x-im.width/2),Math.round(y-im.height+2));X.globalAlpha=1}
+// 每位角色的 sprite 規格。預設（沒列在 SPR）= 舊版 72×66、3 幀（0 站、1/2 步）、腳底在 y=66、顯示比例 1。
+// qz／bl／yx = v19 新版（三人共用同一縮放，三人身高相對一致；王大叔與其他 NPC 仍是舊規格） 192×192、4 幀（0 左腳前、1 站、2 右腳前、3 站）、腳底邊緣 y=180；k 縮放後可見身高與舊圖（60 px）相同。
+const SPR4={n:4,idle:1,seq:[0,1,2,3],map:[1,0,2],k:.353,fh:180},SPR={qz:SPR4,bl:SPR4,yx:SPR4};
+const sprC=key=>key.split('_')[0];
+const sprIs=key=>/^[a-z]+_(down|up|left|right)\d$/.test(key);
+const sprK=key=>sprIs(key)&&SPR[sprC(key)]?SPR[sprC(key)].k:1;      // 顯示縮放（相對原圖像素）
+const sprFeet=key=>sprIs(key)&&SPR[sprC(key)]?SPR[sprC(key)].fh:(I[key]?.height||66);  // 腳底邊緣在原圖的 y
+const sprIdle=(k,dir)=>k+'_'+dir+(SPR[k]?SPR[k].idle:0);
+// 以腳底 (x,y)（舊版基準：圖底 = y+2）畫 sprite；s 為額外縮放
+function sprDraw(key,x,y,s,round){const im=I[key],k=sprK(key)*(s||1);if(!im?.naturalWidth)return;const w=im.width*k,h=im.height*k,l=x-w/2,t=y+2-sprFeet(key)*k;if(round)X.drawImage(im,Math.round(l),Math.round(t),w,h);else X.drawImage(im,l,t,w,h)}
+function spriteKey(k,dir,f){const S=SPR[k],fr=S?(f>0?S.seq[Math.floor(f)&3]:S.idle):(f>0?[0,1,0,2][Math.floor(f)&3]:0);let key=k+'_'+dir+fr;if(I[key])return key;key=k+'_'+dir+(S?S.idle:0);if(I[key])return key;key=k+'_down'+(S?S.idle:0);return I[key]?key:k}
+function chr(key,x,y,a){const im=I[key];if(!im?.naturalWidth){X.fillStyle='#647477';X.fillRect(x-8,y-28,16,26);X.beginPath();X.arc(x,y-34,8,0,7);X.fill();return}X.fillStyle='rgba(0,0,0,.32)';X.beginPath();X.ellipse(x,y-1,13,4.5,0,0,7);X.fill();if(a!=null)X.globalAlpha=a;sprDraw(key,x,y,1,1);X.globalAlpha=1}
 function drawObj(o,t){if(o.fire&&I.campfire?.naturalWidth)return;if(o.tal&&G.flags.tal)return;let k=o.k;if(o.chest&&G.opened[o.chest])k='chest_o';const im=I[k],s=o.s,w=im.width*s,h=im.height*s;
  X.save();X.translate(o.x,o.y);if(o.sway){X.transform(1,0,Math.sin(t*1.3+o.sway)*.035+Math.sin(t*.6+o.sway*.7)*.012,1,0,0)}if(o.mir)X.scale(-1,1);
  if(!o.flat&&!o.sway){X.fillStyle='rgba(20,25,10,.25)';X.beginPath();X.ellipse(0,-2,w*.38,Math.max(5,h*.05),0,0,7);X.fill()}
