@@ -1,6 +1,18 @@
 'use strict';
 // 圖片清單：key -> assets/img 路徑（勿改回 base64 內嵌）
 const ASSETS={
+ "qz_pole": "assets/img/qz_pole.webp",
+ "qz_atk_windup": "assets/img/qz_atk_windup.webp",
+ "qz_atk_strike": "assets/img/qz_atk_strike.webp",
+ "qz_atk_recover": "assets/img/qz_atk_recover.webp",
+ "lin": "assets/img/lin.webp",
+ "zhou": "assets/img/zhou.webp",
+ "pt_lin": "assets/img/pt_lin.webp",
+ "pt_zhou": "assets/img/pt_zhou.webp",
+ "campfire": "assets/img/campfire.webp",
+ "pt_qz_startled": "assets/img/pt_qz_startled.webp",
+ "pt_bl_quiet": "assets/img/pt_bl_quiet.webp",
+
  "cottage": "assets/img/cottage.webp",
  "hall": "assets/img/hall.webp",
  "hut": "assets/img/hut.webp",

@@ -18,8 +18,9 @@ function drawVFX(now){const B=G.B,u=B.u||1,dt=Math.min(50,now-(B.vlt||now))/16.7
  for(const sp of B.vx){const t=now-sp.at-(sp.delay||0);if(t<0)continue;const imp=VIMP[sp.k]||150,P=sp.tg.map(o=>B.po(o)),S=B.po(sp.src),fire=!sp.fired&&t>=imp;if(fire)sp.fired=1;
   const big=sp.hits.some(h=>h.crit||h.big);
   switch(sp.k){
-  case'slash':P.forEach(q=>{const p=Math.min(1,t/260),R=Math.max(42*u,q[2]*.55);if(t<340)glowLine(arcPts(q[0],q[1],R,-2.6,-2.6+p*2.9,18,.55).slice(Math.floor(p*8)),7*u,'#7fe0ff',1-Math.max(0,(t-200)/140));
-    if(fire){burst(q[0]+R*.3,q[1],16,['#fff','#9ef','#5cf'],6*u);if(big){shake(9,320);flash(170)}else shake(3,160)}});break;
+  case'slash':P.forEach(q=>{const p=Math.min(1,t/260),R=Math.max(42*u,q[2]*.55);if(sp.motion!=='qzAttack'&&t<340)glowLine(arcPts(q[0],q[1],R,-2.6,-2.6+p*2.9,18,.55).slice(Math.floor(p*8)),7*u,'#7fe0ff',1-Math.max(0,(t-200)/140));
+    if(sp.motion==='qzAttack'&&t>=imp&&t<imp+90)orb(q[0],q[1]-q[3]*.3,(10+(t-imp)*.15)*u,'#fff3c6','rgba(224,161,61,0)',1-(t-imp)/90);
+    if(fire){burst(sp.motion==='qzAttack'?q[0]:q[0]+R*.3,sp.motion==='qzAttack'?q[1]-q[3]*.3:q[1],16,sp.motion==='qzAttack'?['#fff5ce','#f1ca78','#c49043']:['#fff','#9ef','#5cf'],6*u);if(big){shake(9,320);flash(170)}else shake(3,160)}});break;
   case'claw':P.forEach(q=>{for(let k=0;k<3;k++){const p=Math.min(1,Math.max(0,(t-k*40)/160)),ox=(k-1)*14*u,L=q[3]*.55;if(p>0&&t<380)glowLine([[q[0]+ox+L*.35,q[1]-L*.5],[q[0]+ox+L*.35-L*.7*p,q[1]-L*.5+L*p]],5*u,'#ff7ad9',1-Math.max(0,(t-260)/120))}
     if(fire){burst(q[0],q[1],16,['#fff','#ffa6ec','#c58bff'],5.5*u);if(big){shake(9,320);flash(170)}else shake(3,160)}});break;
   case'sweep':{if(P.length){const xs=P.map(q=>q[0]),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=P[0][1]+P[0][3]*.1,R=Math.max(80*u,(Math.max(...xs)-Math.min(...xs))/2+60*u),p=Math.min(1,t/320);

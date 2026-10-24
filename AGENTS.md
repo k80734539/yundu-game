@@ -35,8 +35,10 @@ src/update.js         地圖模式更新：自由移動（非格子）、同伴�
 src/ui.js             UI 繪圖工具：UI()（重設 transform 為 CSS px）、FS() 字級、txt/box/rr/wrap、對話框 drawDlg（半身立繪）
 src/render.js         drawWorld（地圖、y-sort 物件、角色）、drawBoat（夜渡場景）
 src/fx.js             戰鬥 VFX：粒子池 VPT（上限 VMAX=160）、startFx、drawVFX、shake/flash
+src/battle_motion.js  青舟普攻650ms演出、手部握點、武器圖片與弧形拖尾（不改數值）
 src/battle_ui.js      drawBattle：敵我站位、KO 溶解、傷害數字、底部面板；觸控 bTap / B.hit 點擊區
 src/screens.js        標題、CREDITS、全滅、結局畫面
+src/save.js           存檔系統：localStorage（yundu_save_auto/1/2/3，SAVE_VER 版本號＋migrateSave）、右上「選單」DOM 按鈕與存讀檔面板、標題「繼續遊戲／讀取存檔」
 src/main.js           frame() 主迴圈（try/catch → window.__err）、測試掛勾
 assets/img/           所有圖片（webp/png/jpg），由舊版 base64 抽出
 legacy/village.html   早期村莊原型（獨立單檔，僅保存）
@@ -45,7 +47,8 @@ CREDITS.txt           素材來源（必須保留）
 tests/                Playwright 測試，見 tests/README.md
 package.json          只給測試用（npm test）
 ```
-**載入順序**（index.html）：joystick → assets → engine → data → maps → story → battle → input → update → ui → render → fx → battle_ui → screens → main。
+**載入順序**（index.html）：joystick → assets → engine → data → maps → story → battle → input → update → ui → cinematics → render → fx → battle_motion → battle_ui → screens → save → main。
+- 存檔：saveCP() 會同時寫入自動存檔；改 G 的存檔欄位或格式時，把 SAVE_VER +1 並在 migrateSave() 補升級。存檔只在 canSave()（地圖自由行動、無對話/戰鬥/演出 G.cut）時允許。
 classic script 的 function 宣告只在該檔執行時才建立，所以**載入時（top-level）立即執行的程式碼只能呼叫前面檔案的東西**；在 frame()/事件中呼叫則不受限。新增檔案時放在正確位置。
 
 ## 4. 美術 / UX 規則（務必遵守）
@@ -60,11 +63,11 @@ classic script 的 function 宣告只在該檔執行時才建立，所以**載�
 - 戰鬥訊息可為 `[text, fxSpec]`，訊息出現（或被跳過）時 `startFx` 啟動，傷害數字在特效命中時間（`VIMP`）才跳出。
 
 ## 5. 版本號規則
-- 目前 **v14**。每次上線改動都要 +1（下一版 **v15**），三處一起改：
+- 目前 **v17**。每次上線改動都要 +1（下一版 **v18**），三處一起改：
   1. `index.html` `<title>雲渡仙緣 第一章 vN</title>`
   2. `src/screens.js` 標題畫面 `'版本 vN'`
   3. `src/render.js` 地圖右下角 `'vN'`
-- `grep -rn "v14" index.html src` 確認全換。上線前可對前一版打 git tag（如 `v14`）以便回滾。
+- `grep -rn "v16" index.html src` 確認版本標籤與 index.html 所有 `?v=` 均為 v17／17（劇本檔名與故事版本不改）。上線前可對前一版打 git tag（如 `v16`）以便回滾。
 
 ## 6. 測試流程
 ```bash
