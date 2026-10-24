@@ -63,11 +63,11 @@ classic script 的 function 宣告只在該檔執行時才建立，所以**載�
 - 戰鬥訊息可為 `[text, fxSpec]`，訊息出現（或被跳過）時 `startFx` 啟動，傷害數字在特效命中時間（`VIMP`）才跳出。
 
 ## 5. 版本號規則
-- 目前 **v17**。每次上線改動都要 +1（下一版 **v18**），三處一起改：
+- 目前 **v18**。每次上線改動都要 +1（下一版 **v19**），三處一起改：
   1. `index.html` `<title>雲渡仙緣 第一章 vN</title>`
   2. `src/screens.js` 標題畫面 `'版本 vN'`
   3. `src/render.js` 地圖右下角 `'vN'`
-- `grep -rn "v16" index.html src` 確認版本標籤與 index.html 所有 `?v=` 均為 v17／17（劇本檔名與故事版本不改）。上線前可對前一版打 git tag（如 `v16`）以便回滾。
+- `grep -rn "v17" index.html src` 確認版本標籤與 index.html 所有 `?v=` 均為 v18／18（劇本檔名與故事版本不改）。上線前可對前一版打 git tag（如 `v16`）以便回滾。
 
 ## 6. 測試流程
 ```bash
