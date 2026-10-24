@@ -3,7 +3,7 @@
 // 三人共用同一縮放 BFR.scale。滑步只改畫面座標，不碰戰鬥邏輯（傷害／命中時間仍由 startFx 排程）。
 const BFR={w:480,h:420,fx:240,fy:355,scale:.39};
 const BPRE={qz:'qzd',bl:'bld',yx:'yxd'};          // 角色 → 影格檔名前綴
-const BSLOT={yx:0,qz:1,bl:2};                      // 斜角站位：左上→右下 雲纖、青舟、白苓
+const BSLOT={yx:0,qz:1,bl:2};                      // 左→右 雲纖、青舟（中間略低）、白苓
 const HIT_MS=450;                                  // 受擊 pose 持續時間
 const motionEase=p=>{p=Math.max(0,Math.min(1,p));return p*p*(3-2*p)};
 // 動作表：delay＝命中延遲（命中時間＝sp.at+delay+VIMP[k]）；seq＝[結束 ms, 影格]；sl＝滑步關鍵影格 [ms, 0~1 佔滑行距離]；pull＝點擊跳過時直接拉到命中

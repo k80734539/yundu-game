@@ -1,14 +1,14 @@
 'use strict';
-// v22 戰鬥畫面：全螢幕背景＋斜角站位（敵人左上、我方右下斜排）、八角指令鈕、底部三張角色卡、觸控 bTap
-// 設計座標：直式 390×844（我方腳底 雲纖(185,505) 青舟(262,585) 白苓(335,665)），依實際畫面等比縮放；橫式另有一組座標。
-const BP_FEET=[[160,540],[240,625],[320,710]],BP_EN={1:[[100,300]],2:[[70,260],[150,340]],3:[[60,250],[150,320],[70,390]],b:[[100,330]]};
+// v22 戰鬥畫面：全螢幕背景＋左中右橫向站位（敵人左上、我方左／中／右排開，中間略低）、八角指令鈕、底部三張角色卡、觸控 bTap
+// 設計座標：直式 390×844（我方腳底 左雲纖(110,640) 中青舟(210,670) 右白苓(310,640)），依實際畫面等比縮放；橫式另有一組座標。
+const BP_FEET=[[110,640],[210,670],[310,640]],BP_EN={1:[[100,300]],2:[[70,260],[150,340]],3:[[60,250],[150,320],[70,390]],b:[[100,330]]};
 function bLayout(n){const port=SH>SW,aw=SW-SA.l-SA.r,L={port,aw};
  L.U=port?Math.min(SW/390,SH/844):SH/390;L.s=BFR.scale*L.U;L.eu=L.U;
  L.ch=port?Math.max(62,Math.round(82*L.U)):54;L.cy=SH-SA.b-L.ch-8;const gap=port?10:8;
  L.cw=port?(aw-24-gap*2)/3:Math.min(210,(aw-24-gap*2)/3);L.cx0=port?SA.l+12:SA.l+(aw-(L.cw*3+gap*2))/2;L.gap=gap;
  const fp=port?(q=>[SW/2+(SA.l-SA.r)/2+(q[0]-195)*L.U,SH-SA.b-(844-q[1])*L.U]):null;
  if(port){L.feet=BP_FEET.map(fp);L.en=(k,boss)=>(BP_EN[boss?'b':Math.min(3,k)]||BP_EN[1]).map(fp)}
- else{const k=SH/390,cx=SA.l+aw*.72,cyf=L.cy-64*k;L.feet=[[cx-80*k,cyf-52*k],[cx,cyf],[cx+80*k,cyf+52*k]];
+ else{const k=SH/390,cx=SA.l+aw*.68,cyf=L.cy-64*k;L.feet=[[cx-100*k,cyf],[cx,cyf+30*k],[cx+100*k,cyf]];
   const ex=SA.l+aw*.25,ey=L.cy-92*k;L.en=(m,boss)=>boss?[[ex,ey+16*k]]:Array.from({length:m},(_,i)=>[ex+(i-(m-1)/2)*80*k,ey+(i-(m-1)/2)*50*k])}
  // 指令鈕（畫面右緣中段、由上往下疊，仿仙劍；不遮住任何角色）：直式 x=SW-SA.r-40、第一顆在 SH*.30，每 50px 一顆；逃跑在左上
  L.bd=Math.max(34,Math.min(44,40*Math.max(.9,L.U)));L.bs=Math.max(46,Math.round(50*Math.max(.92,L.U)));L.bx=SW-SA.r-(port?Math.max(34,40*L.U):34);L.by=Math.max(SA.t+86,Math.round(port?SH*.30:SA.t+96*L.U));
@@ -36,7 +36,7 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
  const u2=G.party[B.ai]||G.party[0];
  // 訊息裡的特效在這一格就啟動（不等到上方訊息框畫出來），受擊／倒下 pose 才不會早一格
  {const c0=B.ph==='msg'&&B.msgs[0];if(Array.isArray(c0)&&c0[1].at==null)startFx(c0[1],now)}
- // ---- 幾何：敵人（左上）與我方（右下斜排）
+ // ---- 幾何：敵人（左上）與我方（下方左中右橫排）
  const boss=B.en.some(e=>e.boss),ES=L.en(n,boss&&n===1);
  const eScale=e=>(e.boss?.57:e.e=='lu'?.59:.58)*L.eu;  // 小水妖≈70px、蘆葦精≈100px、河伯≈170px（390×844）
  B.po=o=>{const ei=B.en.indexOf(o);if(ei>=0){const im=I[o.e],s2=eScale(o),q=ES[Math.min(ei,ES.length-1)];return[q[0],q[1]-im.height*s2/2,im.width*s2,im.height*s2]}
@@ -51,7 +51,7 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
   const bw=Math.min(90,Math.max(w*.9,60));lab.push(()=>{X.font=(fs-2)+'px '+FONT;txt(e.n,x,y+fs+4,fs-2,'#fff','center');X.fillStyle='#400';X.fillRect(x-bw/2,y+fs+10,bw,6);X.fillStyle='#e44';X.fillRect(x-bw/2,y+fs+10,bw*e.hp/e.mhp,6)});
   if(B.ph=='target'&&B.tk=='E'){if(B.sel==i)txt('▼',x,y-h-6+Math.sin(t*8)*3,fs+6,'#ff0','center');H.push({x:x-Math.max(w,60)/2,y:y-h-10,w:Math.max(w,60),h:h+fs+30,fn:()=>{B.sel=i;press('ok')}})}});
  lab.forEach(f=>f());
- // ---- 我方（斜排；依腳底 y 由上往下畫）
+ // ---- 我方（左中右橫排，中間略低；依腳底 y 由上往下畫）
  B.pose={};const order=G.party.map((p,i)=>i).sort((a,b)=>B.feetOf(G.party[a])[1]-B.feetOf(G.party[b])[1]);
  order.forEach(i=>{const p=G.party[i],F=B.feetOf(p),sl=bSlot(p,i),act=i==B.ai&&B.ph!='msg'&&!B.won,ps=bPose(p,sl,now,F,s,L);B.pose[i]=ps.name;
   const im=I[ps.pre+'_'+ps.name]?.naturalWidth?I[ps.pre+'_'+ps.name]:I[ps.pre+'_idle0'];const hx=ps.hit?Math.sin(now/20)*4*u:0,x=F[0]+ps.dx+hx,y=F[1]+ps.dy,al=ent*(p.hp>0||ps.name==='down'?1:.35);

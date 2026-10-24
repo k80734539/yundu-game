@@ -25,7 +25,8 @@ export async function diagBattle(browser,url,sizes=[[390,844],[375,553],[844,390
    await setup();
    const lay=await pg.evaluate(()=>{const B=G_().B,L=B.L;return{port:L.port,feet:L.feet,en:B.en.map(e=>B.po(e)),cards:B.cards,hit:B.hit.map(h=>({x:h.x,y:h.y,w:h.w,h:h.h})),s:L.s,SW:window.innerWidth,SH:window.innerHeight}});
    assert.equal(lay.cards.length,3);
-   if(lay.port){assert.ok(lay.feet[0][0]<lay.feet[1][0]&&lay.feet[1][0]<lay.feet[2][0]&&lay.feet[0][1]<lay.feet[1][1]&&lay.feet[1][1]<lay.feet[2][1],'party on lower-right diagonal (雲纖→青舟→白苓)');
+   assert.ok(lay.feet[0][0]<lay.feet[1][0]&&lay.feet[1][0]<lay.feet[2][0]&&lay.feet[1][1]>lay.feet[0][1]&&lay.feet[1][1]>lay.feet[2][1],'party left/middle/right, middle lower (雲纖,青舟,白苓)');
+   if(lay.port){
     assert.ok(Math.max(...lay.en.map(q=>q[0]))<lay.feet[1][0]&&Math.max(...lay.en.map(q=>q[1]))<lay.feet[2][1],'enemies upper-left')}
    for(const c of lay.cards){assert.ok(c.x>=0&&c.x+c.w<=lay.SW&&c.y+c.h<=lay.SH&&c.h>=44,'card inside screen')}
    assert.ok(lay.cards[0].x+lay.cards[0].w<=lay.cards[1].x&&lay.cards[1].x+lay.cards[1].w<=lay.cards[2].x,'cards do not overlap');
@@ -42,8 +43,10 @@ export async function diagBattle(browser,url,sizes=[[390,844],[375,553],[844,390
    for(let i=0;i<pr.length;i++)for(let j=i+1;j<pr.length;j++)assert.ok(!hit2(pr[i],pr[j]),`party ${i}/${j} overlap`);
    for(let i=0;i<er.length;i++)for(let j=i+1;j<er.length;j++)assert.ok(!hit2(er[i],er[j]),`enemy ${i}/${j} overlap`);
    for(const a of pr)for(const b of er)assert.ok(!hit2(a,b),'party overlaps enemy at rest');
+   for(const q of rects.p){assert.ok(q[0]-q[2]*.3>=0&&q[0]+q[2]*.3<=lay.SW,'party inside screen horizontally')}
    for(const h of lay.hit)for(const a of [...pr,...er])assert.ok(!hit2(h,a)||h===lay.hit[4],'command button covers a character');
-   if(lay.port){const U=rects.U;for(let i=0;i<3;i++)for(let j=i+1;j<3;j++){assert.ok(Math.abs(lay.feet[i][0]-lay.feet[j][0])>=70*U-.5&&Math.abs(lay.feet[i][1]-lay.feet[j][1])>=70*U-.5,'party spacing ≥70')}
+   if(lay.port){const U=rects.U;for(let i=0;i<2;i++)assert.ok(lay.feet[i+1][0]-lay.feet[i][0]>=95*U*Math.min(1,lay.SW/390/U)-.5,'party horizontal spacing ≈100');
+    assert.ok(lay.feet[1][1]-lay.feet[0][1]>=25*U&&Math.abs(lay.feet[0][1]-lay.feet[2][1])<1,'middle ≈30px lower, ends level');
     const ph=270*lay.s;assert.ok(ph>=lay.SH*.1&&ph<=lay.SH*.15,'party height ≈ SH/8 '+ph);
     assert.ok(Math.abs(lay.en[0][3]-70*U)<8*U&&Math.abs(lay.en[2][3]-100*U)<10*U,'enemy heights '+lay.en.map(q=>q[3]))}
    await pg.screenshot({path:`${dir}/layout.png`});
