@@ -33,10 +33,21 @@ export async function diagBattle(browser,url,sizes=[[390,844],[375,553],[844,390
    for(const h of lay.hit){assert.ok(h.w>=44&&h.h>=44,`touch target ${h.w}×${h.h}`);assert.ok(h.x>=0&&h.y>=0&&h.x+h.w<=lay.SW&&h.y+h.h<=lay.SH);
     for(const c of lay.cards)assert.ok(h.x+h.w<=c.x||c.x+c.w<=h.x||h.y+h.h<=c.y||c.y+c.h<=h.y,'button overlaps card')}
    assert.ok(lay.hit[4].x<lay.SW*.3&&lay.hit[4].y<lay.SH*.3,'逃 at top-left');
-   assert.ok(lay.hit[0].x>lay.SW*.6&&lay.hit[0].y>lay.SH*.5,'攻 at lower-right');
-   for(let i=1;i<4;i++)assert.ok(lay.hit[i].y<lay.hit[i-1].y,'buttons stack upward');
+   assert.ok(lay.hit[0].x>lay.SW*.6&&lay.hit[0].y>lay.SH*.1&&lay.hit[0].y<lay.SH*.5,'攻 at right-edge middle/upper');
+   for(let i=1;i<4;i++)assert.ok(lay.hit[i].y>lay.hit[i-1].y,'buttons stack downward');
+   // v22b：角色縮小、站位散開、指令鈕不遮任何角色、敵我不重疊
+   const R=q=>({x:q[0]-q[2]/2,y:q[1]-q[3]/2,w:q[2],h:q[3]}),hit2=(a,b)=>!(a.x+a.w<=b.x||b.x+b.w<=a.x||a.y+a.h<=b.y||b.y+b.h<=a.y);
+   const rects=await pg.evaluate(()=>{const B=G_().B;return{p:G_().party.map(p=>B.po(p)),e:B.en.map(e=>B.po(e)),U:B.L.U}});
+   const pr=rects.p.map(q=>R([q[0],q[1],q[2]*.62,q[3]*.9])),er=rects.e.map(R);
+   for(let i=0;i<pr.length;i++)for(let j=i+1;j<pr.length;j++)assert.ok(!hit2(pr[i],pr[j]),`party ${i}/${j} overlap`);
+   for(let i=0;i<er.length;i++)for(let j=i+1;j<er.length;j++)assert.ok(!hit2(er[i],er[j]),`enemy ${i}/${j} overlap`);
+   for(const a of pr)for(const b of er)assert.ok(!hit2(a,b),'party overlaps enemy at rest');
+   for(const h of lay.hit)for(const a of [...pr,...er])assert.ok(!hit2(h,a)||h===lay.hit[4],'command button covers a character');
+   if(lay.port){const U=rects.U;for(let i=0;i<3;i++)for(let j=i+1;j<3;j++){assert.ok(Math.abs(lay.feet[i][0]-lay.feet[j][0])>=70*U-.5&&Math.abs(lay.feet[i][1]-lay.feet[j][1])>=70*U-.5,'party spacing ≥70')}
+    const ph=270*lay.s;assert.ok(ph>=lay.SH*.1&&ph<=lay.SH*.15,'party height ≈ SH/8 '+ph);
+    assert.ok(Math.abs(lay.en[0][3]-70*U)<8*U&&Math.abs(lay.en[2][3]-100*U)<10*U,'enemy heights '+lay.en.map(q=>q[3]))}
    await pg.screenshot({path:`${dir}/layout.png`});
-   // 共用縮放：三人影格都以 0.62×480×420（×畫面係數）畫出
+   // 共用縮放：三人影格都以 BFR.scale×480×420（×畫面係數）畫出
    await pg.evaluate(()=>{const o=CanvasRenderingContext2D.prototype.drawImage;window.__sp=[];window.__so=o;CanvasRenderingContext2D.prototype.drawImage=function(im,...a){for(const k of ['qzd','bld','yxd'])for(const n of ['idle0','idle1'])if(I[k+'_'+n]===im)window.__sp.push({k,w:a[2],h:a[3]});return o.call(this,im,...a)}});
    await step(50);
    const sc=await pg.evaluate(()=>{CanvasRenderingContext2D.prototype.drawImage=window.__so;return{r:window.__sp,s:G_().B.L.s}});
@@ -58,6 +69,13 @@ export async function diagBattle(browser,url,sizes=[[390,844],[375,553],[844,390
    await setup();await pg.evaluate("press('ok');press('ok')");
    const dist=[];for(let t=0;t<800;t+=40){await step(40);dist.push(await pg.evaluate(()=>{const B=G_().B,p=G_().party[0],F=B.feetOf(p),ps=bPose(p,1,performance.now(),F,B.L.s,B.L);return Math.hypot(ps.dx,ps.dy)}))}
    assert.ok(Math.max(...dist)>40,'qz slides toward enemy '+Math.max(...dist));assert.ok(dist.at(-1)<1,'qz returns to stance');
+   // 衝刺只到敵人旁邊：身體（約 ±24×±50px）不得與任何敵人圖重疊（普攻與橫掃）
+   for(const [setupArgs,keys] of [[[],"press('ok');press('ok')"],[[],"press('down');press('ok');press('ok')"]]){
+    await setup(...setupArgs);await pg.evaluate("G_().B.ai=0;"+keys);let worst=1e9;
+    for(let t=0;t<800;t+=40){await step(40);const c=await pg.evaluate(()=>{const B=G_().B,p=G_().party[0],F=B.feetOf(p),ps=bPose(p,1,performance.now(),F,B.L.s,B.L),u=B.L.U,bx=F[0]+ps.dx,by=F[1]+ps.dy-52*u;
+     return B.en.filter(e=>e.hp>0).map(e=>{const q=B.po(e),dx=Math.max(0,Math.abs(bx-q[0])-(q[2]/2+24*u)),dy=Math.max(0,Math.abs(by-q[1])-(q[3]/2+50*u));return Math.hypot(dx,dy)+(dx>0||dy>0?0:-1)})});
+     worst=Math.min(worst,...c)}
+    assert.ok(worst>=-1+1e-9&&worst>=0,'qz dash stops beside enemies '+worst)}
    // 橫掃：sweepwind → sweep → recover
    await setup();await pg.evaluate("press('down');press('ok');press('ok')");const sw=[];for(let t=0;t<1100;t+=40){await step(40);sw.push(await pg.evaluate("G_().B.pose[0]"))}
    assert.ok(['sweepwind','sweep','recover'].every(n=>sw.includes(n))&&sw.indexOf('sweepwind')<sw.indexOf('sweep')&&sw.indexOf('sweep')<sw.indexOf('recover'),'sweep '+collapse(sw));

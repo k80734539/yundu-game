@@ -1,17 +1,17 @@
 'use strict';
 // v22 戰鬥畫面：全螢幕背景＋斜角站位（敵人左上、我方右下斜排）、八角指令鈕、底部三張角色卡、觸控 bTap
 // 設計座標：直式 390×844（我方腳底 雲纖(185,505) 青舟(262,585) 白苓(335,665)），依實際畫面等比縮放；橫式另有一組座標。
-const BP_FEET=[[185,505],[262,585],[335,665]],BP_EN={1:[[110,360]],2:[[80,318],[142,392]],3:[[36,250],[84,314],[132,378]],b:[[108,390]]};
+const BP_FEET=[[160,540],[240,625],[320,710]],BP_EN={1:[[100,300]],2:[[70,260],[150,340]],3:[[60,250],[150,320],[70,390]],b:[[100,330]]};
 function bLayout(n){const port=SH>SW,aw=SW-SA.l-SA.r,L={port,aw};
- L.U=port?Math.min(SW/390,SH/844):.75*SH/390;L.s=BFR.scale*L.U;L.eu=port?L.U:SH/390*.8;
+ L.U=port?Math.min(SW/390,SH/844):SH/390;L.s=BFR.scale*L.U;L.eu=L.U;
  L.ch=port?Math.max(62,Math.round(82*L.U)):54;L.cy=SH-SA.b-L.ch-8;const gap=port?10:8;
  L.cw=port?(aw-24-gap*2)/3:Math.min(210,(aw-24-gap*2)/3);L.cx0=port?SA.l+12:SA.l+(aw-(L.cw*3+gap*2))/2;L.gap=gap;
  const fp=port?(q=>[SW/2+(SA.l-SA.r)/2+(q[0]-195)*L.U,SH-SA.b-(844-q[1])*L.U]):null;
  if(port){L.feet=BP_FEET.map(fp);L.en=(k,boss)=>(BP_EN[boss?'b':Math.min(3,k)]||BP_EN[1]).map(fp)}
- else{const k=SH/390,cx=SA.l+aw*.72,cyf=L.cy-64*k;L.feet=[[cx-66*k,cyf-52*k],[cx,cyf],[cx+66*k,cyf+52*k]];
-  const ex=SA.l+aw*.25,ey=L.cy-92*k;L.en=(m,boss)=>boss?[[ex,ey+16*k]]:Array.from({length:m},(_,i)=>[ex+(i-(m-1)/2)*52*k,ey+(i-(m-1)/2)*46*k])}
- // 指令鈕（右下、往上疊）：直式 x=SW-SA.r-40、第一顆在 cardTop-32，每 50px 一顆；逃跑在左上
- L.bd=Math.max(34,Math.min(44,40*Math.max(.9,L.U)));L.bs=Math.max(46,Math.round(50*Math.max(.92,L.U)));L.bx=SW-SA.r-(port?Math.max(34,40*L.U):34);L.by=L.cy-32;
+ else{const k=SH/390,cx=SA.l+aw*.72,cyf=L.cy-64*k;L.feet=[[cx-80*k,cyf-52*k],[cx,cyf],[cx+80*k,cyf+52*k]];
+  const ex=SA.l+aw*.25,ey=L.cy-92*k;L.en=(m,boss)=>boss?[[ex,ey+16*k]]:Array.from({length:m},(_,i)=>[ex+(i-(m-1)/2)*80*k,ey+(i-(m-1)/2)*50*k])}
+ // 指令鈕（畫面右緣中段、由上往下疊，仿仙劍；不遮住任何角色）：直式 x=SW-SA.r-40、第一顆在 SH*.30，每 50px 一顆；逃跑在左上
+ L.bd=Math.max(34,Math.min(44,40*Math.max(.9,L.U)));L.bs=Math.max(46,Math.round(50*Math.max(.92,L.U)));L.bx=SW-SA.r-(port?Math.max(34,40*L.U):34);L.by=Math.max(SA.t+86,Math.round(port?SH*.30:SA.t+96*L.U));
  L.ex=[SA.l+14+L.bd/2,SA.t+14+L.bd/2];return L}
 function bSlot(p,i){return BSLOT[p.e]!=null?BSLOT[p.e]:Math.min(i,2)}
 function oct(cx,cy,r){X.beginPath();for(let i=0;i<8;i++){const a=Math.PI/8+i*Math.PI/4,x=cx+Math.cos(a)*r*1.0824,y=cy+Math.sin(a)*r*1.0824;i?X.lineTo(x,y):X.moveTo(x,y)}X.closePath()}
@@ -38,15 +38,15 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
  {const c0=B.ph==='msg'&&B.msgs[0];if(Array.isArray(c0)&&c0[1].at==null)startFx(c0[1],now)}
  // ---- 幾何：敵人（左上）與我方（右下斜排）
  const boss=B.en.some(e=>e.boss),ES=L.en(n,boss&&n===1);
- const eScale=e=>(e.boss?.78:n>=3?.72:.86)*(e.e=='lu'?.95:1)*L.eu;
+ const eScale=e=>(e.boss?.57:e.e=='lu'?.59:.58)*L.eu;  // 小水妖≈70px、蘆葦精≈100px、河伯≈170px（390×844）
  B.po=o=>{const ei=B.en.indexOf(o);if(ei>=0){const im=I[o.e],s2=eScale(o),q=ES[Math.min(ei,ES.length-1)];return[q[0],q[1]-im.height*s2/2,im.width*s2,im.height*s2]}
-  const pi=G.party.indexOf(o),F=L.feet[bSlot(o,Math.max(0,pi))];return[F[0],F[1]-118*s,95*s,236*s]};
+  const pi=G.party.indexOf(o),F=L.feet[bSlot(o,Math.max(0,pi))];return[F[0],F[1]-135*s,95*s,270*s]};
  B.feetOf=p=>L.feet[bSlot(p,Math.max(0,G.party.indexOf(p)))];
  X.font=(fs-2)+'px '+FONT;
  // ---- 敵人（後方，依序由左上畫到右下）
  const lab=[];B.en.forEach((e,i)=>{let da=0;if(e.hp<=0&&e.dieAt){if(now>e.dieAt+650)return;if(now>e.dieAt){da=(now-e.dieAt)/650;if(!e.dz){e.dz=1;const q=B.po&&B.po(e);if(q)for(let k=0;k<26;k++)vp({x:q[0]+(Math.random()-.5)*q[2]*.7,y:q[1]+(Math.random()-.5)*q[3]*.7,vx:(Math.random()-.5)*1.2,vy:-1-Math.random()*2.2,col:k%2?'#bfe8ff':'#fff',sz:2+Math.random()*3,life:500+Math.random()*400})}}}
   const im=I[e.e],s2=eScale(e),w=im.width*s2,h=im.height*s2,q=ES[Math.min(i,ES.length-1)],x=q[0],y=q[1],bob=Math.sin(t*2.2+e.ph)*3*u;
-  const fx=B.fx.find(f=>f.t==e&&!f.heal&&now>=f.at&&now-f.at<500);X.fillStyle='rgba(0,0,0,.38)';X.beginPath();X.ellipse(x,y-2*u,w*.4,Math.max(6,9*u),0,0,7);X.fill();
+  const fx=B.fx.find(f=>f.t==e&&!f.heal&&now>=f.at&&now-f.at<500);X.fillStyle='rgba(0,0,0,.38)';X.beginPath();X.ellipse(x,y-2*u,w*.4,Math.max(4,6*u),0,0,7);X.fill();
   X.save();X.globalAlpha=ent*(1-da);if(fx&&Math.floor((now-fx.at)/70)%2)X.globalAlpha*=.4;if(da){X.translate(x,y);X.scale(1+da*.25,1-da*.5);X.translate(-x,-y)}X.drawImage(im,x-w/2+(fx?Math.sin(now/20)*3:0),y-h+bob-da*20*u,w,h);if(da>0){X.globalCompositeOperation='lighter';X.globalAlpha=(1-da)*.6;X.drawImage(im,x-w/2,y-h+bob-da*20*u,w,h)}X.restore();if(da)return;
   const bw=Math.min(90,Math.max(w*.9,60));lab.push(()=>{X.font=(fs-2)+'px '+FONT;txt(e.n,x,y+fs+4,fs-2,'#fff','center');X.fillStyle='#400';X.fillRect(x-bw/2,y+fs+10,bw,6);X.fillStyle='#e44';X.fillRect(x-bw/2,y+fs+10,bw*e.hp/e.mhp,6)});
   if(B.ph=='target'&&B.tk=='E'){if(B.sel==i)txt('▼',x,y-h-6+Math.sin(t*8)*3,fs+6,'#ff0','center');H.push({x:x-Math.max(w,60)/2,y:y-h-10,w:Math.max(w,60),h:h+fs+30,fn:()=>{B.sel=i;press('ok')}})}});
@@ -55,11 +55,11 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
  B.pose={};const order=G.party.map((p,i)=>i).sort((a,b)=>B.feetOf(G.party[a])[1]-B.feetOf(G.party[b])[1]);
  order.forEach(i=>{const p=G.party[i],F=B.feetOf(p),sl=bSlot(p,i),act=i==B.ai&&B.ph!='msg'&&!B.won,ps=bPose(p,sl,now,F,s,L);B.pose[i]=ps.name;
   const im=I[ps.pre+'_'+ps.name]?.naturalWidth?I[ps.pre+'_'+ps.name]:I[ps.pre+'_idle0'];const hx=ps.hit?Math.sin(now/20)*4*u:0,x=F[0]+ps.dx+hx,y=F[1]+ps.dy,al=ent*(p.hp>0||ps.name==='down'?1:.35);
-  X.fillStyle='rgba(0,0,0,.38)';X.beginPath();X.ellipse(x,y-2*u,46*s,Math.max(6,13*s),0,0,7);X.fill();
+  X.fillStyle='rgba(0,0,0,.38)';X.beginPath();X.ellipse(x,y-2*u,58*s,Math.max(5,15*s),0,0,7);X.fill();
   if(im?.naturalWidth){X.save();X.globalAlpha=al;if(ps.hit&&Math.floor((now-(B.fx.find(f=>f.t===p&&!f.heal&&now>=f.at&&now-f.at<HIT_MS)||{at:0}).at)/70)%2)X.globalAlpha*=.6;X.drawImage(im,x-BFR.fx*s,y-BFR.fy*s,BFR.w*s,BFR.h*s);X.restore()}
-  if(p.guard&&p.hp>0)shield(x,y-110*s,70*s,125*s,.3+Math.sin(t*4)*.1);
-  if(act||(B.ph=='target'&&B.tk=='A'&&B.sel==i))txt('▼',x,y-255*s+Math.sin(t*6)*2,fs,'#ff0','center');
-  if(B.ph=='target'&&B.tk=='A')H.push({x:F[0]-55*s,y:F[1]-250*s,w:110*s,h:260*s,fn:()=>{B.sel=i;press('ok')}})});
+  if(p.guard&&p.hp>0)shield(x,y-125*s,70*s,140*s,.3+Math.sin(t*4)*.1);
+  if(act||(B.ph=='target'&&B.tk=='A'&&B.sel==i))txt('▼',x,y-290*s+Math.sin(t*6)*2,fs,'#ff0','center');
+  if(B.ph=='target'&&B.tk=='A')H.push({x:F[0]-Math.max(55*s,24),y:F[1]-285*s,w:Math.max(110*s,48),h:295*s,fn:()=>{B.sel=i;press('ok')}})});
  B.fx=B.fx.filter(f=>now-f.at<1000);
  drawVFX(now);UI();
  // ---- 底部角色卡
@@ -68,12 +68,12 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
  // ---- 指令：八角小圖示鈕（右下往上疊；逃跑在左上）；技能／道具清單浮在卡片上方
  let info='';const bhs=Math.max(46,L.bd+6),push=(cx,cy,fn)=>H.push({x:cx-bhs/2,y:cy-bhs/2,w:bhs,h:bhs,fn});
  if(B.ph=='cmd'){const G4=[['攻',0],['技',1],['道',2],['防',3]];
-  G4.forEach(([ch,i])=>{const cx=L.bx,cy=L.by-i*L.bs,sel=B.sel==i;octBtn(cx,cy,L.bd,ch,sel,fs);push(cx,cy,()=>{B.sel=i;press('ok')})});
+  G4.forEach(([ch,i])=>{const cx=L.bx,cy=L.by+i*L.bs,sel=B.sel==i;octBtn(cx,cy,L.bd,ch,sel,fs);push(cx,cy,()=>{B.sel=i;press('ok')})});
   octBtn(L.ex[0],L.ex[1],L.bd,'逃',B.sel==4,fs);push(L.ex[0],L.ex[1],()=>{B.sel=4;press('ok')})}
  else if(B.ph=='skill'||B.ph=='item'){let LL;
   if(B.ph=='skill'){LL=u2.skills.map(sk=>sk+' '+SK[sk].mp+'MP');info=SK[u2.skills[B.sel]]?SK[u2.skills[B.sel]].d:''}
   else{const ks=Object.keys(G.inv).filter(i=>G.inv[i]>0);LL=ks.map(k=>k+'×'+G.inv[k]);info=ks[B.sel]?ITEMS[ks[B.sel]].d:''}
-  const lh=fs+16,pw=Math.min(L.aw-24,Math.max(190,fs*11)),ph=(LL.length+1)*lh+12,px=SW-SA.r-12-pw,py=L.cy-8-ph;box(px,py,pw,ph,.95);
+  const lh=fs+16,pw=Math.min(L.aw-24,Math.max(190,fs*11)),ph=(LL.length+1)*lh+12,px=SW-SA.r-12-pw,py=Math.max(SA.t+80,Math.min(L.cy-8-ph,L.by-24));box(px,py,pw,ph,.95);
   [...LL,'◀ 返回'].forEach((l,i)=>{const isB=i==LL.length,sel=!isB&&i==B.sel,iy=py+6+i*lh;
    if(sel){X.fillStyle='rgba(255,230,120,.16)';rr(px+5,iy,pw-10,lh-2,5);X.fill()}
    txt((sel?'▶ ':'')+l,px+16,iy+lh/2+fs*.36,fs,isB?'#9cf':sel?'#ffe9a8':'#fff');

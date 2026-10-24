@@ -1,7 +1,7 @@
 'use strict';
 // v22 戰鬥動作：斜角站位三人 pose。影格 480×420 透明 PNG：腳底 y=355、水平中心 x=240、面向左上（背對鏡頭），
 // 三人共用同一縮放 BFR.scale。滑步只改畫面座標，不碰戰鬥邏輯（傷害／命中時間仍由 startFx 排程）。
-const BFR={w:480,h:420,fx:240,fy:355,scale:.62};
+const BFR={w:480,h:420,fx:240,fy:355,scale:.39};
 const BPRE={qz:'qzd',bl:'bld',yx:'yxd'};          // 角色 → 影格檔名前綴
 const BSLOT={yx:0,qz:1,bl:2};                      // 斜角站位：左上→右下 雲纖、青舟、白苓
 const HIT_MS=450;                                  // 受擊 pose 持續時間
@@ -32,8 +32,12 @@ function bPose(p,i,now,F,s,L){const B=G.B,pre=BPRE[p.e]||'qzd';let name,dx=0,dy=
  else if(hf)name='hit';
  else if(a){const t=now-a.at;name=(a.plan.seq.find(q=>t<q[0])||a.plan.seq[a.plan.seq.length-1])[1];
   if(a.plan.sl){const T=(a.sp.tg.length?a.sp.tg:B.en).map(o=>B.po(o)).filter(Boolean);
-   if(T.length){const tx=T.reduce((m,q)=>m+q[0],0)/T.length,ty=T.reduce((m,q)=>m+q[1],0)/T.length,ax=F[0],ay=F[1]-100*s,vx=tx-ax,vy=ty-ay,d=Math.hypot(vx,vy)||1,
-     gap=Math.max(T[0][2],T[0][3]*.7)*.4+46*(B.u||1),go=Math.max(0,Math.min(d*.8,d-gap,260*(B.u||1))),k=bLerp(a.plan.sl,t);dx=vx/d*go*k;dy=vy/d*go*k}}}
+   if(T.length){const tx=T.reduce((m,q)=>m+q[0],0)/T.length,ty=T.reduce((m,q)=>m+q[1],0)/T.length,ax=F[0],ay=F[1]-135*s,vx=tx-ax,vy=ty-ay,d=Math.hypot(vx,vy)||1,ux=vx/d,uy=vy/d,rc=34*(B.u||1),
+     all=B.en.filter(o=>o.hp>0||!o.dieAt||now<o.dieAt+650).map(o=>B.po(o)).filter(Boolean);
+    // 只衝到敵人「旁邊」：沿衝刺方向找最遠的點，使身體與每隻敵人（半徑近似）都不重疊
+    let go=Math.max(0,Math.min(d*.8,300*(B.u||1)));
+    for(;go>0;go-=4)if(all.every(q=>Math.hypot(ax+ux*go-q[0],ay+uy*go-q[1])>=Math.max(q[2],q[3])*.5+rc))break;
+    const k=bLerp(a.plan.sl,t);dx=ux*go*k;dy=uy*go*k}}}
  else if(p.guard&&p.hp>0)name='guard';
  else name='idle'+((Math.floor(now/600)+i)%2);
  return {name,dx,dy,pre,hit:!!hf}}
