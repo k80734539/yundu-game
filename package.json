@@ -8,7 +8,7 @@
     "test": "node tests/run-all.mjs",
     "test:play": "node tests/playthrough.mjs",
     "test:touch": "node tests/touch-battle.mjs",
-    "test:motion": "node tests/attack-motion.mjs",
+    "test:diag": "node tests/diag-battle.mjs",
     "test:qzsprite": "node tests/qz-sprite.mjs",
     "test:spritesize": "node tests/sprite-size.mjs",
     "test:fx": "node tests/fx.mjs",
