@@ -1,6 +1,10 @@
 'use strict';
 // 圖片清單：key -> assets/img 路徑（勿改回 base64 內嵌）
 const ASSETS={
+ "qz_pole": "assets/img/qz_pole.webp",
+ "qz_atk_windup": "assets/img/qz_atk_windup.webp",
+ "qz_atk_strike": "assets/img/qz_atk_strike.webp",
+ "qz_atk_recover": "assets/img/qz_atk_recover.webp",
  "lin": "assets/img/lin.webp",
  "zhou": "assets/img/zhou.webp",
  "pt_lin": "assets/img/pt_lin.webp",

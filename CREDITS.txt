@@ -15,3 +15,6 @@ Chapter 1 polish (v15): Lin / Zhou map sprites and matching portraits, six-frame
 Qingzhou startled and Bailing reflective portrait variants: original AI-assisted art generated
 with OpenAI image_gen for this project, referencing only existing project character art.
 No new third-party asset pack used. Prompts and processing notes: docs/art/ch1-polish.md.
+
+[v17 青舟普通攻擊美術]
+竹篙 qz_pole.webp、蓄力／揮出／收招 qz_atk_*.webp：OpenAI image_gen 原創生成，參考本專案青舟角色與立繪；透明圖片經裁切、等比縮放與握點註冊。提示詞與規格見 docs/art/qz-attack-v17.md。

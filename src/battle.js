@@ -24,7 +24,7 @@ function win(){const B=G.B,ex=B.en.reduce((s,e)=>s+e.exp,0),m=['勝利！獲得 
  G.party.forEach(p=>{if(p.hp<=0)p.hp=1;p.exp+=ex;while(p.exp>=p.lv*20){p.exp-=p.lv*20;p.lv++;p.mhp+=9;p.mmp+=3;p.atk+=2;p.def+=1;p.mag+=2;p.hp=p.mhp;p.mp=p.mmp;m.push(p.n+'升到了 Lv'+p.lv+'！HP/MP全滿！')}});
  B.msgs=m;B.ph='msg';B.after=()=>{G.B=null;G.mode='map';G.party.forEach(p=>{p.guard=0});if(B.opt.onWin)B.opt.onWin()}}
 function exec(t){const B=G.B,u=G.party[B.ai],P=B.pend,m=[];
- if(P.t=='atk'){const cr=Math.random()<.12;if(cr)m.push('會心一擊！');m.push(u.n+(u.n=='陳青舟'?'揮動竹篙':'揮袖一擊')+'，對'+t.n+'造成'+dmg(u.atk,t,0,cr)+'點傷害！');ko(t,m);wr(m,0,u.e=='bl'?'claw':'slash',u,[t])}
+ if(P.t=='atk'){const cr=Math.random()<.12;if(cr)m.push('會心一擊！');m.push(u.n+(u.n=='陳青舟'?'揮動竹篙':'揮袖一擊')+'，對'+t.n+'造成'+dmg(u.atk,t,0,cr)+'點傷害！');ko(t,m);wr(m,0,u.e=='bl'?'claw':'slash',u,[t]);if(u.e==='qz')m[0][1].motion='qzAttack'}
  else if(P.t=='sk'){const s=SK[P.s];u.mp-=s.mp;
   if(P.s=='橫掃'){m.push(u.n+'使出「橫掃」！竹篙掃過一片水花！');alive(B.en).forEach(e=>{m.push(e.n+'受到'+dmg(u.atk*.85,e)+'點傷害！');ko(e,m)});wr(m,0,'sweep',u)}
   if(P.s=='狐火'){m.push(u.n+'喚出「狐火」！藍色火焰燒向'+t.n+'，造成'+dmg(u.mag*2.2,t,1)+'點傷害！');ko(t,m);wr(m,0,'foxfire',u,[t])}
@@ -34,7 +34,7 @@ function exec(t){const B=G.B,u=G.party[B.ai],P=B.pend,m=[];
  act(m)}
 function goTarget(kind){const B=G.B;if(kind=='allE'||kind=='allA')return exec(null);B.tk=kind=='oneE'?'E':'A';B.ph='target';const L=B.tk=='E'?B.en:G.party;B.sel=L.findIndex(x=>x.hp>0)}
 function bKey(k){const B=G.B,u=G.party[B.ai];
- if(B.ph=='msg'){if(k=='ok'){const o=B.msgs.shift();if(Array.isArray(o)&&!o[1].at)startFx(o[1],performance.now());if(!B.msgs.length){const f=B.after;B.after=null;f&&f()}}return}
+ if(B.ph=='msg'){if(k=='ok'){const o=B.msgs.shift();if(Array.isArray(o)&&o[1].at==null)startFx(o[1],performance.now());finishQzAttack(performance.now());if(!B.msgs.length){const f=B.after;B.after=null;f&&f()}}return}
  const lists={cmd:['攻擊','技能','道具','防禦','逃跑'],skill:u.skills,item:Object.keys(G.inv).filter(i=>G.inv[i]>0)},L=lists[B.ph];
  if(B.ph=='target'){const A=B.tk=='E'?B.en:G.party;if(k=='cancel'){B.ph='cmd';B.sel=0;return}
   if(k=='left'||k=='up'||k=='right'||k=='down'){const s=(k=='left'||k=='up')?-1:1;let i=B.sel;do{i=(i+s+A.length)%A.length}while(A[i].hp<=0&&B.tk=='E');B.sel=i}
