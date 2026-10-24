@@ -25,3 +25,5 @@ No new third-party asset pack used. Prompts and processing notes: docs/art/ch1-p
 
 [v19 青舟／白苓／雲纖地圖行走 sprite]
 {qz,bl,yx}_{down,up,left,right}{0-3}.webp：OpenAI image_gen 原創生成（參考本專案青舟立繪與舊 sprite），經去背、裁切、等比縮放與腳底對齊後轉 webp。提示詞與規格見 docs/art/char-sprites-v19.md。
+
+敵人姿勢更新 v24：河伯、蘆葦精、小水妖六姿勢圖由專案使用者提供；透明去背、切圖與遊戲整合由 Codex 處理。

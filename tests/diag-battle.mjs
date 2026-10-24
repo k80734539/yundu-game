@@ -17,10 +17,20 @@ export async function diagBattle(browser,url,sizes=[[390,844],[375,553],[844,390
    assert.equal(await pg.evaluate(K=>Object.entries(K).every(([p,a])=>a.every(n=>ASSETS[p+'_'+n]&&I[p+'_'+n].naturalWidth===480&&I[p+'_'+n].naturalHeight===420)),KEYS),true,'30 diagonal frames 480×420');
    assert.equal(await pg.evaluate("['qz','bl','yx'].every(c=>I['pt_'+c+'_battle'].naturalWidth>=128&&I['pt_'+c].naturalWidth>0)"),true,'battle avatars + dialogue portraits');
    assert.equal(await pg.evaluate("['qz_pole','qz_atk_windup','qz_atk_strike','qz_atk_recover'].every(k=>!(k in ASSETS))"),true,'v20 pole art removed');
-   assert.equal(await pg.evaluate("Object.keys(ASSETS).every(k=>I[k].src.includes('?v='+ASSET_V))&&ASSET_V===22"),true);
+   assert.equal(await pg.evaluate("Object.keys(ASSETS).every(k=>I[k].src.includes('?v='+ASSET_V))&&ASSET_V===24"),true);
    const setup=async(names=['小水妖','小水妖','蘆葦精'],ko=false)=>{await pg.evaluate(({names,ko})=>{__sb(names,{noEsc:1});
     const B=G_().B;Math.random=()=>.5;G_().party.forEach(p=>{p.hp=p.mhp;p.mp=p.mmp;p.guard=0});B.msgs=[];B.ph='cmd';B.ai=0;B.sel=0;B.an=[];B.en.forEach(e=>e.hp=e.mhp=ko?1:9999)},{names,ko});await pg.clock.runFor(700)};
    const step=async(ms)=>{await pg.clock.runFor(ms)};
+   // v24 supplied enemy art: complete six-pose sets and impact-driven state selection.
+   assert.equal(await pg.evaluate(()=>['shui','lu','hebo'].every(k=>['idle0','idle1','cast','attack','hit','down'].every(p=>I[k+'_'+p]?.naturalWidth===512))),true,'18 enemy poses loaded');
+   await setup();
+   assert.equal(await pg.evaluate(()=>{const B=G_().B,e=B.en[0],now=performance.now();
+    const idle=/^idle[01]$/.test(enemyPose(e,now));
+    B.vx=[{src:e,k:'splash',at:now}];const wind=enemyPose(e,now)==='cast',attack=enemyPose(e,now+170)==='attack';
+    B.fx=[{t:e,at:now+200}];const before=enemyPose(e,now+199)==='attack',hit=enemyPose(e,now+200)==='hit';
+    e.hp=0;e.dieAt=now+200;const down=enemyPose(e,now+200)==='down';
+    const old=I[e.e+'_down'];I[e.e+'_down']=null;const fallback=enemyImage(e,now+200,100,200,1).pose==='fallback';I[e.e+'_down']=old;
+    return idle&&wind&&attack&&before&&hit&&down&&fallback}),true,'enemy states follow VFX timing; missing art falls back');
    // 2) 版面
    await setup();
    const lay=await pg.evaluate(()=>{const B=G_().B,L=B.L;return{port:L.port,feet:L.feet,en:B.en.map(e=>B.po(e)),cards:B.cards,hit:B.hit.map(h=>({x:h.x,y:h.y,w:h.w,h:h.h})),s:L.s,SW:window.innerWidth,SH:window.innerHeight}});

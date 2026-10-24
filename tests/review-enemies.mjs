@@ -1,0 +1,4 @@
+import {serve,launch,newPage,outDir} from './lib.mjs';
+const s=await serve(),b=await launch();
+try{for(const [w,h] of [[390,664],[844,390]]){const {ctx,pg,jsErrors}=await newPage(b,w,h,{seed:true});await pg.clock.install({time:0});await pg.goto(s.url);await pg.clock.pauseAt(1000);await pg.clock.runFor(1500);await pg.evaluate(()=>{press('ok');G_().dlg=null;G_().party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']),mk('雲纖','yx',50,26,6,2,12,['劍氣']))});
+for(const enemy of ['小水妖','蘆葦精','河伯']){await pg.evaluate(enemy=>{__sb([enemy],{noEsc:1});const B=G_().B;B.msgs=[];B.ph='cmd';B.ai=0},enemy);await pg.clock.runFor(700);await pg.screenshot({path:outDir('enemies-v24',`${w}x${h}`)+'/'+enemy+'.png'});}if((await jsErrors()).length)throw Error(await jsErrors());await ctx.close();console.log('Enemy screenshots '+w+'x'+h+' PASS')}}finally{await b.close();s.close()}

@@ -1,8 +1,26 @@
 'use strict';
 // 圖片清單：key -> assets/img 路徑（勿改回 base64 內嵌）
 // 圖片網址會加上 ?v=ASSET_V（與 index.html 的 ?v=N 同步）。改 sprite 規格／換圖時一定要一起 +1，避免舊 JS 畫新圖或新 JS 畫舊快取圖
-const ASSET_V=22;
+const ASSET_V=24;
 const ASSETS={
+ "shui_idle0": "assets/img/shui_idle0.webp",
+ "shui_idle1": "assets/img/shui_idle1.webp",
+ "shui_cast": "assets/img/shui_cast.webp",
+ "shui_attack": "assets/img/shui_attack.webp",
+ "shui_hit": "assets/img/shui_hit.webp",
+ "shui_down": "assets/img/shui_down.webp",
+ "lu_idle0": "assets/img/lu_idle0.webp",
+ "lu_idle1": "assets/img/lu_idle1.webp",
+ "lu_cast": "assets/img/lu_cast.webp",
+ "lu_attack": "assets/img/lu_attack.webp",
+ "lu_hit": "assets/img/lu_hit.webp",
+ "lu_down": "assets/img/lu_down.webp",
+ "hebo_idle0": "assets/img/hebo_idle0.webp",
+ "hebo_idle1": "assets/img/hebo_idle1.webp",
+ "hebo_cast": "assets/img/hebo_cast.webp",
+ "hebo_attack": "assets/img/hebo_attack.webp",
+ "hebo_hit": "assets/img/hebo_hit.webp",
+ "hebo_down": "assets/img/hebo_down.webp",
  "qzd_idle0": "assets/img/qzd_idle0.webp",
  "qzd_idle1": "assets/img/qzd_idle1.webp",
  "qzd_charge": "assets/img/qzd_charge.webp",

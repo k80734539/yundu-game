@@ -36,7 +36,13 @@ function bPose(p,i,now,F,s,L){const B=G.B,pre=BPRE[p.e]||'qzd';let name,dx=0,dy=
      all=B.en.filter(o=>o.hp>0||!o.dieAt||now<o.dieAt+650).map(o=>B.po(o)).filter(Boolean);
     // 只衝到敵人「旁邊」：沿衝刺方向找最遠的點，使身體與每隻敵人（半徑近似）都不重疊
     let go=Math.max(0,Math.min(d*.8,300*(B.u||1)));
-    for(;go>0;go-=4)if(all.every(q=>Math.hypot(ax+ux*go-q[0],ay+uy*go-q[1])>=Math.max(q[2],q[3])*.5+rc))break;
+    // Scan the entire approach: wider supplied enemy art must not be crossed en route.
+    const unit=B.u||1,bodyY=F[1]-52*unit,limit=go;go=0;
+    for(let travel=4;travel<=limit;travel+=4){
+     if(!all.every(q=>Math.hypot(ax+ux*travel-q[0],ay+uy*travel-q[1])>=Math.max(q[2],q[3])*.5+rc&&
+      (Math.abs(F[0]+ux*travel-q[0])>q[2]/2+25*unit||Math.abs(bodyY+uy*travel-q[1])>q[3]/2+51*unit)))break;
+     go=travel
+    }
     const k=bLerp(a.plan.sl,t);dx=ux*go*k;dy=uy*go*k}}}
  else if(p.guard&&p.hp>0)name='guard';
  else name='idle'+((Math.floor(now/600)+i)%2);

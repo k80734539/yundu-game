@@ -1,0 +1,398 @@
+{
+  "hebo": {
+    "qa": {
+      "status": "pass",
+      "method": "generate2dsprite process geometry v2: alpha above the geometry threshold, 8- or 4-connected components, ground-line anchors, one shared sampling grid with whole-pixel offsets, output-space scale metrics, forge_matte.matte_qa key residue",
+      "notProven": [
+        "pose quality, anatomy, identity and facing",
+        "loop seam, phase order and timing at game size",
+        "colour fidelity of keyed edges beyond the matte_qa residue counts",
+        "that the subject is complete where it does not touch a cell edge"
+      ],
+      "checks": [
+        {
+          "id": "empty_frames",
+          "status": "pass",
+          "value": [],
+          "threshold": []
+        },
+        {
+          "id": "paste_clamped_frames",
+          "status": "pass",
+          "value": [],
+          "threshold": []
+        },
+        {
+          "id": "output_edge_touch_frames",
+          "status": "pass",
+          "value": [],
+          "threshold": []
+        },
+        {
+          "id": "source_edge_touch_frames",
+          "status": "pass",
+          "value": [],
+          "threshold": []
+        },
+        {
+          "id": "body_scale_cv",
+          "status": "skipped",
+          "value": 0.09139522352449558,
+          "threshold": null
+        },
+        {
+          "id": "anchor_y_std",
+          "status": "skipped",
+          "value": 0.03954310821631766,
+          "threshold": null
+        },
+        {
+          "id": "key_residue",
+          "status": "pass",
+          "value": 0,
+          "threshold": 0
+        },
+        {
+          "id": "key_ring_spill",
+          "status": "pass",
+          "value": 0.0,
+          "threshold": 0.01
+        }
+      ],
+      "inputs": [
+        {
+          "path": "raw-sheet.png",
+          "sha256": "00e07dcc865047fc8cbde1d7b19b650041c27f32491a43ddfd9927cac6dcf210",
+          "bytes": 2484884
+        }
+      ],
+      "outputs": [
+        {
+          "path": "sheet-1.png",
+          "sha256": "db35b1ecd4ddb05df4abcb8b1206bc63523b3bb8b6575fb3eb5c18118829378e",
+          "bytes": 232434
+        },
+        {
+          "path": "sheet-2.png",
+          "sha256": "6d05a55dd05d4f1de48b84d109e0a07f4d3ed3f9cfdd85f8d27e6f3e01d407d4",
+          "bytes": 211531
+        },
+        {
+          "path": "sheet-3.png",
+          "sha256": "f9ef9ae90348f4f63e6fb54eb26488ca18b82dc2a98d6c87285dc3048da3f5cc",
+          "bytes": 225580
+        },
+        {
+          "path": "sheet-4.png",
+          "sha256": "12d94a996f25b4615b6d76dbdab40a9d5e2534cadfca8f7cf8def90c73aac1b0",
+          "bytes": 245613
+        },
+        {
+          "path": "sheet-5.png",
+          "sha256": "82556f4755b9bc1abb72cb799d16cd29746a87e93ec3fe9e9ec87bfa10a8cbad",
+          "bytes": 188188
+        },
+        {
+          "path": "sheet-6.png",
+          "sha256": "96284f197ed8bac2cca35598fdfe10dbe6d69759f99daecaaf9967e2b56d8149",
+          "bytes": 185812
+        },
+        {
+          "path": "sheet-transparent.png",
+          "sha256": "37edb90a3431da85c889f11fdc20455773d2e2687846ff34892ccec841f815ee",
+          "bytes": 1291354
+        }
+      ],
+      "tool": {
+        "name": "generate2dsprite.py process",
+        "version": "0.4.0"
+      }
+    },
+    "matte": {
+      "key": [
+        255.0,
+        0.0,
+        255.0
+      ],
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.0,
+      "semitransparent_fraction": 0.07623187071998394,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 478,
+      "visible_px": 717141,
+      "outer_ring_px": 22440,
+      "thresholds": {
+        "key_tolerance": 48.0,
+        "spill_threshold": 20.0,
+        "min_pocket_area": 16,
+        "opaque_alpha": 128,
+        "spill_hue_balance": 0.5
+      },
+      "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+    }
+  },
+  "lu": {
+    "qa": {
+      "status": "pass",
+      "method": "generate2dsprite process geometry v2: alpha above the geometry threshold, 8- or 4-connected components, ground-line anchors, one shared sampling grid with whole-pixel offsets, output-space scale metrics, forge_matte.matte_qa key residue",
+      "notProven": [
+        "pose quality, anatomy, identity and facing",
+        "loop seam, phase order and timing at game size",
+        "colour fidelity of keyed edges beyond the matte_qa residue counts",
+        "that the subject is complete where it does not touch a cell edge"
+      ],
+      "checks": [
+        {
+          "id": "empty_frames",
+          "status": "pass",
+          "value": [],
+          "threshold": []
+        },
+        {
+          "id": "paste_clamped_frames",
+          "status": "pass",
+          "value": [],
+          "threshold": []
+        },
+        {
+          "id": "output_edge_touch_frames",
+          "status": "pass",
+          "value": [],
+          "threshold": []
+        },
+        {
+          "id": "source_edge_touch_frames",
+          "status": "pass",
+          "value": [],
+          "threshold": []
+        },
+        {
+          "id": "body_scale_cv",
+          "status": "skipped",
+          "value": 0.20250020420305304,
+          "threshold": null
+        },
+        {
+          "id": "anchor_y_std",
+          "status": "skipped",
+          "value": 0.07266530749663312,
+          "threshold": null
+        },
+        {
+          "id": "key_residue",
+          "status": "pass",
+          "value": 0,
+          "threshold": 0
+        },
+        {
+          "id": "key_ring_spill",
+          "status": "pass",
+          "value": 0.0,
+          "threshold": 0.01
+        }
+      ],
+      "inputs": [
+        {
+          "path": "raw-sheet.png",
+          "sha256": "356f88d21f5ec36bea8955d20ccd657e03ae90b0c53ee3b2ac03feb703ce4425",
+          "bytes": 2199869
+        }
+      ],
+      "outputs": [
+        {
+          "path": "sheet-1.png",
+          "sha256": "ca00bc3803c71740af61ddb8b48d4915ad190a2f6025a85556a558279b02ab3c",
+          "bytes": 188047
+        },
+        {
+          "path": "sheet-2.png",
+          "sha256": "cd0017b3091da6a0f0aab9c8ad2bd4478794f80a0f4fdf28709a9a8be39154dd",
+          "bytes": 193042
+        },
+        {
+          "path": "sheet-3.png",
+          "sha256": "a7dcfceac7bc4864f2a2afde86f45be6affe7518fbc76a16e28def1fa6912537",
+          "bytes": 200286
+        },
+        {
+          "path": "sheet-4.png",
+          "sha256": "76655a45a22a3618593ed8fd508c4982984835c0a51f8923af4327a2ba446944",
+          "bytes": 190763
+        },
+        {
+          "path": "sheet-5.png",
+          "sha256": "f7fc66285fa36e041d1463cac3cfa9c735c799625aa7c49e19166d73d741de54",
+          "bytes": 176809
+        },
+        {
+          "path": "sheet-6.png",
+          "sha256": "fdec2a8a8e4e5cd29ebf4b095ab7a89ad5b49193983bd7ea41502f13fee62bad",
+          "bytes": 113916
+        },
+        {
+          "path": "sheet-transparent.png",
+          "sha256": "66dd2ed6c883623cab276d1e65d0089115dea76ccb26dc02497b2d74859aa4e2",
+          "bytes": 1064177
+        }
+      ],
+      "tool": {
+        "name": "generate2dsprite.py process",
+        "version": "0.4.0"
+      }
+    },
+    "matte": {
+      "key": [
+        255.0,
+        0.0,
+        255.0
+      ],
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.0,
+      "semitransparent_fraction": 0.13573171381973903,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 1666,
+      "visible_px": 543867,
+      "outer_ring_px": 28995,
+      "thresholds": {
+        "key_tolerance": 48.0,
+        "spill_threshold": 20.0,
+        "min_pocket_area": 16,
+        "opaque_alpha": 128,
+        "spill_hue_balance": 0.5
+      },
+      "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+    }
+  },
+  "shui": {
+    "qa": {
+      "status": "pass",
+      "method": "generate2dsprite process geometry v2: alpha above the geometry threshold, 8- or 4-connected components, ground-line anchors, one shared sampling grid with whole-pixel offsets, output-space scale metrics, forge_matte.matte_qa key residue",
+      "notProven": [
+        "pose quality, anatomy, identity and facing",
+        "loop seam, phase order and timing at game size",
+        "colour fidelity of keyed edges beyond the matte_qa residue counts",
+        "that the subject is complete where it does not touch a cell edge"
+      ],
+      "checks": [
+        {
+          "id": "empty_frames",
+          "status": "pass",
+          "value": [],
+          "threshold": []
+        },
+        {
+          "id": "paste_clamped_frames",
+          "status": "pass",
+          "value": [],
+          "threshold": []
+        },
+        {
+          "id": "output_edge_touch_frames",
+          "status": "pass",
+          "value": [],
+          "threshold": []
+        },
+        {
+          "id": "source_edge_touch_frames",
+          "status": "pass",
+          "value": [],
+          "threshold": []
+        },
+        {
+          "id": "body_scale_cv",
+          "status": "skipped",
+          "value": 0.2520551545075989,
+          "threshold": null
+        },
+        {
+          "id": "anchor_y_std",
+          "status": "skipped",
+          "value": 0.062321349610578475,
+          "threshold": null
+        },
+        {
+          "id": "key_residue",
+          "status": "pass",
+          "value": 0,
+          "threshold": 0
+        },
+        {
+          "id": "key_ring_spill",
+          "status": "pass",
+          "value": 0.0,
+          "threshold": 0.01
+        }
+      ],
+      "inputs": [
+        {
+          "path": "raw-sheet.png",
+          "sha256": "26032a2ab0c4ba8c0420894cbfcbe005e2e5de95281fb44e675db9e89da89ce1",
+          "bytes": 1662173
+        }
+      ],
+      "outputs": [
+        {
+          "path": "sheet-1.png",
+          "sha256": "73fa63943b097f27546b3863e207277dfacb0580eeac659e14abb260ee4ff0a6",
+          "bytes": 117188
+        },
+        {
+          "path": "sheet-2.png",
+          "sha256": "eb0d17caaef5191862c6b83b8fdfb8c8218f8ce897e274339e160bb073ccb7b5",
+          "bytes": 106667
+        },
+        {
+          "path": "sheet-3.png",
+          "sha256": "ad2c1ac735f54f94f0b0a0f1be978f32011bf689655f79db08f0496a88bdacd8",
+          "bytes": 81018
+        },
+        {
+          "path": "sheet-4.png",
+          "sha256": "3dc1e4797cfa51bdad437947ed5131dd7b70334e0bafef6d415067fb930fa1c9",
+          "bytes": 117882
+        },
+        {
+          "path": "sheet-5.png",
+          "sha256": "20e33f5fb0b94eabd0c856cf7b629e4620350d02c68646969c1bb6a4ed64b742",
+          "bytes": 104829
+        },
+        {
+          "path": "sheet-6.png",
+          "sha256": "92493cdc4f7061865d9b7c004d7e3ceed1c7fd843360484d0595c6b44c43eb9f",
+          "bytes": 74509
+        },
+        {
+          "path": "sheet-transparent.png",
+          "sha256": "273a0048e1c970c5ecc708d3b20c136206eb7bcba30fd9aee2c390c10b88f09f",
+          "bytes": 601935
+        }
+      ],
+      "tool": {
+        "name": "generate2dsprite.py process",
+        "version": "0.4.0"
+      }
+    },
+    "matte": {
+      "key": [
+        255.0,
+        0.0,
+        255.0
+      ],
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.0,
+      "semitransparent_fraction": 0.06057651656989034,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 0,
+      "visible_px": 347709,
+      "outer_ring_px": 8743,
+      "thresholds": {
+        "key_tolerance": 48.0,
+        "spill_threshold": 20.0,
+        "min_pocket_area": 16,
+        "opaque_alpha": 128,
+        "spill_hue_balance": 0.5
+      },
+      "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+    }
+  }
+}
