@@ -36,3 +36,5 @@ npx playwright install chromium      # 或改用系統 Chrome：export CHROME_PA
 - 測試掛勾（在 `src/main.js`）：`G_()`、`press(k)`、`TP(x,y,dir)`、`M_()`、`__sb(enemies,opt)` 開戰、`__ex(pend,target)` 執行指令、`__ep()` 敵方行動、`mk(...)` 建角色。請保留。
 
 `npm test` 同時執行 `attack-motion.mjs`，定格截圖放 `tests/out/attack-motion/<尺寸>/`。青舟普攻使用手繪竹篙與三張攻擊姿勢；測試額外驗證握點、拖尾尖端一致、缺圖回退與粒子上限。傷害與回合規則不變。
+
+`npm test` 也執行 `party-motion.mjs`（v18）：白苓普攻／施法（橫掃、狐火、春霖）與全隊受擊後仰，動作用現有立繪的衣袖旋轉，限制在隊伍站位區（不蓋到敵人名稱、血條與下方面板）。青舟普攻仍走 qzAttack（測試確認不疊加）。截圖在 `tests/out/party-motion/<尺寸>/`。
