@@ -40,6 +40,7 @@ src/battle_ui.js      drawBattle：敵我站位、KO 溶解、傷害數字、底
 src/screens.js        標題、CREDITS、全滅、結局畫面
 src/save.js           存檔系統：localStorage（yundu_save_auto/1/2/3，SAVE_VER 版本號＋migrateSave）、右上「選單」DOM 按鈕與存讀檔面板、標題「繼續遊戲／讀取存檔」
 src/main.js           frame() 主迴圈（try/catch → window.__err）、測試掛勾
+docs/art/             美術規範 style-guide.md、現況審核 audit.md、各素材製作文件與 audit/ contact sheets
 assets/img/           所有圖片（webp/png/jpg），由舊版 base64 抽出
 legacy/village.html   早期村莊原型（獨立單檔，僅保存）
 chapter1.html, village.html   舊網址轉址頁
@@ -52,6 +53,7 @@ package.json          只給測試用（npm test）
 classic script 的 function 宣告只在該檔執行時才建立，所以**載入時（top-level）立即執行的程式碼只能呼叫前面檔案的東西**；在 frame()/事件中呼叫則不受限。新增檔案時放在正確位置。
 
 ## 4. 美術 / UX 規則（務必遵守）
+- **所有新增美術（圖片、特效色、立繪、sprite、武器）必須遵守 [`docs/art/style-guide.md`](docs/art/style-guide.md)**（水彩手繪、統一斜視、章節色盤、光源左上、立繪 6.5～7 頭身、手繪武器、手機直式驗收＋在 `docs/art/` 留文件）。現有素材與規範的落差見 [`docs/art/audit.md`](docs/art/audit.md)。
 - **地圖**：手繪、斜視（oblique / 3/4 俯視）風格的整張背景圖 + 獨立物件做 y-sort 遮擋；不是方塊 tilemap。
 - **自由移動**（free movement，非格子），碰撞用遮罩圖；同伴跟隨走過的路徑。
 - **角色 sprite 必須與立繪（portrait）一致**（髮型、服裝、配色）。新增角色時兩者一起做。
