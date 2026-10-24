@@ -4,6 +4,7 @@ import {PNG} from 'pngjs';
 import {serve,launch,newPage,SIZES} from './lib.mjs';
 
 // v20 回歸：v19 漏改「被物件遮住時的半透明剪影」，iPhone 上青舟躲在樹／屋後面會出現 3 倍大的半透明鬼影。
+// 注意：v21 起青舟戰鬥圖為 480×360 的 qzb_*（不在此 regex 內），由 qz-battle.mjs／attack-motion.mjs 驗證。
 // 這裡監聽每一次 drawImage：凡是畫角色 sprite（qz/bl/yx 的 192px 新圖），目的寬度都必須 <100px（約 68px），
 // 並走遍地圖所有物件後方，確認「剪影」確實被畫出且大小正確。另模擬舊快取圖片搭新 JS（72×66／缺第 4 幀）。
 const SPY=`(()=>{const o=CanvasRenderingContext2D.prototype.drawImage;window.__di=[];CanvasRenderingContext2D.prototype.drawImage=function(im,...a){try{if(typeof I!=="undefined"){for(const k in I)if(I[k]===im&&/^(qz|bl|yx|wang)_(down|up|left|right)\\d$/.test(k)){const w=a.length===2||a.length===4?(a.length===4?a[2]:im.width):(a.length===8?a[6]:a[2]);window.__di.push({k,w,a:this.globalAlpha,nw:im.naturalWidth})}}}catch(e){}return o.call(this,im,...a)}})()`;

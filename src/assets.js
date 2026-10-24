@@ -1,12 +1,20 @@
 'use strict';
 // 圖片清單：key -> assets/img 路徑（勿改回 base64 內嵌）
 // 圖片網址會加上 ?v=ASSET_V（與 index.html 的 ?v=N 同步）。改 sprite 規格／換圖時一定要一起 +1，避免舊 JS 畫新圖或新 JS 畫舊快取圖
-const ASSET_V=20;
+const ASSET_V=21;
 const ASSETS={
- "qz_pole": "assets/img/qz_pole.webp",
- "qz_atk_windup": "assets/img/qz_atk_windup.webp",
- "qz_atk_strike": "assets/img/qz_atk_strike.webp",
- "qz_atk_recover": "assets/img/qz_atk_recover.webp",
+ "qzb_idle0": "assets/img/qzb_idle0.webp",
+ "qzb_idle1": "assets/img/qzb_idle1.webp",
+ "qzb_charge": "assets/img/qzb_charge.webp",
+ "qzb_dash0": "assets/img/qzb_dash0.webp",
+ "qzb_dash1": "assets/img/qzb_dash1.webp",
+ "qzb_thrust": "assets/img/qzb_thrust.webp",
+ "qzb_recover": "assets/img/qzb_recover.webp",
+ "qzb_sweepwind": "assets/img/qzb_sweepwind.webp",
+ "qzb_sweep": "assets/img/qzb_sweep.webp",
+ "qzb_hit": "assets/img/qzb_hit.webp",
+ "qzb_down": "assets/img/qzb_down.webp",
+ "qzb_win": "assets/img/qzb_win.webp",
  "lin": "assets/img/lin.webp",
  "zhou": "assets/img/zhou.webp",
  "pt_lin": "assets/img/pt_lin.webp",

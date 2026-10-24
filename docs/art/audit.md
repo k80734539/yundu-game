@@ -1,3 +1,5 @@
+> **v21 註記**：`qz_pole`／`qz_atk_*` 已移除，改為 `qzb_*` 12 張戰鬥姿勢（見 `docs/art/qz-battle-v21.md`）。以下為 v17 歷史記錄。
+
 # 美術現況審核（Art Audit，對照 `style-guide.md`）
 
 審核日期：2026-10-24（Asia/Taipei）。基準：`main` v17（`dd2f6fe`）。

@@ -35,7 +35,7 @@ src/update.js         地圖模式更新：自由移動（非格子）、同伴�
 src/ui.js             UI 繪圖工具：UI()（重設 transform 為 CSS px）、FS() 字級、txt/box/rr/wrap、對話框 drawDlg（半身立繪）
 src/render.js         drawWorld（地圖、y-sort 物件、角色）、drawBoat（夜渡場景）
 src/fx.js             戰鬥 VFX：粒子池 VPT（上限 VMAX=160）、startFx、drawVFX、shake/flash
-src/battle_motion.js  青舟普攻650ms演出、手部握點、武器圖片與弧形拖尾（不改數值）
+src/battle_motion.js  v21 青舟戰鬥彩繪姿勢 qzb_*（待機/受擊/倒下/勝利）、普攻650ms衝刺刺擊、橫掃、落點計算 qzLanding（不改數值）；詳見 docs/art/qz-battle-v21.md
 src/battle_ui.js      drawBattle：敵我站位、KO 溶解、傷害數字、底部面板；觸控 bTap / B.hit 點擊區
 src/screens.js        標題、CREDITS、全滅、結局畫面
 src/save.js           存檔系統：localStorage（yundu_save_auto/1/2/3，SAVE_VER 版本號＋migrateSave）、右上「選單」DOM 按鈕與存讀檔面板、標題「繼續遊戲／讀取存檔」
@@ -66,11 +66,11 @@ classic script 的 function 宣告只在該檔執行時才建立，所以**載�
 - 戰鬥訊息可為 `[text, fxSpec]`，訊息出現（或被跳過）時 `startFx` 啟動，傷害數字在特效命中時間（`VIMP`）才跳出。
 
 ## 5. 版本號規則
-- 目前 **v20**（v18 保留給 `feature/qz-attack-fix`／隊伍動作分支，尚未合併）。每次上線改動都要 +1（下一版 **v21**），三處一起改：
+- 目前 **v21**（v18 保留給 `feature/qz-attack-fix`／隊伍動作分支，尚未合併）。每次上線改動都要 +1（下一版 **v22**），三處一起改：
   1. `index.html` `<title>雲渡仙緣 第一章 vN</title>`
   2. `src/screens.js` 標題畫面 `'版本 vN'`
   3. `src/render.js` 地圖右下角 `'vN'`
-- `grep -rn "v19" index.html src` 確認版本標籤與 index.html 所有 `?v=` 均為 v20／20；並同步 `src/assets.js` 的 `ASSET_V`（圖片網址 `?v=`）（劇本檔名與故事版本不改）。上線前可對前一版打 git tag（如 `v16`）以便回滾。
+- `grep -rn "v20" index.html src` 確認版本標籤與 index.html 所有 `?v=` 均為 v21／21；並同步 `src/assets.js` 的 `ASSET_V`（圖片網址 `?v=`）（劇本檔名與故事版本不改）。上線前可對前一版打 git tag（如 `v16`）以便回滾。
 
 ## 6. 測試流程
 ```bash

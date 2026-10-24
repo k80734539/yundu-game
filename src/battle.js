@@ -26,7 +26,7 @@ function win(){const B=G.B,ex=B.en.reduce((s,e)=>s+e.exp,0),m=['勝利！獲得 
 function exec(t){const B=G.B,u=G.party[B.ai],P=B.pend,m=[];
  if(P.t=='atk'){const cr=Math.random()<.12;if(cr)m.push('會心一擊！');m.push(u.n+(u.n=='陳青舟'?'揮動竹篙':'揮袖一擊')+'，對'+t.n+'造成'+dmg(u.atk,t,0,cr)+'點傷害！');ko(t,m);wr(m,0,u.e=='bl'?'claw':'slash',u,[t]);if(u.e==='qz')m[0][1].motion='qzAttack'}
  else if(P.t=='sk'){const s=SK[P.s];u.mp-=s.mp;
-  if(P.s=='橫掃'){m.push(u.n+'使出「橫掃」！竹篙掃過一片水花！');alive(B.en).forEach(e=>{m.push(e.n+'受到'+dmg(u.atk*.85,e)+'點傷害！');ko(e,m)});wr(m,0,'sweep',u)}
+  if(P.s=='橫掃'){m.push(u.n+'使出「橫掃」！竹篙掃過一片水花！');alive(B.en).forEach(e=>{m.push(e.n+'受到'+dmg(u.atk*.85,e)+'點傷害！');ko(e,m)});wr(m,0,'sweep',u);if(u.e==='qz')m[0][1].motion='qzSweep'}
   if(P.s=='狐火'){m.push(u.n+'喚出「狐火」！藍色火焰燒向'+t.n+'，造成'+dmg(u.mag*2.2,t,1)+'點傷害！');ko(t,m);wr(m,0,'foxfire',u,[t])}
   if(P.s=='春霖'){m.push(u.n+'施展「春霖」，細雨灑落全隊。');alive(G.party).forEach(p=>{const h=Math.min(p.mhp-p.hp,22+u.mag);p.hp+=heal(p,h);m.push(p.n+'回復'+h+'HP。')});wr(m,0,'rain',u,alive(G.party))}}
  else if(P.t=='it'){G.inv[P.k]--;if(P.k=='魚乾'){const h=Math.min(t.mhp-t.hp,40);t.hp+=heal(t,h);m.push(u.n+'使用魚乾，'+t.n+'回復'+h+'HP。');wr(m,0,'item',u,[t])}

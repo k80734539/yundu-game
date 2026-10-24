@@ -1,3 +1,5 @@
+> **v21 註記**：`qz_pole`／`qz_atk_*` 已移除，改為 `qzb_*` 12 張戰鬥姿勢（見 `docs/art/qz-battle-v21.md`）。以下為 v17 歷史記錄。
+
 # v17 青舟武器與攻擊姿勢
 
 來源：內建 OpenAI `image_gen`，`art_source: host_image`。身份與畫風參考只使用本專案 `qz_left0.webp`、`pt_qz.jpg`。四張原創圖片，不含第三方素材包；原 CREDITS 保留。未使用影片生成，三張為獨立繪製的靜態關鍵姿勢，由 Canvas 時間軸搭配武器旋轉和位移。

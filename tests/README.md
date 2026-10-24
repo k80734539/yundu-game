@@ -36,3 +36,5 @@ npx playwright install chromium      # 或改用系統 Chrome：export CHROME_PA
 - 測試掛勾（在 `src/main.js`）：`G_()`、`press(k)`、`TP(x,y,dir)`、`M_()`、`__sb(enemies,opt)` 開戰、`__ex(pend,target)` 執行指令、`__ep()` 敵方行動、`mk(...)` 建角色。請保留。
 
 `npm test` 同時執行 `sprite-size.mjs`（v20 回歸：監聽所有 drawImage，角色 sprite 不得超大；含長時間走路、被物件遮住的剪影、舊快取圖片＋新 JS；`npm run test:spritesize`）與 `qz-sprite.mjs`（v19 青舟／白苓／雲纖 192×192／4 幀 sprite：48 張載入、走路循環、腳底錨點與身高、王大叔舊 72×66 不變；`npm run test:qzsprite`）與 `attack-motion.mjs`，定格截圖放 `tests/out/attack-motion/<尺寸>/`。青舟普攻使用手繪竹篙與三張攻擊姿勢；測試額外驗證握點、拖尾尖端一致、缺圖回退與粒子上限。傷害與回合規則不變。
+
+- `qz-battle.mjs`（v21）：青舟戰鬥彩繪 `qzb_*` 的大小比例（1.0–1.25×）、待機／受擊／倒下／勝利姿勢、攻擊全程無 `clip()`、敵人名稱疊在角色之後；`attack-motion.mjs` 驗證目標 A/B/C 不重疊旁邊敵人、命中 340ms、返回 650ms。
