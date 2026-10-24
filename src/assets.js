@@ -1,5 +1,7 @@
 'use strict';
 // 圖片清單：key -> assets/img 路徑（勿改回 base64 內嵌）
+// 圖片網址會加上 ?v=ASSET_V（與 index.html 的 ?v=N 同步）。改 sprite 規格／換圖時一定要一起 +1，避免舊 JS 畫新圖或新 JS 畫舊快取圖
+const ASSET_V=20;
 const ASSETS={
  "qz_pole": "assets/img/qz_pole.webp",
  "qz_atk_windup": "assets/img/qz_atk_windup.webp",

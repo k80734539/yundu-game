@@ -10,7 +10,7 @@ function fit(){K=Math.min(devicePixelRatio||1,2);const vv=window.visualViewport;
  WS=Math.min(SW,SH)/(JOY.touch?(SH>SW?430:380):470);VW=SW/WS;VH=SH/WS}
 fit();addEventListener('resize',fit);if(window.visualViewport){visualViewport.addEventListener('resize',fit);visualViewport.addEventListener('scroll',()=>scrollTo(0,0))}setInterval(()=>{const vv=window.visualViewport,h=Math.round(Math.min(innerHeight,vv?vv.height:1e9));if(h!=SH||Math.round(vv?vv.width:innerWidth)!=SW)fit()},500);addEventListener('orientationchange',()=>setTimeout(fit,200));
 const I={};let toLoad=0,ready=false;
-for(const k in ASSETS){toLoad++;const im=new Image();im.onload=im.onerror=()=>{if(--toLoad==0){ready=true}};im.src=ASSETS[k];I[k]=im}
+for(const k in ASSETS){toLoad++;const im=new Image();im.onload=im.onerror=()=>{if(--toLoad==0){ready=true}};im.src=ASSETS[k]+'?v='+ASSET_V;I[k]=im}
 const rnd=n=>Math.floor(Math.random()*n);
 function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 const tm=()=>performance.now()/400;
