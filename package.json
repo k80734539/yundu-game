@@ -10,6 +10,7 @@
     "test:touch": "node tests/touch-battle.mjs",
     "test:motion": "node tests/attack-motion.mjs",
     "test:qzsprite": "node tests/qz-sprite.mjs",
+    "test:spritesize": "node tests/sprite-size.mjs",
     "test:fx": "node tests/fx.mjs",
     "test:polish": "node tests/polish.mjs",
     "test:screens": "node tests/screens.mjs",

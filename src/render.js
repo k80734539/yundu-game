@@ -25,7 +25,7 @@ function drawWorld(now){const t=now/1000;
  const pk=spriteKey('qz',G.dir,G.f);if(!sceneStagesParty())L.push({y:qp.y,f:()=>drawStoryCharacter('qz',qp)});
  L.sort((a,b)=>a.y-b.y).forEach(o=>o.f());
  const hid=o=>{if(o.flat||o.ghost===0)return 0;const im=I[o.k],w=im.width*o.s,h=im.height*o.s;return o.y>G.y&&Math.abs(o.x-G.x)<w/2-4&&G.y>o.y-h+24};
- if(!scene&&M.obj.some(hid)){X.globalAlpha=.5;X.drawImage(I[pk],Math.round(G.x-I[pk].width/2),Math.round(G.y-I[pk].height+2));X.globalAlpha=1}
+ if(!scene&&M.obj.some(hid)){X.globalAlpha=.5;sprDraw(pk,G.x,G.y,1,1);X.globalAlpha=1}  // 被物件遮住時的半透明剪影：必須走 sprDraw（v19 漏改過，192px 新圖被原尺寸畫出）
  // interact hint
  if(!G.dlg&&G.mode=='map'){const v=DV[G.dir],fx=G.x+v[0]*24,fy=G.y-12+v[1]*22;for(const it of M.inter){const d=Math.min(Math.hypot(it.x-fx,it.y-fy),Math.hypot(it.x-G.x,it.y-G.y+12)+8);if(d<it.r){const yy=G.y-74+Math.sin(t*6)*2;X.fillStyle='rgba(12,16,34,.8)';X.beginPath();X.arc(G.x,yy,10,0,7);X.fill();txt('A',G.x,yy+5,13,'#ffe9a8','center');break}}}
  // atmosphere
@@ -46,7 +46,7 @@ function drawWorld(now){const t=now/1000;
   const L=SA.l+30,R=SW-SA.r-30,Tp=SA.t+fs*2+40,Bt=SH-SA.b-(JOY.touch?190:30);
   if(sx>L&&sx<R&&sy>Tp&&sy<Bt){txt('▼ 渡船',sx,sy-6+bob,fs+2,'#ffe9a8','center')}
   else{const ax=Math.max(L+20,Math.min(R-20,sx)),ay=Math.max(Tp,Math.min(Bt,sy)),an=Math.atan2(sy-ay,sx-ax);X.save();X.translate(ax,ay);X.fillStyle='rgba(0,0,0,.55)';X.beginPath();X.arc(0,0,fs*1.7,0,7);X.fill();X.rotate(an);X.fillStyle='#ffe9a8';X.beginPath();X.moveTo(fs*1.5+bob/2,0);X.lineTo(fs*.6,-fs*.7);X.lineTo(fs*.6,fs*.7);X.fill();X.restore();txt('渡船',ax,ay+fs*.4,fs-2,'#fff','center')}}}
- txt('v19',SW-SA.r-6,SH-SA.b-4,Math.max(10,fs-6),'rgba(255,255,255,.6)','right');
+ txt('v20',SW-SA.r-6,SH-SA.b-4,Math.max(10,fs-6),'rgba(255,255,255,.6)','right');
  const at=now-G.lt;if(M.id=='temple'&&at<2600){X.globalAlpha=Math.min(1,Math.max(0,1-(at-1600)/1000));X.fillStyle='#000';X.fillRect(0,0,SW,SH);cover(I.ext);const fs2=fs+6;box(SW/2-80,SH*.7,160,fs2+22);txt('河神廟',SW/2,SH*.7+fs2+6,fs2,'#f3dfa0','center');X.globalAlpha=1}}
 function dlgTop(){return JOY.touch&&SW>SH}
 function drawBoat(now){drawNightScene(now)}
