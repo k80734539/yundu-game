@@ -31,12 +31,12 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
   if(B.ph=='target'&&B.tk=='E'){if(B.sel==i)txt('▼',x,y-h-6+Math.sin(t*8)*3,fs+6,'#ff0','center');H.push({x:x-Math.max(w,60)/2,y:y-h-10,w:Math.max(w,60),h:h+fs+30,fn:()=>{B.sel=i;press('ok')}})}});
  // party sprites
  G.party.forEach((p,i)=>{const [x,y]=PP(i),hf=B.fx.find(f=>f.t==p&&!f.heal&&now>=f.at&&now-f.at<500),act=i==B.ai&&B.ph!='msg',lunge=B.ph=='msg'&&i==B.ai&&B.fx.some(f=>B.en.includes(f.t)&&!f.sp?.motion&&now-f.at<450);
-  const pose=p.e==='qz'&&B.qzMotion?.src===p?qzAttackPose(now,[x,y],B.po(B.qzMotion.tg[0]),I.qz_left0.width*ps,I.qz_left0.height*ps,stage):null;if(pose)B.qzPose=pose;
-  const d=pose?(pose.dir>0?'left':'right'):port?'up':'left',fr=pose?pose.frame:lunge?1:(act?Math.floor(t*4)%2*2:0),im=I[p.e+'_'+d+fr]||I[p.e+'_'+d+'0'];if(!im)return;const w=im.width*ps,h=im.height*ps;
+  const pose=p.e==='qz'&&B.qzMotion?.src===p?qzAttackPose(now,[x,y],B.po(B.qzMotion.tg[0]),72*ps,66*ps,stage):null;if(pose)B.qzPose=pose;
+  const d=pose?(pose.dir>0?'left':'right'):port?'up':'left',fr0=pose?pose.frame:lunge?1:(act?Math.floor(t*4)%2*2:0),SP=SPR[p.e],fr=SP?SP.map[fr0]:fr0,im=I[p.e+'_'+d+fr]||I[p.e+'_'+d+(SP?SP.idle:0)];if(!im)return;const sk=sprK(p.e+'_'+d+fr),w=im.width*ps*sk,h=im.height*ps*sk,fo=(im.height-sprFeet(p.e+'_'+d+fr))*sk*ps;
   let dx=0,dy=0;if(lunge){if(port)dy=-14*u;else dx=-22*u}if(hf)dx+=Math.sin(now/20)*4;
   if(pose)drawQzAttack(im,pose,w,h,u,ent*(p.hp>0?1:.35),stage);else{
   X.fillStyle='rgba(0,0,0,.35)';X.beginPath();X.ellipse(x,y-3,w*.28,6*u,0,0,7);X.fill();
-  X.save();X.globalAlpha=ent*(p.hp>0?1:.35);if(hf&&Math.floor((now-hf.at)/70)%2)X.globalAlpha*=.4;X.drawImage(im,x-w/2+dx,y-h+dy,w,h);X.restore()}if(p.guard&&p.hp>0)shield(x+dx,y-h*.5+dy,w*.62,h*.58,.35+Math.sin(t*4)*.1);
+  X.save();X.globalAlpha=ent*(p.hp>0?1:.35);if(hf&&Math.floor((now-hf.at)/70)%2)X.globalAlpha*=.4;X.drawImage(im,x-w/2+dx,y-h+dy+fo,w,h);X.restore()}if(p.guard&&p.hp>0)shield(x+dx,y-h*.5+dy,w*.62,h*.58,.35+Math.sin(t*4)*.1);
   if(act||(B.ph=='target'&&B.tk=='A'&&B.sel==i))txt('▼',x,y-h-2+Math.sin(t*6)*2,fs,'#ff0','center');
   if(B.ph=='target'&&B.tk=='A')H.push({x:x-w/2,y:y-h,w,h,fn:()=>{B.sel=i;press('ok')}})});
  B.fx=B.fx.filter(f=>now-f.at<1000);

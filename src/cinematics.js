@@ -101,9 +101,9 @@ function drawNightScene(now){UI();X.fillStyle='#081321';X.fillRect(0,0,SW,SH);co
  const ty=Math.min(-c.oy*cam.z,Math.max(SH-(c.oy+im.height*c.s)*cam.z,SH*(SH>SW?.28:.66)-q[1]*cam.z));
  X.save();X.translate(tx-j[0],ty-j[1]);X.scale(cam.z,cam.z);
  X.drawImage(im,c.ox,c.oy,im.width*c.s,im.height*c.s);
- const sc=c.s*1.05,bob=Math.sin(t*1.5)*2,dr=(k,x,y,rot,a)=>{const pic=I[k],v=P(x,y);if(!pic?.naturalWidth)return;X.save();X.translate(v[0],v[1]+bob);X.rotate(rot||0);X.globalAlpha=a==null?1:a;X.drawImage(pic,-pic.width*sc/2,-pic.height*sc+2,pic.width*sc,pic.height*sc);X.restore();};
- dr('qz_right0',st>=8?510:490,398,st===9?-.12:0);
- if(st>=5){const p=st===9?cinEase((now-(s?.beatAt||now))/CIN.walk):st>=10?1:0;dr('bl_down0',cinLerp(700,565,p),cinLerp(455,392,p)-Math.sin(p*Math.PI)*20,-1.4,.88);
+ const sc=c.s*1.05,bob=Math.sin(t*1.5)*2,dr=(k,x,y,rot,a)=>{const pic=I[k],v=P(x,y);if(!pic?.naturalWidth)return;X.save();X.translate(v[0],v[1]+bob);X.rotate(rot||0);X.globalAlpha=a==null?1:a;sprDraw(k,0,0,sc);X.restore();};
+ dr(sprIdle('qz','right'),st>=8?510:490,398,st===9?-.12:0);
+ if(st>=5){const p=st===9?cinEase((now-(s?.beatAt||now))/CIN.walk):st>=10?1:0;dr(sprIdle('bl','down'),cinLerp(700,565,p),cinLerp(455,392,p)-Math.sin(p*Math.PI)*20,-1.4,.88);
   const v=P(cinLerp(700,565,p),cinLerp(455,392,p));X.save();X.strokeStyle='rgba(187,229,245,.4)';X.lineWidth=1.5;X.beginPath();X.ellipse(v[0],v[1]+4,22+Math.sin(t*3)*4,5,0,0,7);X.stroke();X.restore();}
  if(st===8||st===9){const a=P(514,370),b=P(st===8?670:590,430);X.strokeStyle='#a99669';X.lineWidth=3*c.s;X.beginPath();X.moveTo(a[0],a[1]);X.lineTo(b[0],b[1]);X.stroke();}
  drawDriftingMist(now,-200,-80,SW+400,SH+160,.095);X.restore();drawSceneOverlay(now);

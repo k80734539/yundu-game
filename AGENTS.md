@@ -56,6 +56,7 @@ classic script 的 function 宣告只在該檔執行時才建立，所以**載�
 - **所有新增美術（圖片、特效色、立繪、sprite、武器）必須遵守 [`docs/art/style-guide.md`](docs/art/style-guide.md)**（水彩手繪、統一斜視、章節色盤、光源左上、立繪 6.5～7 頭身、手繪武器、手機直式驗收＋在 `docs/art/` 留文件）。現有素材與規範的落差見 [`docs/art/audit.md`](docs/art/audit.md)。
 - **地圖**：手繪、斜視（oblique / 3/4 俯視）風格的整張背景圖 + 獨立物件做 y-sort 遮擋；不是方塊 tilemap。
 - **自由移動**（free movement，非格子），碰撞用遮罩圖；同伴跟隨走過的路徑。
+- **sprite 規格依角色而異**：預設 72×66、3 幀（0 站、1/2 步）、腳底 y=66；**青舟／白苓／雲纖（v19 起）為 192×192、4 幀**（0 左腳前、1 站、2 右腳前、3 站，走路 0→1→2→3，站立＝第 1 幀）、腳底邊緣 y=180、顯示縮放 0.353。規格登記在 `src/ui.js` 的 `SPR`，**一律用 `sprDraw` / `chr` / `spriteKey` / `sprIdle` 取圖與繪製，不要直接 `drawImage(I['qz_…0'])`**。細節見 [`docs/art/char-sprites-v19.md`](docs/art/char-sprites-v19.md)。
 - **角色 sprite 必須與立繪（portrait）一致**（髮型、服裝、配色）。新增角色時兩者一起做。
 - **對話立繪 = 半身 bust**：要看得到**下巴與肩膀**，不可只裁到臉。
 - **觸控**：覆蓋式虛擬搖桿（左下）+ A/B（右下），只在觸控裝置顯示；**戰鬥中隱藏搖桿**（`JOY.hide(true)`），戰鬥改用直接點擊。
@@ -65,11 +66,11 @@ classic script 的 function 宣告只在該檔執行時才建立，所以**載�
 - 戰鬥訊息可為 `[text, fxSpec]`，訊息出現（或被跳過）時 `startFx` 啟動，傷害數字在特效命中時間（`VIMP`）才跳出。
 
 ## 5. 版本號規則
-- 目前 **v17**。每次上線改動都要 +1（下一版 **v18**），三處一起改：
+- 目前 **v19**（v18 保留給 `feature/qz-attack-fix`／隊伍動作分支，尚未合併）。每次上線改動都要 +1（下一版 **v20**），三處一起改：
   1. `index.html` `<title>雲渡仙緣 第一章 vN</title>`
   2. `src/screens.js` 標題畫面 `'版本 vN'`
   3. `src/render.js` 地圖右下角 `'vN'`
-- `grep -rn "v16" index.html src` 確認版本標籤與 index.html 所有 `?v=` 均為 v17／17（劇本檔名與故事版本不改）。上線前可對前一版打 git tag（如 `v16`）以便回滾。
+- `grep -rn "v18" index.html src` 確認版本標籤與 index.html 所有 `?v=` 均為 v19／19（劇本檔名與故事版本不改）。上線前可對前一版打 git tag（如 `v16`）以便回滾。
 
 ## 6. 測試流程
 ```bash
