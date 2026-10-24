@@ -35,7 +35,7 @@ src/update.js         地圖模式更新：自由移動（非格子）、同伴�
 src/ui.js             UI 繪圖工具：UI()（重設 transform 為 CSS px）、FS() 字級、txt/box/rr/wrap、對話框 drawDlg（半身立繪）
 src/render.js         drawWorld（地圖、y-sort 物件、角色）、drawBoat（夜渡場景）
 src/fx.js             戰鬥 VFX：粒子池 VPT（上限 VMAX=160）、startFx、drawVFX、shake/flash
-src/battle_motion.js  青舟普攻650ms演出、手部握點、武器圖片與弧形拖尾（不改數值）
+src/battle_motion.js  v21 青舟戰鬥彩繪姿勢 qzb_*（待機/受擊/倒下/勝利）、普攻650ms衝刺刺擊、橫掃、落點計算 qzLanding（不改數值）；詳見 docs/art/qz-battle-v21.md
 src/battle_ui.js      drawBattle：敵我站位、KO 溶解、傷害數字、底部面板；觸控 bTap / B.hit 點擊區
 src/screens.js        標題、CREDITS、全滅、結局畫面
 src/save.js           存檔系統：localStorage（yundu_save_auto/1/2/3，SAVE_VER 版本號＋migrateSave）、右上「選單」DOM 按鈕與存讀檔面板、標題「繼續遊戲／讀取存檔」
