@@ -7,7 +7,7 @@ function burst(x,y,n,col,sp,o){for(let i=0;i<n;i++){const a=Math.random()*6.283,
 function shake(a,d){if(G.B)G.B.shk={at:performance.now(),a,d:d||300}}
 function flash(d,c,k){if(G.B)G.B.fl={at:performance.now(),d:d||160,c:c||'255,255,255',k:k||.45}}
 const VIMP={slash:110,claw:150,sweep:200,foxfire:330,rain:320,item:160,guard:60,splash:170,leaf:220,tail:190,wave:520,poison:120},VDUR={slash:380,claw:420,sweep:520,foxfire:620,rain:850,item:600,guard:500,splash:500,leaf:520,tail:480,wave:900,poison:500};
-function startFx(sp,now){const B=G.B;if(!B)return;sp.at=now;if(sp.motion==='qzAttack'){finishQzAttack(now);sp.delay=QZ_ATTACK.dashEnd;B.qzMotion=sp}if(!sp.tg.length)sp.tg=[...new Set(sp.hits.map(h=>h.t))];(B.vx=B.vx||[]).push(sp);const im=VIMP[sp.k]||150;
+function startFx(sp,now){const B=G.B;if(!B)return;sp.at=now;if(sp.motion==='qzAttack'||sp.motion==='qzSweep'){finishQzAttack(now);sp.delay=QZ_MOT[sp.motion].delay;B.qzMotion=sp}if(!sp.tg.length)sp.tg=[...new Set(sp.hits.map(h=>h.t))];(B.vx=B.vx||[]).push(sp);const im=VIMP[sp.k]||150;
  sp.hits.forEach((h,i)=>{const at=now+(sp.delay||0)+im+(sp.k=='sweep'?i*70:sp.k=='wave'?i*90:0);B.fx.push({t:h.t,d:h.d,crit:h.crit,heal:h.heal,big:h.big,at,sp});if(h.t.hp<=0&&B.en.includes(h.t))h.t.dieAt=at})}
 function glowLine(pts,w,col,a){X.save();X.globalCompositeOperation='lighter';X.lineCap='round';X.lineJoin='round';for(const[k,c]of[[3,col],[1.6,col],[.6,'#fff']]){X.globalAlpha=a*(k==3?.25:k>1?.55:1);X.strokeStyle=c;X.lineWidth=w*k;X.beginPath();pts.forEach((p,i)=>i?X.lineTo(p[0],p[1]):X.moveTo(p[0],p[1]));X.stroke()}X.restore()}
 function arcPts(cx,cy,r,a0,a1,n,sq){const o=[];for(let i=0;i<=n;i++){const a=a0+(a1-a0)*i/n;o.push([cx+Math.cos(a)*r,cy+Math.sin(a)*r*(sq||1)])}return o}
@@ -19,8 +19,9 @@ function drawVFX(now){const B=G.B,u=B.u||1,dt=Math.min(50,now-(B.vlt||now))/16.7
   const big=sp.hits.some(h=>h.crit||h.big);
   switch(sp.k){
   case'slash':P.forEach(q=>{const p=Math.min(1,t/260),R=Math.max(42*u,q[2]*.55);if(sp.motion!=='qzAttack'&&t<340)glowLine(arcPts(q[0],q[1],R,-2.6,-2.6+p*2.9,18,.55).slice(Math.floor(p*8)),7*u,'#7fe0ff',1-Math.max(0,(t-200)/140));
-    if(sp.motion==='qzAttack'&&t>=imp&&t<imp+90)orb(q[0],q[1]-q[3]*.3,(10+(t-imp)*.15)*u,'#fff3c6','rgba(224,161,61,0)',1-(t-imp)/90);
-    if(fire){burst(sp.motion==='qzAttack'?q[0]:q[0]+R*.3,sp.motion==='qzAttack'?q[1]-q[3]*.3:q[1],16,sp.motion==='qzAttack'?['#fff5ce','#f1ca78','#c49043']:['#fff','#9ef','#5cf'],6*u);if(big){shake(9,320);flash(170)}else shake(3,160)}});break;
+    const ip=sp.motion==='qzAttack'&&sp.hitPt||[q[0],q[1]-q[3]*.3];
+    if(sp.motion==='qzAttack'&&t>=imp&&t<imp+90)orb(ip[0],ip[1],(10+(t-imp)*.15)*u,'#fff3c6','rgba(224,161,61,0)',1-(t-imp)/90);
+    if(fire){burst(sp.motion==='qzAttack'?ip[0]:q[0]+R*.3,sp.motion==='qzAttack'?ip[1]:q[1],16,sp.motion==='qzAttack'?['#fff5ce','#f1ca78','#c49043']:['#fff','#9ef','#5cf'],6*u);if(big){shake(9,320);flash(170)}else shake(3,160)}});break;
   case'claw':P.forEach(q=>{for(let k=0;k<3;k++){const p=Math.min(1,Math.max(0,(t-k*40)/160)),ox=(k-1)*14*u,L=q[3]*.55;if(p>0&&t<380)glowLine([[q[0]+ox+L*.35,q[1]-L*.5],[q[0]+ox+L*.35-L*.7*p,q[1]-L*.5+L*p]],5*u,'#ff7ad9',1-Math.max(0,(t-260)/120))}
     if(fire){burst(q[0],q[1],16,['#fff','#ffa6ec','#c58bff'],5.5*u);if(big){shake(9,320);flash(170)}else shake(3,160)}});break;
   case'sweep':{if(P.length){const xs=P.map(q=>q[0]),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=P[0][1]+P[0][3]*.1,R=Math.max(80*u,(Math.max(...xs)-Math.min(...xs))/2+60*u),p=Math.min(1,t/320);
