@@ -35,6 +35,6 @@ function drawDlg(){const d=G.dlg,[n,t]=d.l[d.i],pk=PORT[n];UI();const fs=FS(),po
  const ps=pk?Math.round(fs*5.2):0,tx=bx+14+(pk?ps+12:0),tw=bx+w-14-tx,lines=wrap(t,tw);
  const h=Math.max(ps+24,(n?fs+12:0)+lines.length*(fs+8)+26);
  const y=top?SA.t+8:JOY.touch?SH-SA.b-200-h:SH-SA.b-12-h;
- box(bx,y,w,h,.95);if(pk){const portrait=I[scenePortrait(n,pk)]?.naturalWidth?I[scenePortrait(n,pk)]:I['pt_'+pk];X.save();X.globalAlpha=scenePortraitAlpha(performance.now());if(portrait?.naturalWidth)X.drawImage(portrait,bx+12,y+12,ps,ps);X.restore();X.strokeStyle='#c9b26b';X.lineWidth=1.5;X.strokeRect(bx+12,y+12,ps,ps)}
+ box(bx,y,w,h,.95);if(pk){const portrait=I[scenePortrait(n,pk)]?.naturalWidth?I[scenePortrait(n,pk)]:I['pt_'+pk];X.save();X.globalAlpha=scenePortraitAlpha(performance.now());const hero=pk==='qz'||pk==='bl'||pk==='yx';if(hero){X.shadowColor='rgba(0,0,0,.45)';X.shadowBlur=4}if(portrait?.naturalWidth)X.drawImage(portrait,bx+12,y+12,ps,ps);X.restore();if(!hero){X.strokeStyle='#c9b26b';X.lineWidth=1.5;X.strokeRect(bx+12,y+12,ps,ps)}}
  let yy=y+fs+12;const sys=n=='提示'||n=='系統';if(n){txt(sys?'◆ '+n:'【'+n+'】',tx,yy,fs,sys?'#8fd0ff':'#f3dfa0');yy+=fs+12}lines.forEach(l=>{txt(l,tx,yy,fs,sys?'#cfe8ff':undefined);yy+=fs+8});
  txt('▼',bx+w-22,y+h-10+Math.sin(tm()*3)*2,fs-4,'#c9b26b')}

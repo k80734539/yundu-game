@@ -1,7 +1,7 @@
 'use strict';
 // 圖片清單：key -> assets/img 路徑（勿改回 base64 內嵌）
 // 圖片網址會加上 ?v=ASSET_V（與 index.html 的 ?v=N 同步）。改 sprite 規格／換圖時一定要一起 +1，避免舊 JS 畫新圖或新 JS 畫舊快取圖
-const ASSET_V=27;
+const ASSET_V=28;
 const ASSETS={
  "shui_idle0": "assets/img/shui_idle0.webp",
  "shui_idle1": "assets/img/shui_idle1.webp",
@@ -51,16 +51,16 @@ const ASSETS={
  "yxd_hit": "assets/img/yxd_hit.webp",
  "yxd_down": "assets/img/yxd_down.webp",
  "yxd_win": "assets/img/yxd_win.webp",
- "pt_qz_battle": "assets/img/pt_qz_battle.webp",
- "pt_bl_battle": "assets/img/pt_bl_battle.webp",
- "pt_yx_battle": "assets/img/pt_yx_battle.webp",
+ "pt_qz_battle": "assets/img/pt_qz_v28.webp",
+ "pt_bl_battle": "assets/img/pt_bl_v28.webp",
+ "pt_yx_battle": "assets/img/pt_yx_v28.webp",
  "lin": "assets/img/lin.webp",
  "zhou": "assets/img/zhou.webp",
  "pt_lin": "assets/img/pt_lin.webp",
  "pt_zhou": "assets/img/pt_zhou.webp",
  "campfire": "assets/img/campfire.webp",
- "pt_qz_startled": "assets/img/pt_qz_startled.webp",
- "pt_bl_quiet": "assets/img/pt_bl_quiet.webp",
+ "pt_qz_startled": "assets/img/pt_qz_front_v28.webp",
+ "pt_bl_quiet": "assets/img/pt_bl_front_v28.webp",
 
  "cottage": "assets/img/cottage.webp",
  "hall": "assets/img/hall.webp",
@@ -176,9 +176,9 @@ const ASSETS={
  "bg_reeds": "assets/img/bg_reeds_v26.webp",
  "bg_temple": "assets/img/bg_temple_v26.webp",
  "ext": "assets/img/ext.jpg",
- "pt_qz": "assets/img/pt_qz.jpg",
- "pt_bl": "assets/img/pt_bl.jpg",
- "pt_yx": "assets/img/pt_yx.jpg",
+ "pt_qz": "assets/img/pt_qz_v28.webp",
+ "pt_bl": "assets/img/pt_bl_v28.webp",
+ "pt_yx": "assets/img/pt_yx_v28.webp",
  "pt_chief": "assets/img/pt_chief.jpg",
  "pt_granny": "assets/img/pt_granny.jpg",
  "pt_hebo": "assets/img/pt_hebo.jpg",

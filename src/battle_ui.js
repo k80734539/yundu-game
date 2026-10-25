@@ -13,6 +13,7 @@ function bLayout(n){const port=SH>SW,aw=SW-SA.l-SA.r,L={port,aw};
   const ex=SA.l+Math.max(aw*.25,162*k+12),ey=L.cy-110*k;L.en=(m,boss)=>boss?[[ex,ey+15*k]]:m===1?[[ex,ey]]:m===2?[[ex-58*k,ey+20*k],[ex+58*k,ey-35*k]]:[[ex-96*k,ey+36*k],[ex,ey-10*k],[ex+96*k,ey-56*k]]}
  // 指令鈕（畫面右緣中段、由上往下疊，仿仙劍；不遮住任何角色）：直式 x=SW-SA.r-40、第一顆在 SH*.30，每 50px 一顆；逃跑在左上
  L.bd=Math.max(34,Math.min(44,40*Math.max(.9,L.U)));L.bs=Math.max(46,Math.round(50*Math.max(.92,L.U)));L.bx=SW-SA.r-(port?Math.max(34,40*L.U):34);L.by=Math.max(SA.t+86,Math.round(port?SH*.30:SA.t+96*L.U));
+ L.pd=Math.min(L.cw*(port?.96:.74),Math.max(90,SH*(port?.16:.20)));L.py=L.cy+L.ch-L.pd;L.infoTop=Math.max(L.cy+L.ch*.42,L.py+L.pd*.66);
  L.ex=[SA.l+14+L.bd/2,SA.t+14+L.bd/2];return L}
 function bSlot(p,i){return BSLOT[p.e]!=null?BSLOT[p.e]:Math.min(i,2)}
 function oct(cx,cy,r){X.beginPath();for(let i=0;i<8;i++){const a=Math.PI/8+i*Math.PI/4,x=cx+Math.cos(a)*r*1.0824,y=cy+Math.sin(a)*r*1.0824;i?X.lineTo(x,y):X.moveTo(x,y)}X.closePath()}
@@ -26,19 +27,18 @@ function octBtn(cx,cy,d,ch,sel,fs){
  X.font='bold '+Math.round(size)+'px '+FONT;X.textAlign='center';X.lineJoin='round';X.lineWidth=3;X.strokeStyle='#09202a';X.strokeText(label,cx,cy+size*.36);X.fillStyle=sel?'#ecffe7':'#75e5de';X.fillText(label,cx,cy+size*.36);X.restore()}
 function drawCard(L,p,i,act,fs,now){
  const x=L.cx0+i*(L.cw+L.gap),w=L.cw,h=L.ch,y=L.cy,pt=I['pt_'+p.e+'_battle']?.naturalWidth?I['pt_'+p.e+'_battle']:I['pt_'+p.e];
- const bust=Math.min(w*.82,h*1.42),bx=x+(w-bust)/2,by=y+h-bust;
- X.save();X.globalAlpha=p.hp>0?1:.4;
- if(pt?.naturalWidth){X.shadowColor=act?'#ffe7a0':'#101a24';X.shadowBlur=act?12:4;X.drawImage(pt,bx,by,bust,bust)}X.restore();
- X.save();const shade=X.createLinearGradient(x,y+h*.35,x,y+h);shade.addColorStop(0,'rgba(26,22,18,0)');shade.addColorStop(.38,'rgba(29,23,20,.74)');shade.addColorStop(1,'rgba(15,23,30,.96)');X.fillStyle=shade;X.fillRect(x,y,w,h);
- X.strokeStyle=act?'#f5d68a':'rgba(180,160,110,.65)';X.lineWidth=act?2:1;X.strokeRect(x,y+h*.44,w,h*.56);
- const nf=Math.max(10,Math.min(14,fs-1,w/7.5)),tx=x+7,right=x+w-7;
- X.shadowColor='#000';X.shadowBlur=3;txt(p.n,tx,y+h*.44-5,nf,act?'#ffe9ad':'#eee8d6');
- if(p.st||p.guard)txt(p.st?'毒':'防',right,y+h*.44-5,nf,p.st?'#e5a0cf':'#c9e8d9','right');
- txt(Math.max(0,p.hp)+'/'+p.mhp,right,y+h*.70,nf,'#f2aa88','right');
- txt(Math.max(0,p.mp)+'/'+p.mmp,right,y+h*.94,nf,'#87cfe3','right');X.shadowBlur=0;
- const bar=(yy,v,col)=>{X.fillStyle='#111b20';X.fillRect(tx,yy,w-14,2);X.fillStyle=col;X.fillRect(tx,yy,(w-14)*Math.max(0,Math.min(1,v)),2)};
- bar(y+h*.74,p.hp/p.mhp,'#bb7459');bar(y+h*.98,p.mp/p.mmp,'#68abbc');X.restore();
- return{x,y:L.cy,w,h}}
+ const d=L.pd,bx=L.port?x+(w-d)/2:x+4,by=L.py;
+ X.save();X.globalAlpha=p.hp>0?1:.4;X.shadowColor=act?'rgba(247,211,137,.65)':'rgba(0,0,0,.55)';X.shadowBlur=act?8:3;
+ if(pt?.naturalWidth)X.drawImage(pt,bx,by,d,d);X.restore();
+ X.save();const shade=X.createLinearGradient(x,L.infoTop,x,y+h);shade.addColorStop(0,'rgba(18,24,29,.22)');shade.addColorStop(1,'rgba(12,20,28,.94)');X.fillStyle=shade;X.fillRect(x,L.infoTop,w,y+h-L.infoTop);
+ X.strokeStyle=act?'#e8cb8c':'rgba(176,155,105,.55)';X.lineWidth=act?1.5:1;X.strokeRect(x+.5,L.infoTop+.5,w-1,y+h-L.infoTop-1);
+ const nf=Math.max(10,Math.min(L.port?12:15,fs)),right=x+w-7,hpy=y+h*.71,mpy=y+h*.96;
+ X.shadowColor='#000';X.shadowBlur=3;
+ txt(p.n,L.port?x+7:right,L.port?hpy:y+12,nf,act?'#ffe6ab':'#e8e6d8',L.port?'left':'right');
+ txt(Math.max(0,p.hp)+'/'+p.mhp,right,hpy,nf,'#efa588','right');txt(Math.max(0,p.mp)+'/'+p.mmp,right,mpy,nf,'#83cce6','right');
+ if(p.st||p.guard)txt(p.st?'毒':'防',x+7,mpy,nf-1,p.st?'#e9a4cb':'#c8ded5');X.shadowBlur=0;
+ X.restore();
+ return{x,y:L.py,w,h:y+h-L.py,portrait:{x:bx,y:by,w:d,h:d},infoTop:L.infoTop}}
 // v24: supplied enemy poses, one shared scale and ground anchor per creature.
 const EART={
   "shui": {

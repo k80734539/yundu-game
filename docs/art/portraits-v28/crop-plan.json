@@ -1,0 +1,107 @@
+{
+  "art_source": "existing",
+  "route": "user supplied JPEG sheets -> soft chroma matte -> ownership slicing -> bust crop",
+  "size": [
+    512,
+    512
+  ],
+  "portraits": [
+    {
+      "character": "qz",
+      "view": 3,
+      "sourceCrop": [
+        976,
+        20,
+        1264,
+        308
+      ],
+      "path": "assets\\img\\pt_qz_v28.webp",
+      "alphaBounds": [
+        15,
+        39,
+        401,
+        512
+      ],
+      "sourceSha256": "4fe552fc10ca097423a253138d1a44807d50e5257cab31175fc1b5f88e684fac"
+    },
+    {
+      "character": "bl",
+      "view": 3,
+      "sourceCrop": [
+        976,
+        20,
+        1264,
+        308
+      ],
+      "path": "assets\\img\\pt_bl_v28.webp",
+      "alphaBounds": [
+        12,
+        38,
+        449,
+        512
+      ],
+      "sourceSha256": "cc45702116198f8487a4b60c40b022110535e97200e8ff60c9138d2260e335cb"
+    },
+    {
+      "character": "yx",
+      "view": 3,
+      "sourceCrop": [
+        976,
+        20,
+        1264,
+        308
+      ],
+      "path": "assets\\img\\pt_yx_v28.webp",
+      "alphaBounds": [
+        8,
+        30,
+        425,
+        512
+      ],
+      "sourceSha256": "3fb0d8bdf872b6b76eb93e239e9d8ce937ca72a8b05c411077aa63d68637c998"
+    },
+    {
+      "character": "qz",
+      "view": 0,
+      "sourceCrop": [
+        20,
+        20,
+        308,
+        308
+      ],
+      "path": "assets\\img\\pt_qz_front_v28.webp",
+      "alphaBounds": [
+        53,
+        42,
+        512,
+        512
+      ],
+      "sourceSha256": "4fe552fc10ca097423a253138d1a44807d50e5257cab31175fc1b5f88e684fac"
+    },
+    {
+      "character": "bl",
+      "view": 0,
+      "sourceCrop": [
+        20,
+        20,
+        308,
+        308
+      ],
+      "path": "assets\\img\\pt_bl_front_v28.webp",
+      "alphaBounds": [
+        53,
+        42,
+        491,
+        512
+      ],
+      "sourceSha256": "cc45702116198f8487a4b60c40b022110535e97200e8ff60c9138d2260e335cb"
+    }
+  ],
+  "styleReference": "Fourth user image: portrait rises above bottom status strip; HP red and MP blue. Composition only; no external game characters or artwork copied.",
+  "sourceFiles": {
+    "qz": "1-\u7167\u7247-1.jpg",
+    "bl": "2-\u7167\u7247-2.jpg",
+    "yx": "3-\u7167\u7247-3.jpg"
+  },
+  "sceneVariants": "Original front-angle crops, not newly generated surprised/sad expressions."
+}

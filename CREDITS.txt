@@ -31,3 +31,5 @@ No new third-party asset pack used. Prompts and processing notes: docs/art/ch1-p
 v26 戰鬥背景：bg_{reeds,river,temple}_v26.webp 由 OpenAI 內建 image_gen 為本專案原創生成，依斜視戰鬥站位構圖；原始 PNG、提示詞、參考圖及製作規格見 docs/art/battle-backgrounds-v26/。
 
 v27 主角戰鬥影格重匯入：三張 2×5 原始姿勢圖由使用者提供；軟式色鍵、跨格元件歸屬切圖、原色保存與腳底註冊使用 generate2dsprite 工具處理。來源檔、前版影格、規格與 QA 見 docs/art/heroes-v27/。未重新生成角色。
+
+v28 主角半身頭像：使用者提供的三張四視角角色圖，經軟式色鍵、跨格元件歸屬裁切、局部去除桃紅邊緣、保護原粉色／膚色後裁成透明半身像。戰鬥及對話共用，版面參考使用者第四張截圖的呈現方式；沒有複製該截圖人物或美術。來源與規格見 docs/art/portraits-v28/。

@@ -1,0 +1,16 @@
+{
+  "reviewer": "Codex visual inspection",
+  "date": "2026-10-25",
+  "art_source": "existing",
+  "route": "supplied sheets -> soft matte -> ownership -> crop -> edge-only cleanup -> lossless WebP",
+  "references": "First three supplied images for identity; fourth for bottom HUD composition only",
+  "gameTests": "npm test ALL PASS; final bar-free portrait UI also rechecked across six sizes",
+  "visualChecks": [
+    "five portrait crops",
+    "390x664 battle",
+    "844x390 battle and dialogue",
+    "1024x768 battle",
+    "24 before/after screenshot pairs"
+  ],
+  "sceneVariantLimit": "Front-angle source crops used for old special scene keys; no generated emotion variants."
+}

@@ -15,6 +15,7 @@ npx playwright install chromium      # 或改用系統 Chrome：export CHROME_PA
 | `npm run test:play [-- W H touch]` | 第一章完整通關（村莊→夜渡戰→蘆葦蕩→河神廟 Boss→結局） |
 | `npm run test:touch` | 用 `touchscreen.tap` 點八角指令鈕與敵人；確認戰鬥中搖桿隱藏、戰後恢復 |
 | `npm run test:screens` | 5 尺寸截圖：title / dialog / village / dock / battle_menu |
+| `node tests/portrait-ui.mjs` | 六尺寸：透明半身圖、戰鬥／對話共用素材、頭像點選隊友、畫面與觸控範圍 |
 | `node tests/hero-assets.mjs` | 30 張原色角色圖載入、透明邊緣、裁切、腳底範圍、紅色細節與受擊／倒下姿勢區分 |
 | `node tests/battle-backgrounds.mjs` | 三個戰鬥背景 × 六尺寸：高解析素材、裁切、腳底落地與避開欄杆／水面／場景邊緣；保存實機截圖 |
 | `node tests/enemy-layout.mjs` | 五尺寸單敵／雙敵／三敵／河伯的左右對陣、向右上斜排、裁切與血條避開底部頭像檢查；保存站位截圖 |
