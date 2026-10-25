@@ -34,6 +34,7 @@ src/input.js          鍵盤與 press(k)（'up/down/left/right/ok/cancel'）
 src/update.js         地圖模式更新：自由移動（非格子）、同伴跟隨、互動判定
 src/ui.js             UI 繪圖工具：UI()（重設 transform 為 CSS px）、FS() 字級、txt/box/rr/wrap、對話框 drawDlg（半身立繪）
 src/render.js         drawWorld（地圖、y-sort 物件、角色）、drawBoat（夜渡場景）
+src/audio.js          Web Audio 合成音效、手勢解鎖、靜音與持久化開關
 src/fx.js             戰鬥 VFX：粒子池 VPT（上限 VMAX=160）、startFx、drawVFX、shake/flash
 src/battle_motion.js  v22 斜角站位動作：BFR（480×420 影格、腳底 y=355、縮放 .39，v22b 縮小）、BSLOT 站位、BPLAN 動作表（青舟／白苓／雲纖各招式的影格序列與滑步）、bPose 選影格（只改畫面座標，不改數值）
 src/battle_ui.js      drawBattle：全螢幕背景、敵左上／我方下方左中右橫排＋橢圓影子、八角指令鈕、底部三張角色卡、KO 溶解、傷害數字；觸控 bTap / B.hit 點擊區
@@ -48,7 +49,7 @@ CREDITS.txt           素材來源（必須保留）
 tests/                Playwright 測試，見 tests/README.md
 package.json          只給測試用（npm test）
 ```
-**載入順序**（index.html）：joystick → assets → engine → data → maps → story → battle → input → update → ui → cinematics → render → fx → battle_motion → battle_ui → screens → save → main。
+**載入順序**（index.html）：joystick → assets → engine → data → maps → story → battle → input → update → ui → cinematics → render → audio → fx → battle_motion → battle_ui → screens → save → main。
 - 存檔：saveCP() 會同時寫入自動存檔；改 G 的存檔欄位或格式時，把 SAVE_VER +1 並在 migrateSave() 補升級。存檔只在 canSave()（地圖自由行動、無對話/戰鬥/演出 G.cut）時允許。
 classic script 的 function 宣告只在該檔執行時才建立，所以**載入時（top-level）立即執行的程式碼只能呼叫前面檔案的東西**；在 frame()/事件中呼叫則不受限。新增檔案時放在正確位置。
 
@@ -72,7 +73,7 @@ classic script 的 function 宣告只在該檔執行時才建立，所以**載�
 - **頭像（v28）**：三位主角以使用者提供四視角原圖的三分之四正面裁成 512×512 透明半身像，戰鬥與對話共用同一張，勿改回舊像素頭像或有底色的方塊。卡片頭像在左、紅／藍數字在右；直式壓縮為兩行且臉部不被資訊列覆蓋。cards 的觸控區包含浮出資訊列的頭像。情境鍵 pt_qz_startled／pt_bl_quiet 目前使用同一原圖的正面視角，不自行生成表情。參見 docs/art/portraits-v28.md 與 tests/portrait-ui.mjs。原色裁切工具為 tools/import-portraits.py。
 
 ## 5. 版本號規則
-- 目前 **v29**（v28 已上線；v29 拉開敵我站位與中央交戰空間）。每次上線改動都要 +1（下一版 **v30**），三處一起改：
+- 目前 **v30**（v29 已上線；v30 加入命中回饋與音效）。每次上線改動都要 +1（下一版 **v31**），三處一起改：
   1. `index.html` `<title>雲渡仙緣 第一章 vN</title>`
   2. `src/screens.js` 標題畫面 `'版本 vN'`
   3. `src/render.js` 地圖右下角 `'vN'`
@@ -100,3 +101,5 @@ npm test                                          # 必須 ALL PASS，且無 JS 
 - 不要移除測試掛勾（`G_`、`press`、`TP`、`__sb`、`__ex`、`__ep`、`mk`）或 `frame()` 的 try/catch。
 - 不要讓搖桿在戰鬥中出現、不要讓戰鬥指令鈕遮住角色（放在右緣中段，逃跑除外，在左上）、不要讓指令鈕觸控目標小於 44px、不要讓戰鬥角色影格脫離共用縮放 `BFR.scale`、不要把立繪裁到看不到下巴與肩膀。
 - 不要忘記 bump 版本號；不要 push 沒跑過 `npm test` 的改動。
+
+- **戰鬥回饋（v30）**：bImpactTime 只定格攻擊者繪圖時鐘 55ms／會心 80ms，不改傷害時間；bRecoil 在命中後位移並於 260ms 內回位。soundBtn 需保留 44px 觸控區、上方訊息框讓出右緣。音效於可信手勢才建立 AudioContext，靜音獨立存於 yundu_sound，不改存檔格式。tests/battle-feedback.mjs 測試實際音訊輸出與命中排程。

@@ -19,6 +19,16 @@ const BPLAN={
 };
 function bPlan(e,k){const P=BPLAN[e];if(!P)return null;if(P[k])return P[k];if(e==='yx'&&(k==='sweep'||k==='foxfire'||k==='rain'))return P.skill;return null}
 function bLerp(a,t){if(t<=a[0][0])return a[0][1];for(let i=1;i<a.length;i++)if(t<=a[i][0]){const p=a[i-1],q=a[i];return p[1]+(q[1]-p[1])*motionEase((t-p[0])/(q[0]-p[0]||1))}return a[a.length-1][1]}
+// Hold only the attacker's drawing clock briefly; damage, input and message timers keep running.
+function bImpactHold(sp){return sp.hits.some(h=>!h.heal&&h.d>0)?(sp.hits.some(h=>!h.heal&&(h.crit||h.big))?80:55):0}
+function bImpactTime(sp,now){const at=sp.at+(sp.delay||0)+(VIMP[sp.k]||150),hold=bImpactHold(sp);
+ return now<at?now:Math.max(at,now-hold)}
+function bRecoil(p,now){const B=G.B,f=B.fx.findLast(f=>f.t===p&&!f.heal&&f.d>0&&now>=f.at&&now-f.at<260);
+ if(!f||!f.sp?.src)return{dx:0,dy:0};
+ const q=B.po(p),src=B.po(f.sp.src);if(!q||!src||p===f.sp.src)return{dx:0,dy:0};
+ const vx=q[0]-src[0],vy=q[1]-src[1],d=Math.hypot(vx,vy)||1,t=now-f.at;
+ const amplitude=(p.boss?3:p.guard?4:f.crit||f.big?11:7)*(B.u||1),k=t<55?1:1-motionEase((t-55)/205);
+ return{dx:vx/d*amplitude*k,dy:vy/d*amplitude*k*.45}}
 // 點擊跳過訊息：還沒命中的衝刺類動作直接跳到命中瞬間（和 v20 行為相同），動作結束
 function finishBattleMotion(now){const B=G.B;if(!B||!B.an)return;
  B.an=B.an.filter(a=>{if(!a.plan.pull)return true;const impact=(a.sp.delay||0)+(VIMP[a.sp.k]||150);
@@ -26,11 +36,11 @@ function finishBattleMotion(now){const B=G.B;if(!B||!B.an)return;
 // 目前這位角色該畫哪一格：勝利 > 倒下 > 受擊 > 攻擊／施法動作 > 防禦 > 待機（兩幀每 600ms 交替）
 function bPose(p,i,now,F,s,L){const B=G.B,pre=BPRE[p.e]||'qzd';let name,dx=0,dy=0;
  const pend=B.msgs.some(m=>Array.isArray(m)&&m[1].at==null&&m[1].hits.some(h=>h.t===p)),hf=B.fx.find(f=>f.t===p&&!f.heal&&now>=f.at&&now-f.at<HIT_MS);
- B.an=(B.an||[]).filter(a=>now-a.at<a.plan.dur);const a=B.an.find(a=>a.p===p);
+ B.an=(B.an||[]).filter(a=>now-a.at<a.plan.dur+bImpactHold(a.sp));const a=B.an.find(a=>a.p===p);
  if(B.won)name='win';
  else if(p.hp<=0&&!pend&&!hf)name='down';
  else if(hf)name='hit';
- else if(a){const t=now-a.at;name=(a.plan.seq.find(q=>t<q[0])||a.plan.seq[a.plan.seq.length-1])[1];
+ else if(a){const t=bImpactTime(a.sp,now)-a.at;name=(a.plan.seq.find(q=>t<q[0])||a.plan.seq[a.plan.seq.length-1])[1];
   if(a.plan.sl){const T=(a.sp.tg.length?a.sp.tg:B.en).map(o=>B.po(o)).filter(Boolean);
    if(T.length){const tx=T.reduce((m,q)=>m+q[0],0)/T.length,ty=T.reduce((m,q)=>m+q[1],0)/T.length,ax=F[0],ay=F[1]-135*s,vx=tx-ax,vy=ty-ay,d=Math.hypot(vx,vy)||1,ux=vx/d,uy=vy/d,rc=34*(B.u||1),
      all=B.en.filter(o=>o.hp>0||!o.dieAt||now<o.dieAt+650).map(o=>B.po(o)).filter(Boolean);
@@ -46,4 +56,5 @@ function bPose(p,i,now,F,s,L){const B=G.B,pre=BPRE[p.e]||'qzd';let name,dx=0,dy=
     const k=bLerp(a.plan.sl,t);dx=ux*go*k;dy=uy*go*k}}}
  else if(p.guard&&p.hp>0)name='guard';
  else name='idle'+((Math.floor(now/600)+i)%2);
+ const recoil=bRecoil(p,now);dx+=recoil.dx;dy+=recoil.dy;
  return {name,dx,dy,pre,hit:!!hf}}

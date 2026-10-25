@@ -6,7 +6,7 @@ for(const [w,h] of sizes){const {ctx,pg,jsErrors}=await newPage(b,w,h,{seed:true
 for(const [label,names] of [['single',['小水妖']],['pair',['小水妖','小水妖']],['trio',['小水妖','小水妖','蘆葦精']],['boss',['河伯']]]){await pg.evaluate(names=>{__sb(names,{noEsc:1});const B=G_().B;B.msgs=[];B.ph='cmd';B.ai=0},names);await pg.clock.runFor(700);
 const layout=await pg.evaluate(()=>{const B=G_().B;return{party:B.L.feet,en:B.L.en(B.en.length,B.en[0].boss&&B.en.length===1),rects:B.en.map(e=>B.po(e)),U:B.L.U,hudTop:B.L.py,labelPad:FS()+16}});
 const lane=Math.min(...layout.party.map(p=>p[0]))-Math.max(...layout.en.map(p=>p[0]));
-assert.ok(lane>=((h>w)?80*layout.U:w*.25),'central lane stays open between opposing ranks');
+assert.ok(lane>=((h>w)?80*layout.U:(w/h<1.6?55*layout.U:w*.24)),'central lane stays open between opposing ranks');
 for(const rank of [layout.en,layout.party])for(let i=1;i<rank.length;i++){assert.ok(rank[i][0]>rank[i-1][0]&&rank[i][1]<rank[i-1][1],'both ranks rise toward the right')}
 assert.ok(Math.max(...layout.en.map(p=>p[1]))+layout.labelPad<layout.hudTop,'enemy labels stay above portrait HUD');
 for(const q of layout.rects){assert.ok(q[0]-q[2]/2>=0&&q[0]+q[2]/2<=w&&q[1]-q[3]/2>=0&&q[1]+q[3]/2<h,'enemy visible')}

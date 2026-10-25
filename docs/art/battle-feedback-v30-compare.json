@@ -1,0 +1,319 @@
+[
+  {
+    "scene": "fx\\390x664\\claw_120.png",
+    "changed_bbox": [
+      16,
+      10,
+      764,
+      163
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\claw_180.png",
+    "changed_bbox": [
+      16,
+      10,
+      764,
+      163
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\foxfire_180.png",
+    "changed_bbox": [
+      47,
+      10,
+      764,
+      163
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\foxfire_350.png",
+    "changed_bbox": [
+      47,
+      10,
+      764,
+      163
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\guard_150.png",
+    "changed_bbox": [
+      552,
+      10,
+      764,
+      112
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\ko_300.png",
+    "changed_bbox": [
+      552,
+      10,
+      764,
+      112
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\ko_500.png",
+    "changed_bbox": [
+      109,
+      10,
+      764,
+      773
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\leaf_230.png",
+    "changed_bbox": [
+      16,
+      10,
+      764,
+      827
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\rain_350.png",
+    "changed_bbox": [
+      16,
+      10,
+      764,
+      163
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\rain_550.png",
+    "changed_bbox": [
+      16,
+      10,
+      764,
+      163
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\slash_150.png",
+    "changed_bbox": [
+      46,
+      10,
+      764,
+      163
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\slash_90.png",
+    "changed_bbox": [
+      46,
+      10,
+      764,
+      163
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\splash_190.png",
+    "changed_bbox": [
+      16,
+      10,
+      764,
+      969
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\sweep_220.png",
+    "changed_bbox": [
+      16,
+      10,
+      764,
+      163
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\sweep_320.png",
+    "changed_bbox": [
+      16,
+      10,
+      764,
+      163
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\tail_200.png",
+    "changed_bbox": [
+      16,
+      10,
+      764,
+      828
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\wave_250.png",
+    "changed_bbox": [
+      552,
+      10,
+      764,
+      112
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\wave_550.png",
+    "changed_bbox": [
+      528,
+      10,
+      764,
+      828
+    ]
+  },
+  {
+    "scene": "fx\\390x664\\wave_700.png",
+    "changed_bbox": [
+      547,
+      10,
+      764,
+      824
+    ]
+  },
+  {
+    "scene": "fx\\844x390\\claw_120.png",
+    "changed_bbox": [
+      1520,
+      10,
+      1672,
+      98
+    ]
+  },
+  {
+    "scene": "fx\\844x390\\claw_180.png",
+    "changed_bbox": [
+      1520,
+      10,
+      1672,
+      98
+    ]
+  },
+  {
+    "scene": "fx\\844x390\\foxfire_180.png",
+    "changed_bbox": [
+      1520,
+      10,
+      1672,
+      98
+    ]
+  },
+  {
+    "scene": "fx\\844x390\\foxfire_350.png",
+    "changed_bbox": [
+      1520,
+      10,
+      1672,
+      98
+    ]
+  },
+  {
+    "scene": "fx\\844x390\\guard_150.png",
+    "changed_bbox": [
+      1520,
+      10,
+      1672,
+      98
+    ]
+  },
+  {
+    "scene": "fx\\844x390\\ko_300.png",
+    "changed_bbox": [
+      1520,
+      10,
+      1672,
+      98
+    ]
+  },
+  {
+    "scene": "fx\\844x390\\ko_500.png",
+    "changed_bbox": [
+      180,
+      10,
+      1672,
+      449
+    ]
+  },
+  {
+    "scene": "fx\\844x390\\leaf_230.png",
+    "changed_bbox": null
+  },
+  {
+    "scene": "fx\\844x390\\rain_350.png",
+    "changed_bbox": [
+      1520,
+      10,
+      1672,
+      98
+    ]
+  },
+  {
+    "scene": "fx\\844x390\\rain_550.png",
+    "changed_bbox": [
+      1520,
+      10,
+      1672,
+      98
+    ]
+  },
+  {
+    "scene": "fx\\844x390\\slash_150.png",
+    "changed_bbox": [
+      1520,
+      10,
+      1672,
+      98
+    ]
+  },
+  {
+    "scene": "fx\\844x390\\slash_90.png",
+    "changed_bbox": [
+      1520,
+      10,
+      1672,
+      98
+    ]
+  },
+  {
+    "scene": "fx\\844x390\\splash_190.png",
+    "changed_bbox": [
+      1227,
+      10,
+      1672,
+      488
+    ]
+  },
+  {
+    "scene": "fx\\844x390\\sweep_220.png",
+    "changed_bbox": [
+      1520,
+      10,
+      1672,
+      98
+    ]
+  },
+  {
+    "scene": "fx\\844x390\\sweep_320.png",
+    "changed_bbox": [
+      1520,
+      10,
+      1672,
+      98
+    ]
+  },
+  {
+    "scene": "fx\\844x390\\tail_200.png",
+    "changed_bbox": null
+  },
+  {
+    "scene": "fx\\844x390\\wave_250.png",
+    "changed_bbox": null
+  },
+  {
+    "scene": "fx\\844x390\\wave_550.png",
+    "changed_bbox": null
+  },
+  {
+    "scene": "fx\\844x390\\wave_700.png",
+    "changed_bbox": null
+  }
+]
