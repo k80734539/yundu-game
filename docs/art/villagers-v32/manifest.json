@@ -1,0 +1,451 @@
+{
+  "art_source": "existing",
+  "route": "user-provided images; chroma key, crop and premultiplied resize",
+  "characters": [
+    {
+      "key": "lin",
+      "name": "林嬸",
+      "height": 156,
+      "portrait": [
+        35,
+        90,
+        385,
+        440
+      ],
+      "bodyCrop": [
+        12,
+        114,
+        403,
+        968
+      ],
+      "root": [
+        96,
+        180
+      ],
+      "canvas": [
+        192,
+        192
+      ],
+      "sourceScale": 0.18266978922716628,
+      "despill": {
+        "mode": "edge",
+        "applied": "edge",
+        "radius": 2,
+        "margin": 12,
+        "changed_px": 0
+      },
+      "assets": [
+        {
+          "kind": "npc",
+          "file": "assets\\img\\npc_lin_v32.webp",
+          "qa": {
+            "key": [
+              255.0,
+              0.0,
+              255.0
+            ],
+            "opaque_key_px": 0,
+            "outer_ring_spill_fraction": 0.0,
+            "semitransparent_fraction": 0.24931805782869612,
+            "enclosed_key_pockets": 0,
+            "key_hued_px": 0,
+            "visible_px": 7332,
+            "outer_ring_px": 955,
+            "thresholds": {
+              "key_tolerance": 48.0,
+              "spill_threshold": 20.0,
+              "min_pocket_area": 16,
+              "opaque_alpha": 128,
+              "spill_hue_balance": 0.5
+            },
+            "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+          },
+          "sha256": "cb6751197dcdeb783c07d09012dec2267e945e3b4f19b771dc384ed70458c164"
+        },
+        {
+          "kind": "pt",
+          "file": "assets\\img\\pt_lin_v32.webp",
+          "qa": {
+            "key": [
+              255.0,
+              0.0,
+              255.0
+            ],
+            "opaque_key_px": 0,
+            "outer_ring_spill_fraction": 0.0,
+            "semitransparent_fraction": 0.08800038392189932,
+            "enclosed_key_pockets": 0,
+            "key_hued_px": 0,
+            "visible_px": 145863,
+            "outer_ring_px": 5218,
+            "thresholds": {
+              "key_tolerance": 48.0,
+              "spill_threshold": 20.0,
+              "min_pocket_area": 16,
+              "opaque_alpha": 128,
+              "spill_hue_balance": 0.5
+            },
+            "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+          },
+          "sha256": "afc730a52eca1d98e5edf31e3bbdba6eaad3c56dee159651c8b85b9105ee09ff"
+        }
+      ]
+    },
+    {
+      "key": "zhou",
+      "name": "老周",
+      "height": 162,
+      "portrait": [
+        470,
+        0,
+        970,
+        500
+      ],
+      "bodyCrop": [
+        485,
+        23,
+        944,
+        1049
+      ],
+      "root": [
+        96,
+        180
+      ],
+      "canvas": [
+        192,
+        192
+      ],
+      "sourceScale": 0.15789473684210525,
+      "despill": {
+        "mode": "edge",
+        "applied": "edge",
+        "radius": 2,
+        "margin": 12,
+        "changed_px": 378
+      },
+      "assets": [
+        {
+          "kind": "npc",
+          "file": "assets\\img\\npc_zhou_v32.webp",
+          "qa": {
+            "key": [
+              255.0,
+              0.0,
+              255.0
+            ],
+            "opaque_key_px": 0,
+            "outer_ring_spill_fraction": 0.0,
+            "semitransparent_fraction": 0.2777628394729766,
+            "enclosed_key_pockets": 0,
+            "key_hued_px": 0,
+            "visible_px": 7438,
+            "outer_ring_px": 1050,
+            "thresholds": {
+              "key_tolerance": 48.0,
+              "spill_threshold": 20.0,
+              "min_pocket_area": 16,
+              "opaque_alpha": 128,
+              "spill_hue_balance": 0.5
+            },
+            "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+          },
+          "sha256": "2d4e5addb5bfd854c82cd3054f178dc25bba686fc3ed664e7409dcf776db7067"
+        },
+        {
+          "kind": "pt",
+          "file": "assets\\img\\pt_zhou_v32.webp",
+          "qa": {
+            "key": [
+              255.0,
+              0.0,
+              255.0
+            ],
+            "opaque_key_px": 0,
+            "outer_ring_spill_fraction": 0.0,
+            "semitransparent_fraction": 0.07945688043676315,
+            "enclosed_key_pockets": 0,
+            "key_hued_px": 0,
+            "visible_px": 148181,
+            "outer_ring_px": 4781,
+            "thresholds": {
+              "key_tolerance": 48.0,
+              "spill_threshold": 20.0,
+              "min_pocket_area": 16,
+              "opaque_alpha": 128,
+              "spill_hue_balance": 0.5
+            },
+            "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+          },
+          "sha256": "321a7660e3f0fce4fb187f350e6cc8fad237d807f0e389d8ccfc9b38b02843bb"
+        }
+      ]
+    },
+    {
+      "key": "granny",
+      "name": "阿婆",
+      "height": 146,
+      "portrait": [
+        240,
+        70,
+        800,
+        630
+      ],
+      "bodyCrop": [
+        220,
+        102,
+        827,
+        1419
+      ],
+      "root": [
+        96,
+        180
+      ],
+      "canvas": [
+        192,
+        192
+      ],
+      "sourceScale": 0.1108580106302202,
+      "despill": {
+        "mode": "edge",
+        "applied": "edge",
+        "radius": 2,
+        "margin": 12,
+        "changed_px": 730
+      },
+      "assets": [
+        {
+          "kind": "npc",
+          "file": "assets\\img\\npc_granny_v32.webp",
+          "qa": {
+            "key": [
+              255.0,
+              0.0,
+              255.0
+            ],
+            "opaque_key_px": 0,
+            "outer_ring_spill_fraction": 0.0,
+            "semitransparent_fraction": 0.22994333432746794,
+            "enclosed_key_pockets": 0,
+            "key_hued_px": 0,
+            "visible_px": 6706,
+            "outer_ring_px": 792,
+            "thresholds": {
+              "key_tolerance": 48.0,
+              "spill_threshold": 20.0,
+              "min_pocket_area": 16,
+              "opaque_alpha": 128,
+              "spill_hue_balance": 0.5
+            },
+            "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+          },
+          "sha256": "f9913151635b996f56b205a649022aef8317d7d5dce9b43c0a8538b439508313"
+        },
+        {
+          "kind": "pt",
+          "file": "assets\\img\\pt_granny_v32.webp",
+          "qa": {
+            "key": [
+              255.0,
+              0.0,
+              255.0
+            ],
+            "opaque_key_px": 0,
+            "outer_ring_spill_fraction": 0.0,
+            "semitransparent_fraction": 0.05585180030815766,
+            "enclosed_key_pockets": 0,
+            "key_hued_px": 0,
+            "visible_px": 140837,
+            "outer_ring_px": 4421,
+            "thresholds": {
+              "key_tolerance": 48.0,
+              "spill_threshold": 20.0,
+              "min_pocket_area": 16,
+              "opaque_alpha": 128,
+              "spill_hue_balance": 0.5
+            },
+            "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+          },
+          "sha256": "8a9c1e43f279ca3a79108677f571a0271fcb33c6d120f3a53afc723278b8d826"
+        }
+      ]
+    },
+    {
+      "key": "chief",
+      "name": "村長",
+      "height": 164,
+      "portrait": [
+        240,
+        0,
+        840,
+        600
+      ],
+      "bodyCrop": [
+        293,
+        33,
+        813,
+        1413
+      ],
+      "root": [
+        96,
+        180
+      ],
+      "canvas": [
+        192,
+        192
+      ],
+      "sourceScale": 0.11884057971014493,
+      "despill": {
+        "mode": "edge",
+        "applied": "edge",
+        "radius": 2,
+        "margin": 12,
+        "changed_px": 781
+      },
+      "assets": [
+        {
+          "kind": "npc",
+          "file": "assets\\img\\npc_chief_v32.webp",
+          "qa": {
+            "key": [
+              255.0,
+              0.0,
+              255.0
+            ],
+            "opaque_key_px": 0,
+            "outer_ring_spill_fraction": 0.0,
+            "semitransparent_fraction": 0.28037001768466874,
+            "enclosed_key_pockets": 0,
+            "key_hued_px": 0,
+            "visible_px": 7351,
+            "outer_ring_px": 1106,
+            "thresholds": {
+              "key_tolerance": 48.0,
+              "spill_threshold": 20.0,
+              "min_pocket_area": 16,
+              "opaque_alpha": 128,
+              "spill_hue_balance": 0.5
+            },
+            "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+          },
+          "sha256": "17d7be9f356bbc2cb18dc6c075202062ec0b4dd3110b789d1caac9ae44d8295f"
+        },
+        {
+          "kind": "pt",
+          "file": "assets\\img\\pt_chief_v32.webp",
+          "qa": {
+            "key": [
+              255.0,
+              0.0,
+              255.0
+            ],
+            "opaque_key_px": 0,
+            "outer_ring_spill_fraction": 0.0,
+            "semitransparent_fraction": 0.05710800021620119,
+            "enclosed_key_pockets": 0,
+            "key_hued_px": 0,
+            "visible_px": 129509,
+            "outer_ring_px": 3991,
+            "thresholds": {
+              "key_tolerance": 48.0,
+              "spill_threshold": 20.0,
+              "min_pocket_area": 16,
+              "opaque_alpha": 128,
+              "spill_hue_balance": 0.5
+            },
+            "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+          },
+          "sha256": "4442280e2a5736571afe32f06fca4df06ca43935d5104914d4d580344f37e918"
+        }
+      ]
+    },
+    {
+      "key": "wang",
+      "name": "王大叔",
+      "height": 164,
+      "portrait": [
+        440,
+        0,
+        960,
+        520
+      ],
+      "bodyCrop": [
+        470,
+        16,
+        913,
+        1058
+      ],
+      "root": [
+        96,
+        180
+      ],
+      "canvas": [
+        192,
+        192
+      ],
+      "sourceScale": 0.15738963531669867,
+      "despill": {
+        "mode": "edge",
+        "applied": "edge",
+        "radius": 2,
+        "margin": 12,
+        "changed_px": 305
+      },
+      "assets": [
+        {
+          "kind": "npc",
+          "file": "assets\\img\\npc_wang_v32.webp",
+          "qa": {
+            "key": [
+              255.0,
+              0.0,
+              255.0
+            ],
+            "opaque_key_px": 0,
+            "outer_ring_spill_fraction": 0.0,
+            "semitransparent_fraction": 0.28191861278142916,
+            "enclosed_key_pockets": 0,
+            "key_hued_px": 0,
+            "visible_px": 7151,
+            "outer_ring_px": 1015,
+            "thresholds": {
+              "key_tolerance": 48.0,
+              "spill_threshold": 20.0,
+              "min_pocket_area": 16,
+              "opaque_alpha": 128,
+              "spill_hue_balance": 0.5
+            },
+            "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+          },
+          "sha256": "7752d21ddac56a3de8871e1c873f3750731a8f894200c6c43573278254e86f36"
+        },
+        {
+          "kind": "pt",
+          "file": "assets\\img\\pt_wang_v32.webp",
+          "qa": {
+            "key": [
+              255.0,
+              0.0,
+              255.0
+            ],
+            "opaque_key_px": 0,
+            "outer_ring_spill_fraction": 0.0,
+            "semitransparent_fraction": 0.06875846465785168,
+            "enclosed_key_pockets": 0,
+            "key_hued_px": 0,
+            "visible_px": 127737,
+            "outer_ring_px": 4124,
+            "thresholds": {
+              "key_tolerance": 48.0,
+              "spill_threshold": 20.0,
+              "min_pocket_area": 16,
+              "opaque_alpha": 128,
+              "spill_hue_balance": 0.5
+            },
+            "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+          },
+          "sha256": "466ee21c1e1163f2433368df410bc1dd6c4cae5f194700b1a04e9f59d098f18d"
+        }
+      ]
+    }
+  ]
+}

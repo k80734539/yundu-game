@@ -1,7 +1,7 @@
 'use strict';
 // 圖片清單：key -> assets/img 路徑（勿改回 base64 內嵌）
 // 圖片網址會加上 ?v=ASSET_V（與 index.html 的 ?v=N 同步）。改 sprite 規格／換圖時一定要一起 +1，避免舊 JS 畫新圖或新 JS 畫舊快取圖
-const ASSET_V=31;
+const ASSET_V=32;
 const ASSETS={
  "shui_idle0": "assets/img/shui_idle0.webp",
  "shui_idle1": "assets/img/shui_idle1.webp",
@@ -54,10 +54,10 @@ const ASSETS={
  "pt_qz_battle": "assets/img/pt_qz_v28.webp",
  "pt_bl_battle": "assets/img/pt_bl_v28.webp",
  "pt_yx_battle": "assets/img/pt_yx_v28.webp",
- "lin": "assets/img/lin.webp",
- "zhou": "assets/img/zhou.webp",
- "pt_lin": "assets/img/pt_lin.webp",
- "pt_zhou": "assets/img/pt_zhou.webp",
+ "lin": "assets/img/npc_lin_v32.webp",
+ "zhou": "assets/img/npc_zhou_v32.webp",
+ "pt_lin": "assets/img/pt_lin_v32.webp",
+ "pt_zhou": "assets/img/pt_zhou_v32.webp",
  "campfire": "assets/img/campfire.webp",
  "pt_qz_startled": "assets/img/pt_qz_front_v28.webp",
  "pt_bl_quiet": "assets/img/pt_bl_front_v28.webp",
@@ -121,6 +121,7 @@ const ASSETS={
  "yx_left3": "assets/img/yx_left3.webp",
  "yx_right2": "assets/img/yx_right2.webp",
  "yx_right3": "assets/img/yx_right3.webp",
+ "wang": "assets/img/npc_wang_v32.webp",
  "wang_down0": "assets/img/wang_down0.webp",
  "wang_down1": "assets/img/wang_down1.webp",
  "wang_down2": "assets/img/wang_down2.webp",
@@ -133,8 +134,8 @@ const ASSETS={
  "wang_right1": "assets/img/wang_right1.webp",
  "wang_left2": "assets/img/wang_left2.webp",
  "wang_right2": "assets/img/wang_right2.webp",
- "chief": "assets/img/chief.webp",
- "granny": "assets/img/granny.webp",
+ "chief": "assets/img/npc_chief_v32.webp",
+ "granny": "assets/img/npc_granny_v32.webp",
  "reed1": "assets/img/reed1.webp",
  "reed2": "assets/img/reed2.webp",
  "lily": "assets/img/lily.webp",
@@ -179,8 +180,8 @@ const ASSETS={
  "pt_qz": "assets/img/pt_qz_v28.webp",
  "pt_bl": "assets/img/pt_bl_v28.webp",
  "pt_yx": "assets/img/pt_yx_v28.webp",
- "pt_chief": "assets/img/pt_chief.jpg",
- "pt_granny": "assets/img/pt_granny.jpg",
+ "pt_chief": "assets/img/pt_chief_v32.webp",
+ "pt_granny": "assets/img/pt_granny_v32.webp",
  "pt_hebo": "assets/img/pt_hebo.jpg",
- "pt_wang": "assets/img/pt_wang.jpg"
+ "pt_wang": "assets/img/pt_wang_v32.webp"
 };

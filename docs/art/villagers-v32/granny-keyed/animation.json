@@ -1,0 +1,332 @@
+{
+  "schema": "generate2dsprite.full_frames.v2",
+  "frame_size": [
+    1024,
+    1536
+  ],
+  "source_frame_count": 1,
+  "sources": [
+    {
+      "path": "../granny-source.png",
+      "file_sha256": "5d62644fdc15f1cc002f28c155d641c283fc981eb3186814508a455e0e942700",
+      "bytes": 1802497,
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "source_mode": "RGB",
+      "bit_depth": 8,
+      "conversion": "RGB -> RGBA",
+      "key": {
+        "quality": "soft",
+        "requested_quality": "soft",
+        "key_rgb": [
+          248,
+          4,
+          248
+        ],
+        "key_estimate": {
+          "declared": "magenta",
+          "declared_rgb": [
+            255,
+            0,
+            255
+          ],
+          "ring_px": 40704,
+          "native_alpha": false,
+          "use_native_alpha": false,
+          "near_share": 1.0,
+          "key": [
+            248.0,
+            4.0,
+            248.0
+          ],
+          "source": "border_median",
+          "valid": true,
+          "reason": null,
+          "ring_share": 1.0,
+          "coverage": 0.6830495198567709,
+          "distance_from_declared": 10.68
+        },
+        "qa": {
+          "opaque_key_px": 0,
+          "outer_ring_spill_fraction": 0.16509892961401232,
+          "semitransparent_fraction": 0.021722448497727406,
+          "enclosed_key_pockets": 0,
+          "key_hued_px": 3164,
+          "visible_px": 491289,
+          "outer_ring_px": 6166,
+          "thresholds": {
+            "key_tolerance": 48.0,
+            "spill_threshold": 20.0,
+            "min_pocket_area": 16,
+            "opaque_alpha": 128,
+            "spill_hue_balance": 0.5
+          },
+          "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+        },
+        "interior_despill": false,
+        "key_material_share": 0.009331756875109476,
+        "params": {
+          "w_chroma": 1.0,
+          "t_bg": 18.0,
+          "t_fg": 40.0,
+          "keylike": 0.5,
+          "r_a": 3,
+          "r_c": 3,
+          "radius": 4,
+          "tau": 6.0,
+          "kappa": 0.6,
+          "temp": 0.4,
+          "a_lo": 0.04,
+          "a_hi": 0.96,
+          "unmix_from": 0.0,
+          "excess_slack": 3.0,
+          "ref_r": 10,
+          "speck_steps": 3,
+          "monotone": true,
+          "interior_despill": false,
+          "snap": "ramp",
+          "refine": "none",
+          "gf_r": 2,
+          "gf_eps": 0.004
+        }
+      }
+    }
+  ],
+  "frames": [
+    {
+      "index": 0,
+      "file": "frames/frame-00.png",
+      "source_index": 0,
+      "crop_box": [
+        0,
+        0,
+        1024,
+        1536
+      ],
+      "crop_id": "r0c0",
+      "sheet_origin": [
+        0,
+        0
+      ],
+      "owned_components": 22,
+      "pixels_from_outside_cell": 0,
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "file_sha256": "257e7fff9e797117a71c827d004b5c33d196900b51a65ed1c8d60c35fe7ee9b3",
+      "rgba_pixel_sha256": "acf0b2df8f0741dd9edc6992f90cca2a16326df27431f973bf1234557d693408"
+    }
+  ],
+  "sequence": [
+    0
+  ],
+  "duration_ms": 250,
+  "total_duration_ms": 250,
+  "loop": 0,
+  "atlas": {
+    "file": "atlas.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "rows": 1,
+    "cols": 1,
+    "file_sha256": "257e7fff9e797117a71c827d004b5c33d196900b51a65ed1c8d60c35fe7ee9b3",
+    "rgba_pixels_exact": true
+  },
+  "webp": {
+    "decoded_frame_count": 1,
+    "decoded_frames": [
+      {
+        "index": 0,
+        "timestamp_ms": 0,
+        "duration_ms": 250,
+        "sequence_positions": [
+          0
+        ]
+      }
+    ],
+    "total_duration_ms": 250,
+    "loop": 0,
+    "alpha_and_visible_rgb_exact": true,
+    "timeline_verified": true,
+    "hidden_rgb_guaranteed": false,
+    "file": "animation.webp",
+    "file_sha256": "04b030627d3c8ca3383772aa703f9c8a98c7007231880d04bdadfe7701afc434",
+    "bytes": 790110,
+    "lossless": true,
+    "quality": 75,
+    "method": 3,
+    "timed_static_container": true,
+    "all_keyframes": false
+  },
+  "transitions": [
+    {
+      "from_sequence_position": 0,
+      "to_sequence_position": 0,
+      "from_frame": 0,
+      "to_frame": 0,
+      "wrap": true,
+      "premultiplied_rgb_mae": 0.0,
+      "alpha_mae": 0.0,
+      "changed_visible_pixels": 0
+    }
+  ],
+  "loop_seam": null,
+  "loop_overlap": null,
+  "static_regions": {},
+  "key": {
+    "mode": "chroma",
+    "key_color": "auto",
+    "requested_quality": "soft",
+    "pixel_art": false,
+    "per_source": "sources[].key"
+  },
+  "slicing": {
+    "source": "grid",
+    "rows": 1,
+    "cols": 1,
+    "rounding": "exact",
+    "mode": "ownership",
+    "threshold": 16,
+    "min_area": 4,
+    "attach_radius": 6,
+    "connectivity": 8,
+    "canvas": [
+      1024,
+      1536
+    ],
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "registration": "frame pixel (u, v) = sheet pixel (u - padding[0] + cell x0, v - padding[1] + cell y0)",
+    "attached_px": 0,
+    "cell_fallback_px": 44,
+    "dropped_px": 0,
+    "haze": "keep",
+    "hidden_rgb": "zeroed (only visible pixels are copied)",
+    "method": "forge_core.ownership_slice (D14): 8-connected components of alpha > threshold with at least min_area px go whole to the cell holding most of their pixels; fainter visible pixels join the owner they reach within attach_radius steps; haze keep/drop decides the rest; one shared padding keeps registration"
+  },
+  "spill_check": {
+    "threshold": 16,
+    "min_area": 4,
+    "connectivity": 8,
+    "components": 52,
+    "crossing": [],
+    "specks_crossing": 0,
+    "unboxed_components": 0,
+    "unboxed_px": 0,
+    "verdict": "clean",
+    "status": "clean",
+    "background_share": 0.687647,
+    "note": "--slice ownership keeps each crossing component whole in its owner cell."
+  },
+  "provenance": {
+    "user_manifest": null,
+    "user_assertions_verified": false
+  },
+  "validation": {
+    "png_rgba_exact": true,
+    "atlas_rgba_exact": true,
+    "webp_timeline_verified": true,
+    "visual_approval": false,
+    "note": "Numerical diagnostics only; no claim of seamless motion or visual continuity."
+  },
+  "processing": {
+    "resized": false,
+    "aligned": false,
+    "chroma_keyed": true,
+    "masked": true,
+    "blended": false
+  },
+  "qa": {
+    "status": "needs-visual-review",
+    "method": "Lossless packaging: frame PNGs and the atlas are decoded and compared pixel for pixel; the WebP timeline and its visible RGBA are decoded and verified. Spill: 8-connected components of alpha above the threshold that leave their owner cell. Seams: forge_core.seam_report of the played sequence (premultiplied RGBA MAE); wrap_ratio = seam / mean adjacent step. Drift: NCC of premultiplied luma.",
+    "notProven": [
+      "visual quality, identity or anatomy of any frame",
+      "smooth motion or a seamless loop (seam ratios are numeric diagnostics only)",
+      "that the crop boxes, grid or sequence match the intended phases",
+      "that RGB hidden under alpha 0 survives the WebP preview"
+    ],
+    "checks": [
+      {
+        "id": "png_rgba_exact",
+        "status": "pass",
+        "value": true,
+        "threshold": null
+      },
+      {
+        "id": "atlas_rgba_exact",
+        "status": "pass",
+        "value": true,
+        "threshold": null
+      },
+      {
+        "id": "webp_timeline",
+        "status": "pass",
+        "value": 250,
+        "threshold": null
+      },
+      {
+        "id": "cross_cell_spill",
+        "status": "pass",
+        "value": 0,
+        "threshold": 0
+      },
+      {
+        "id": "chroma_key_residue",
+        "status": "pass",
+        "value": 0,
+        "threshold": 0
+      },
+      {
+        "id": "chroma_key_backdrop",
+        "status": "pass",
+        "value": 0,
+        "threshold": 0
+      },
+      {
+        "id": "loop_seam",
+        "status": "skipped",
+        "value": null,
+        "threshold": null
+      }
+    ],
+    "inputs": [
+      {
+        "path": "../granny-source.png",
+        "sha256": "5d62644fdc15f1cc002f28c155d641c283fc981eb3186814508a455e0e942700",
+        "bytes": 1802497
+      }
+    ],
+    "outputs": [
+      {
+        "path": "frames/frame-00.png",
+        "sha256": "257e7fff9e797117a71c827d004b5c33d196900b51a65ed1c8d60c35fe7ee9b3",
+        "bytes": 1231341
+      },
+      {
+        "path": "atlas.png",
+        "sha256": "257e7fff9e797117a71c827d004b5c33d196900b51a65ed1c8d60c35fe7ee9b3",
+        "bytes": 1231341
+      },
+      {
+        "path": "animation.webp",
+        "sha256": "04b030627d3c8ca3383772aa703f9c8a98c7007231880d04bdadfe7701afc434",
+        "bytes": 790110
+      }
+    ],
+    "tool": {
+      "name": "assemble_frames",
+      "version": "0.4.0"
+    }
+  }
+}

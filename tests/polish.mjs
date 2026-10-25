@@ -13,7 +13,7 @@ export async function polish(b,url){
     await pg.evaluate(({key,name})=>{G_().dlg=null;loadMap('village',key==='lin'?6.6*T:19.6*T,key==='lin'?17.2*T:17.9*T,'up');M_().npcs.find(n=>n.n===name).talk();},{key,name});
     await run(1600);await shot(key);
     assert.equal(await pg.evaluate(name=>PORT[name],name),key);
-    assert.deepEqual(await pg.evaluate(key=>[I[key].naturalWidth,I[key].naturalHeight,I['pt_'+key].naturalWidth],[key][0]),[72,66,256]);
+    assert.deepEqual(await pg.evaluate(key=>[I[key].naturalWidth,I[key].naturalHeight,I['pt_'+key].naturalWidth],[key][0]),[192,192,512]);
     assert.equal(await pg.evaluate("G_().dlg.l[G_().dlg.i][0]"),name);
    }
    await pg.evaluate("G_().dlg=null;G_().party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']));G_().flags.tal=1;loadMap('reeds',12.5*T2,9.5*T2,'down');campfire();window.positionBefore=[G_().x,G_().y];");

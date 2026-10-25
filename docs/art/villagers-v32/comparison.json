@@ -1,0 +1,46 @@
+[
+  {
+    "size": "390x664",
+    "npc": "lin",
+    "changed_bbox": [
+      35,
+      297,
+      771,
+      1320
+    ],
+    "note": "Supplied body and transparent bust, with v32 version label."
+  },
+  {
+    "size": "390x664",
+    "npc": "zhou",
+    "changed_bbox": [
+      38,
+      298,
+      768,
+      1320
+    ],
+    "note": "Supplied body and transparent bust, with v32 version label."
+  },
+  {
+    "size": "844x390",
+    "npc": "lin",
+    "changed_bbox": [
+      103,
+      38,
+      1676,
+      772
+    ],
+    "note": "Supplied body and transparent bust, with v32 version label."
+  },
+  {
+    "size": "844x390",
+    "npc": "zhou",
+    "changed_bbox": [
+      0,
+      0,
+      1676,
+      772
+    ],
+    "note": "Supplied body and transparent bust, with v32 version label."
+  }
+]
