@@ -1,0 +1,277 @@
+[
+  {
+    "scene": "screens\\375x553\\battle_menu.png",
+    "changedPixels": 1818,
+    "totalPixels": 829500,
+    "changedBBox": [
+      603,
+      42,
+      713,
+      68
+    ]
+  },
+  {
+    "scene": "screens\\375x553\\dialog.png",
+    "changedPixels": 47137,
+    "totalPixels": 829500,
+    "changedBBox": [
+      16,
+      16,
+      738,
+      1099
+    ]
+  },
+  {
+    "scene": "screens\\375x553\\dock.png",
+    "changedPixels": 46908,
+    "totalPixels": 829500,
+    "changedBBox": [
+      16,
+      16,
+      738,
+      1099
+    ]
+  },
+  {
+    "scene": "screens\\375x553\\title.png",
+    "changedPixels": 1993,
+    "totalPixels": 829500,
+    "changedBBox": [
+      547,
+      21,
+      713,
+      68
+    ]
+  },
+  {
+    "scene": "screens\\375x553\\village.png",
+    "changedPixels": 46914,
+    "totalPixels": 829500,
+    "changedBBox": [
+      16,
+      16,
+      738,
+      1099
+    ]
+  },
+  {
+    "scene": "screens\\390x664\\battle_menu.png",
+    "changedPixels": 1818,
+    "totalPixels": 1035840,
+    "changedBBox": [
+      633,
+      42,
+      743,
+      68
+    ]
+  },
+  {
+    "scene": "screens\\390x664\\dialog.png",
+    "changedPixels": 26745,
+    "totalPixels": 1035840,
+    "changedBBox": [
+      198,
+      16,
+      768,
+      1321
+    ]
+  },
+  {
+    "scene": "screens\\390x664\\dock.png",
+    "changedPixels": 26515,
+    "totalPixels": 1035840,
+    "changedBBox": [
+      198,
+      16,
+      768,
+      1321
+    ]
+  },
+  {
+    "scene": "screens\\390x664\\title.png",
+    "changedPixels": 2012,
+    "totalPixels": 1035840,
+    "changedBBox": [
+      576,
+      21,
+      743,
+      68
+    ]
+  },
+  {
+    "scene": "screens\\390x664\\village.png",
+    "changedPixels": 26516,
+    "totalPixels": 1035840,
+    "changedBBox": [
+      198,
+      16,
+      768,
+      1321
+    ]
+  },
+  {
+    "scene": "screens\\430x750\\battle_menu.png",
+    "changedPixels": 1818,
+    "totalPixels": 1290000,
+    "changedBBox": [
+      713,
+      42,
+      823,
+      68
+    ]
+  },
+  {
+    "scene": "screens\\430x750\\dialog.png",
+    "changedPixels": 27965,
+    "totalPixels": 1290000,
+    "changedBBox": [
+      250,
+      16,
+      847,
+      1493
+    ]
+  },
+  {
+    "scene": "screens\\430x750\\dock.png",
+    "changedPixels": 27725,
+    "totalPixels": 1290000,
+    "changedBBox": [
+      250,
+      16,
+      847,
+      1493
+    ]
+  },
+  {
+    "scene": "screens\\430x750\\title.png",
+    "changedPixels": 2031,
+    "totalPixels": 1290000,
+    "changedBBox": [
+      655,
+      22,
+      823,
+      68
+    ]
+  },
+  {
+    "scene": "screens\\430x750\\village.png",
+    "changedPixels": 27728,
+    "totalPixels": 1290000,
+    "changedBBox": [
+      250,
+      16,
+      847,
+      1493
+    ]
+  },
+  {
+    "scene": "screens\\664x390\\battle_menu.png",
+    "changedPixels": 1818,
+    "totalPixels": 1035840,
+    "changedBBox": [
+      1181,
+      42,
+      1291,
+      68
+    ]
+  },
+  {
+    "scene": "screens\\664x390\\dialog.png",
+    "changedPixels": 139,
+    "totalPixels": 1035840,
+    "changedBBox": [
+      1303,
+      754,
+      1316,
+      773
+    ]
+  },
+  {
+    "scene": "screens\\664x390\\dock.png",
+    "changedPixels": 26516,
+    "totalPixels": 1035840,
+    "changedBBox": [
+      746,
+      16,
+      1316,
+      773
+    ]
+  },
+  {
+    "scene": "screens\\664x390\\title.png",
+    "changedPixels": 2012,
+    "totalPixels": 1035840,
+    "changedBBox": [
+      1124,
+      21,
+      1291,
+      68
+    ]
+  },
+  {
+    "scene": "screens\\664x390\\village.png",
+    "changedPixels": 26516,
+    "totalPixels": 1035840,
+    "changedBBox": [
+      746,
+      16,
+      1316,
+      773
+    ]
+  },
+  {
+    "scene": "screens\\844x390\\battle_menu.png",
+    "changedPixels": 1818,
+    "totalPixels": 1316640,
+    "changedBBox": [
+      1541,
+      42,
+      1651,
+      68
+    ]
+  },
+  {
+    "scene": "screens\\844x390\\dialog.png",
+    "changedPixels": 139,
+    "totalPixels": 1316640,
+    "changedBBox": [
+      1663,
+      754,
+      1676,
+      773
+    ]
+  },
+  {
+    "scene": "screens\\844x390\\dock.png",
+    "changedPixels": 26514,
+    "totalPixels": 1316640,
+    "changedBBox": [
+      1106,
+      16,
+      1676,
+      773
+    ]
+  },
+  {
+    "scene": "screens\\844x390\\title.png",
+    "changedPixels": 2012,
+    "totalPixels": 1316640,
+    "changedBBox": [
+      1484,
+      21,
+      1651,
+      68
+    ]
+  },
+  {
+    "scene": "screens\\844x390\\village.png",
+    "changedPixels": 26516,
+    "totalPixels": 1316640,
+    "changedBBox": [
+      1106,
+      16,
+      1676,
+      773
+    ]
+  }
+]

@@ -17,7 +17,7 @@ export async function diagBattle(browser,url,sizes=[[390,844],[375,553],[844,390
    assert.equal(await pg.evaluate(K=>Object.entries(K).every(([p,a])=>a.every(n=>ASSETS[p+'_'+n]&&I[p+'_'+n].naturalWidth===480&&I[p+'_'+n].naturalHeight===420)),KEYS),true,'30 diagonal frames 480×420');
    assert.equal(await pg.evaluate("['qz','bl','yx'].every(c=>I['pt_'+c+'_battle'].naturalWidth>=128&&I['pt_'+c].naturalWidth>0)"),true,'battle avatars + dialogue portraits');
    assert.equal(await pg.evaluate("['qz_pole','qz_atk_windup','qz_atk_strike','qz_atk_recover'].every(k=>!(k in ASSETS))"),true,'v20 pole art removed');
-   assert.equal(await pg.evaluate("Object.keys(ASSETS).every(k=>I[k].src.includes('?v='+ASSET_V))&&ASSET_V===32"),true);
+   assert.equal(await pg.evaluate("Object.keys(ASSETS).every(k=>I[k].src.includes('?v='+ASSET_V))&&ASSET_V===33"),true);
    const setup=async(names=['小水妖','小水妖','蘆葦精'],ko=false)=>{await pg.evaluate(({names,ko})=>{__sb(names,{noEsc:1});
     const B=G_().B;Math.random=()=>.5;G_().party.forEach(p=>{p.hp=p.mhp;p.mp=p.mmp;p.guard=0});B.msgs=[];B.ph='cmd';B.ai=0;B.sel=0;B.an=[];B.en.forEach(e=>e.hp=e.mhp=ko?1:9999)},{names,ko});await pg.clock.runFor(700)};
    const step=async(ms)=>{await pg.clock.runFor(ms)};

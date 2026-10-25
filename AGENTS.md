@@ -49,7 +49,7 @@ CREDITS.txt           素材來源（必須保留）
 tests/                Playwright 測試，見 tests/README.md
 package.json          只給測試用（npm test）
 ```
-**載入順序**（index.html）：joystick → assets → engine → data → maps → story → battle → input → update → ui → cinematics → render → audio → fx → battle_motion → battle_ui → screens → save → main。
+**載入順序**（index.html）：joystick → assets → engine → data → maps → story → battle → input → update → ui → cinematics → render → audio_assets → audio → audio_playback → fx → battle_motion → battle_ui → screens → save → main。
 - 存檔：saveCP() 會同時寫入自動存檔；改 G 的存檔欄位或格式時，把 SAVE_VER +1 並在 migrateSave() 補升級。存檔只在 canSave()（地圖自由行動、無對話/戰鬥/演出 G.cut）時允許。
 classic script 的 function 宣告只在該檔執行時才建立，所以**載入時（top-level）立即執行的程式碼只能呼叫前面檔案的東西**；在 frame()/事件中呼叫則不受限。新增檔案時放在正確位置。
 
@@ -73,7 +73,7 @@ classic script 的 function 宣告只在該檔執行時才建立，所以**載�
 - **頭像（v28）**：三位主角以使用者提供四視角原圖的三分之四正面裁成 512×512 透明半身像，戰鬥與對話共用同一張，勿改回舊像素頭像或有底色的方塊。卡片頭像在左、紅／藍數字在右；直式壓縮為兩行且臉部不被資訊列覆蓋。cards 的觸控區包含浮出資訊列的頭像。情境鍵 pt_qz_startled／pt_bl_quiet 目前使用同一原圖的正面視角，不自行生成表情。參見 docs/art/portraits-v28.md 與 tests/portrait-ui.mjs。原色裁切工具為 tools/import-portraits.py。
 
 ## 5. 版本號規則
-- 目前 **v32**（v31 已上線；v32 更新五位村民的地圖圖像與對話頭像）。每次上線改動都要 +1（下一版 **v33**），三處一起改：
+- 目前 **v33**（v32 已上線；v33 接入使用者音樂與音效）。每次上線改動都要 +1（下一版 **v34**），三處一起改：
   1. `index.html` `<title>雲渡仙緣 第一章 vN</title>`
   2. `src/screens.js` 標題畫面 `'版本 vN'`
   3. `src/render.js` 地圖右下角 `'vN'`
@@ -107,3 +107,5 @@ npm test                                          # 必須 ALL PASS，且無 JS 
 - **夜渡（v31）**：nightActors 以夜景原圖座標定義船內腳底和救人路徑，nightHull 重繪近側船舷遮擋。白苓使用現有 bld_down 蜷坐圖與水面裁切，不旋轉站立圖。nightFrame 依 dialogLayout 預留文字空間，角色不可被對話遮住。船與人物不得各自上下漂移。參見 docs/art/night-rescue-v31.md、tests/night-rescue.mjs。
 
 - **村民（v32）**：林嬸 lin、老周 zhou、阿婆 granny、村長 chief、王大叔 wang 使用使用者提供的圖片，NPC 靜態畫布 192×192、腳底 (96,180)、顯示倍率 .353，規格在 NPCSPR，spriteKey 優先回傳靜態角色鍵。對話為 512×512 透明半身像。只有林嬸原圖有多視角，目前統一使用所提供正面偏側站姿；其餘不自行生成人物視角或走路。舊王大叔方向影格保留供舊圖回退，不作新素材的動畫。來源與重匯入工具見 docs/art/villagers-v32.md、tools/import-villagers.py。
+
+- **音樂／音效（v33）**：src/audio_assets.js 為 22 份使用者音檔清單，audio.js 保留 Web Audio 解鎖及合成回退，audio_playback.js 管理錄音播放、背景音樂、環境音與聲音設定。音樂和音效分開儲存於 yundu_music／yundu_sound。音樂僅在可信手勢後載入，解碼快取最多兩首；不要預載所有音樂。MP4 僅抽取音軌。src/fx.js 以原有出手／命中時間播放，死亡和升級各播一次。來源、裁切、音量及循環製作見 docs/audio/audio-v33.md、manifest-v33.json、tools/import-audio.py。tests/audio-library.mjs 量測實際音樂與音效取樣及切歌競態。

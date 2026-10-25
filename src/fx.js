@@ -15,7 +15,7 @@ function orb(x,y,r,c1,c2,a){X.save();X.globalCompositeOperation='lighter';X.glob
 function shield(x,y,rw,rh,a){X.save();X.globalCompositeOperation='lighter';X.globalAlpha=a;const g=X.createRadialGradient(x,y,rw*.2,x,y,rw);g.addColorStop(0,'rgba(255,220,120,0)');g.addColorStop(.75,'rgba(255,210,110,.25)');g.addColorStop(1,'rgba(255,240,170,.9)');X.fillStyle=g;X.beginPath();X.ellipse(x,y,rw,rh,0,0,7);X.fill();X.strokeStyle='rgba(255,236,160,.9)';X.lineWidth=2;X.beginPath();for(let i=0;i<=6;i++){const an=i/6*6.283+Math.PI/6;i?X.lineTo(x+Math.cos(an)*rw*.8,y+Math.sin(an)*rh*.8):X.moveTo(x+Math.cos(an)*rw*.8,y+Math.sin(an)*rh*.8)}X.stroke();X.restore()}
 function drawVFX(now){const B=G.B,u=B.u||1,dt=Math.min(50,now-(B.vlt||now))/16.7;B.vlt=now;
  B.vx=(B.vx||[]).filter(sp=>now-sp.at<(sp.delay||0)+(VDUR[sp.k]||500));
- for(const sp of B.vx){const t=now-sp.at-(sp.delay||0);if(t<0)continue;if(!sp.sounded){sp.sounded=1;battleSound(sp.k,'start')}const imp=VIMP[sp.k]||150,P=sp.tg.map(o=>B.po(o)),S=B.po(sp.src),fire=!sp.fired&&t>=imp;if(fire){sp.fired=1;battleSound(sp.k,'impact',sp.hits.some(h=>h.crit||h.big))}
+ for(const sp of B.vx){const t=now-sp.at-(sp.delay||0);if(t<0)continue;if(!sp.sounded){sp.sounded=1;battleSound(sp.k,'start',false,sp.src)}const imp=VIMP[sp.k]||150,P=sp.tg.map(o=>B.po(o)),S=B.po(sp.src),fire=!sp.fired&&t>=imp;if(fire){sp.fired=1;battleSound(sp.k,'impact',sp.hits.some(h=>h.crit||h.big),sp.src,sp.hits.some(h=>h.crit))}
   const big=sp.hits.some(h=>h.crit||h.big);
   switch(sp.k){
   case'slash':P.forEach(q=>{const p=Math.min(1,t/260),R=Math.max(42*u,q[2]*.55);if(!sp.plan&&t<340)glowLine(arcPts(q[0],q[1],R,-2.6,-2.6+p*2.9,18,.55).slice(Math.floor(p*8)),7*u,'#7fe0ff',1-Math.max(0,(t-200)/140));

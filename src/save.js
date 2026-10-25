@@ -36,13 +36,13 @@ const SV={p:null,sel:0,items:[],btn:null,el:null};
  '.svI small{display:block;margin-top:3px;font-size:12.5px;color:#cde}.svI.on{border-color:#f3dfa0;background:rgba(201,178,107,.22)}.svI:disabled{opacity:.45}'+
  '@media (max-height:520px){.touch #svPanel.title,#svPanel.title{padding-bottom:calc(8px + env(safe-area-inset-bottom))}#svPanel.title #svBox{width:min(60vw,420px)}#svPanel.title .svL{display:block}#svBox{width:min(94vw,640px);padding:8px 10px}#svBox h3{margin:0 4px 4px}#svBox p{margin:2px 4px 4px}.svL{display:grid;grid-template-columns:1fr 1fr;column-gap:8px}.svI{margin:4px 0;padding:6px 10px}}';
  document.head.appendChild(st);
- const b=document.createElement('button');b.id='svBtn';b.textContent='選單';b.onclick=e=>{e.preventDefault();openMenu()};document.body.appendChild(b);
- const p=document.createElement('div');p.id='svPanel';p.innerHTML='<div id="svBox"></div>';p.addEventListener('click',e=>{if(e.target===p&&SV.p!='title')closePanel()});document.body.appendChild(p);
+ const b=document.createElement('button');b.id='svBtn';b.textContent='選單';b.onclick=e=>{e.preventDefault();soundUi('ok');openMenu()};document.body.appendChild(b);
+ const p=document.createElement('div');p.id='svPanel';p.innerHTML='<div id="svBox"></div>';p.addEventListener('click',e=>{if(e.target===p&&SV.p!='title'){soundUi('cancel');closePanel()}});document.body.appendChild(p);
  for(const el of[b,p]){el.addEventListener('touchstart',e=>e.stopPropagation(),{passive:true});el.addEventListener('touchmove',e=>e.stopPropagation(),{passive:true})}
  SV.btn=b;SV.el=p})();
 function showPanel(kind,title,msg,items,sel){SV.p=kind;SV.items=items;SV.sel=sel||0;while(SV.items[SV.sel]&&SV.items[SV.sel].off)SV.sel++;
  const bx=document.getElementById('svBox');bx.innerHTML=(title?'<h3>'+title+'</h3>':'')+(msg?'<p>'+msg+'</p>':'')+'<div class="svL"></div>';const ls=bx.lastChild;
- items.forEach((it,i)=>{const e=document.createElement('button');e.className='svI';e.dataset.i=i;e.disabled=!!it.off;e.innerHTML=it.l+(it.sub?'<small>'+it.sub+'</small>':'');e.onclick=ev=>{ev.preventDefault();if(!it.off)it.fn()};ls.appendChild(e)});
+ items.forEach((it,i)=>{const e=document.createElement('button');e.className='svI';e.dataset.i=i;e.disabled=!!it.off;e.innerHTML=it.l+(it.sub?'<small>'+it.sub+'</small>':'');e.onclick=ev=>{ev.preventDefault();if(!it.off){soundUi(['返回','關閉','取消'].includes(it.l)?'cancel':'ok');it.fn()}};ls.appendChild(e)});
  SV.el.className=kind=='title'?'title':'';SV.el.style.display='flex';hl()}
 function hl(){document.querySelectorAll('#svBox .svI').forEach((e,i)=>e.classList.toggle('on',i==SV.sel))}
 function closePanel(){SV.p=null;SV.el.style.display='none'}

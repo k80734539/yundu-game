@@ -4,7 +4,7 @@
 function interact(){const v=DV[G.dir],fx=G.x+v[0]*24,fy=G.y-12+v[1]*22;let best=null,bd=1e9;
  for(const it of M.inter){const d1=Math.hypot(it.x-fx,it.y-fy),d2=Math.hypot(it.x-G.x,it.y-(G.y-12));const d=Math.min(d1,d2+8);if(d<it.r&&d<bd){bd=d;best=it}}
  if(best)best.act()}
-function press(k){if(!ready)return;if(SV.p)return svKey(k);
+function press(k){if(!ready)return;if(typeof soundUi==='function')soundUi(k);if(SV.p)return svKey(k);
  if(G.mode=='title'){if(G.cred){G.cred=0;return}if(k=='cred'||k=='cancel'){G.cred=1;return}if(k=='ok'){if(hasSave())titleMenu();else newGame()}return}
  if(G.mode=='over'){if(k=='ok')retry();return}
  if(G.mode=='end'){if(k=='ok'&&performance.now()-G.endT>800)G={mode:'title',cred:0};return}

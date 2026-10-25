@@ -12,11 +12,11 @@ export async function battleFeedback(browser,url){
    await pg.evaluate(()=>{window.audioMeter=SFX.ctx.createAnalyser();audioMeter.fftSize=2048;SFX.bus.connect(audioMeter);soundTone(440,440,.4,.5)});
    await pg.waitForFunction(()=>{const data=new Float32Array(audioMeter.fftSize);audioMeter.getFloatTimeDomainData(data);return data.some(v=>Math.abs(v)>.001)});
    const initial=await pg.locator('#soundBtn').boundingBox();assert.ok(initial.width>=44&&initial.height>=44&&initial.x+initial.width<=w);
-   await pg.locator('#soundBtn').focus();await pg.keyboard.press('Enter');assert.equal(await pg.evaluate(()=>SFX.muted),true);
+   await pg.locator('#soundBtn').focus();await pg.keyboard.press('Enter');await pg.locator('#sfxToggle').click();assert.equal(await pg.evaluate(()=>SFX.muted),true);
    await pg.waitForFunction(()=>SFX.bus.gain.value===0);
    await pg.reload();await pg.waitForFunction(()=>ready);
    assert.equal(await pg.evaluate(()=>SFX.muted&&SFX.ctx===null),true,'mute survives reload without creating audio');
-   await pg.locator('#soundBtn').click();await pg.waitForFunction(()=>SFX.ctx?.state==='running');
+   await pg.locator('#soundBtn').click();await pg.locator('#sfxToggle').click();await pg.locator('#soundClose').click();await pg.waitForFunction(()=>SFX.ctx?.state==='running');
    await pg.clock.install({time:0});await pg.clock.pauseAt(1000);
    await pg.evaluate(()=>{press('ok');G_().dlg=null;__sb(['小水妖'],{noEsc:1});const B=G_().B;B.msgs=[];B.ph='cmd';drawBattle(performance.now())});
    const result=await pg.evaluate(()=>{

@@ -1,0 +1,423 @@
+{
+  "source": "user-provided recordings",
+  "files": [
+    {
+      "key": "mist",
+      "source": "霧渡.mp3",
+      "sourceSha256": "81bd01a388849c76e6d38ff1c2c66724a80dfd210162ccebfca520f47f71399f",
+      "sourceDuration": 66.69061224489796,
+      "kind": "music",
+      "trim": [
+        0.27999999999999997,
+        62.830000000000005
+      ],
+      "crossfade": 2,
+      "gain": 0.4929145293332078,
+      "duration": 60.55,
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedPeak": 0.4704710841178894,
+      "path": "assets/audio/mist_v33.mp3",
+      "sha256": "96bab57782f7fb2c7f5cd1b3b5c81242fdb4180d84d4839fb24e88060a3ffb09"
+    },
+    {
+      "key": "mist_alt",
+      "source": "霧渡1.mp3",
+      "sourceSha256": "28af4b832183a75972b481b449231843dcabfaaa750a0615d4b2a4ff751eef19",
+      "sourceDuration": 89.23428571428572,
+      "kind": "music",
+      "trim": [
+        0.08,
+        86.42999999999999
+      ],
+      "crossfade": 2,
+      "gain": 0.505493361888304,
+      "duration": 84.35,
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedPeak": 0.47606927156448364,
+      "path": "assets/audio/mist_alt_v33.mp3",
+      "sha256": "ca856225305a01d1b72d9ca6cca09aac28230c0e5b450eadca801b14cb5365f1"
+    },
+    {
+      "key": "village",
+      "source": "蘆花渡.mp3",
+      "sourceSha256": "1db50664b2d70fe39a7066b3255d956d4856ab075d8911a9832c94cc2c18e2a2",
+      "sourceDuration": 92.31673469387755,
+      "kind": "music",
+      "trim": [
+        0.7200000000000001,
+        89.53
+      ],
+      "crossfade": 2,
+      "gain": 0.5025620464199655,
+      "duration": 86.81,
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedPeak": 0.507733166217804,
+      "path": "assets/audio/village_v33.mp3",
+      "sha256": "d4f28086d22c1b85b0739e21521a4b007dbf7645c6bd92dfca120e9698b26a2c"
+    },
+    {
+      "key": "night",
+      "source": "蘆葦蕩夜行.mp4",
+      "sourceSha256": "6f647eda15703c4d971acef720d22c9eb898412244a1e502e479cc22cdd69e28",
+      "sourceDuration": 64.0,
+      "kind": "music",
+      "trim": [
+        0.08,
+        60.99
+      ],
+      "crossfade": 2,
+      "gain": 0.5036467085556322,
+      "duration": 58.91,
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedPeak": 0.4682493805885315,
+      "path": "assets/audio/night_v33.mp3",
+      "sha256": "c5def56b4e214af3369899cd24c4ec99b53cf4e12811309beac95a98ca88fa84"
+    },
+    {
+      "key": "battle",
+      "source": "破霧迎敵.mp3",
+      "sourceSha256": "a4488cd4d65701de6d815d6106927117ea4244cea97652ab0069de16f0611832",
+      "sourceDuration": 83.25224489795919,
+      "kind": "music",
+      "trim": [
+        0.06000000000000001,
+        80.58999999999999
+      ],
+      "crossfade": 2,
+      "gain": 0.5035869565543654,
+      "duration": 78.53,
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedPeak": 0.5057888627052307,
+      "path": "assets/audio/battle_v33.mp3",
+      "sha256": "86076fece53d1eecf508317acdbf5c60512c9fcc1a6b05a0efdc8b5b1338d279"
+    },
+    {
+      "key": "boss",
+      "source": "河伯怒潮.mp3",
+      "sourceSha256": "c1215d95d73dda39b51bdec79e58df6bf262ce0c1a263d6fe6e8658c2b474009",
+      "sourceDuration": 67.03020408163265,
+      "kind": "music",
+      "trim": [
+        0.6000000000000001,
+        64.31
+      ],
+      "crossfade": 2,
+      "gain": 0.5004811292823332,
+      "duration": 61.71,
+      "sampleRate": 44100,
+      "channels": 2,
+      "decodedPeak": 0.4858340322971344,
+      "path": "assets/audio/boss_v33.mp3",
+      "sha256": "d0ccceebc4b1f70748d9a5fb36d9944e3fdbb607bfa4f652b848d5f553ac2638"
+    },
+    {
+      "key": "river",
+      "source": "環境音amb_river.mp3",
+      "sourceSha256": "688ad61eb028f8e35f7484a85e4f898150d0810680358848d53c5b5704cc585b",
+      "sourceDuration": 30.0,
+      "kind": "ambient",
+      "trim": [
+        0,
+        30
+      ],
+      "crossfade": 0.3,
+      "gain": 0.742550663951963,
+      "duration": 29.7,
+      "sampleRate": 22050,
+      "channels": 1,
+      "decodedPeak": 0.3657349944114685,
+      "path": "assets/audio/river_v33.mp3",
+      "sha256": "3821da25aaa08d650dd8c692fcfde4623c382772f6a4bae001e0cfd89e0250c3"
+    },
+    {
+      "key": "insects",
+      "source": "蟲鳴聲.mp3",
+      "sourceSha256": "8c2f814fd142a9970caaf0aeecda02983bd26ff39af43ed7c1c974d4f2d2969a",
+      "sourceDuration": 30.0,
+      "kind": "ambient",
+      "trim": [
+        0,
+        30
+      ],
+      "crossfade": 0.3,
+      "gain": 5.740870626479227,
+      "duration": 29.7,
+      "sampleRate": 22050,
+      "channels": 1,
+      "decodedPeak": 0.34261414408683777,
+      "path": "assets/audio/insects_v33.mp3",
+      "sha256": "893628ba4a75b8816044f894350e11f19294fa7217b288d82392d54a206d5502"
+    },
+    {
+      "key": "level",
+      "source": "角色升級、修為突破、境界提升.mp3",
+      "sourceSha256": "7b8c700b86766a26a89a010fba4929c06ee325e98495f76f3c589d3d75ccc194",
+      "sourceDuration": 2.0,
+      "kind": "sfx",
+      "trim": [
+        0,
+        1.65
+      ],
+      "crossfade": 0,
+      "gain": 1.535764116485876,
+      "duration": 1.65,
+      "sampleRate": 44100,
+      "channels": 1,
+      "decodedPeak": 0.5106208324432373,
+      "path": "assets/audio/level_v33.mp3",
+      "sha256": "b18b03580d3bf13e46e0a5367570b64c0a7eeb9d236f3313ebca55a97ca5f22f"
+    },
+    {
+      "key": "item",
+      "source": "使用藥水、服用丹藥、使用道具.mp3",
+      "sourceSha256": "5a0120a11918d9bcba3946eeee0a5955ef416a4d00df592153003ef254fe77d4",
+      "sourceDuration": 3.0,
+      "kind": "sfx",
+      "trim": [
+        0.14,
+        0.7
+      ],
+      "crossfade": 0,
+      "gain": 2.316845927812524,
+      "duration": 0.56,
+      "sampleRate": 44100,
+      "channels": 1,
+      "decodedPeak": 0.8432188034057617,
+      "path": "assets/audio/item_v33.mp3",
+      "sha256": "e3deebf5a863268dbb15b838fc1bc577fb26f3cac1a5063d3755b6d684d436bd"
+    },
+    {
+      "key": "cancel",
+      "source": "取消操作、返回上一頁、關閉選單.mp3",
+      "sourceSha256": "c38e148b19ae3f14dee9880dd2541517af3109f45d71940e4ef02b4d731a49cd",
+      "sourceDuration": 0.4865079365079365,
+      "kind": "sfx",
+      "trim": [
+        0,
+        0.3
+      ],
+      "crossfade": 0,
+      "gain": 11.640546896251028,
+      "duration": 0.3,
+      "sampleRate": 44100,
+      "channels": 1,
+      "decodedPeak": 0.4340059757232666,
+      "path": "assets/audio/cancel_v33.mp3",
+      "sha256": "34017fa9ec81dad95229fec984e7ffdfbbc3978c0585e04a80a99e449a611fe7"
+    },
+    {
+      "key": "move",
+      "source": "切換選單、移動選項、選擇物品.mp3",
+      "sourceSha256": "9c2a0f067794cf4cfc11ddc6eea51ba834070fb6adaf0ba051f44b49530da51f",
+      "sourceDuration": 0.4865079365079365,
+      "kind": "sfx",
+      "trim": [
+        0,
+        0.2
+      ],
+      "crossfade": 0,
+      "gain": 1.0190061495337914,
+      "duration": 0.2,
+      "sampleRate": 44100,
+      "channels": 1,
+      "decodedPeak": 0.8669748902320862,
+      "path": "assets/audio/move_v33.mp3",
+      "sha256": "971b9c5cdbc3b487b75885eb5bf05e554e09d353471fad78934fa03790b8abd6"
+    },
+    {
+      "key": "heal",
+      "source": "春霖治療.mp3",
+      "sourceSha256": "d58d338793de9a90ad6544a14dfb7b1b9e1184eb6726d3050678aed23e0643af",
+      "sourceDuration": 15.0,
+      "kind": "sfx",
+      "trim": [
+        3.8,
+        6
+      ],
+      "crossfade": 0,
+      "gain": 11.021552871056484,
+      "duration": 2.2,
+      "sampleRate": 44100,
+      "channels": 1,
+      "decodedPeak": 0.5976084470748901,
+      "path": "assets/audio/heal_v33.mp3",
+      "sha256": "623dee1c2ae48b9329af8b19d9cd8a062a22fa4b7ef540d8daed873ac2949221"
+    },
+    {
+      "key": "leaf",
+      "source": "蘆葦飛葉.mp3",
+      "sourceSha256": "af965e4b13b068afd8aa393ebcf71839b1b5af5080bb97865fec810e758e15bc",
+      "sourceDuration": 2.0,
+      "kind": "sfx",
+      "trim": [
+        0.3,
+        1
+      ],
+      "crossfade": 0,
+      "gain": 8.926535752970407,
+      "duration": 0.7,
+      "sampleRate": 44100,
+      "channels": 1,
+      "decodedPeak": 0.7769805192947388,
+      "path": "assets/audio/leaf_v33.mp3",
+      "sha256": "431dfa923f46a9166b0f5adf07aec2cc1c6ecc8551f84d5b00d361ead89c77de"
+    },
+    {
+      "key": "wave",
+      "source": "河伯巨浪.mp3",
+      "sourceSha256": "07d0c21c72c8e88beefa791eb68dbc73c683bb3b63ffa23523599f359f714e47",
+      "sourceDuration": 8.0,
+      "kind": "sfx",
+      "trim": [
+        4.15,
+        6.5
+      ],
+      "crossfade": 0,
+      "gain": 0.7453684704435967,
+      "duration": 2.35,
+      "sampleRate": 44100,
+      "channels": 1,
+      "decodedPeak": 0.5543082356452942,
+      "path": "assets/audio/wave_v33.mp3",
+      "sha256": "2199101c6842b47412acff8398c8233321e364bd35174c982c6d50aaa8efef3f"
+    },
+    {
+      "key": "down",
+      "source": "妖物消散.mp3",
+      "sourceSha256": "b9241fdf60f89fd57aafa51f4ad98be6fa760987825d1cf1779f786c1d1ee369",
+      "sourceDuration": 6.0,
+      "kind": "sfx",
+      "trim": [
+        2.1,
+        3.2
+      ],
+      "crossfade": 0,
+      "gain": 3.5680300813696797,
+      "duration": 1.1,
+      "sampleRate": 44100,
+      "channels": 1,
+      "decodedPeak": 0.5177542567253113,
+      "path": "assets/audio/down_v33.mp3",
+      "sha256": "fffe90e99323bb219c4b92df94b7210bbe3d79857c0dba8160d7dc76b4c50392"
+    },
+    {
+      "key": "critical",
+      "source": "(會心一擊.mp3",
+      "sourceSha256": "161df69a0aa455464753c3fd69546e093c04abfae24dd144d676b96bc0d38586",
+      "sourceDuration": 3.0,
+      "kind": "sfx",
+      "trim": [
+        0,
+        1.2
+      ],
+      "crossfade": 0,
+      "gain": 0.6236089797969269,
+      "duration": 1.2,
+      "sampleRate": 44100,
+      "channels": 1,
+      "decodedPeak": 0.6136451363563538,
+      "path": "assets/audio/critical_v33.mp3",
+      "sha256": "960ba57ee674e1f3a49ab08e79e4351c083f6bd8844ac1b522fa6f3162a79b9c"
+    },
+    {
+      "key": "water",
+      "source": "水彈命中.mp3",
+      "sourceSha256": "d74afdf52ceaec83e53bb6a405075c660729b0bee4ea20458d63d8dec794ba1e",
+      "sourceDuration": 2.0,
+      "kind": "sfx",
+      "trim": [
+        0,
+        1
+      ],
+      "crossfade": 0,
+      "gain": 2.575330068632674,
+      "duration": 1.0,
+      "sampleRate": 44100,
+      "channels": 1,
+      "decodedPeak": 0.9182348251342773,
+      "path": "assets/audio/water_v33.mp3",
+      "sha256": "1f5f1bea1ac3b72a27f39654057d8ca978ee83a40dfa6092774f55b98b6d631a"
+    },
+    {
+      "key": "fox",
+      "source": "狐火爆散.mp3",
+      "sourceSha256": "e3f34e10dd42841a320bf1aede6b1f829c43a81b3e46e0bf776273c12d073e8a",
+      "sourceDuration": 3.0,
+      "kind": "sfx",
+      "trim": [
+        0.5,
+        2.45
+      ],
+      "crossfade": 0,
+      "gain": 5.317546587217747,
+      "duration": 1.95,
+      "sampleRate": 44100,
+      "channels": 1,
+      "decodedPeak": 0.486538827419281,
+      "path": "assets/audio/fox_v33.mp3",
+      "sha256": "c18d600263d1791d910de678e2d366a8b9dd13aa11ac399561836df2e5de66ee"
+    },
+    {
+      "key": "gather",
+      "source": "靈力聚集.mp3",
+      "sourceSha256": "602b92648242f3082c473e60aa2b880f083a9be021384a91038d2c6cd5a0f904",
+      "sourceDuration": 4.0,
+      "kind": "sfx",
+      "trim": [
+        0.3,
+        1.7
+      ],
+      "crossfade": 0,
+      "gain": 6.170158914309142,
+      "duration": 1.4,
+      "sampleRate": 44100,
+      "channels": 1,
+      "decodedPeak": 0.6058289408683777,
+      "path": "assets/audio/gather_v33.mp3",
+      "sha256": "eba9ca92773de1691069bf2eeb5b2e7fe2da88ec5f4bead7b4591b8d797a0191"
+    },
+    {
+      "key": "wood",
+      "source": "實木打擊.mp3",
+      "sourceSha256": "9f2b22917b9e7bfde89f191c09d79f8579e525ea4e3df00350bf18ea71668fe3",
+      "sourceDuration": 2.0,
+      "kind": "sfx",
+      "trim": [
+        0.02,
+        0.65
+      ],
+      "crossfade": 0,
+      "gain": 1.0838071210273974,
+      "duration": 0.63,
+      "sampleRate": 44100,
+      "channels": 1,
+      "decodedPeak": 0.827149510383606,
+      "path": "assets/audio/wood_v33.mp3",
+      "sha256": "ec9e27a808c4153413bdc7ea7d85c340152aa98e734b5398136c0c0d33306da4"
+    },
+    {
+      "key": "pole",
+      "source": "竹篙攻擊).mp3",
+      "sourceSha256": "fa2b5b0b6aa0fc424c3a3a00fa67348fb5119bff65c8626443c75ebf9ff28b43",
+      "sourceDuration": 2.0,
+      "kind": "sfx",
+      "trim": [
+        0.48,
+        1.05
+      ],
+      "crossfade": 0,
+      "gain": 1.7942464917039518,
+      "duration": 0.57,
+      "sampleRate": 44100,
+      "channels": 1,
+      "decodedPeak": 0.6105130314826965,
+      "path": "assets/audio/pole_v33.mp3",
+      "sha256": "f3bcc5db0fd5840c40630efc49e9b102a29984dd2e4fffa0fec1c9ad694cec4f"
+    }
+  ]
+}

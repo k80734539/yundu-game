@@ -1,0 +1,380 @@
+[
+  {
+    "file": "(會心一擊.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "3.000000",
+      "size": "73197"
+    }
+  },
+  {
+    "file": "使用藥水、服用丹藥、使用道具.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "3.000000",
+      "size": "73197"
+    }
+  },
+  {
+    "file": "切換選單、移動選項、選擇物品.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "0.486500",
+      "size": "13293"
+    }
+  },
+  {
+    "file": "取消操作、返回上一頁、關閉選單.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "0.486500",
+      "size": "13293"
+    }
+  },
+  {
+    "file": "妖物消散.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "6.000000",
+      "size": "145197"
+    }
+  },
+  {
+    "file": "實木打擊.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "2.000000",
+      "size": "49581"
+    }
+  },
+  {
+    "file": "春霖治療.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "15.000000",
+      "size": "361197"
+    }
+  },
+  {
+    "file": "水彈命中.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "2.000000",
+      "size": "49581"
+    }
+  },
+  {
+    "file": "河伯巨浪.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "8.000000",
+      "size": "193581"
+    }
+  },
+  {
+    "file": "河伯怒潮.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "44100",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "67.030167",
+      "size": "1614851"
+    }
+  },
+  {
+    "file": "狐火爆散.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "3.000000",
+      "size": "73197"
+    }
+  },
+  {
+    "file": "環境音amb_river.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "30.000000",
+      "size": "721197"
+    }
+  },
+  {
+    "file": "破霧迎敵.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "44100",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "83.252167",
+      "size": "2004179"
+    }
+  },
+  {
+    "file": "竹篙攻擊).mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "2.000000",
+      "size": "49581"
+    }
+  },
+  {
+    "file": "蘆花渡.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "44100",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "92.316667",
+      "size": "2221727"
+    }
+  },
+  {
+    "file": "蘆葦蕩夜行.mp4",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video"
+      },
+      {
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "sample_rate": "44100",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "64.033333",
+      "size": "3804923"
+    }
+  },
+  {
+    "file": "蘆葦飛葉.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "2.000000",
+      "size": "49581"
+    }
+  },
+  {
+    "file": "蟲鳴聲.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "30.000000",
+      "size": "721197"
+    }
+  },
+  {
+    "file": "角色升級、修為突破、境界提升.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "2.000000",
+      "size": "49581"
+    }
+  },
+  {
+    "file": "霧渡.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "44100",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "66.690542",
+      "size": "1606700"
+    }
+  },
+  {
+    "file": "霧渡1.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "44100",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "89.234208",
+      "size": "2147748"
+    }
+  },
+  {
+    "file": "靈力聚集.mp3",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "4.000000",
+      "size": "97389"
+    }
+  }
+]
