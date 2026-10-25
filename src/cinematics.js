@@ -91,21 +91,55 @@ function drawSceneOverlay(now){const s=activeScene();UI();X.save();
  if(G.flags?.dawn&&G.dawnT!=null){const p=cinEase((now-G.dawnT)/CIN.dawn);if(p<1){X.fillStyle='rgba(9,18,43,'+(.88*(1-p))+')';X.fillRect(0,0,SW,SH);const g=X.createLinearGradient(0,0,0,SH);g.addColorStop(0,'rgba(255,195,133,'+(.2*p)+')');g.addColorStop(1,'rgba(255,159,107,0)');X.fillStyle=g;X.fillRect(0,0,SW,SH);}}
  X.restore();
 }
-function drawNightScene(now){UI();X.fillStyle='#081321';X.fillRect(0,0,SW,SH);const s=tickScene(now),st=s?s.beat:G.dlg?.i||0,im=I.night,t=now/1000;
- if(!im?.naturalWidth)return;
- const z0=Math.max(SW/im.width,SH/im.height),c={s:z0,ox:Math.min(0,Math.max(SW-im.width*z0,SW/2-im.width*z0*.5)),oy:Math.min(0,Math.max(SH-im.height*z0,SH/2-im.height*z0*.62))};
- const focus={x:st<5?500:st<9?640:550,y:375,z:st>=5?1.18:1.06};
- let cam=focus;if(s){const from=s.from||{x:500,y:375,z:1},p=cinEase((now-s.beatAt)/CIN.pan);cam={x:cinLerp(from.x,focus.x,p),y:cinLerp(from.y,focus.y,p),z:cinLerp(from.z,focus.z,p)};s.cam=cam;}
- const P=(x,y)=>[c.ox+x*c.s,c.oy+y*c.s],q=P(cam.x,cam.y),j=sceneShake(now);
- const tx=Math.min(-c.ox*cam.z,Math.max(SW-(c.ox+im.width*c.s)*cam.z,SW*.5-q[0]*cam.z));
- const ty=Math.min(-c.oy*cam.z,Math.max(SH-(c.oy+im.height*c.s)*cam.z,SH*(SH>SW?.28:.66)-q[1]*cam.z));
- X.save();X.translate(tx-j[0],ty-j[1]);X.scale(cam.z,cam.z);
- X.drawImage(im,c.ox,c.oy,im.width*c.s,im.height*c.s);
- const sc=c.s*1.05,bob=Math.sin(t*1.5)*2,dr=(k,x,y,rot,a)=>{const pic=I[k],v=P(x,y);if(!pic?.naturalWidth)return;X.save();X.translate(v[0],v[1]+bob);X.rotate(rot||0);X.globalAlpha=a==null?1:a;sprDraw(k,0,0,sc);X.restore();};
- dr(sprIdle('qz','right'),st>=8?510:490,398,st===9?-.12:0);
- if(st>=5){const p=st===9?cinEase((now-(s?.beatAt||now))/CIN.walk):st>=10?1:0;dr(sprIdle('bl','down'),cinLerp(700,565,p),cinLerp(455,392,p)-Math.sin(p*Math.PI)*20,-1.4,.88);
-  const v=P(cinLerp(700,565,p),cinLerp(455,392,p));X.save();X.strokeStyle='rgba(187,229,245,.4)';X.lineWidth=1.5;X.beginPath();X.ellipse(v[0],v[1]+4,22+Math.sin(t*3)*4,5,0,0,7);X.stroke();X.restore();}
- if(st===8||st===9){const a=P(514,370),b=P(st===8?670:590,430);X.strokeStyle='#a99669';X.lineWidth=3*c.s;X.beginPath();X.moveTo(a[0],a[1]);X.lineTo(b[0],b[1]);X.stroke();}
- drawDriftingMist(now,-200,-80,SW+400,SH+160,.095);X.restore();drawSceneOverlay(now);
- const fs=FS();box(SA.l+8,SA.t+8,fs*3+20,fs+16,.9);txt('夜河',SA.l+22,SA.t+fs+12,fs,'#f3dfa0');
+// v31: anchors are in the painted 1024x576 plate. Feet stay inside the near gunwale.
+function nightActors(st,age){
+ const p=st===9?cinEase(age/2200):st>=10?1:0;
+ return{p,qz:{x:st>=8?535-25*p:515,y:386-8*p,rot:st===8?.16:st===9?.16*(1-p):0},
+  bl:st>=5?{x:680-110*p,y:437-51*p-Math.sin(p*Math.PI)*14,rot:-.14*(1-p),waterY:415}:null};
+}
+function nightFrame(st,s,now){
+ const port=SH>SW,dlg=G.dlg?dialogLayout():null,key=[SW,SH,JOY.touch].join(':');
+ if(s&&G.dlg&&s.dialogKey!==key){s.dialogKey=key;s.dialogHeight=Math.max(...G.dlg.l.map(line=>dialogLayout({l:[line],i:0}).h))}
+ const dialogHeight=s?.dialogHeight||dlg?.h||0;
+ let top=SA.t+38,bottom=SH-SA.b-(port&&JOY.touch?200:12);
+ if(dlg){if(dlgTop())top=SA.t+8+dialogHeight+12;else bottom=SH-SA.b-(JOY.touch?200:12)-dialogHeight-12}
+ const height=Math.max(100,bottom-top),scale=Math.min((SW-SA.l-SA.r-20)/(port?300:800),height/190);
+ const focus=st>=5?(port?575:550):(port?525:515),from=s?.from?.x??focus,p=s?cinEase((now-s.beatAt)/CIN.pan):1;
+ const cx=cinLerp(from,focus,p),cy=365,ox=SW/2-cx*scale,oy=(top+bottom)/2-cy*scale;
+ if(s)s.cam={x:cx,y:cy,z:1};return{scale,ox,oy,top,bottom};
+}
+function nightBamboo(a,b){
+ const dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy)||1,nx=-dy/len,ny=dx/len;
+ X.save();X.lineCap='round';X.lineWidth=3.6;X.strokeStyle='#715a36';X.beginPath();X.moveTo(a[0]-dx*.12,a[1]-dy*.12);X.lineTo(...b);X.stroke();
+ X.lineWidth=1.5;X.strokeStyle='#bba473';X.beginPath();X.moveTo(a[0]-dx*.12+nx*.6,a[1]-dy*.12+ny*.6);X.lineTo(b[0]+nx*.6,b[1]+ny*.6);X.stroke();
+ X.lineWidth=1.6;X.strokeStyle='#65563c';for(let d=14;d<len;d+=24){const x=a[0]+dx*d/len,y=a[1]+dy*d/len;X.beginPath();X.moveTo(x-nx*2,y-ny*2);X.lineTo(x+nx*2,y+ny*2);X.stroke()}
+ X.lineWidth=2;X.beginPath();X.moveTo(...b);X.quadraticCurveTo(b[0]+4,b[1]+5,b[0]+7,b[1]+1);X.stroke();X.restore();
+}
+function nightHull(im){
+ // Redraw the painted near side over the occupants, rather than letting feet float over the rail.
+ const rim=[[360,345],[390,371],[440,389],[500,399],[565,405],[620,397],[653,384],[667,379],[651,416],[631,440],[601,448],[527,447],[467,433],[410,412],[376,380]];
+ X.save();X.beginPath();rim.forEach((q,i)=>i?X.lineTo(...q):X.moveTo(...q));X.closePath();X.clip();X.drawImage(im,0,0);X.restore();
+}
+function drawNightScene(now){UI();X.fillStyle='#081321';X.fillRect(0,0,SW,SH);
+ const s=tickScene(now),st=s?s.beat:G.dlg?.i||0,im=I.night,t=now/1000;if(!im?.naturalWidth)return;
+ const actors=nightActors(st,s?now-s.beatAt:0),f=nightFrame(st,s,now),q=actors.qz,j=sceneShake(now);
+ if(s)s.night={frame:f,actors};
+ X.save();X.translate(f.ox-j[0],f.oy-j[1]);X.scale(f.scale,f.scale);X.drawImage(im,0,0);
+ const girl=actors.bl,bob=Math.sin(t*1.6)*1.4*(1-actors.p);
+ if(girl){
+  if(actors.p>.7){X.fillStyle='rgba(0,0,0,.25)';X.beginPath();X.ellipse(girl.x,girl.y-1,27,5,0,0,7);X.fill()}
+  X.save();if(actors.p<.7){X.beginPath();X.rect(0,0,1024,girl.waterY+bob);X.clip()}
+  X.translate(girl.x,girl.y+bob);X.rotate(girl.rot);
+  const pose=I.bld_down;if(pose?.naturalWidth)X.drawImage(pose,-240*.38,-355*.38,480*.38,420*.38);else sprDraw(sprIdle('bl','down'),0,0,1.4);
+  X.restore();
+  if(actors.p<.85){X.save();X.globalAlpha=(1-actors.p)*.6;X.strokeStyle='#a7d3e1';X.lineWidth=1;
+   for(let i=0;i<2;i++){X.beginPath();X.ellipse(girl.x+12,girl.waterY+bob+i*3,32+i*9+Math.sin(t*2+i)*2,4+i*2,0,0,7);X.stroke()}X.restore();}
+ }
+ X.fillStyle='rgba(0,0,0,.32)';X.beginPath();X.ellipse(q.x,q.y-1,13,3.5,0,0,7);X.fill();
+ X.save();X.translate(q.x,q.y);X.rotate(q.rot);sprDraw(sprIdle('qz','right'),0,0,1.45);X.restore();nightHull(im);
+ if((st===8||st===9)&&girl){const a=[q.x+6*Math.cos(q.rot)+27*Math.sin(q.rot),q.y+6*Math.sin(q.rot)-27*Math.cos(q.rot)],b=[girl.x+18,girl.y-22+bob];nightBamboo(a,b);if(s)s.night.pole={hand:a,hook:b};}
+ drawDriftingMist(now,300,310,460,140,.065);X.restore();
+ // A portrait cinematic has a dedicated stage above its dialogue, so the boat is not hidden by text.
+ if(SH>SW){const g=X.createLinearGradient(0,f.bottom,0,Math.min(SH,f.bottom+70));g.addColorStop(0,'rgba(8,19,33,0)');g.addColorStop(1,'rgba(8,19,33,.95)');X.fillStyle=g;X.fillRect(0,f.bottom,SW,SH-f.bottom)}
+ drawSceneOverlay(now);const fs=FS();box(SA.l+8,SA.t+8,fs*3+20,fs+16,.9);txt('夜河',SA.l+22,SA.t+fs+12,fs,'#f3dfa0');
 }

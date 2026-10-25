@@ -1,0 +1,24 @@
+[
+  {
+    "size": "390x664",
+    "before": "tests\\baseline-v30\\polish\\390x664\\rescue.png",
+    "after": "tests\\out\\night-rescue\\390x664\\pull.png",
+    "changed_bbox": [
+      0,
+      0,
+      780,
+      1328
+    ]
+  },
+  {
+    "size": "844x390",
+    "before": "tests\\baseline-v30\\polish\\844x390\\rescue.png",
+    "after": "tests\\out\\night-rescue\\844x390\\pull.png",
+    "changed_bbox": [
+      0,
+      0,
+      1688,
+      780
+    ]
+  }
+]

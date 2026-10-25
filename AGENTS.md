@@ -73,7 +73,7 @@ classic script 的 function 宣告只在該檔執行時才建立，所以**載�
 - **頭像（v28）**：三位主角以使用者提供四視角原圖的三分之四正面裁成 512×512 透明半身像，戰鬥與對話共用同一張，勿改回舊像素頭像或有底色的方塊。卡片頭像在左、紅／藍數字在右；直式壓縮為兩行且臉部不被資訊列覆蓋。cards 的觸控區包含浮出資訊列的頭像。情境鍵 pt_qz_startled／pt_bl_quiet 目前使用同一原圖的正面視角，不自行生成表情。參見 docs/art/portraits-v28.md 與 tests/portrait-ui.mjs。原色裁切工具為 tools/import-portraits.py。
 
 ## 5. 版本號規則
-- 目前 **v30**（v29 已上線；v30 加入命中回饋與音效）。每次上線改動都要 +1（下一版 **v31**），三處一起改：
+- 目前 **v31**（v30 已上線；v31 修正夜渡船艙站位與救人演出）。每次上線改動都要 +1（下一版 **v32**），三處一起改：
   1. `index.html` `<title>雲渡仙緣 第一章 vN</title>`
   2. `src/screens.js` 標題畫面 `'版本 vN'`
   3. `src/render.js` 地圖右下角 `'vN'`
@@ -103,3 +103,5 @@ npm test                                          # 必須 ALL PASS，且無 JS 
 - 不要忘記 bump 版本號；不要 push 沒跑過 `npm test` 的改動。
 
 - **戰鬥回饋（v30）**：bImpactTime 只定格攻擊者繪圖時鐘 55ms／會心 80ms，不改傷害時間；bRecoil 在命中後位移並於 260ms 內回位。soundBtn 需保留 44px 觸控區、上方訊息框讓出右緣。音效於可信手勢才建立 AudioContext，靜音獨立存於 yundu_sound，不改存檔格式。tests/battle-feedback.mjs 測試實際音訊輸出與命中排程。
+
+- **夜渡（v31）**：nightActors 以夜景原圖座標定義船內腳底和救人路徑，nightHull 重繪近側船舷遮擋。白苓使用現有 bld_down 蜷坐圖與水面裁切，不旋轉站立圖。nightFrame 依 dialogLayout 預留文字空間，角色不可被對話遮住。船與人物不得各自上下漂移。參見 docs/art/night-rescue-v31.md、tests/night-rescue.mjs。
