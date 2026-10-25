@@ -1,0 +1,61 @@
+{
+  "reeds": {
+    "art_source": "host_image",
+    "route": "built-in image_gen",
+    "model": "not exposed by host tool",
+    "estimateUsd": null,
+    "source": "docs\\art\\battle-backgrounds-v26\\reeds-original.png",
+    "sourceSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "b7814bf7c4130002f3511c568acbadf0ebd9cf70c10cae5a4725ea5ec8888f4d",
+    "runtime": "assets\\img\\bg_reeds_v26.webp",
+    "bytes": 589460,
+    "prompt": "reeds-prompt.txt",
+    "references": [
+      "guide-landscape/guide.png",
+      "assets/img/bg_reeds.jpg"
+    ]
+  },
+  "temple": {
+    "art_source": "host_image",
+    "route": "built-in image_gen",
+    "model": "not exposed by host tool",
+    "estimateUsd": null,
+    "source": "docs\\art\\battle-backgrounds-v26\\temple-original.png",
+    "sourceSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "548d607065ae846970ae49de09f15c67a25bdf897b7f5865f20b5ddedd9089ff",
+    "runtime": "assets\\img\\bg_temple_v26.webp",
+    "bytes": 517472,
+    "prompt": "temple-prompt.txt",
+    "references": [
+      "guide-landscape/guide.png",
+      "reeds-original.png",
+      "assets/img/bg_temple.jpg"
+    ]
+  },
+  "river": {
+    "art_source": "host_image",
+    "route": "built-in image_gen",
+    "model": "not exposed by host tool",
+    "estimateUsd": null,
+    "source": "docs\\art\\battle-backgrounds-v26\\river-original.png",
+    "sourceSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "0004e7c00a6db94a9f8dffb9025b3d93a3fae42e27db4ef79e26068ec921f338",
+    "runtime": "assets\\img\\bg_river_v26.webp",
+    "bytes": 412796,
+    "prompt": "river-prompt.txt",
+    "references": [
+      "guide-landscape/guide.png",
+      "reeds-original.png",
+      "assets/img/bg_river.jpg"
+    ]
+  }
+}

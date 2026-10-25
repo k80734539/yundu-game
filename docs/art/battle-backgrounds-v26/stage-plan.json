@@ -1,0 +1,100 @@
+{
+  "schema": "generate2dmap.stage.v1",
+  "plate": "plate.png",
+  "sourceSize": [
+    2048,
+    1152
+  ],
+  "fit": "cover",
+  "objectPosition": [
+    0.5,
+    0.5
+  ],
+  "reviewedAspectRange": [
+    1.3333333333333333,
+    2.17
+  ],
+  "groundPolygons": [
+    [
+      [
+        0,
+        0.18
+      ],
+      [
+        1,
+        0.18
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        0,
+        1
+      ]
+    ]
+  ],
+  "playableBand": [
+    0.18,
+    1
+  ],
+  "slots": {
+    "hero": [
+      [
+        0.64,
+        0.78
+      ],
+      [
+        0.73,
+        0.64
+      ],
+      [
+        0.81,
+        0.51
+      ]
+    ],
+    "enemy": [
+      [
+        0.14,
+        0.65
+      ],
+      [
+        0.25,
+        0.52
+      ],
+      [
+        0.36,
+        0.4
+      ]
+    ],
+    "boss": [
+      0.25,
+      0.63
+    ]
+  },
+  "approachPoints": [
+    [
+      0.48,
+      0.64
+    ]
+  ],
+  "protectedRegions": [
+    {
+      "id": "distant-scenery",
+      "box": [
+        0,
+        0,
+        1,
+        0.14
+      ],
+      "appliesTo": [
+        "walk"
+      ]
+    }
+  ],
+  "effects": [],
+  "bakedContent": {
+    "actors": false,
+    "collectibles": false
+  }
+}

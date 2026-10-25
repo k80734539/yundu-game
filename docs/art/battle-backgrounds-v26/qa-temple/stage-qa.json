@@ -1,0 +1,2560 @@
+{
+  "schema": "generate2dmap.stage_qa.v1",
+  "status": "needs-visual-review",
+  "method": "validate_stage: stage.v1 structure and cross-field rules; even-odd point-in-polygon tests of each slot and approach point plus 8 footprint-ellipse samples against ground polygons, walk-protected regions and ripple polygons; pixel-centre rasters for effect overlaps; a greedy grid-search layout solver per aspect (cover/contain projection, UI panels, scale ladder, foot-y draw order).",
+  "notProven": [
+    "Geometry is checked against the stage's own polygons; the tool does not see whether the painted plate really has dry, open ground there. Look at stage-overlay.png and the layout renders.",
+    "Actor boxes are rectangles of the given height, aspect and foot anchor, not real silhouettes; the UI panels are the chosen profile, not the game's own HUD unless --ui gives it.",
+    "Layouts are solved at reference viewports (720 px high, 390 px wide in portrait) with the stage's fit and objectPosition; other projections, safe-area insets and depth-dependent actor scale are not modelled.",
+    "A solved layout is one valid answer from a greedy search; the game's own layout code must still place actors on ground (run it, or compare with the solved feet)."
+  ],
+  "checks": [
+    {
+      "id": "ground polygons are simple",
+      "status": "pass",
+      "value": null,
+      "threshold": null
+    },
+    {
+      "id": "slots stand on ground",
+      "status": "pass",
+      "value": null,
+      "threshold": {
+        "footRadius": 0.01,
+        "ySquash": 0.58
+      }
+    },
+    {
+      "id": "slots avoid walk-protected regions",
+      "status": "pass",
+      "value": null,
+      "threshold": {
+        "footRadius": 0.01,
+        "ySquash": 0.58
+      }
+    },
+    {
+      "id": "slots stay off water",
+      "status": "pass",
+      "value": null,
+      "threshold": {
+        "footRadius": 0.01,
+        "ySquash": 0.58
+      }
+    },
+    {
+      "id": "slots inside playableBand",
+      "status": "pass",
+      "value": null,
+      "threshold": [
+        0.24,
+        0.98
+      ]
+    },
+    {
+      "id": "approach points are standable",
+      "status": "pass",
+      "value": null,
+      "threshold": {
+        "footRadius": 0.01,
+        "ySquash": 0.58
+      }
+    },
+    {
+      "id": "slot footprints do not overlap",
+      "status": "pass",
+      "value": null,
+      "threshold": {
+        "footprintPx": [
+          33.44,
+          19.3952
+        ]
+      }
+    },
+    {
+      "id": "effects avoid motion-protected regions",
+      "status": "pass",
+      "value": null,
+      "threshold": null
+    },
+    {
+      "id": "water stays off ground polygons",
+      "status": "pass",
+      "value": null,
+      "threshold": "split the ground polygon around the water: a runtime that tests only groundPolygons would let actors stand in it (validate_stage also tests ripple polygons)"
+    },
+    {
+      "id": "bakedContent declared",
+      "status": "pass",
+      "value": {
+        "painted": []
+      },
+      "threshold": null
+    },
+    {
+      "id": "plate matches sourceSize",
+      "status": "pass",
+      "value": [
+        1672,
+        941
+      ],
+      "threshold": [
+        1672,
+        941
+      ]
+    },
+    {
+      "id": "layout 4:3 party-vs-enemies",
+      "status": "pass",
+      "value": {
+        "aspect": "4:3",
+        "ratio": 1.3333,
+        "formation": "party-vs-enemies",
+        "viewport": [
+          960,
+          720
+        ],
+        "inReviewedRange": true,
+        "placed": 6,
+        "unplaced": [],
+        "minScale": 1.0,
+        "drawOrder": [
+          "E3",
+          "H3",
+          "E2",
+          "H2",
+          "E1",
+          "H1"
+        ],
+        "errors": []
+      },
+      "threshold": {
+        "reviewedAspectRange": [
+          1.3333,
+          2.17
+        ],
+        "warnBelowScale": 0.7
+      }
+    },
+    {
+      "id": "layout 4:3 party-vs-boss",
+      "status": "pass",
+      "value": {
+        "aspect": "4:3",
+        "ratio": 1.3333,
+        "formation": "party-vs-boss",
+        "viewport": [
+          960,
+          720
+        ],
+        "inReviewedRange": true,
+        "placed": 4,
+        "unplaced": [],
+        "minScale": 1.0,
+        "drawOrder": [
+          "H3",
+          "H2",
+          "B",
+          "H1"
+        ],
+        "errors": []
+      },
+      "threshold": {
+        "reviewedAspectRange": [
+          1.3333,
+          2.17
+        ],
+        "warnBelowScale": 0.7
+      }
+    },
+    {
+      "id": "layout 16:9 party-vs-enemies",
+      "status": "pass",
+      "value": {
+        "aspect": "16:9",
+        "ratio": 1.7778,
+        "formation": "party-vs-enemies",
+        "viewport": [
+          1280,
+          720
+        ],
+        "inReviewedRange": true,
+        "placed": 6,
+        "unplaced": [],
+        "minScale": 1.0,
+        "drawOrder": [
+          "E3",
+          "H3",
+          "E2",
+          "H2",
+          "E1",
+          "H1"
+        ],
+        "errors": []
+      },
+      "threshold": {
+        "reviewedAspectRange": [
+          1.3333,
+          2.17
+        ],
+        "warnBelowScale": 0.7
+      }
+    },
+    {
+      "id": "layout 16:9 party-vs-boss",
+      "status": "pass",
+      "value": {
+        "aspect": "16:9",
+        "ratio": 1.7778,
+        "formation": "party-vs-boss",
+        "viewport": [
+          1280,
+          720
+        ],
+        "inReviewedRange": true,
+        "placed": 4,
+        "unplaced": [],
+        "minScale": 1.0,
+        "drawOrder": [
+          "H3",
+          "H2",
+          "B",
+          "H1"
+        ],
+        "errors": []
+      },
+      "threshold": {
+        "reviewedAspectRange": [
+          1.3333,
+          2.17
+        ],
+        "warnBelowScale": 0.7
+      }
+    },
+    {
+      "id": "layout 21:9 party-vs-enemies",
+      "status": "pass",
+      "value": {
+        "aspect": "21:9",
+        "ratio": 2.3333,
+        "formation": "party-vs-enemies",
+        "viewport": [
+          1680,
+          720
+        ],
+        "inReviewedRange": false,
+        "placed": 6,
+        "unplaced": [],
+        "minScale": 1.0,
+        "drawOrder": [
+          "E3",
+          "H3",
+          "E2",
+          "H2",
+          "E1",
+          "H1"
+        ],
+        "errors": []
+      },
+      "threshold": {
+        "reviewedAspectRange": [
+          1.3333,
+          2.17
+        ],
+        "warnBelowScale": 0.7
+      }
+    },
+    {
+      "id": "layout 21:9 party-vs-boss",
+      "status": "pass",
+      "value": {
+        "aspect": "21:9",
+        "ratio": 2.3333,
+        "formation": "party-vs-boss",
+        "viewport": [
+          1680,
+          720
+        ],
+        "inReviewedRange": false,
+        "placed": 4,
+        "unplaced": [],
+        "minScale": 1.0,
+        "drawOrder": [
+          "H3",
+          "H2",
+          "B",
+          "H1"
+        ],
+        "errors": []
+      },
+      "threshold": {
+        "reviewedAspectRange": [
+          1.3333,
+          2.17
+        ],
+        "warnBelowScale": 0.7
+      }
+    },
+    {
+      "id": "layout 9:19.5 party-vs-enemies",
+      "status": "pass",
+      "value": {
+        "aspect": "9:19.5",
+        "ratio": 0.4615,
+        "formation": "party-vs-enemies",
+        "viewport": [
+          390,
+          845
+        ],
+        "inReviewedRange": false,
+        "placed": 6,
+        "unplaced": [],
+        "minScale": 1.0,
+        "drawOrder": [
+          "E3",
+          "E2",
+          "H2",
+          "E1",
+          "H3",
+          "H1"
+        ],
+        "errors": []
+      },
+      "threshold": {
+        "reviewedAspectRange": [
+          1.3333,
+          2.17
+        ],
+        "warnBelowScale": 0.7
+      }
+    },
+    {
+      "id": "layout 9:19.5 party-vs-boss",
+      "status": "pass",
+      "value": {
+        "aspect": "9:19.5",
+        "ratio": 0.4615,
+        "formation": "party-vs-boss",
+        "viewport": [
+          390,
+          845
+        ],
+        "inReviewedRange": false,
+        "placed": 4,
+        "unplaced": [],
+        "minScale": 0.8,
+        "drawOrder": [
+          "H2",
+          "H3",
+          "B",
+          "H1"
+        ],
+        "errors": []
+      },
+      "threshold": {
+        "reviewedAspectRange": [
+          1.3333,
+          2.17
+        ],
+        "warnBelowScale": 0.7
+      }
+    },
+    {
+      "id": "layout solves at both ends of reviewedAspectRange",
+      "status": "pass",
+      "value": [
+        {
+          "ratio": 1.3333,
+          "formation": "party-vs-enemies",
+          "viewport": [
+            960,
+            720
+          ],
+          "unplaced": []
+        },
+        {
+          "ratio": 1.3333,
+          "formation": "party-vs-boss",
+          "viewport": [
+            960,
+            720
+          ],
+          "unplaced": []
+        },
+        {
+          "ratio": 2.17,
+          "formation": "party-vs-enemies",
+          "viewport": [
+            1562,
+            720
+          ],
+          "unplaced": []
+        },
+        {
+          "ratio": 2.17,
+          "formation": "party-vs-boss",
+          "viewport": [
+            1562,
+            720
+          ],
+          "unplaced": []
+        }
+      ],
+      "threshold": [
+        1.3333,
+        2.17
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "path": "../temple-stage.json",
+      "sha256": "6ae19f425f344191522e1ea71aef378aaa1268896d6598f83601e6329229a337",
+      "bytes": 1630
+    },
+    {
+      "path": "../temple-original.png",
+      "sha256": "548d607065ae846970ae49de09f15c67a25bdf897b7f5865f20b5ddedd9089ff",
+      "bytes": 3167574
+    }
+  ],
+  "outputs": [
+    {
+      "path": "stage-overlay.png",
+      "sha256": "c9a0c140f65e96886be82302f54a957e4b0b4c5e747b511047e027827dc28669",
+      "bytes": 3012092
+    },
+    {
+      "path": "layout-4x3.png",
+      "sha256": "734448a629a9e7fec6243f32d529d4ac0f63a2e693f762c909c857976b52d0ac",
+      "bytes": 1320464
+    },
+    {
+      "path": "layout-4x3-boss.png",
+      "sha256": "4a4427c424efe5874a4c9c7521b6f185587dbefe2ff89e1e29a303e8cf4af0b2",
+      "bytes": 1315360
+    },
+    {
+      "path": "layout-16x9.png",
+      "sha256": "ce60055b139d6cc5adb6b39be941b5b4a5950bafb3133cdd6d58c982344f8bf1",
+      "bytes": 1763578
+    },
+    {
+      "path": "layout-16x9-boss.png",
+      "sha256": "847bb762c4c8634e3732952f6bb8ab9860230336416f87b1d7278bd169668b37",
+      "bytes": 1758000
+    },
+    {
+      "path": "layout-21x9.png",
+      "sha256": "decda3ddbc9caa2b8251eb838d74d607e900cded31c4207ca8d08758a3cdb59b",
+      "bytes": 2235934
+    },
+    {
+      "path": "layout-21x9-boss.png",
+      "sha256": "54c521a5a36f846bcdab29599e0821b14f05f9761fb96b5039cfd623862fa4d2",
+      "bytes": 2231142
+    },
+    {
+      "path": "layout-9x19.5.png",
+      "sha256": "25b6c7fc415086c556a5278dfc078186d21074d5273225dd05a1109d0918cbb2",
+      "bytes": 590732
+    },
+    {
+      "path": "layout-9x19.5-boss.png",
+      "sha256": "244afcb28dc25cdbcbbda422926971be6f82f4b9b97ef80c0dc00a34edc0c664",
+      "bytes": 591120
+    }
+  ],
+  "tool": {
+    "name": "validate_stage",
+    "version": "0.4.0"
+  },
+  "stage": {
+    "sourceSize": [
+      1672,
+      941
+    ],
+    "fit": "cover",
+    "reviewedAspectRange": [
+      1.3333333333333333,
+      2.17
+    ],
+    "objectPosition": [
+      0.5,
+      0.5
+    ],
+    "slots": 7
+  },
+  "settings": {
+    "footRadius": 0.01,
+    "ySquash": 0.58,
+    "minScale": 0.5,
+    "actors": {
+      "hero": {
+        "height": 0.2,
+        "aspect": 1.0,
+        "anchor": [
+          0.5,
+          0.96
+        ]
+      },
+      "enemy": {
+        "height": 0.18,
+        "aspect": 1.0,
+        "anchor": [
+          0.5,
+          0.96
+        ]
+      },
+      "boss": {
+        "height": 0.4,
+        "aspect": 1.0,
+        "anchor": [
+          0.5,
+          0.96
+        ]
+      }
+    },
+    "ui": "battle",
+    "minActorPx": 38
+  },
+  "layouts": [
+    {
+      "aspect": "4:3",
+      "ratio": 1.333,
+      "formation": "party-vs-enemies",
+      "render": "layout-4x3.png",
+      "viewport": [
+        960,
+        720
+      ],
+      "fit": "cover",
+      "scale": 0.765,
+      "offset": [
+        -159.66,
+        0.0
+      ],
+      "visibleUv": [
+        0.125,
+        0.0,
+        0.875,
+        1.0
+      ],
+      "ui": [
+        {
+          "id": "top",
+          "box": [
+            19.2,
+            25.2,
+            748.8,
+            115.2
+          ]
+        },
+        {
+          "id": "party",
+          "box": [
+            768.0,
+            25.2,
+            940.8,
+            244.8
+          ]
+        },
+        {
+          "id": "command",
+          "box": [
+            768.0,
+            324.0,
+            940.8,
+            612.0
+          ]
+        },
+        {
+          "id": "detail",
+          "box": [
+            768.0,
+            619.2,
+            940.8,
+            698.4
+          ]
+        },
+        {
+          "id": "targets",
+          "box": [
+            19.2,
+            612.0,
+            384.0,
+            698.4
+          ]
+        },
+        {
+          "id": "log",
+          "box": [
+            19.2,
+            576.0,
+            364.8,
+            604.8
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "id": "H1",
+          "role": "hero",
+          "slot": [
+            0.64,
+            0.78
+          ],
+          "desired": [
+            678.0,
+            561.6
+          ],
+          "foot": [
+            678.0,
+            561.6
+          ],
+          "footUv": [
+            0.655,
+            0.78
+          ],
+          "box": [
+            606.0,
+            423.36,
+            750.0,
+            567.36
+          ],
+          "sizePx": 144.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 0.0
+        },
+        {
+          "id": "H2",
+          "role": "hero",
+          "slot": [
+            0.73,
+            0.64
+          ],
+          "desired": [
+            786.0,
+            460.8
+          ],
+          "foot": [
+            676.0,
+            398.215
+          ],
+          "footUv": [
+            0.653,
+            0.553
+          ],
+          "box": [
+            604.0,
+            259.975,
+            748.0,
+            403.975
+          ],
+          "sizePx": 144.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 126.558
+        },
+        {
+          "id": "H3",
+          "role": "hero",
+          "slot": [
+            0.81,
+            0.51
+          ],
+          "desired": [
+            882.0,
+            367.2
+          ],
+          "foot": [
+            676.0,
+            336.738
+          ],
+          "footUv": [
+            0.653,
+            0.468
+          ],
+          "box": [
+            604.0,
+            198.498,
+            748.0,
+            342.498
+          ],
+          "sizePx": 144.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 208.24
+        },
+        {
+          "id": "E1",
+          "role": "enemy",
+          "slot": [
+            0.14,
+            0.65
+          ],
+          "desired": [
+            78.0,
+            468.0
+          ],
+          "foot": [
+            78.0,
+            468.0
+          ],
+          "footUv": [
+            0.186,
+            0.65
+          ],
+          "box": [
+            13.5,
+            344.16,
+            142.5,
+            473.16
+          ],
+          "sizePx": 129.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 0.0
+        },
+        {
+          "id": "E2",
+          "role": "enemy",
+          "slot": [
+            0.25,
+            0.52
+          ],
+          "desired": [
+            210.0,
+            374.4
+          ],
+          "foot": [
+            210.0,
+            374.4
+          ],
+          "footUv": [
+            0.289,
+            0.52
+          ],
+          "box": [
+            145.5,
+            250.56,
+            274.5,
+            379.56
+          ],
+          "sizePx": 129.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 0.0
+        },
+        {
+          "id": "E3",
+          "role": "enemy",
+          "slot": [
+            0.36,
+            0.4
+          ],
+          "desired": [
+            342.0,
+            288.0
+          ],
+          "foot": [
+            342.0,
+            288.0
+          ],
+          "footUv": [
+            0.392,
+            0.4
+          ],
+          "box": [
+            277.5,
+            164.16,
+            406.5,
+            293.16
+          ],
+          "sizePx": 129.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 0.0
+        }
+      ],
+      "drawOrder": [
+        "E3",
+        "H3",
+        "E2",
+        "H2",
+        "E1",
+        "H1"
+      ],
+      "overlaps": [
+        [
+          "H2",
+          "H3"
+        ]
+      ],
+      "errors": []
+    },
+    {
+      "aspect": "4:3",
+      "ratio": 1.333,
+      "formation": "party-vs-boss",
+      "render": "layout-4x3-boss.png",
+      "viewport": [
+        960,
+        720
+      ],
+      "fit": "cover",
+      "scale": 0.765,
+      "offset": [
+        -159.66,
+        0.0
+      ],
+      "visibleUv": [
+        0.125,
+        0.0,
+        0.875,
+        1.0
+      ],
+      "ui": [
+        {
+          "id": "top",
+          "box": [
+            19.2,
+            25.2,
+            748.8,
+            115.2
+          ]
+        },
+        {
+          "id": "party",
+          "box": [
+            768.0,
+            25.2,
+            940.8,
+            244.8
+          ]
+        },
+        {
+          "id": "command",
+          "box": [
+            768.0,
+            324.0,
+            940.8,
+            612.0
+          ]
+        },
+        {
+          "id": "detail",
+          "box": [
+            768.0,
+            619.2,
+            940.8,
+            698.4
+          ]
+        },
+        {
+          "id": "targets",
+          "box": [
+            19.2,
+            612.0,
+            384.0,
+            698.4
+          ]
+        },
+        {
+          "id": "log",
+          "box": [
+            19.2,
+            576.0,
+            364.8,
+            604.8
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "id": "H1",
+          "role": "hero",
+          "slot": [
+            0.64,
+            0.78
+          ],
+          "desired": [
+            609.643,
+            561.6
+          ],
+          "foot": [
+            609.643,
+            561.6
+          ],
+          "footUv": [
+            0.601,
+            0.78
+          ],
+          "box": [
+            537.643,
+            423.36,
+            681.643,
+            567.36
+          ],
+          "sizePx": 144.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 0.0
+        },
+        {
+          "id": "H2",
+          "role": "hero",
+          "slot": [
+            0.73,
+            0.64
+          ],
+          "desired": [
+            715.714,
+            460.8
+          ],
+          "foot": [
+            678.6,
+            398.215
+          ],
+          "footUv": [
+            0.655,
+            0.553
+          ],
+          "box": [
+            606.6,
+            259.975,
+            750.6,
+            403.975
+          ],
+          "sizePx": 144.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 72.762
+        },
+        {
+          "id": "H3",
+          "role": "hero",
+          "slot": [
+            0.81,
+            0.51
+          ],
+          "desired": [
+            810.0,
+            367.2
+          ],
+          "foot": [
+            678.6,
+            336.738
+          ],
+          "footUv": [
+            0.655,
+            0.468
+          ],
+          "box": [
+            606.6,
+            198.498,
+            750.6,
+            342.498
+          ],
+          "sizePx": 144.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 134.884
+        },
+        {
+          "id": "B",
+          "role": "boss",
+          "slot": [
+            0.25,
+            0.63
+          ],
+          "desired": [
+            150.0,
+            453.6
+          ],
+          "foot": [
+            150.0,
+            453.6
+          ],
+          "footUv": [
+            0.242,
+            0.63
+          ],
+          "box": [
+            6.0,
+            177.12,
+            294.0,
+            465.12
+          ],
+          "sizePx": 288.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 0.0
+        }
+      ],
+      "drawOrder": [
+        "H3",
+        "H2",
+        "B",
+        "H1"
+      ],
+      "overlaps": [
+        [
+          "H2",
+          "H3"
+        ]
+      ],
+      "errors": []
+    },
+    {
+      "aspect": "16:9",
+      "ratio": 1.778,
+      "formation": "party-vs-enemies",
+      "render": "layout-16x9.png",
+      "viewport": [
+        1280,
+        720
+      ],
+      "fit": "cover",
+      "scale": 0.766,
+      "offset": [
+        0.0,
+        -0.191
+      ],
+      "visibleUv": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "ui": [
+        {
+          "id": "top",
+          "box": [
+            25.6,
+            25.2,
+            998.4,
+            115.2
+          ]
+        },
+        {
+          "id": "party",
+          "box": [
+            1024.0,
+            25.2,
+            1254.4,
+            244.8
+          ]
+        },
+        {
+          "id": "command",
+          "box": [
+            1024.0,
+            324.0,
+            1254.4,
+            612.0
+          ]
+        },
+        {
+          "id": "detail",
+          "box": [
+            1024.0,
+            619.2,
+            1254.4,
+            698.4
+          ]
+        },
+        {
+          "id": "targets",
+          "box": [
+            25.6,
+            612.0,
+            512.0,
+            698.4
+          ]
+        },
+        {
+          "id": "log",
+          "box": [
+            25.6,
+            576.0,
+            486.4,
+            604.8
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "id": "H1",
+          "role": "hero",
+          "slot": [
+            0.64,
+            0.78
+          ],
+          "desired": [
+            819.2,
+            561.707
+          ],
+          "foot": [
+            819.2,
+            561.707
+          ],
+          "footUv": [
+            0.64,
+            0.78
+          ],
+          "box": [
+            747.2,
+            423.467,
+            891.2,
+            567.467
+          ],
+          "sizePx": 144.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 0.0
+        },
+        {
+          "id": "H2",
+          "role": "hero",
+          "slot": [
+            0.73,
+            0.64
+          ],
+          "desired": [
+            934.4,
+            460.854
+          ],
+          "foot": [
+            934.4,
+            398.236
+          ],
+          "footUv": [
+            0.73,
+            0.553
+          ],
+          "box": [
+            862.4,
+            259.996,
+            1006.4,
+            403.996
+          ],
+          "sizePx": 144.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 62.618
+        },
+        {
+          "id": "H3",
+          "role": "hero",
+          "slot": [
+            0.81,
+            0.51
+          ],
+          "desired": [
+            1036.8,
+            367.204
+          ],
+          "foot": [
+            932.178,
+            336.726
+          ],
+          "footUv": [
+            0.728,
+            0.468
+          ],
+          "box": [
+            860.178,
+            198.486,
+            1004.178,
+            342.486
+          ],
+          "sizePx": 144.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 108.971
+        },
+        {
+          "id": "E1",
+          "role": "enemy",
+          "slot": [
+            0.14,
+            0.65
+          ],
+          "desired": [
+            179.2,
+            468.057
+          ],
+          "foot": [
+            179.2,
+            468.057
+          ],
+          "footUv": [
+            0.14,
+            0.65
+          ],
+          "box": [
+            114.7,
+            344.217,
+            243.7,
+            473.217
+          ],
+          "sizePx": 129.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 0.0
+        },
+        {
+          "id": "E2",
+          "role": "enemy",
+          "slot": [
+            0.25,
+            0.52
+          ],
+          "desired": [
+            320.0,
+            374.408
+          ],
+          "foot": [
+            320.0,
+            374.408
+          ],
+          "footUv": [
+            0.25,
+            0.52
+          ],
+          "box": [
+            255.5,
+            250.568,
+            384.5,
+            379.568
+          ],
+          "sizePx": 129.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 0.0
+        },
+        {
+          "id": "E3",
+          "role": "enemy",
+          "slot": [
+            0.36,
+            0.4
+          ],
+          "desired": [
+            460.8,
+            287.962
+          ],
+          "foot": [
+            460.8,
+            287.962
+          ],
+          "footUv": [
+            0.36,
+            0.4
+          ],
+          "box": [
+            396.3,
+            164.122,
+            525.3,
+            293.122
+          ],
+          "sizePx": 129.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 0.0
+        }
+      ],
+      "drawOrder": [
+        "E3",
+        "H3",
+        "E2",
+        "H2",
+        "E1",
+        "H1"
+      ],
+      "overlaps": [
+        [
+          "H2",
+          "H3"
+        ]
+      ],
+      "errors": []
+    },
+    {
+      "aspect": "16:9",
+      "ratio": 1.778,
+      "formation": "party-vs-boss",
+      "render": "layout-16x9-boss.png",
+      "viewport": [
+        1280,
+        720
+      ],
+      "fit": "cover",
+      "scale": 0.766,
+      "offset": [
+        0.0,
+        -0.191
+      ],
+      "visibleUv": [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "ui": [
+        {
+          "id": "top",
+          "box": [
+            25.6,
+            25.2,
+            998.4,
+            115.2
+          ]
+        },
+        {
+          "id": "party",
+          "box": [
+            1024.0,
+            25.2,
+            1254.4,
+            244.8
+          ]
+        },
+        {
+          "id": "command",
+          "box": [
+            1024.0,
+            324.0,
+            1254.4,
+            612.0
+          ]
+        },
+        {
+          "id": "detail",
+          "box": [
+            1024.0,
+            619.2,
+            1254.4,
+            698.4
+          ]
+        },
+        {
+          "id": "targets",
+          "box": [
+            25.6,
+            612.0,
+            512.0,
+            698.4
+          ]
+        },
+        {
+          "id": "log",
+          "box": [
+            25.6,
+            576.0,
+            486.4,
+            604.8
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "id": "H1",
+          "role": "hero",
+          "slot": [
+            0.64,
+            0.78
+          ],
+          "desired": [
+            819.2,
+            561.707
+          ],
+          "foot": [
+            819.2,
+            561.707
+          ],
+          "footUv": [
+            0.64,
+            0.78
+          ],
+          "box": [
+            747.2,
+            423.467,
+            891.2,
+            567.467
+          ],
+          "sizePx": 144.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 0.0
+        },
+        {
+          "id": "H2",
+          "role": "hero",
+          "slot": [
+            0.73,
+            0.64
+          ],
+          "desired": [
+            934.4,
+            460.854
+          ],
+          "foot": [
+            934.4,
+            398.236
+          ],
+          "footUv": [
+            0.73,
+            0.553
+          ],
+          "box": [
+            862.4,
+            259.996,
+            1006.4,
+            403.996
+          ],
+          "sizePx": 144.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 62.618
+        },
+        {
+          "id": "H3",
+          "role": "hero",
+          "slot": [
+            0.81,
+            0.51
+          ],
+          "desired": [
+            1036.8,
+            367.204
+          ],
+          "foot": [
+            932.178,
+            336.726
+          ],
+          "footUv": [
+            0.728,
+            0.468
+          ],
+          "box": [
+            860.178,
+            198.486,
+            1004.178,
+            342.486
+          ],
+          "sizePx": 144.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 108.971
+        },
+        {
+          "id": "B",
+          "role": "boss",
+          "slot": [
+            0.25,
+            0.63
+          ],
+          "desired": [
+            320.0,
+            453.65
+          ],
+          "foot": [
+            320.0,
+            453.65
+          ],
+          "footUv": [
+            0.25,
+            0.63
+          ],
+          "box": [
+            176.0,
+            177.17,
+            464.0,
+            465.17
+          ],
+          "sizePx": 288.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 0.0
+        }
+      ],
+      "drawOrder": [
+        "H3",
+        "H2",
+        "B",
+        "H1"
+      ],
+      "overlaps": [
+        [
+          "H2",
+          "H3"
+        ]
+      ],
+      "errors": []
+    },
+    {
+      "aspect": "21:9",
+      "ratio": 2.333,
+      "formation": "party-vs-enemies",
+      "render": "layout-21x9.png",
+      "viewport": [
+        1680,
+        720
+      ],
+      "fit": "cover",
+      "scale": 1.005,
+      "offset": [
+        0.0,
+        -112.751
+      ],
+      "visibleUv": [
+        0.0,
+        0.119,
+        1.0,
+        0.881
+      ],
+      "ui": [
+        {
+          "id": "top",
+          "box": [
+            33.6,
+            25.2,
+            1310.4,
+            115.2
+          ]
+        },
+        {
+          "id": "party",
+          "box": [
+            1344.0,
+            25.2,
+            1646.4,
+            244.8
+          ]
+        },
+        {
+          "id": "command",
+          "box": [
+            1344.0,
+            324.0,
+            1646.4,
+            612.0
+          ]
+        },
+        {
+          "id": "detail",
+          "box": [
+            1344.0,
+            619.2,
+            1646.4,
+            698.4
+          ]
+        },
+        {
+          "id": "targets",
+          "box": [
+            33.6,
+            612.0,
+            672.0,
+            698.4
+          ]
+        },
+        {
+          "id": "log",
+          "box": [
+            33.6,
+            576.0,
+            638.4,
+            604.8
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "id": "H1",
+          "role": "hero",
+          "slot": [
+            0.64,
+            0.78
+          ],
+          "desired": [
+            1075.2,
+            624.741
+          ],
+          "foot": [
+            1075.2,
+            624.741
+          ],
+          "footUv": [
+            0.64,
+            0.78
+          ],
+          "box": [
+            980.7,
+            443.301,
+            1169.7,
+            632.301
+          ],
+          "sizePx": 189.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 0.0
+        },
+        {
+          "id": "H2",
+          "role": "hero",
+          "slot": [
+            0.73,
+            0.64
+          ],
+          "desired": [
+            1226.4,
+            492.37
+          ],
+          "foot": [
+            1226.4,
+            417.085
+          ],
+          "footUv": [
+            0.73,
+            0.56
+          ],
+          "box": [
+            1131.9,
+            235.645,
+            1320.9,
+            424.645
+          ],
+          "sizePx": 189.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 75.286
+        },
+        {
+          "id": "H3",
+          "role": "hero",
+          "slot": [
+            0.81,
+            0.51
+          ],
+          "desired": [
+            1360.8,
+            369.455
+          ],
+          "foot": [
+            1223.483,
+            347.181
+          ],
+          "footUv": [
+            0.728,
+            0.486
+          ],
+          "box": [
+            1128.983,
+            165.741,
+            1317.983,
+            354.741
+          ],
+          "sizePx": 189.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 139.111
+        },
+        {
+          "id": "E1",
+          "role": "enemy",
+          "slot": [
+            0.14,
+            0.65
+          ],
+          "desired": [
+            235.2,
+            501.825
+          ],
+          "foot": [
+            235.2,
+            501.825
+          ],
+          "footUv": [
+            0.14,
+            0.65
+          ],
+          "box": [
+            150.2,
+            338.625,
+            320.2,
+            508.625
+          ],
+          "sizePx": 170.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 0.0
+        },
+        {
+          "id": "E2",
+          "role": "enemy",
+          "slot": [
+            0.25,
+            0.52
+          ],
+          "desired": [
+            420.0,
+            378.91
+          ],
+          "foot": [
+            420.0,
+            378.91
+          ],
+          "footUv": [
+            0.25,
+            0.52
+          ],
+          "box": [
+            335.0,
+            215.71,
+            505.0,
+            385.71
+          ],
+          "sizePx": 170.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 0.0
+        },
+        {
+          "id": "E3",
+          "role": "enemy",
+          "slot": [
+            0.36,
+            0.4
+          ],
+          "desired": [
+            604.8,
+            265.45
+          ],
+          "foot": [
+            604.8,
+            300.579
+          ],
+          "footUv": [
+            0.36,
+            0.437
+          ],
+          "box": [
+            519.8,
+            137.379,
+            689.8,
+            307.379
+          ],
+          "sizePx": 170.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 35.129
+        }
+      ],
+      "drawOrder": [
+        "E3",
+        "H3",
+        "E2",
+        "H2",
+        "E1",
+        "H1"
+      ],
+      "overlaps": [
+        [
+          "H2",
+          "H3"
+        ]
+      ],
+      "errors": []
+    },
+    {
+      "aspect": "21:9",
+      "ratio": 2.333,
+      "formation": "party-vs-boss",
+      "render": "layout-21x9-boss.png",
+      "viewport": [
+        1680,
+        720
+      ],
+      "fit": "cover",
+      "scale": 1.005,
+      "offset": [
+        0.0,
+        -112.751
+      ],
+      "visibleUv": [
+        0.0,
+        0.119,
+        1.0,
+        0.881
+      ],
+      "ui": [
+        {
+          "id": "top",
+          "box": [
+            33.6,
+            25.2,
+            1310.4,
+            115.2
+          ]
+        },
+        {
+          "id": "party",
+          "box": [
+            1344.0,
+            25.2,
+            1646.4,
+            244.8
+          ]
+        },
+        {
+          "id": "command",
+          "box": [
+            1344.0,
+            324.0,
+            1646.4,
+            612.0
+          ]
+        },
+        {
+          "id": "detail",
+          "box": [
+            1344.0,
+            619.2,
+            1646.4,
+            698.4
+          ]
+        },
+        {
+          "id": "targets",
+          "box": [
+            33.6,
+            612.0,
+            672.0,
+            698.4
+          ]
+        },
+        {
+          "id": "log",
+          "box": [
+            33.6,
+            576.0,
+            638.4,
+            604.8
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "id": "H1",
+          "role": "hero",
+          "slot": [
+            0.64,
+            0.78
+          ],
+          "desired": [
+            1075.2,
+            624.741
+          ],
+          "foot": [
+            1075.2,
+            624.741
+          ],
+          "footUv": [
+            0.64,
+            0.78
+          ],
+          "box": [
+            980.7,
+            443.301,
+            1169.7,
+            632.301
+          ],
+          "sizePx": 189.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 0.0
+        },
+        {
+          "id": "H2",
+          "role": "hero",
+          "slot": [
+            0.73,
+            0.64
+          ],
+          "desired": [
+            1226.4,
+            492.37
+          ],
+          "foot": [
+            1226.4,
+            417.085
+          ],
+          "footUv": [
+            0.73,
+            0.56
+          ],
+          "box": [
+            1131.9,
+            235.645,
+            1320.9,
+            424.645
+          ],
+          "sizePx": 189.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 75.286
+        },
+        {
+          "id": "H3",
+          "role": "hero",
+          "slot": [
+            0.81,
+            0.51
+          ],
+          "desired": [
+            1360.8,
+            369.455
+          ],
+          "foot": [
+            1223.483,
+            347.181
+          ],
+          "footUv": [
+            0.728,
+            0.486
+          ],
+          "box": [
+            1128.983,
+            165.741,
+            1317.983,
+            354.741
+          ],
+          "sizePx": 189.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 139.111
+        },
+        {
+          "id": "B",
+          "role": "boss",
+          "slot": [
+            0.25,
+            0.63
+          ],
+          "desired": [
+            420.0,
+            482.915
+          ],
+          "foot": [
+            420.0,
+            486.988
+          ],
+          "footUv": [
+            0.25,
+            0.634
+          ],
+          "box": [
+            231.0,
+            124.108,
+            609.0,
+            502.108
+          ],
+          "sizePx": 378.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 4.073
+        }
+      ],
+      "drawOrder": [
+        "H3",
+        "H2",
+        "B",
+        "H1"
+      ],
+      "overlaps": [
+        [
+          "H2",
+          "H3"
+        ]
+      ],
+      "errors": []
+    },
+    {
+      "aspect": "9:19.5",
+      "ratio": 0.462,
+      "formation": "party-vs-enemies",
+      "render": "layout-9x19.5.png",
+      "viewport": [
+        390,
+        845
+      ],
+      "fit": "cover",
+      "scale": 0.898,
+      "offset": [
+        -555.712,
+        0.0
+      ],
+      "visibleUv": [
+        0.37,
+        0.0,
+        0.63,
+        1.0
+      ],
+      "ui": [
+        {
+          "id": "top",
+          "box": [
+            11.7,
+            12.675,
+            378.3,
+            76.05
+          ]
+        },
+        {
+          "id": "targets",
+          "box": [
+            11.7,
+            88.725,
+            195.0,
+            198.575
+          ]
+        },
+        {
+          "id": "party",
+          "box": [
+            206.7,
+            88.725,
+            378.3,
+            240.825
+          ]
+        },
+        {
+          "id": "log",
+          "box": [
+            11.7,
+            207.025,
+            195.0,
+            240.825
+          ]
+        },
+        {
+          "id": "command",
+          "box": [
+            11.7,
+            545.025,
+            195.0,
+            832.325
+          ]
+        },
+        {
+          "id": "detail",
+          "box": [
+            206.7,
+            726.7,
+            378.3,
+            832.325
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "id": "H1",
+          "role": "hero",
+          "slot": [
+            0.64,
+            0.78
+          ],
+          "desired": [
+            246.47,
+            659.1
+          ],
+          "foot": [
+            288.74,
+            659.1
+          ],
+          "footUv": [
+            0.562,
+            0.78
+          ],
+          "box": [
+            204.24,
+            496.86,
+            373.24,
+            665.86
+          ],
+          "sizePx": 169.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 42.27
+        },
+        {
+          "id": "H2",
+          "role": "hero",
+          "slot": [
+            0.73,
+            0.64
+          ],
+          "desired": [
+            274.545,
+            540.8
+          ],
+          "foot": [
+            274.545,
+            467.35
+          ],
+          "footUv": [
+            0.553,
+            0.553
+          ],
+          "box": [
+            190.045,
+            305.11,
+            359.045,
+            474.11
+          ],
+          "sizePx": 169.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 73.45
+        },
+        {
+          "id": "H3",
+          "role": "hero",
+          "slot": [
+            0.81,
+            0.51
+          ],
+          "desired": [
+            299.5,
+            430.95
+          ],
+          "foot": [
+            299.5,
+            539.5
+          ],
+          "footUv": [
+            0.57,
+            0.638
+          ],
+          "box": [
+            215.0,
+            377.26,
+            384.0,
+            546.26
+          ],
+          "sizePx": 169.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 108.55
+        },
+        {
+          "id": "E1",
+          "role": "enemy",
+          "slot": [
+            0.14,
+            0.65
+          ],
+          "desired": [
+            90.5,
+            549.25
+          ],
+          "foot": [
+            90.5,
+            515.45
+          ],
+          "footUv": [
+            0.43,
+            0.61
+          ],
+          "box": [
+            14.5,
+            369.53,
+            166.5,
+            521.53
+          ],
+          "sizePx": 152.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 33.8
+        },
+        {
+          "id": "E2",
+          "role": "enemy",
+          "slot": [
+            0.25,
+            0.52
+          ],
+          "desired": [
+            124.813,
+            439.4
+          ],
+          "foot": [
+            105.765,
+            439.4
+          ],
+          "footUv": [
+            0.441,
+            0.52
+          ],
+          "box": [
+            29.765,
+            293.48,
+            181.765,
+            445.48
+          ],
+          "sizePx": 152.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 19.048
+        },
+        {
+          "id": "E3",
+          "role": "enemy",
+          "slot": [
+            0.36,
+            0.4
+          ],
+          "desired": [
+            159.127,
+            338.0
+          ],
+          "foot": [
+            159.127,
+            395.2
+          ],
+          "footUv": [
+            0.476,
+            0.468
+          ],
+          "box": [
+            83.127,
+            249.28,
+            235.127,
+            401.28
+          ],
+          "sizePx": 152.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 57.2
+        }
+      ],
+      "drawOrder": [
+        "E3",
+        "E2",
+        "H2",
+        "E1",
+        "H3",
+        "H1"
+      ],
+      "overlaps": [
+        [
+          "H1",
+          "H3"
+        ],
+        [
+          "H2",
+          "H3"
+        ],
+        [
+          "H2",
+          "E3"
+        ],
+        [
+          "H3",
+          "E3"
+        ],
+        [
+          "E1",
+          "E2"
+        ],
+        [
+          "E1",
+          "E3"
+        ],
+        [
+          "E2",
+          "E3"
+        ]
+      ],
+      "errors": []
+    },
+    {
+      "aspect": "9:19.5",
+      "ratio": 0.462,
+      "formation": "party-vs-boss",
+      "render": "layout-9x19.5-boss.png",
+      "viewport": [
+        390,
+        845
+      ],
+      "fit": "cover",
+      "scale": 0.898,
+      "offset": [
+        -555.712,
+        0.0
+      ],
+      "visibleUv": [
+        0.37,
+        0.0,
+        0.63,
+        1.0
+      ],
+      "ui": [
+        {
+          "id": "top",
+          "box": [
+            11.7,
+            12.675,
+            378.3,
+            76.05
+          ]
+        },
+        {
+          "id": "targets",
+          "box": [
+            11.7,
+            88.725,
+            195.0,
+            198.575
+          ]
+        },
+        {
+          "id": "party",
+          "box": [
+            206.7,
+            88.725,
+            378.3,
+            240.825
+          ]
+        },
+        {
+          "id": "log",
+          "box": [
+            11.7,
+            207.025,
+            195.0,
+            240.825
+          ]
+        },
+        {
+          "id": "command",
+          "box": [
+            11.7,
+            545.025,
+            195.0,
+            832.325
+          ]
+        },
+        {
+          "id": "detail",
+          "box": [
+            206.7,
+            726.7,
+            378.3,
+            832.325
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "id": "H1",
+          "role": "hero",
+          "slot": [
+            0.64,
+            0.78
+          ],
+          "desired": [
+            202.857,
+            659.1
+          ],
+          "foot": [
+            202.857,
+            515.45
+          ],
+          "footUv": [
+            0.505,
+            0.61
+          ],
+          "box": [
+            118.357,
+            353.21,
+            287.357,
+            522.21
+          ],
+          "sizePx": 169.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 143.65
+        },
+        {
+          "id": "H2",
+          "role": "hero",
+          "slot": [
+            0.73,
+            0.64
+          ],
+          "desired": [
+            209.286,
+            540.8
+          ],
+          "foot": [
+            209.286,
+            443.3
+          ],
+          "footUv": [
+            0.51,
+            0.525
+          ],
+          "box": [
+            124.786,
+            281.06,
+            293.786,
+            450.06
+          ],
+          "sizePx": 169.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 97.5
+        },
+        {
+          "id": "H3",
+          "role": "hero",
+          "slot": [
+            0.81,
+            0.51
+          ],
+          "desired": [
+            215.0,
+            430.95
+          ],
+          "foot": [
+            260.616,
+            491.4
+          ],
+          "footUv": [
+            0.544,
+            0.582
+          ],
+          "box": [
+            176.116,
+            329.16,
+            345.116,
+            498.16
+          ],
+          "sizePx": 169.0,
+          "scale": 1.0,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 75.73
+        },
+        {
+          "id": "B",
+          "role": "boss",
+          "slot": [
+            0.25,
+            0.63
+          ],
+          "desired": [
+            175.0,
+            532.35
+          ],
+          "foot": [
+            141.093,
+            515.45
+          ],
+          "footUv": [
+            0.464,
+            0.61
+          ],
+          "box": [
+            6.093,
+            256.25,
+            276.093,
+            526.25
+          ],
+          "sizePx": 270.0,
+          "scale": 0.8,
+          "placed": true,
+          "grounded": true,
+          "movedPx": 37.885
+        }
+      ],
+      "drawOrder": [
+        "H2",
+        "H3",
+        "B",
+        "H1"
+      ],
+      "overlaps": [
+        [
+          "H1",
+          "H2"
+        ],
+        [
+          "H1",
+          "H3"
+        ],
+        [
+          "H1",
+          "B"
+        ],
+        [
+          "H2",
+          "H3"
+        ],
+        [
+          "H2",
+          "B"
+        ],
+        [
+          "H3",
+          "B"
+        ]
+      ],
+      "errors": []
+    }
+  ],
+  "warnings": []
+}

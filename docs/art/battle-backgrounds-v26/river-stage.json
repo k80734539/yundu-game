@@ -1,0 +1,124 @@
+{
+  "schema": "generate2dmap.stage.v1",
+  "plate": "river-original.png",
+  "sourceSize": [
+    1672,
+    941
+  ],
+  "fit": "cover",
+  "objectPosition": [
+    0.5,
+    0.5
+  ],
+  "reviewedAspectRange": [
+    1.3333333333333333,
+    2.17
+  ],
+  "groundPolygons": [
+    [
+      [
+        0.05,
+        0.24
+      ],
+      [
+        0.95,
+        0.24
+      ],
+      [
+        0.95,
+        0.98
+      ],
+      [
+        0.05,
+        0.98
+      ]
+    ]
+  ],
+  "playableBand": [
+    0.24,
+    0.98
+  ],
+  "slots": {
+    "hero": [
+      [
+        0.64,
+        0.78
+      ],
+      [
+        0.73,
+        0.64
+      ],
+      [
+        0.81,
+        0.51
+      ]
+    ],
+    "enemy": [
+      [
+        0.14,
+        0.65
+      ],
+      [
+        0.25,
+        0.52
+      ],
+      [
+        0.36,
+        0.4
+      ]
+    ],
+    "boss": [
+      0.25,
+      0.63
+    ]
+  },
+  "approachPoints": [
+    [
+      0.48,
+      0.64
+    ]
+  ],
+  "protectedRegions": [
+    {
+      "id": "scenery",
+      "box": [
+        0,
+        0,
+        1,
+        0.23
+      ],
+      "appliesTo": [
+        "walk"
+      ]
+    },
+    {
+      "id": "left-corner",
+      "box": [
+        0,
+        0.8,
+        0.13,
+        1
+      ],
+      "appliesTo": [
+        "walk"
+      ]
+    },
+    {
+      "id": "right-corner",
+      "box": [
+        0.91,
+        0.8,
+        1,
+        1
+      ],
+      "appliesTo": [
+        "walk"
+      ]
+    }
+  ],
+  "effects": [],
+  "bakedContent": {
+    "actors": false,
+    "collectibles": false
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "reviewer": "Codex visual inspection",
+  "date": "2026-10-25",
+  "art_source": "host_image",
+  "selectedGuide": "guide-landscape/guide.png",
+  "stageToolStatus": "needs-visual-review",
+  "stageToolWarnFailChecks": [],
+  "visualReview": "Reviewed all 24 proxy stage views via three review-contact.png sheets, all three generated paintings, actual 844x390 battle scenes, and six-aspect river/temple game crop sheets; accepted for integration. Runtime uses responsive game layout, not proxy actor boxes.",
+  "runtimeGroundChecks": "3 scenes x 6 sizes; foot roots inverse-projected onto manually annotated floor and checked against protected regions.",
+  "comparison": "18 v25/v26 screenshots; tests/out/battle-backgrounds/comparison.json",
+  "limitations": "Ground polygons are manually annotated, not inferred from pixels; no physical iPhone performance claim.",
+  "gameTestResult": "npm test: ALL PASS",
+  "beforeAfterChangedPercentRange": [
+    29.9,
+    54.05
+  ]
+}

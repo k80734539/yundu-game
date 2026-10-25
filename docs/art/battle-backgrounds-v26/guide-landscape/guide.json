@@ -1,0 +1,282 @@
+{
+  "schema": "generate2dmap.scene_guide.v1",
+  "tool": {
+    "name": "scene_layout_guide",
+    "version": "0.4.0"
+  },
+  "stage": {
+    "path": "../stage-plan.json",
+    "sha256": "3a875f9e154cccb7df1caeb3b9631dc3664ca006d91877ed59b4d64298fde1f6",
+    "bytes": 1271
+  },
+  "canvas": [
+    2048,
+    1152
+  ],
+  "guide": {
+    "path": "guide.png",
+    "sha256": "f21255f0e3f37b7f2587e2b714a014c6bd020ec5d6403d6309e1de4c79229712",
+    "bytes": 74105
+  },
+  "promptBlock": {
+    "path": "prompt-block.txt",
+    "sha256": "3b89c24cf1ec3cffbadec342a56c589db5b63c6f59079f202ebfe618cc69faaf",
+    "bytes": 1677
+  },
+  "percent": {
+    "ground": {
+      "box": [
+        0,
+        18,
+        100,
+        100
+      ],
+      "polygons": [
+        [
+          [
+            0,
+            18
+          ],
+          [
+            100,
+            18
+          ],
+          [
+            100,
+            100
+          ],
+          [
+            0,
+            100
+          ]
+        ]
+      ]
+    },
+    "band": {
+      "y": [
+        18,
+        100
+      ],
+      "x": [
+        0,
+        100
+      ]
+    },
+    "alwaysVisible": [
+      13,
+      9,
+      88,
+      91
+    ],
+    "slots": [
+      {
+        "id": "H1",
+        "role": "hero",
+        "x": 64,
+        "y": 78
+      },
+      {
+        "id": "H2",
+        "role": "hero",
+        "x": 73,
+        "y": 64
+      },
+      {
+        "id": "H3",
+        "role": "hero",
+        "x": 81,
+        "y": 51
+      },
+      {
+        "id": "E1",
+        "role": "enemy",
+        "x": 14,
+        "y": 65
+      },
+      {
+        "id": "E2",
+        "role": "enemy",
+        "x": 25,
+        "y": 52
+      },
+      {
+        "id": "E3",
+        "role": "enemy",
+        "x": 36,
+        "y": 40
+      },
+      {
+        "id": "B",
+        "role": "boss",
+        "x": 25,
+        "y": 63
+      }
+    ],
+    "approach": [
+      {
+        "x": 48,
+        "y": 64
+      }
+    ],
+    "landmarks": [
+      {
+        "id": "distant-scenery",
+        "box": [
+          0,
+          0,
+          100,
+          14
+        ]
+      }
+    ],
+    "surfaces": []
+  },
+  "forbiddenInWalk": [
+    "people, characters, creatures or silhouettes",
+    "trees, tall shrubs, grass clumps or hedges",
+    "lamps, lanterns, pillars, posts or statues",
+    "furniture, tables, crates, barrels or piles",
+    "stairs, steps, ledges or raised platforms",
+    "walls, fences, railings, gates or balustrades",
+    "ponds, puddles, wells or streams",
+    "boats, carts or vehicles",
+    "loose items: tools, bottles, rope, debris or pickups",
+    "large cast shadows",
+    "text, signs, symbols, labels or UI"
+  ],
+  "bakedContent": {
+    "actors": false,
+    "collectibles": false
+  },
+  "qa": {
+    "status": "pass",
+    "method": "scene_layout_guide: the stage's UV geometry drawn at sourceSize and restated in whole percent; the plan checked with validate_stage's static checks (footprint point-in-polygon tests of every slot against ground, landmarks and water; polygon simplicity; effect overlaps).",
+    "notProven": [
+      "The guide and prompt describe the plan; they do not make an image model follow it. Measure the returned plate, fix sourceSize and the polygons after looking at it, then run validate_stage.py on the real plate.",
+      "Percentages are rounded to whole percent; the stage file keeps the exact values.",
+      "The always-visible area assumes the stage's fit and objectPosition at the two ends of reviewedAspectRange."
+    ],
+    "checks": [
+      {
+        "id": "ground polygons are simple",
+        "status": "pass",
+        "value": null,
+        "threshold": null
+      },
+      {
+        "id": "slots stand on ground",
+        "status": "pass",
+        "value": null,
+        "threshold": {
+          "footRadius": 0.01,
+          "ySquash": 0.58
+        }
+      },
+      {
+        "id": "slots avoid walk-protected regions",
+        "status": "pass",
+        "value": null,
+        "threshold": {
+          "footRadius": 0.01,
+          "ySquash": 0.58
+        }
+      },
+      {
+        "id": "slots stay off water",
+        "status": "pass",
+        "value": null,
+        "threshold": {
+          "footRadius": 0.01,
+          "ySquash": 0.58
+        }
+      },
+      {
+        "id": "slots inside playableBand",
+        "status": "pass",
+        "value": null,
+        "threshold": [
+          0.18,
+          1.0
+        ]
+      },
+      {
+        "id": "approach points are standable",
+        "status": "pass",
+        "value": null,
+        "threshold": {
+          "footRadius": 0.01,
+          "ySquash": 0.58
+        }
+      },
+      {
+        "id": "slot footprints do not overlap",
+        "status": "pass",
+        "value": null,
+        "threshold": {
+          "footprintPx": [
+            40.96,
+            23.7568
+          ]
+        }
+      },
+      {
+        "id": "effects avoid motion-protected regions",
+        "status": "pass",
+        "value": null,
+        "threshold": null
+      },
+      {
+        "id": "water stays off ground polygons",
+        "status": "pass",
+        "value": null,
+        "threshold": "split the ground polygon around the water: a runtime that tests only groundPolygons would let actors stand in it (validate_stage also tests ripple polygons)"
+      },
+      {
+        "id": "bakedContent declared",
+        "status": "pass",
+        "value": {
+          "painted": []
+        },
+        "threshold": null
+      },
+      {
+        "id": "slots always on screen",
+        "status": "pass",
+        "value": null,
+        "threshold": {
+          "alwaysVisibleUv": [
+            0.125,
+            0.0903,
+            0.875,
+            0.9097
+          ],
+          "note": "cropped slots rely on the runtime layout moving actors (see validate_stage.py)"
+        }
+      }
+    ],
+    "inputs": [
+      {
+        "path": "../stage-plan.json",
+        "sha256": "3a875f9e154cccb7df1caeb3b9631dc3664ca006d91877ed59b4d64298fde1f6",
+        "bytes": 1271
+      }
+    ],
+    "outputs": [
+      {
+        "path": "guide.png",
+        "sha256": "f21255f0e3f37b7f2587e2b714a014c6bd020ec5d6403d6309e1de4c79229712",
+        "bytes": 74105
+      },
+      {
+        "path": "prompt-block.txt",
+        "sha256": "3b89c24cf1ec3cffbadec342a56c589db5b63c6f59079f202ebfe618cc69faaf",
+        "bytes": 1677
+      }
+    ],
+    "tool": {
+      "name": "scene_layout_guide",
+      "version": "0.4.0"
+    }
+  },
+  "warnings": []
+}

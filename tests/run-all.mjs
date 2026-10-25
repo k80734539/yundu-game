@@ -3,11 +3,16 @@ import {serve,launch} from './lib.mjs';import {playthrough} from './playthrough.
 import {diagBattle} from './diag-battle.mjs';
 import {qzSprite} from './qz-sprite.mjs';
 import {spriteSize} from './sprite-size.mjs';
+import {enemyLayout} from './enemy-layout.mjs';
+import {battleBackgrounds} from './battle-backgrounds.mjs';
 const s=await serve(),b=await launch();let ok=true;
+ok=await battleBackgrounds(b,s.url)&&ok;
+ok=await enemyLayout(b,s.url)&&ok;
+ok=await diagBattle(b,s.url)&&ok;
 ok=await playthrough(b,process.env.URL||s.url,390,664,true)&&ok;ok=await playthrough(b,process.env.URL||s.url,844,390,true)&&ok;
 ok=await touchBattle(b,s.url)&&ok;ok=await screens(b,s.url)&&ok;ok=await fx(b,s.url)&&ok;for(const[w,h]of[[390,664],[844,390]])ok=await saveTest(b,s.url,w,h)&&ok;
 ok=await polish(b,s.url)&&ok;
-ok=await diagBattle(b,s.url)&&ok;
+
 ok=await qzSprite(b,s.url)&&ok;
 ok=await spriteSize(b,s.url)&&ok;
 await b.close();s.close();console.log(ok?'ALL PASS':'SOME TESTS FAILED');process.exit(ok?0:1)

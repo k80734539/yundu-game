@@ -1,7 +1,7 @@
 'use strict';
 // 圖片清單：key -> assets/img 路徑（勿改回 base64 內嵌）
 // 圖片網址會加上 ?v=ASSET_V（與 index.html 的 ?v=N 同步）。改 sprite 規格／換圖時一定要一起 +1，避免舊 JS 畫新圖或新 JS 畫舊快取圖
-const ASSET_V=24;
+const ASSET_V=26;
 const ASSETS={
  "shui_idle0": "assets/img/shui_idle0.webp",
  "shui_idle1": "assets/img/shui_idle1.webp",
@@ -172,9 +172,9 @@ const ASSETS={
  "t_marsh": "assets/img/t_marsh.webp",
  "t_stone": "assets/img/t_stone.webp",
  "night": "assets/img/night.jpg",
- "bg_river": "assets/img/bg_river.jpg",
- "bg_reeds": "assets/img/bg_reeds.jpg",
- "bg_temple": "assets/img/bg_temple.jpg",
+ "bg_river": "assets/img/bg_river_v26.webp",
+ "bg_reeds": "assets/img/bg_reeds_v26.webp",
+ "bg_temple": "assets/img/bg_temple_v26.webp",
  "ext": "assets/img/ext.jpg",
  "pt_qz": "assets/img/pt_qz.jpg",
  "pt_bl": "assets/img/pt_bl.jpg",

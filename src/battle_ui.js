@@ -1,15 +1,16 @@
 'use strict';
 // v22 戰鬥畫面：全螢幕背景＋左中右橫向站位（敵人左上、我方左／中／右排開，中間略低）、八角指令鈕、底部三張角色卡、觸控 bTap
 // 設計座標：直式 390×844（我方腳底 左雲纖(110,640) 中青舟(210,670) 右白苓(310,640)），依實際畫面等比縮放；橫式另有一組座標。
-const BP_FEET=[[110,640],[210,670],[310,640]],BP_EN={1:[[100,300]],2:[[70,260],[150,340]],3:[[60,250],[150,320],[60,390]],b:[[100,330]]};
+// v25: two opposing diagonal ranks, front-left to back-right, like the supplied reference.
+const BP_FEET=[[205,700],[250,610],[295,520]],BP_EN={1:[[105,460]],2:[[75,525],[140,365]],3:[[70,540],[115,390],[150,260]],b:[[105,460]]};
 function bLayout(n){const port=SH>SW,aw=SW-SA.l-SA.r,L={port,aw};
  L.U=port?Math.min(SW/390,SH/844):SH/390;L.s=BFR.scale*L.U;L.eu=L.U;
  L.ch=port?Math.max(62,Math.round(82*L.U)):54;L.cy=SH-SA.b-L.ch-8;const gap=port?10:8;
  L.cw=port?(aw-24-gap*2)/3:Math.min(210,(aw-24-gap*2)/3);L.cx0=port?SA.l+12:SA.l+(aw-(L.cw*3+gap*2))/2;L.gap=gap;
  const fp=port?(q=>[SW/2+(SA.l-SA.r)/2+(q[0]-195)*L.U,SH-SA.b-(844-q[1])*L.U]):null;
  if(port){L.feet=BP_FEET.map(fp);L.en=(k,boss)=>(BP_EN[boss?'b':Math.min(3,k)]||BP_EN[1]).map(fp)}
- else{const k=SH/390,cx=SA.l+aw*.68,cyf=L.cy-64*k;L.feet=[[cx-100*k,cyf],[cx,cyf+30*k],[cx+100*k,cyf]];
-  const ex=SA.l+aw*.25,ey=L.cy-92*k;L.en=(m,boss)=>boss?[[ex,ey+16*k]]:Array.from({length:m},(_,i)=>[ex+(i-(m-1)/2)*90*k,ey+(i-(m-1)/2)*50*k])}
+ else{const k=SH/390,cx=SA.l+aw*.73;L.feet=[[cx-80*k,L.cy-34*k],[cx,L.cy-88*k],[cx+64*k,L.cy-142*k]];
+  const ex=SA.l+Math.max(aw*.25,162*k+12),ey=L.cy-110*k;L.en=(m,boss)=>boss?[[ex,ey+15*k]]:m===1?[[ex,ey]]:m===2?[[ex-58*k,ey+20*k],[ex+58*k,ey-35*k]]:[[ex-96*k,ey+36*k],[ex,ey-10*k],[ex+96*k,ey-56*k]]}
  // 指令鈕（畫面右緣中段、由上往下疊，仿仙劍；不遮住任何角色）：直式 x=SW-SA.r-40、第一顆在 SH*.30，每 50px 一顆；逃跑在左上
  L.bd=Math.max(34,Math.min(44,40*Math.max(.9,L.U)));L.bs=Math.max(46,Math.round(50*Math.max(.92,L.U)));L.bx=SW-SA.r-(port?Math.max(34,40*L.U):34);L.by=Math.max(SA.t+86,Math.round(port?SH*.30:SA.t+96*L.U));
  L.ex=[SA.l+14+L.bd/2,SA.t+14+L.bd/2];return L}
@@ -68,7 +69,8 @@ function enemyPose(e,now){const B=G.B;
 function enemyImage(e,now,x,y,scale){const c=EART[e.e],pose=enemyPose(e,now),im=I[e.e+'_'+pose];
  if(c&&im?.naturalWidth){const z=c.factor*scale;return{im,x:x-c.x*z,y:y-c.y*z,w:c.size*z,h:c.size*z,pose}}
  const base=I[e.e];return{im:base,x:x-base.width*scale/2,y:y-base.height*scale,w:base.width*scale,h:base.height*scale,pose:'fallback'}}
-function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){const a=(now-B.shk.at)/B.shk.d;if(a<1){const k=B.shk.a*(1-a);SX=(Math.random()*2-1)*k;SY=(Math.random()*2-1)*k}else B.shk=null}X.translate(SX,SY);X.fillStyle='#000';X.fillRect(-20,-20,SW+40,SH+40);cover(I[B.opt.bg||'bg_reeds'],.5,.6);X.fillStyle='rgba(0,0,20,.22)';X.fillRect(-20,-20,SW+40,SH+40);
+function drawBattleBackground(B){const requested=B.opt.bg||'bg_reeds',key=I[requested]?.naturalWidth?requested:'bg_reeds',im=I[key];if(im?.naturalWidth){B.bgFit=Object.assign(cover(im,.5,.5),{key,width:im.naturalWidth,height:im.naturalHeight})}else{B.bgFit=null;X.fillStyle='#24343c';X.fillRect(-20,-20,SW+40,SH+40)}}
+function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){const a=(now-B.shk.at)/B.shk.d;if(a<1){const k=B.shk.a*(1-a);SX=(Math.random()*2-1)*k;SY=(Math.random()*2-1)*k}else B.shk=null}X.translate(SX,SY);X.fillStyle='#000';X.fillRect(-20,-20,SW+40,SH+40);drawBattleBackground(B);
  const fs=FS(),n=B.en.length,np=G.party.length,ent=Math.min(1,(now-G.bT)/400),H=B.hit=[],L=B.L=bLayout(),u=L.U,s=L.s;B.u=u;
  const u2=G.party[B.ai]||G.party[0];
  // 訊息裡的特效在這一格就啟動（不等到上方訊息框畫出來），受擊／倒下 pose 才不會早一格
@@ -81,7 +83,7 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
  B.feetOf=p=>L.feet[bSlot(p,Math.max(0,G.party.indexOf(p)))];
  X.font=(fs-2)+'px '+FONT;
  // ---- 敵人（後方，依序由左上畫到右下）
- const lab=[];B.en.forEach((e,i)=>{let da=0;if(e.hp<=0&&e.dieAt){if(now>e.dieAt+650)return;if(now>e.dieAt){da=(now-e.dieAt)/650;if(!e.dz){e.dz=1;const q=B.po&&B.po(e);if(q)for(let k=0;k<26;k++)vp({x:q[0]+(Math.random()-.5)*q[2]*.7,y:q[1]+(Math.random()-.5)*q[3]*.7,vx:(Math.random()-.5)*1.2,vy:-1-Math.random()*2.2,col:k%2?'#bfe8ff':'#fff',sz:2+Math.random()*3,life:500+Math.random()*400})}}}
+ const lab=[];B.en.map((e,i)=>({e,i})).sort((a,b)=>ES[a.i][1]-ES[b.i][1]).forEach(({e,i})=>{let da=0;if(e.hp<=0&&e.dieAt){if(now>e.dieAt+650)return;if(now>e.dieAt){da=(now-e.dieAt)/650;if(!e.dz){e.dz=1;const q=B.po&&B.po(e);if(q)for(let k=0;k<26;k++)vp({x:q[0]+(Math.random()-.5)*q[2]*.7,y:q[1]+(Math.random()-.5)*q[3]*.7,vx:(Math.random()-.5)*1.2,vy:-1-Math.random()*2.2,col:k%2?'#bfe8ff':'#fff',sz:2+Math.random()*3,life:500+Math.random()*400})}}}
   const im=I[e.e],s2=eScale(e),w=im.width*s2,h=im.height*s2,q=ES[Math.min(i,ES.length-1)],x=q[0],y=q[1],bob=Math.sin(t*2.2+e.ph)*3*u;
   const fx=B.fx.find(f=>f.t==e&&!f.heal&&now>=f.at&&now-f.at<500);X.fillStyle='rgba(0,0,0,.38)';X.beginPath();X.ellipse(x,y-2*u,w*.4,Math.max(4,6*u),0,0,7);X.fill();
   X.save();X.globalAlpha=ent*(1-da);if(fx&&Math.floor((now-fx.at)/70)%2)X.globalAlpha*=.4;if(da){X.translate(x,y);X.scale(1+da*.25,1-da*.5);X.translate(-x,-y)}const art=enemyImage(e,now,x+(fx?Math.sin(now/20)*3:0),y+bob-da*20*u,s2);X.drawImage(art.im,art.x,art.y,art.w,art.h);if(da>0){X.globalCompositeOperation='lighter';X.globalAlpha=(1-da)*.6;X.drawImage(art.im,art.x,art.y,art.w,art.h)}X.restore();if(da)return;
