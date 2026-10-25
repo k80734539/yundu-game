@@ -18,7 +18,7 @@ npx playwright install chromium      # 或改用系統 Chrome：export CHROME_PA
 | `node tests/portrait-ui.mjs` | 六尺寸：透明半身圖、戰鬥／對話共用素材、頭像點選隊友、畫面與觸控範圍 |
 | `node tests/hero-assets.mjs` | 30 張原色角色圖載入、透明邊緣、裁切、腳底範圍、紅色細節與受擊／倒下姿勢區分 |
 | `node tests/battle-backgrounds.mjs` | 三個戰鬥背景 × 六尺寸：高解析素材、裁切、腳底落地與避開欄杆／水面／場景邊緣；保存實機截圖 |
-| `node tests/enemy-layout.mjs` | 五尺寸單敵／雙敵／三敵／河伯的左右對陣、向右上斜排、裁切與血條避開底部頭像檢查；保存站位截圖 |
+| `node tests/enemy-layout.mjs` | 六尺寸單敵／雙敵／三敵／河伯的中央留白、左右對陣、向右上斜排、裁切與血條避開底部頭像檢查；保存站位截圖 |
 | `npm run test:diag` | v25 左右斜排：30 張影格素材、版面（不重疊、觸控目標 ≥44px、共用縮放 BFR.scale＝.39、我方身高≈SH/8、站位間距 ≥70、敵我與指令鈕不重疊、衝刺停在敵人旁）、待機 600ms 交替、青舟／白苓／雲纖各招式 pose 時間軸（青舟 340ms 命中、滑步回位）、受擊／倒下／勝利、快速略過、旋轉、缺圖（5 尺寸＋390×844） |
 | `npm run test:fx [-- --all]` | 11 種戰鬥特效定格截圖（預設直+橫，`--all` = 5 尺寸） |
 | `npm run test:polish` | 390x664／844x390：新 NPC、營火、救人、河伯消散、雲纖降下、黎明漸亮與回退檢查 |

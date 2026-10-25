@@ -1,0 +1,242 @@
+[
+  {
+    "size": "1024x768",
+    "scene": "boss",
+    "changed_bbox": [
+      328,
+      347,
+      1967,
+      1294
+    ]
+  },
+  {
+    "size": "1024x768",
+    "scene": "pair",
+    "changed_bbox": [
+      281,
+      433,
+      1967,
+      1294
+    ]
+  },
+  {
+    "size": "1024x768",
+    "scene": "single",
+    "changed_bbox": [
+      512,
+      438,
+      1950,
+      1294
+    ]
+  },
+  {
+    "size": "1024x768",
+    "scene": "trio",
+    "changed_bbox": [
+      135,
+      321,
+      1950,
+      1294
+    ]
+  },
+  {
+    "size": "375x553",
+    "scene": "boss",
+    "changed_bbox": [
+      127,
+      347,
+      573,
+      925
+    ]
+  },
+  {
+    "size": "375x553",
+    "scene": "pair",
+    "changed_bbox": [
+      138,
+      357,
+      573,
+      925
+    ]
+  },
+  {
+    "size": "375x553",
+    "scene": "single",
+    "changed_bbox": [
+      177,
+      461,
+      566,
+      925
+    ]
+  },
+  {
+    "size": "375x553",
+    "scene": "trio",
+    "changed_bbox": [
+      131,
+      169,
+      566,
+      925
+    ]
+  },
+  {
+    "size": "390x664",
+    "scene": "boss",
+    "changed_bbox": [
+      92,
+      416,
+      628,
+      1109
+    ]
+  },
+  {
+    "size": "390x664",
+    "scene": "pair",
+    "changed_bbox": [
+      117,
+      428,
+      628,
+      1109
+    ]
+  },
+  {
+    "size": "390x664",
+    "scene": "single",
+    "changed_bbox": [
+      164,
+      554,
+      619,
+      1109
+    ]
+  },
+  {
+    "size": "390x664",
+    "scene": "trio",
+    "changed_bbox": [
+      109,
+      203,
+      619,
+      1109
+    ]
+  },
+  {
+    "size": "430x750",
+    "scene": "boss",
+    "changed_bbox": [
+      93,
+      470,
+      699,
+      1251
+    ]
+  },
+  {
+    "size": "430x750",
+    "scene": "pair",
+    "changed_bbox": [
+      121,
+      484,
+      699,
+      1251
+    ]
+  },
+  {
+    "size": "430x750",
+    "scene": "single",
+    "changed_bbox": [
+      176,
+      626,
+      690,
+      1251
+    ]
+  },
+  {
+    "size": "430x750",
+    "scene": "trio",
+    "changed_bbox": [
+      113,
+      229,
+      690,
+      1251
+    ]
+  },
+  {
+    "size": "664x390",
+    "scene": "boss",
+    "changed_bbox": [
+      178,
+      115,
+      1223,
+      596
+    ]
+  },
+  {
+    "size": "664x390",
+    "scene": "pair",
+    "changed_bbox": [
+      155,
+      159,
+      1223,
+      596
+    ]
+  },
+  {
+    "size": "664x390",
+    "scene": "single",
+    "changed_bbox": [
+      272,
+      161,
+      1213,
+      596
+    ]
+  },
+  {
+    "size": "664x390",
+    "scene": "trio",
+    "changed_bbox": [
+      80,
+      102,
+      1213,
+      596
+    ]
+  },
+  {
+    "size": "844x390",
+    "scene": "boss",
+    "changed_bbox": [
+      219,
+      115,
+      1500,
+      596
+    ]
+  },
+  {
+    "size": "844x390",
+    "scene": "pair",
+    "changed_bbox": [
+      195,
+      159,
+      1500,
+      596
+    ]
+  },
+  {
+    "size": "844x390",
+    "scene": "single",
+    "changed_bbox": [
+      312,
+      163,
+      1490,
+      596
+    ]
+  },
+  {
+    "size": "844x390",
+    "scene": "trio",
+    "changed_bbox": [
+      120,
+      102,
+      1490,
+      596
+    ]
+  }
+]

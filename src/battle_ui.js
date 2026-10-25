@@ -1,16 +1,16 @@
 'use strict';
 // v22 戰鬥畫面：全螢幕背景＋左中右橫向站位（敵人左上、我方左／中／右排開，中間略低）、八角指令鈕、底部三張角色卡、觸控 bTap
 // 設計座標：直式 390×844（我方腳底 左雲纖(110,640) 中青舟(210,670) 右白苓(310,640)），依實際畫面等比縮放；橫式另有一組座標。
-// v25: two opposing diagonal ranks, front-left to back-right, like the supplied reference.
+// v29: keep opposing diagonal ranks and leave a wider central battle lane.
 const BP_FEET=[[205,700],[250,610],[295,520]],BP_EN={1:[[105,460]],2:[[75,525],[140,365]],3:[[70,540],[115,390],[150,260]],b:[[105,460]]};
 function bLayout(n){const port=SH>SW,aw=SW-SA.l-SA.r,L={port,aw};
  L.U=port?Math.min(SW/390,SH/844):SH/390;L.s=BFR.scale*L.U;L.eu=L.U;
  L.ch=port?Math.max(62,Math.round(82*L.U)):54;L.cy=SH-SA.b-L.ch-8;const gap=port?10:8;
  L.cw=port?(aw-24-gap*2)/3:Math.min(210,(aw-24-gap*2)/3);L.cx0=port?SA.l+12:SA.l+(aw-(L.cw*3+gap*2))/2;L.gap=gap;
  const fp=port?(q=>[SW/2+(SA.l-SA.r)/2+(q[0]-195)*L.U,SH-SA.b-(844-q[1])*L.U]):null;
- if(port){L.feet=BP_FEET.map(fp);L.en=(k,boss)=>(BP_EN[boss?'b':Math.min(3,k)]||BP_EN[1]).map(fp)}
- else{const k=SH/390,cx=SA.l+aw*.73;L.feet=[[cx-80*k,L.cy-34*k],[cx,L.cy-88*k],[cx+64*k,L.cy-142*k]];
-  const ex=SA.l+Math.max(aw*.25,162*k+12),ey=L.cy-110*k;L.en=(m,boss)=>boss?[[ex,ey+15*k]]:m===1?[[ex,ey]]:m===2?[[ex-58*k,ey+20*k],[ex+58*k,ey-35*k]]:[[ex-96*k,ey+36*k],[ex,ey-10*k],[ex+96*k,ey-56*k]]}
+ if(port){L.feet=BP_FEET.map(q=>fp([q[0]+15,q[1]]));L.en=(k,boss)=>(BP_EN[boss?'b':Math.min(3,k)]||BP_EN[1]).map(q=>fp([q[0]-15,q[1]-35]))}
+ else{const k=SH/390,cx=SA.l+aw*.77;L.feet=[[cx-80*k,L.cy-34*k],[cx,L.cy-88*k],[cx+64*k,L.cy-142*k]];
+  const ex=SA.l+Math.max(aw*.23,162*k+12),ey=L.cy-125*k;L.en=(m,boss)=>boss?[[ex,ey+15*k]]:m===1?[[ex,ey]]:m===2?[[ex-58*k,ey+20*k],[ex+58*k,ey-35*k]]:[[ex-96*k,ey+36*k],[ex,ey-10*k],[ex+96*k,ey-56*k]]}
  // 指令鈕（畫面右緣中段、由上往下疊，仿仙劍；不遮住任何角色）：直式 x=SW-SA.r-40、第一顆在 SH*.30，每 50px 一顆；逃跑在左上
  L.bd=Math.max(34,Math.min(44,40*Math.max(.9,L.U)));L.bs=Math.max(46,Math.round(50*Math.max(.92,L.U)));L.bx=SW-SA.r-(port?Math.max(34,40*L.U):34);L.by=Math.max(SA.t+86,Math.round(port?SH*.30:SA.t+96*L.U));
  L.pd=Math.min(L.cw*(port?.96:.74),Math.max(90,SH*(port?.16:.20)));L.py=L.cy+L.ch-L.pd;L.infoTop=Math.max(L.cy+L.ch*.42,L.py+L.pd*.66);
