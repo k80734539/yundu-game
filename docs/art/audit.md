@@ -112,3 +112,5 @@ Contact sheets（都在 `docs/art/audit/`）：
 > 註（v22）：`qz_pole` / `qz_atk_*` 已隨斜角站位戰鬥移除，改用 `qzd_* / bld_* / yxd_*`，見 `docs/art/diag-battle-v22.md`。
 
 v26 補充：三張戰鬥背景採內建 image_gen 原創生成，與角色斜視角度對齊；其他條目保留原審核記錄。標題、夜渡演出與地圖外景未更換。驗收與提示詞見 battle-backgrounds-v26.md。
+
+v27 戰鬥姿勢更新：三位主角以使用者原始姿勢圖重新去背、完整歸屬切圖及對位，保留紅頭帶、膚色、粉色花紋；青舟 hit/down 分開、腳底重新歸位。此更新僅作用於 qzd/bld/yxd 戰鬥影格，不修改地圖 sprite 或對話／卡片頭像。見 heroes-v27.md。

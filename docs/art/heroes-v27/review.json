@@ -1,0 +1,19 @@
+{
+  "art_source": "existing",
+  "route": "user supplied originals -> soft chroma matte -> ownership slicing -> registration -> lossless WebP",
+  "reviewDate": "2026-10-25",
+  "reviewer": "Codex visual inspection",
+  "packagingQA": "needs-visual-review; no warn/fail checks",
+  "visualChecks": [
+    "30-pose preview",
+    "light/dark alpha review",
+    "same-canvas qz before/after",
+    "actual 844x390 game scene",
+    "18 screenshot diffs"
+  ],
+  "gameTestResult": "npm test: ALL PASS",
+  "changedScreenshotPercentRange": [
+    1.63,
+    4.59
+  ]
+}

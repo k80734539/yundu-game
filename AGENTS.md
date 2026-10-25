@@ -67,8 +67,10 @@ classic script 的 function 宣告只在該檔執行時才建立，所以**載�
 
 - **戰鬥背景（v26）**：bg_reeds／bg_river／bg_temple 指向 1672×941 的 _v26.webp；中央及前景需為能站人的泥地／船板／石板，勿恢復成有水平線的正面遠景。drawBattleBackground 使用中央 cover 並記錄 B.bgFit，圖片已有夜景調色，勿再加原版 22% 黑藍濾層。以 tests/battle-backgrounds.mjs 檢查六尺寸實際腳底落在標記地面內；參見 docs/art/battle-backgrounds-v26.md。
 
+- **主角戰鬥素材（v27）**：使用者提供的原始三張 2×5 姿勢圖保存在 docs/art/heroes-v27/；保留原色，不加夜景去飽和／暗化。30 張影格仍為 480×420、腳底 (240,355)，BFR.scale 保持 .39。qzd_hit 現在是原圖後仰受擊姿勢，不能再複製 qzd_down。製作記錄見 docs/art/heroes-v27.md，重匯入工具 tools/import-hero-sources.py；tests/hero-assets.mjs 驗證原色、切圖與受擊圖。版本提升時只改 ASSET_V 與腳本快取，不要改已存在背景素材的 _v26.webp 檔名。
+
 ## 5. 版本號規則
-- 目前 **v26**（v24 已上線；v25 橫向斜排站位與 v26 斜視戰鬥背景為後續修正）。每次上線改動都要 +1（下一版 **v27**），三處一起改：
+- 目前 **v27**（v26 已上線；v27 為主角原色姿勢圖重匯入）。每次上線改動都要 +1（下一版 **v28**），三處一起改：
   1. `index.html` `<title>雲渡仙緣 第一章 vN</title>`
   2. `src/screens.js` 標題畫面 `'版本 vN'`
   3. `src/render.js` 地圖右下角 `'vN'`

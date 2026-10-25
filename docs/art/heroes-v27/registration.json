@@ -1,0 +1,692 @@
+[
+  {
+    "key": "qzd",
+    "pose": "idle0",
+    "scale": 0.7941176470588235,
+    "source": "docs\\art\\heroes-v27\\qzd-keyed\\frames\\frame-00.png",
+    "sourceAnchor": [
+      197.0,
+      480.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      105,
+      59,
+      352,
+      357
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\qzd_idle0.webp"
+  },
+  {
+    "key": "qzd",
+    "pose": "idle1",
+    "scale": 0.7941176470588235,
+    "source": "docs\\art\\heroes-v27\\qzd-keyed\\frames\\frame-01.png",
+    "sourceAnchor": [
+      201.0,
+      481.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      100,
+      84,
+      366,
+      356
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\qzd_idle1.webp"
+  },
+  {
+    "key": "qzd",
+    "pose": "charge",
+    "scale": 0.7941176470588235,
+    "source": "docs\\art\\heroes-v27\\qzd-keyed\\frames\\frame-02.png",
+    "sourceAnchor": [
+      207.5,
+      483.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      115,
+      11,
+      342,
+      355
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\qzd_charge.webp"
+  },
+  {
+    "key": "qzd",
+    "pose": "thrust",
+    "scale": 0.7941176470588235,
+    "source": "docs\\art\\heroes-v27\\qzd-keyed\\frames\\frame-03.png",
+    "sourceAnchor": [
+      234.0,
+      482.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      54,
+      70,
+      334,
+      356
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\qzd_thrust.webp"
+  },
+  {
+    "key": "qzd",
+    "pose": "recover",
+    "scale": 0.7941176470588235,
+    "source": "docs\\art\\heroes-v27\\qzd-keyed\\frames\\frame-04.png",
+    "sourceAnchor": [
+      151.0,
+      478.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      177,
+      53,
+      323,
+      356
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\qzd_recover.webp"
+  },
+  {
+    "key": "qzd",
+    "pose": "sweepwind",
+    "scale": 0.7941176470588235,
+    "source": "docs\\art\\heroes-v27\\qzd-keyed\\frames\\frame-05.png",
+    "sourceAnchor": [
+      185.0,
+      420.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      125,
+      93,
+      386,
+      356
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\qzd_sweepwind.webp"
+  },
+  {
+    "key": "qzd",
+    "pose": "sweep",
+    "scale": 0.7941176470588235,
+    "source": "docs\\art\\heroes-v27\\qzd-keyed\\frames\\frame-06.png",
+    "sourceAnchor": [
+      225.5,
+      420.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      73,
+      93,
+      353,
+      355
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\qzd_sweep.webp"
+  },
+  {
+    "key": "qzd",
+    "pose": "hit",
+    "scale": 0.7941176470588235,
+    "source": "docs\\art\\heroes-v27\\qzd-keyed\\frames\\frame-07.png",
+    "sourceAnchor": [
+      190,
+      420
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      154,
+      83,
+      347,
+      355
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\qzd_hit.webp"
+  },
+  {
+    "key": "qzd",
+    "pose": "down",
+    "scale": 0.7941176470588235,
+    "source": "docs\\art\\heroes-v27\\qzd-keyed\\frames\\frame-08.png",
+    "sourceAnchor": [
+      160,
+      400
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      144,
+      195,
+      424,
+      359
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\qzd_down.webp"
+  },
+  {
+    "key": "qzd",
+    "pose": "win",
+    "scale": 0.7941176470588235,
+    "source": "docs\\art\\heroes-v27\\qzd-keyed\\frames\\frame-09.png",
+    "sourceAnchor": [
+      190.5,
+      430
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      135,
+      22,
+      304,
+      362
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\qzd_win.webp"
+  },
+  {
+    "key": "bld",
+    "pose": "idle0",
+    "scale": 0.6235565819861432,
+    "source": "docs\\art\\heroes-v27\\bld-keyed\\frames\\frame-00.png",
+    "sourceAnchor": [
+      153.0,
+      498.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      178,
+      84,
+      331,
+      355
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\bld_idle0.webp"
+  },
+  {
+    "key": "bld",
+    "pose": "idle1",
+    "scale": 0.6235565819861432,
+    "source": "docs\\art\\heroes-v27\\bld-keyed\\frames\\frame-01.png",
+    "sourceAnchor": [
+      163.5,
+      497.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      174,
+      87,
+      318,
+      356
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\bld_idle1.webp"
+  },
+  {
+    "key": "bld",
+    "pose": "cast0",
+    "scale": 0.6235565819861432,
+    "source": "docs\\art\\heroes-v27\\bld-keyed\\frames\\frame-02.png",
+    "sourceAnchor": [
+      162.5,
+      496.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      167,
+      87,
+      330,
+      356
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\bld_cast0.webp"
+  },
+  {
+    "key": "bld",
+    "pose": "cast1",
+    "scale": 0.6235565819861432,
+    "source": "docs\\art\\heroes-v27\\bld-keyed\\frames\\frame-03.png",
+    "sourceAnchor": [
+      225.0,
+      494.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      104,
+      100,
+      301,
+      356
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\bld_cast1.webp"
+  },
+  {
+    "key": "bld",
+    "pose": "recover",
+    "scale": 0.6235565819861432,
+    "source": "docs\\art\\heroes-v27\\bld-keyed\\frames\\frame-04.png",
+    "sourceAnchor": [
+      148.0,
+      497.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      182,
+      85,
+      315,
+      356
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\bld_recover.webp"
+  },
+  {
+    "key": "bld",
+    "pose": "spring",
+    "scale": 0.6235565819861432,
+    "source": "docs\\art\\heroes-v27\\bld-keyed\\frames\\frame-05.png",
+    "sourceAnchor": [
+      125.5,
+      478.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      199,
+      57,
+      351,
+      356
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\bld_spring.webp"
+  },
+  {
+    "key": "bld",
+    "pose": "guard",
+    "scale": 0.6235565819861432,
+    "source": "docs\\art\\heroes-v27\\bld-keyed\\frames\\frame-06.png",
+    "sourceAnchor": [
+      156.5,
+      475.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      180,
+      88,
+      322,
+      356
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\bld_guard.webp"
+  },
+  {
+    "key": "bld",
+    "pose": "hit",
+    "scale": 0.6235565819861432,
+    "source": "docs\\art\\heroes-v27\\bld-keyed\\frames\\frame-07.png",
+    "sourceAnchor": [
+      156.5,
+      471.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      182,
+      101,
+      330,
+      355
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\bld_hit.webp"
+  },
+  {
+    "key": "bld",
+    "pose": "down",
+    "scale": 0.6235565819861432,
+    "source": "docs\\art\\heroes-v27\\bld-keyed\\frames\\frame-08.png",
+    "sourceAnchor": [
+      160.0,
+      453.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      143,
+      179,
+      331,
+      357
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\bld_down.webp"
+  },
+  {
+    "key": "bld",
+    "pose": "win",
+    "scale": 0.6235565819861432,
+    "source": "docs\\art\\heroes-v27\\bld-keyed\\frames\\frame-09.png",
+    "sourceAnchor": [
+      161.0,
+      482.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      173,
+      61,
+      301,
+      355
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\bld_win.webp"
+  },
+  {
+    "key": "yxd",
+    "pose": "idle0",
+    "scale": 0.6521739130434783,
+    "source": "docs\\art\\heroes-v27\\yxd-keyed\\frames\\frame-00.png",
+    "sourceAnchor": [
+      176.5,
+      486.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      189,
+      85,
+      335,
+      356
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\yxd_idle0.webp"
+  },
+  {
+    "key": "yxd",
+    "pose": "idle1",
+    "scale": 0.6521739130434783,
+    "source": "docs\\art\\heroes-v27\\yxd-keyed\\frames\\frame-01.png",
+    "sourceAnchor": [
+      167.0,
+      486.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      191,
+      85,
+      337,
+      355
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\yxd_idle1.webp"
+  },
+  {
+    "key": "yxd",
+    "pose": "charge",
+    "scale": 0.6521739130434783,
+    "source": "docs\\art\\heroes-v27\\yxd-keyed\\frames\\frame-02.png",
+    "sourceAnchor": [
+      251.5,
+      503.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      113,
+      56,
+      283,
+      356
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\yxd_charge.webp"
+  },
+  {
+    "key": "yxd",
+    "pose": "slash0",
+    "scale": 0.6521739130434783,
+    "source": "docs\\art\\heroes-v27\\yxd-keyed\\frames\\frame-03.png",
+    "sourceAnchor": [
+      302.5,
+      491.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      43,
+      110,
+      273,
+      356
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\yxd_slash0.webp"
+  },
+  {
+    "key": "yxd",
+    "pose": "slash1",
+    "scale": 0.6521739130434783,
+    "source": "docs\\art\\heroes-v27\\yxd-keyed\\frames\\frame-04.png",
+    "sourceAnchor": [
+      234.5,
+      486.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      89,
+      85,
+      293,
+      355
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\yxd_slash1.webp"
+  },
+  {
+    "key": "yxd",
+    "pose": "recover",
+    "scale": 0.6521739130434783,
+    "source": "docs\\art\\heroes-v27\\yxd-keyed\\frames\\frame-05.png",
+    "sourceAnchor": [
+      176.0,
+      446.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      188,
+      69,
+      316,
+      355
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\yxd_recover.webp"
+  },
+  {
+    "key": "yxd",
+    "pose": "skill",
+    "scale": 0.6521739130434783,
+    "source": "docs\\art\\heroes-v27\\yxd-keyed\\frames\\frame-06.png",
+    "sourceAnchor": [
+      271.5,
+      453.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      90,
+      77,
+      283,
+      356
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\yxd_skill.webp"
+  },
+  {
+    "key": "yxd",
+    "pose": "hit",
+    "scale": 0.6521739130434783,
+    "source": "docs\\art\\heroes-v27\\yxd-keyed\\frames\\frame-07.png",
+    "sourceAnchor": [
+      199.0,
+      448.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      164,
+      104,
+      325,
+      356
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\yxd_hit.webp"
+  },
+  {
+    "key": "yxd",
+    "pose": "down",
+    "scale": 0.6521739130434783,
+    "source": "docs\\art\\heroes-v27\\yxd-keyed\\frames\\frame-08.png",
+    "sourceAnchor": [
+      189.5,
+      444.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      157,
+      164,
+      346,
+      355
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\yxd_down.webp"
+  },
+  {
+    "key": "yxd",
+    "pose": "win",
+    "scale": 0.6521739130434783,
+    "source": "docs\\art\\heroes-v27\\yxd-keyed\\frames\\frame-09.png",
+    "sourceAnchor": [
+      188.5,
+      460.0
+    ],
+    "outputAnchor": [
+      240,
+      355
+    ],
+    "bounds": [
+      160,
+      60,
+      304,
+      356
+    ],
+    "clippedAlpha": 0,
+    "colorGrade": "none",
+    "path": "assets\\img\\yxd_win.webp"
+  }
+]

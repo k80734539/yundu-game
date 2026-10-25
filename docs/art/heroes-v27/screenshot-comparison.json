@@ -1,0 +1,92 @@
+[
+  {
+    "size": "1024x768",
+    "scene": "reeds",
+    "changedPercent": 4.17
+  },
+  {
+    "size": "1024x768",
+    "scene": "river",
+    "changedPercent": 4.59
+  },
+  {
+    "size": "1024x768",
+    "scene": "temple",
+    "changedPercent": 4.29
+  },
+  {
+    "size": "375x553",
+    "scene": "reeds",
+    "changedPercent": 1.63
+  },
+  {
+    "size": "375x553",
+    "scene": "river",
+    "changedPercent": 1.82
+  },
+  {
+    "size": "375x553",
+    "scene": "temple",
+    "changedPercent": 1.73
+  },
+  {
+    "size": "390x664",
+    "scene": "reeds",
+    "changedPercent": 1.91
+  },
+  {
+    "size": "390x664",
+    "scene": "river",
+    "changedPercent": 2.14
+  },
+  {
+    "size": "390x664",
+    "scene": "temple",
+    "changedPercent": 2.02
+  },
+  {
+    "size": "430x750",
+    "scene": "reeds",
+    "changedPercent": 1.99
+  },
+  {
+    "size": "430x750",
+    "scene": "river",
+    "changedPercent": 2.21
+  },
+  {
+    "size": "430x750",
+    "scene": "temple",
+    "changedPercent": 2.08
+  },
+  {
+    "size": "664x390",
+    "scene": "reeds",
+    "changedPercent": 3.21
+  },
+  {
+    "size": "664x390",
+    "scene": "river",
+    "changedPercent": 3.56
+  },
+  {
+    "size": "664x390",
+    "scene": "temple",
+    "changedPercent": 3.36
+  },
+  {
+    "size": "844x390",
+    "scene": "reeds",
+    "changedPercent": 2.53
+  },
+  {
+    "size": "844x390",
+    "scene": "river",
+    "changedPercent": 2.81
+  },
+  {
+    "size": "844x390",
+    "scene": "temple",
+    "changedPercent": 2.65
+  }
+]

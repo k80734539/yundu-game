@@ -1,0 +1,38 @@
+[
+  {
+    "hero": "qzd",
+    "art_source": "existing",
+    "source": "qzd-original.png",
+    "sha256": "84b34deda36d4e3604c822aa931835f394fbfd7651e6191b6fbafa147e1744f1",
+    "sourceSize": [
+      1536,
+      1024
+    ],
+    "processing": "soft matte and ownership slicing; no generated art; registration per import-plan.json",
+    "crossCellPixelsKept": null
+  },
+  {
+    "hero": "bld",
+    "art_source": "existing",
+    "source": "bld-original.png",
+    "sha256": "302374cdafc4883adaabd2ebf91126a47057faac62dfc854d73758830cfefcdd",
+    "sourceSize": [
+      1536,
+      1024
+    ],
+    "processing": "soft matte and ownership slicing; no generated art; registration per import-plan.json",
+    "crossCellPixelsKept": null
+  },
+  {
+    "hero": "yxd",
+    "art_source": "existing",
+    "source": "yxd-original.png",
+    "sha256": "47418841f79c4b070a5f80b1b9123007c66450b345ea84ca287ee87c3c774aea",
+    "sourceSize": [
+      1536,
+      1024
+    ],
+    "processing": "soft matte and ownership slicing; no generated art; registration per import-plan.json",
+    "crossCellPixelsKept": null
+  }
+]

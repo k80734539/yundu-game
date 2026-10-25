@@ -1,0 +1,74 @@
+{
+  "art_source": "existing",
+  "route": "supplied sheets -> soft chroma matte -> ownership slicing -> registration -> lossless WebP",
+  "frameSize": [
+    480,
+    420
+  ],
+  "footTarget": [
+    240,
+    355
+  ],
+  "qzdBodyTop": 140,
+  "qzdFootY": 480,
+  "qzdFootBand": 70,
+  "qzdOverrides": {
+    "7": [
+      190,
+      420
+    ],
+    "8": [
+      160,
+      400
+    ],
+    "9": [
+      190.5,
+      430
+    ]
+  },
+  "bldFootBand": 8,
+  "yxdFootBand": 8,
+  "names": {
+    "qzd": [
+      "idle0",
+      "idle1",
+      "charge",
+      "thrust",
+      "recover",
+      "sweepwind",
+      "sweep",
+      "hit",
+      "down",
+      "win"
+    ],
+    "bld": [
+      "idle0",
+      "idle1",
+      "cast0",
+      "cast1",
+      "recover",
+      "spring",
+      "guard",
+      "hit",
+      "down",
+      "win"
+    ],
+    "yxd": [
+      "idle0",
+      "idle1",
+      "charge",
+      "slash0",
+      "slash1",
+      "recover",
+      "skill",
+      "hit",
+      "down",
+      "win"
+    ]
+  },
+  "sourceFiles": {
+    "qzd": "F5C1CF7C-3AED-44C1-89B2-277A312C0D47.png",
+    "bld": "D15DF849-AB62-44C0-9BB2-1103464CF208.png",
+    "yxd": "BDBA7641-5530-42B5-977F-C3CA0157B8AB.png"
+  }
+}

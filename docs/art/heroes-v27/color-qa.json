@@ -1,0 +1,101 @@
+[
+  {
+    "hero": "qzd",
+    "art_source": "existing",
+    "route": "supplied -> soft matte -> ownership slicing",
+    "opaqueSourcePixelsCompared": 317989,
+    "maximumOpaqueRGBDelta": 113,
+    "keyMatteQA": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.0008525603452869398,
+      "semitransparent_fraction": 0.11796881717745805,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 70,
+      "visible_px": 360519,
+      "outer_ring_px": 18767,
+      "thresholds": {
+        "key_tolerance": 48.0,
+        "spill_threshold": 20.0,
+        "min_pocket_area": 16,
+        "opaque_alpha": 128,
+        "spill_hue_balance": 0.5
+      },
+      "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+    },
+    "packagingWarnFailChecks": [],
+    "packagingStatus": "needs-visual-review",
+    "interiorColorQA": {
+      "opaqueErosionPx": 3,
+      "samples": 258406,
+      "exactRGBShare": 0.9952090895722235,
+      "meanAbsoluteChannelDelta": 0.018174242600146023,
+      "maximumChannelDelta": 82
+    }
+  },
+  {
+    "hero": "bld",
+    "art_source": "existing",
+    "route": "supplied -> soft matte -> ownership slicing",
+    "opaqueSourcePixelsCompared": 516438,
+    "maximumOpaqueRGBDelta": 107,
+    "keyMatteQA": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.017244508985296787,
+      "semitransparent_fraction": 0.07707566743571369,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 461,
+      "visible_px": 559567,
+      "outer_ring_px": 22036,
+      "thresholds": {
+        "key_tolerance": 48.0,
+        "spill_threshold": 20.0,
+        "min_pocket_area": 16,
+        "opaque_alpha": 128,
+        "spill_hue_balance": 0.5
+      },
+      "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+    },
+    "packagingWarnFailChecks": [],
+    "packagingStatus": "needs-visual-review",
+    "interiorColorQA": {
+      "opaqueErosionPx": 3,
+      "samples": 453592,
+      "exactRGBShare": 0.997852695814741,
+      "meanAbsoluteChannelDelta": 0.007223084475328783,
+      "maximumChannelDelta": 59
+    }
+  },
+  {
+    "hero": "yxd",
+    "art_source": "existing",
+    "route": "supplied -> soft matte -> ownership slicing",
+    "opaqueSourcePixelsCompared": 476305,
+    "maximumOpaqueRGBDelta": 107,
+    "keyMatteQA": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.0081790576941914,
+      "semitransparent_fraction": 0.08574132298348862,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 224,
+      "visible_px": 520974,
+      "outer_ring_px": 20418,
+      "thresholds": {
+        "key_tolerance": 48.0,
+        "spill_threshold": 20.0,
+        "min_pocket_area": 16,
+        "opaque_alpha": 128,
+        "spill_hue_balance": 0.5
+      },
+      "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+    },
+    "packagingWarnFailChecks": [],
+    "packagingStatus": "needs-visual-review",
+    "interiorColorQA": {
+      "opaqueErosionPx": 3,
+      "samples": 415401,
+      "exactRGBShare": 0.9978815650419715,
+      "meanAbsoluteChannelDelta": 0.004804995654801024,
+      "maximumChannelDelta": 40
+    }
+  }
+]
