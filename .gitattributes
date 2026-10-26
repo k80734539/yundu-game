@@ -1,0 +1,2 @@
+# Navigation QA records hashes of the generated bundle bytes.
+docs/maps/reeds-v43/map-bundle*.json -text
