@@ -65,6 +65,7 @@ function buildGrid(id){const R=GRID[id],W=20*T2,H=R.length*T2;M={id,W,H,T:T2,row
    if(t=='S'){addObj({k:'stele',x:cx,y:by-6,s:.6,ghost:1});M.sol.push([cx-12,by-18,24,12]);M.inter.push({x:cx,y:by,r:34,act:loreStone})}
    if(t=='F'){addObj({k:'rock',x:cx,y:by-8,s:.4,fire:1});M.lights.push([cx,by-20,80,'rgba(255,140,60,.4)']);M.zones.push({x0:x*T2,y0:y*T2,x1:x*T2+T2,y1:y*T2+T2,enter:campfire})}
    if(t=='E'){addObj({k:'gate',x:cx,y:by-2,s:.72});M.zones.push({x0:x*T2,y0:y*T2+20,x1:x*T2+T2,y1:y*T2+T2,enter:exitReeds});M.lights.push([cx,by-90,70,'rgba(255,150,70,.25)'])}}));
+  if(id=='reeds'){addObj({k:'wreck',x:10.5*T2,y:7.5*T2-8,s:.52,flat:2});M.inter.push({x:10.5*T2,y:7.5*T2,r:42,act:reedTrial})}
   for(let i=0;i<14;i++)addObj({k:'lily',x:r()*W,y:13.4*T2+r()*1.5*T2,s:.5+r()*.4,flat:2});
   addObj({k:'wreck',x:3.2*T2,y:14.3*T2,s:1,flat:2});addObj({k:'rock',x:9.6*T2,y:13.8*T2,s:.8,flat:2});
   M.flies=Array.from({length:36},()=>({x:r()*W,y:r()*13*T2,p:r()*6,v:.3+r()*.5}));
@@ -76,6 +77,7 @@ function buildGrid(id){const R=GRID[id],W=20*T2,H=R.length*T2;M={id,W,H,T:T2,row
    if(t=='i'){addObj({k:'pillar',x:cx,y:by-6,s:.9,ghost:1});M.sol.push([cx-14,by-18,28,14])}
    if(t=='l'){addObj({k:'tlamp',x:cx,y:by-6,ghost:1});M.sol.push([cx-8,by-16,16,10]);M.lights.push([cx+8,by-66,90,'rgba(255,150,70,.45)'])}}));
   addObj({k:'altar',x:10.5*T2,y:9*T2-6,s:1.9,ghost:1});M.sol.push([9*T2+8,7*T2+20,3*T2-16,2*T2-24]);M.lights.push([10.5*T2,7.6*T2,90,'rgba(255,170,90,.35)']);
+  M.inter.push({x:10.5*T2,y:6.25*T2,r:42,act:templeSeal});
   addObj({k:'statue',x:5.5*T2,y:3.2*T2+40,s:.9,ghost:1});addObj({k:'statue',x:15.5*T2,y:3.2*T2+40,s:.9,mir:1,ghost:1});M.sol.push([5.5*T2-18,3.2*T2+28,36,14],[15.5*T2-18,3.2*T2+28,36,14]);
   addObj({k:'ding',x:10.5*T2,y:10.2*T2,s:1});M.sol.push([10.5*T2-20,10.2*T2-14,40,14]);
   addObj({k:'stele',x:2.5*T2,y:11.6*T2,s:.9,ghost:1});M.inter.push({x:2.5*T2,y:11.6*T2+14,r:38,act:stele});M.inter.push({x:10.5*T2,y:10.2*T2+14,r:36,act:plaque});M.sol.push([2.5*T2-18,11.6*T2-14,36,14]);

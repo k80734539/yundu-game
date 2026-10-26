@@ -73,7 +73,7 @@ classic script 的 function 宣告只在該檔執行時才建立，所以**載�
 - **頭像（v28）**：三位主角以使用者提供四視角原圖的三分之四正面裁成 512×512 透明半身像，戰鬥與對話共用同一張，勿改回舊像素頭像或有底色的方塊。卡片頭像在左、紅／藍數字在右；直式壓縮為兩行且臉部不被資訊列覆蓋。cards 的觸控區包含浮出資訊列的頭像。情境鍵 pt_qz_startled／pt_bl_quiet 目前使用同一原圖的正面視角，不自行生成表情。參見 docs/art/portraits-v28.md 與 tests/portrait-ui.mjs。原色裁切工具為 tools/import-portraits.py。
 
 ## 5. 版本號規則
-- 目前 **v33**（v32 已上線；v33 接入使用者音樂與音效）。每次上線改動都要 +1（下一版 **v34**），三處一起改：
+- 目前 **v34**（v34 擴寫第一章互動劇情）。每次上線改動都要 +1（下一版 **v35**），三處一起改：
   1. `index.html` `<title>雲渡仙緣 第一章 vN</title>`
   2. `src/screens.js` 標題畫面 `'版本 vN'`
   3. `src/render.js` 地圖右下角 `'vN'`
@@ -109,3 +109,6 @@ npm test                                          # 必須 ALL PASS，且無 JS 
 - **村民（v32）**：林嬸 lin、老周 zhou、阿婆 granny、村長 chief、王大叔 wang 使用使用者提供的圖片，NPC 靜態畫布 192×192、腳底 (96,180)、顯示倍率 .353，規格在 NPCSPR，spriteKey 優先回傳靜態角色鍵。對話為 512×512 透明半身像。只有林嬸原圖有多視角，目前統一使用所提供正面偏側站姿；其餘不自行生成人物視角或走路。舊王大叔方向影格保留供舊圖回退，不作新素材的動畫。來源與重匯入工具見 docs/art/villagers-v32.md、tools/import-villagers.py。
 
 - **音樂／音效（v33）**：src/audio_assets.js 為 22 份使用者音檔清單，audio.js 保留 Web Audio 解鎖及合成回退，audio_playback.js 管理錄音播放、背景音樂、環境音與聲音設定。音樂和音效分開儲存於 yundu_music／yundu_sound。音樂僅在可信手勢後載入，解碼快取最多兩首；不要預載所有音樂。MP4 僅抽取音軌。src/fx.js 以原有出手／命中時間播放，死亡和升級各播一次。來源、裁切、音量及循環製作見 docs/audio/audio-v33.md、manifest-v33.json、tools/import-audio.py。tests/audio-library.mjs 量測實際音樂與音效取樣及切歌競態。
+
+
+- **第一章擴寫（v34）**：登船前呈現退水對村民的影響；蘆葦蕩倒伏路障需先互動察看，再由青舟竹篙撐路、白苓狐火清除妖根，完成後才可營火休息與離開；河神廟先讀碑，再於神龕前削弱控妖封印才可挑戰河伯。地圖目標列出目前步驟。章節順序及結局維持不變，新增旗標用既有 `G.flags`，不改存檔格式、戰鬥數值。流程驗收見 `tests/playthrough.mjs`，內容記錄 `docs/chapter1-v34.md`。
