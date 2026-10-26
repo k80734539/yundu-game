@@ -33,9 +33,10 @@ function buildVillage(){const W=42*T,H=28*T;M={id:'village',W,H,T,obj:[],sol:[],
   [1*T,1.2*T,5*T,4*T], [8*T,1.4*T,6*T,4.3*T], [18*T,1.6*T,9*T,4.4*T],
   [31*T,6*T,5*T,4*T], [36*T,1.4*T,5*T,4.4*T], [4*T,6*T,5*T,4*T],
   [1*T,15*T,9*T,6*T], [33*T,14*T,7*T,5*T],
-  // 市集西南側的灌木島與南側矮牆不可穿越；角色截圖站在灌木島上，補足舊碰撞區西北角的缺口。
-  [20.3*T,14.6*T,2.4*T,1.5*T],
-  [22*T,15*T,6*T,1.6*T],
+  // 依 1344×896 底圖像素定位：截圖中的腳底在 (906,446)，即 28.31×13.94 格。
+  // 分段涵蓋市集南側樹叢、院牆與灌木；保留北側道路、東西繞路和南側院門。
+  [878,414,88,28], [846,438,148,107], [964,492,52,96],
+  [712,466,141,98], [792,478,111,106],
   [11.7*T,11.4*T,2*T,1.5*T], [25*T,10.5*T,4*T,2*T], [29*T,11.3*T,3.5*T,1.6*T]
  );
  M.ground=g;M.water=x=>waterY(x);
@@ -95,6 +96,8 @@ function buildGrid(id){const R=GRID[id],W=20*T2,H=R.length*T2,plateKey=id=='reed
  const sol=id=='reeds'?'~':'';M.blocked=(x,y)=>x<8||x>W-8||y<20||y>H-4||(sol&&sol.includes(cell(x,y)))}
 function loadMap(id,x,y,dir){G.map=id;G.x=x;G.y=y;G.dir=dir||'down';G.mode='map';G.steps=0;G.acc=0;G.hist=[];G.bl={x,y,dir:G.dir,f:0};G.f=0;G.lt=performance.now();
  if(id=='village')buildVillage();else buildGrid(id);M.name=NAMES[id];
- for(const z of M.zones)z.in=inZ(z);saveCP({map:id,x,y,dir})}
+ // 更新碰撞後，舊存檔可能位於新障礙內；移到最近空地，避免讀檔後被困住。
+ if(blocked(G.x,G.y)){place:for(let r=8;r<=192;r+=8)for(let dy=-r;dy<=r;dy+=8)for(let dx=-r;dx<=r;dx+=8){if(Math.abs(dx)!=r&&Math.abs(dy)!=r)continue;if(!blocked(x+dx,y+dy)){G.x=x+dx;G.y=y+dy;break place}}G.bl.x=G.x;G.bl.y=G.y}
+ for(const z of M.zones)z.in=inZ(z);saveCP({map:id,x:G.x,y:G.y,dir})}
 const inZ=z=>G.x>z.x0&&G.x<z.x1&&G.y>z.y0&&G.y<z.y1;
 function blocked(x,y){if(M.blocked(x,y))return 1;for(const s of M.sol)if(x+8>s[0]&&x-8<s[0]+s[2]&&y>s[1]&&y-6<s[1]+s[3])return 1;return 0}
