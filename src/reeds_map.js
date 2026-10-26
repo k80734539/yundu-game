@@ -18,5 +18,12 @@ function buildReedsMaze(){const a=REEDS_LAYOUT,W=a.world.width,H=a.world.height,
  M.lights.push([a.campfire.x,a.campfire.y-16,100,'rgba(255,150,70,.42)']);zone(a.campfire.zone,campfire);
  zone(a.exit.zone,exitReeds);M.lights.push([1280,725,70,'rgba(255,150,70,.24)']);
  M.encounterAt=(x,y)=>reedsWalkable(x,y)&&!(x<335&&y<190)&&Math.hypot(x-a.campfire.x,y-a.campfire.y)>138&&x<1230;
+ if(DEBUG_COL){M.walkRed=reedsWalkRedLayer();M.walkRedSolved=!!G.flags.reedSolved}
  const r=rng(43);M.flies=Array.from({length:44},()=>({x:r()*W,y:r()*H,p:r()*6,v:.3+r()*.5}));
 }
+function reedsWalkRedLayer(){const{width:W,height:H}=REEDS_LAYOUT.world,[cv,c]=cvs(W,H);c.fillStyle='#fff';for(const[x,y,w,h]of REEDS_LAYOUT.walkRects)c.fillRect(x,y,w,h);for(const q of REEDS_LAYOUT.clearings){c.beginPath();c.ellipse(q.x,q.y,q.rx,q.ry,0,0,Math.PI*2);c.fill()}const d=c.getImageData(0,0,W,H).data,feet=[[-8,0],[8,0],[-8,-6],[8,-6],[0,0],[0,-6]],sol=M.sol,gates=G.flags.reedSolved?[]:REEDS_LAYOUT.gates.map(g=>g.rect);
+ return walkRedLayer(null,W,H,(x,y)=>{if(x<8||x>W-8||y<8||y>H-4)return false;
+  for(const[dx,dy]of feet){const px=x+dx,py=y+dy;if(px<0||py<0||px>=W||py>=H||d[(Math.floor(py)*W+Math.floor(px))*4]<128)return false}
+  if(gates.some(([rx,ry,w,h])=>x+8>rx&&x-8<rx+w&&y>ry&&y-6<ry+h))return false;
+  return !sol.some(([sx,sy,w,h])=>x+8>sx&&x-8<sx+w&&y>sy&&y-6<sy+h)
+ })}

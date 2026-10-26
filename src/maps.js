@@ -17,7 +17,7 @@ const VILLAGE_FOOT=[[-8,0],[8,0],[-8,-6],[8,-6],[0,0],[0,-6]];
 function walkMask(img,W,H){const[,c]=cvs(W,H);c.drawImage(img,0,0,W,H);const d=c.getImageData(0,0,W,H).data;return(x,y)=>{x=Math.floor(x);y=Math.floor(y);return x>=0&&y>=0&&x<W&&y<H&&d[(y*W+x)*4]>127}}
 // 除錯：網址加 ?debug=col，把「擋人」的地方疊紅色（可走區域不上色），用來對照底圖檢查碰撞。
 const DEBUG_COL=/[?&]debug=col/.test(location.search);
-function walkRedLayer(img,W,H){const[cv,c]=cvs(W,H);c.drawImage(img,0,0,W,H);const im=c.getImageData(0,0,W,H),d=im.data;for(let i=0;i<d.length;i+=4){const w=d[i]>127;d[i]=255;d[i+1]=0;d[i+2]=0;d[i+3]=w?0:255}c.putImageData(im,0,0);return cv}
+function walkRedLayer(img,W,H,walkable){const[cv,c]=cvs(W,H);if(img)c.drawImage(img,0,0,W,H);const im=c.getImageData(0,0,W,H),d=im.data;for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=(y*W+x)*4,w=walkable?walkable(x,y):d[i]>127;d[i]=255;d[i+1]=0;d[i+2]=0;d[i+3]=w?0:255}c.putImageData(im,0,0);return cv}
 function buildVillage(){const W=42*T,H=28*T;M={id:'village',W,H,T,obj:[],sol:[],zones:[],inter:[],npcs:[],lights:[]};
  const o=(k,tx,ty,fw,fh,x={})=>addObj({k,x:tx*T,y:ty*T,sol:null,mapPlate:1,...x});
  // 四區圍繞中央廣場展開；房屋留出朝南入口，短籬笆框出院落但不切斷主路。
