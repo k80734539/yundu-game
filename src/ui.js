@@ -26,7 +26,7 @@ const sprIdle=(k,dir)=>k+'_'+dir+(SPR[k]?SPR[k].idle:0);
 function sprDraw(key,x,y,s,round){const im=I[key],k=sprK(key)*(s||1);if(!im?.naturalWidth)return;const w=im.width*k,h=im.height*k,l=x-w/2,t=y+2-sprFeet(key)*k;if(round)X.drawImage(im,Math.round(l),Math.round(t),w,h);else X.drawImage(im,l,t,w,h)}
 function spriteKey(k,dir,f){if(NPCSPR[k]&&I[k]?.naturalWidth>100)return k;const S=SPR[k],fr=S?(f>0?S.seq[Math.floor(f)&3]:S.idle):(f>0?[0,1,0,2][Math.floor(f)&3]:0);let key=k+'_'+dir+fr;if(I[key]?.naturalWidth)return key;key=k+'_'+dir+(S?S.idle:0);if(I[key]?.naturalWidth)return key;key=k+'_down'+(S?S.idle:0);return I[key]?.naturalWidth?key:k}
 function chr(key,x,y,a){const im=I[key];if(!im?.naturalWidth){X.fillStyle='#647477';X.fillRect(x-8,y-28,16,26);X.beginPath();X.arc(x,y-34,8,0,7);X.fill();return}X.fillStyle='rgba(0,0,0,.32)';X.beginPath();X.ellipse(x,y-1,13,4.5,0,0,7);X.fill();if(a!=null)X.globalAlpha=a;sprDraw(key,x,y,1,1);X.globalAlpha=1}
-function drawObj(o,t){if(o.fire&&I.campfire?.naturalWidth)return;if(o.tal&&G.flags.tal)return;let k=o.k;if(o.chest&&G.opened[o.chest])k='chest_o';const im=I[k],s=o.s,w=im.width*s,h=im.height*s;
+function drawObj(o,t){if(o.rootGate&&G.flags.reedSolved)return;if(o.fire&&I.campfire?.naturalWidth)return;if(o.tal&&G.flags.tal)return;let k=o.k;if(o.chest&&G.opened[o.chest])k='chest_o';const im=I[k],s=o.s,w=im.width*s,h=im.height*s;
  X.save();X.translate(o.x,o.y);if(o.sway){X.transform(1,0,Math.sin(t*1.3+o.sway)*.035+Math.sin(t*.6+o.sway*.7)*.012,1,0,0)}if(o.mir)X.scale(-1,1);
  if(!o.flat&&!o.sway){X.fillStyle='rgba(20,25,10,.25)';X.beginPath();X.ellipse(0,-2,w*.38,Math.max(5,h*.05),0,0,7);X.fill()}
  if(o.tal){X.translate(0,Math.sin(t*2)*2)}

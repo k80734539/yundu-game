@@ -1,0 +1,44 @@
+{
+  "world": {"width": 1344, "height": 896},
+  "pathWidth": 48,
+  "paintedPathWidth": 100,
+  "nodes": {
+    "bank": [24,122], "spawn": [100,122], "stone": [270,122],
+    "westFork": [414,122], "northFork": [670,122], "northBend": [922,122], "northChest": [1215,122],
+    "westBend": [414,338], "westChest": [140,338], "talisman": [670,338], "wreckFork": [922,338],
+    "southFork": [922,553], "camp": [670,553], "southWest": [414,553],
+    "southBend": [414,760], "southChest": [660,760], "eastBend": [1220,553], "exitBend": [1220,760], "exit": [1280,760]
+  },
+  "edges": [
+    ["bank","spawn"], ["spawn","stone"], ["stone","westFork"],
+    ["westFork","northFork"], ["northFork","northBend"], ["northBend","northChest"],
+    ["westFork","westBend"], ["westBend","westChest"], ["westBend","talisman"],
+    ["northFork","talisman"], ["talisman","wreckFork"], ["wreckFork","southFork"],
+    ["talisman","camp"], ["southFork","camp"], ["camp","southWest"],
+    ["southWest","southBend"], ["southBend","southChest"],
+    ["southFork","eastBend"], ["eastBend","exitBend"], ["exitBend","exit"]
+  ],
+  "clearings": [
+    {"id":"stone","x":270,"y":122,"rx":58,"ry":42},
+    {"id":"talisman","x":670,"y":338,"rx":56,"ry":44},
+    {"id":"camp","x":670,"y":574,"rx":100,"ry":60},
+    {"id":"northChest","x":1215,"y":122,"rx":52,"ry":44},
+    {"id":"westChest","x":140,"y":338,"rx":52,"ry":44},
+    {"id":"southChest","x":660,"y":760,"rx":54,"ry":44}
+  ],
+  "bridges": [[228,314,100,48],[1010,98,100,48],[390,630,48,80],[646,400,48,84],[898,400,48,84]],
+  "gates": [
+    {"id":"shortcut","x":670,"y":445,"rect":[646,432,48,26],"approach":[670,390]},
+    {"id":"eastRoots","x":922,"y":445,"rect":[898,432,48,26],"approach":[922,390]}
+  ],
+  "chests": [
+    {"key":"reeds:18,1","x":1215,"y":116},
+    {"key":"reeds:1,7","x":140,"y":330},
+    {"key":"reeds:5,11","x":660,"y":738}
+  ],
+  "stone": {"base":[270,96],"interact":[270,128],"solid":[256,84,28,20]},
+  "talisman": {"x":670,"y":325,"zone":[642,310,56,56]},
+  "campfire": {"x":670,"y":555,"zone":[616,526,108,90],"solid":[654,543,32,16]},
+  "exit": {"zone":[1230,728,82,65],"arrival":[100,122]},
+  "art_source": "host_image"
+}

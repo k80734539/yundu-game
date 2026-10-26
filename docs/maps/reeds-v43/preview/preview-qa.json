@@ -1,0 +1,159 @@
+{
+  "schema": "generate2dmap.scene_preview_qa.v1",
+  "status": "pass",
+  "method": "build_scene_preview: bundle files resolved relative to the bundle and checked against their sha256 when given; collision read through forge_nav (the D2 blocking set; tile collision converted into world solids, material classes into BLOCK and one_way pixel planes); tiles layers pre-rendered from tileset manifests; art found in the D6 order and embedded as data URIs; map-runtime.mjs inlined verbatim; the page scanned for anything that loads from outside it; size gate; optional headless-Chromium run (--verify).",
+  "notProven": [
+    "Collision is forge_nav's D2 blocking set and the page walks it with map-runtime.mjs, which mirrors forge_nav rule for rule; their agreement is tested on synthetic fixtures (tests/test_map_runtime_js.py), not on this map. Rotated shapes can differ by one ulp of sin and cos between a browser and Python.",
+    "Without --verify, or when it prints SKIPPED, the page was assembled and scanned but never run in a browser.",
+    "The actor is a debug marker sized from collision.actorRadius, not character art; animation, lights, atmosphere, stage data, camera bounds and occluder masks are not drawn.",
+    "Draw order is whole-object Y-sort by (sortY, x, id); per-pixel occlusion, fades and cut-aways are not simulated.",
+    "Route checks walk the forge_nav grid with the runtime walker at --speed; an engine controller (acceleration, physics colliders, other speeds) may behave differently. one_way material blocks moving down onto it on every map (N11); a top-down map should not use it.",
+    "Footprint samples lie half a nav cell apart (N10): a solid thinner than that can fall between the samples of the footprint's rim; the actor's centre path is tested exactly (thin-gap rule).",
+    "Only headless Chromium is exercised (with --verify); other browsers, devices and touch input are not tested."
+  ],
+  "checks": [
+    {
+      "id": "html-size",
+      "status": "pass",
+      "value": 1081551,
+      "threshold": 16000000
+    },
+    {
+      "id": "external-references",
+      "status": "pass",
+      "value": [],
+      "threshold": []
+    },
+    {
+      "id": "ascii-only",
+      "status": "pass",
+      "value": true,
+      "threshold": true
+    },
+    {
+      "id": "single-inline-script",
+      "status": "pass",
+      "value": true,
+      "threshold": true
+    },
+    {
+      "id": "runtime-inlined",
+      "status": "pass",
+      "value": "map-runtime.mjs",
+      "threshold": null
+    },
+    {
+      "id": "object-art",
+      "status": "pass",
+      "value": [],
+      "threshold": []
+    },
+    {
+      "id": "build-warnings",
+      "status": "pass",
+      "value": 0,
+      "threshold": 0
+    }
+  ],
+  "inputs": [
+    {
+      "path": "../map-bundle.json",
+      "sha256": "a3f7864bc80925f8baf83d5575ae4f04f737d77ac5a817a1f6baecf7a216de2a",
+      "bytes": 34510
+    },
+    {
+      "path": "../../../../assets/img/chest.webp",
+      "sha256": "d9c917ba73657bce5c9c087411607e397e99e49328e37810957f7267517fabee",
+      "bytes": 1188
+    },
+    {
+      "path": "../../../../assets/img/reeds_map_v43.webp",
+      "sha256": "f99bbd850efc831eb26528ca43a877acd26e1836db84483ef4517eb7f505efe9",
+      "bytes": 722352
+    }
+  ],
+  "outputs": [
+    {
+      "path": "preview.html",
+      "sha256": "4b1e04a52c2213d249a3e0d8eff15cfa057c62282a9eb80e661ebe2f2fd75eeb",
+      "bytes": 1081551
+    }
+  ],
+  "tool": {
+    "name": "build_scene_preview",
+    "version": "0.4.0"
+  },
+  "preview": {
+    "file": "preview.html",
+    "bytes": 1081551,
+    "sha256": "4b1e04a52c2213d249a3e0d8eff15cfa057c62282a9eb80e661ebe2f2fd75eeb",
+    "runtime": {
+      "file": "map-runtime.mjs",
+      "version": "1.1.2",
+      "sha256": "c1fc3d9bf15cfa53fdfeb050ce4252f7ace4c923066ca4e135dea576e7445273"
+    },
+    "world": [
+      1344,
+      896
+    ],
+    "zoom": 1,
+    "speed": 96.0,
+    "actorHeight": 36.0,
+    "actorRadius": 8,
+    "ySquash": 1,
+    "start": "arrival",
+    "layers": [
+      {
+        "name": "ground",
+        "source": "image",
+        "size": [
+          1344,
+          896
+        ]
+      },
+      {
+        "name": "props",
+        "source": "objects"
+      }
+    ],
+    "drawOrder": [
+      "chest-0",
+      "chest-1",
+      "chest-2"
+    ],
+    "objectArt": {
+      "object.image": 3,
+      "props": 0,
+      "prop-pack": 0,
+      "occluder.source": 0,
+      "missing": []
+    },
+    "counts": {
+      "objects": 3,
+      "portals": 1,
+      "spawns": 2,
+      "interactions": 5,
+      "anchors": 0
+    },
+    "images": {
+      "count": 2,
+      "bytes": 723540
+    },
+    "materialMap": null,
+    "collision": {
+      "collisionSolids": 0,
+      "rects": 5,
+      "footprints": 0,
+      "tileSolids": 0,
+      "blockingMaterialClasses": []
+    },
+    "hashes": {
+      "checked": 4,
+      "unchecked": 0
+    }
+  },
+  "warnings": [],
+  "verify": {
+    "status": "not-requested"
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "routes": {
+    "ok": true,
+    "speed": 96,
+    "budget": 1.6,
+    "tickHz": 60,
+    "cell": 4,
+    "spawns": [
+      {
+        "id": "arrival",
+        "valid": true,
+        "reachableCells": 9729
+      },
+      {
+        "id": "camp",
+        "valid": true,
+        "reachableCells": 9729
+      }
+    ],
+    "results": [
+      {
+        "target": "temple-exit",
+        "kind": "exit",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 1020,
+        "distance": 1631.504,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          1231.6,
+          730
+        ],
+        "fired": true,
+        "inwardFired": false
+      },
+      {
+        "target": "stele",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 84,
+        "distance": 134.06,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          234,
+          118
+        ]
+      },
+      {
+        "target": "chest-0",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 674,
+        "distance": 1078.03,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          1178,
+          118
+        ]
+      },
+      {
+        "target": "chest-1",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 442,
+        "distance": 707.105,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          174,
+          322
+        ]
+      },
+      {
+        "target": "chest-2",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 966,
+        "distance": 1544.11,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          622,
+          746
+        ]
+      },
+      {
+        "target": "camp",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 634,
+        "distance": 1013.37,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          706,
+          574
+        ]
+      }
+    ],
+    "portals": [
+      {
+        "id": "temple-exit",
+        "activation": "intent",
+        "to": "temple",
+        "arrivals": []
+      }
+    ]
+  },
+  "ysort": {
+    "status": "pass",
+    "object": "chest-0",
+    "pixel": [
+      1215,
+      97,
+      99
+    ],
+    "behind": {
+      "withActor": [
+        96,
+        54,
+        23,
+        255
+      ],
+      "withoutActor": [
+        96,
+        54,
+        23,
+        255
+      ]
+    },
+    "front": {
+      "withActor": [
+        242,
+        245,
+        234,
+        255
+      ],
+      "withoutActor": [
+        112,
+        69,
+        26,
+        255
+      ]
+    }
+  },
+  "errors": []
+}

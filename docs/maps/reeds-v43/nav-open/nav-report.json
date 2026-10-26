@@ -1,0 +1,268 @@
+{
+  "schema": "generate2dmap.nav_report.v1",
+  "status": "pass",
+  "method": "plan Appendix C validity (centre + 8 footprint samples against walk regions, solids, object footprints scaled once, tile collision and material classes) on a grid of cell max(1, round(r/2)) px; 4-neighbour moves open when segmentClear holds between node centres (samples every cell/2, plus the exact thin-gap centre path and one_way direction); BFS from every spawn and portal arrival to every interaction, exit, anchor slot and approach point",
+  "notProven": [
+    "that the collision data matches the painted art",
+    "positions closer than one grid cell to a blocker (the grid samples cell centres)",
+    "runtime movement code: map-runtime.mjs parity is tested during integration",
+    "links to maps not passed with --link"
+  ],
+  "checks": [
+    {
+      "id": "starts_valid",
+      "status": "pass",
+      "value": {
+        "starts": 2,
+        "blocked": []
+      },
+      "threshold": {
+        "blocked": 0
+      }
+    },
+    {
+      "id": "targets_reachable",
+      "status": "pass",
+      "value": {
+        "reachable": 6,
+        "total": 6,
+        "unreachable": []
+      },
+      "threshold": {
+        "unreachable": 0
+      }
+    },
+    {
+      "id": "portals_inside_world",
+      "status": "pass",
+      "value": {
+        "outside": []
+      },
+      "threshold": {
+        "outside": 0
+      }
+    },
+    {
+      "id": "arrivals_outside_triggers",
+      "status": "pass",
+      "value": {
+        "problems": 0
+      },
+      "threshold": {
+        "problems": 0
+      }
+    },
+    {
+      "id": "reciprocal_links",
+      "status": "skipped",
+      "value": {
+        "links": [],
+        "notChecked": [
+          "temple"
+        ]
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "thin_gaps",
+      "status": "pass",
+      "value": 0,
+      "threshold": "reported: moves the thin-gap rule closed although every footprint sample was valid"
+    },
+    {
+      "id": "unreachable_walkable_area",
+      "status": "pass",
+      "value": {
+        "pockets": 0,
+        "cells": 0
+      },
+      "threshold": "reported"
+    },
+    {
+      "id": "blocked_rects_union",
+      "status": "pass",
+      "value": {
+        "rects": 158,
+        "blockedCells": 65535
+      },
+      "threshold": "union == blocked cells"
+    },
+    {
+      "id": "footprints_scaled_once",
+      "status": "pass",
+      "value": {
+        "objectSolids": 0
+      },
+      "threshold": "object footprint x scale, never inflated by the actor radius"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "../map-bundle.json",
+      "sha256": "a3f7864bc80925f8baf83d5575ae4f04f737d77ac5a817a1f6baecf7a216de2a",
+      "bytes": 34510
+    },
+    {
+      "path": "../../../../assets/img/reeds_map_v43.webp",
+      "sha256": "f99bbd850efc831eb26528ca43a877acd26e1836db84483ef4517eb7f505efe9",
+      "bytes": 722352
+    },
+    {
+      "path": "../../../../assets/img/chest.webp",
+      "sha256": "d9c917ba73657bce5c9c087411607e397e99e49328e37810957f7267517fabee",
+      "bytes": 1188
+    }
+  ],
+  "outputs": [
+    {
+      "path": "nav-grid.json",
+      "sha256": "0db4bad9c10c9d77869a521414d5a901c98bb68b984e9431ce4f347bac7f72b7",
+      "bytes": 163790
+    },
+    {
+      "path": "nav-debug.png",
+      "sha256": "4b5cdf13a7d3fb937a57ef1a94db7dd06507cb5c433c8784b5dcfe153242ed8e",
+      "bytes": 2290989
+    }
+  ],
+  "tool": {
+    "name": "map_nav.py",
+    "version": "0.4.0"
+  },
+  "map": "reeds",
+  "cell": 4,
+  "starts": [
+    {
+      "kind": "spawn",
+      "id": "arrival",
+      "point": [
+        100.0,
+        122.0
+      ],
+      "reachable": true,
+      "steps": 0,
+      "node": [
+        98.0,
+        122.0
+      ],
+      "reason": null
+    },
+    {
+      "kind": "spawn",
+      "id": "camp",
+      "point": [
+        718.0,
+        590.0
+      ],
+      "reachable": true,
+      "steps": 0,
+      "node": [
+        718.0,
+        590.0
+      ],
+      "reason": null
+    }
+  ],
+  "targets": [
+    {
+      "kind": "interaction",
+      "id": "stele",
+      "point": [
+        270.0,
+        128.0
+      ],
+      "reachable": true,
+      "steps": 31,
+      "node": [
+        234.0,
+        118.0
+      ],
+      "reason": null
+    },
+    {
+      "kind": "interaction",
+      "id": "chest-0",
+      "point": [
+        1215.0,
+        124.0
+      ],
+      "reachable": true,
+      "steps": 244,
+      "node": [
+        1178.0,
+        130.0
+      ],
+      "reason": null
+    },
+    {
+      "kind": "interaction",
+      "id": "chest-1",
+      "point": [
+        140.0,
+        338.0
+      ],
+      "reachable": true,
+      "steps": 176,
+      "node": [
+        174.0,
+        322.0
+      ],
+      "reason": null
+    },
+    {
+      "kind": "interaction",
+      "id": "chest-2",
+      "point": [
+        660.0,
+        746.0
+      ],
+      "reachable": true,
+      "steps": 169,
+      "node": [
+        622.0,
+        746.0
+      ],
+      "reason": null
+    },
+    {
+      "kind": "interaction",
+      "id": "camp",
+      "point": [
+        718.0,
+        590.0
+      ],
+      "reachable": true,
+      "steps": 0,
+      "node": [
+        710.0,
+        582.0
+      ],
+      "reason": null
+    },
+    {
+      "kind": "exit",
+      "id": "temple-exit",
+      "point": [
+        1271.0,
+        760.5
+      ],
+      "reachable": true,
+      "steps": 167,
+      "node": [
+        1226.0,
+        718.0
+      ],
+      "reason": null
+    }
+  ],
+  "links": [],
+  "thinGaps": [],
+  "unreachablePockets": [],
+  "bundleNav": {
+    "cell": 4,
+    "grid": "nav-grid.json"
+  },
+  "problems": []
+}

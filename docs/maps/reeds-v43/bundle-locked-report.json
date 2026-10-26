@@ -1,0 +1,184 @@
+{
+  "schema": "generate2dmap.map_bundle_report.v1",
+  "status": "pass",
+  "method": "JSON Schema map.schema.json#/$defs/map_bundle_v2 (vendored copy, built-in Draft 2020-12 evaluator), file existence and sha256 of every referenced file, and cross-field rules: unique ids, tile indices against tilesets, wang/blob topology, material colours, portal targets and arrivals, slots and approach points",
+  "notProven": [
+    "reachability, portal arrivals and collision geometry (run map_nav.py check)",
+    "that collision and footprints match the painted art",
+    "engine or editor import (Tiled GUI, Godot, LDtk not verified)"
+  ],
+  "checks": [
+    {
+      "id": "schema",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "files",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "sha256",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "tilesets",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "layers",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "props_and_objects",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "collision",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "material_map",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "portals",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "spawns_anchors_interactions",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "document",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "path": "map-bundle-locked.json",
+      "sha256": "937267b0dd8bc219b881b5e18898f49a132aa25c8babe45ded9e62cae0d751fb",
+      "bytes": 35535
+    },
+    {
+      "path": "../../../assets/img/reeds_map_v43.webp",
+      "sha256": "f99bbd850efc831eb26528ca43a877acd26e1836db84483ef4517eb7f505efe9",
+      "bytes": 722352
+    },
+    {
+      "path": "../../../assets/img/chest.webp",
+      "sha256": "d9c917ba73657bce5c9c087411607e397e99e49328e37810957f7267517fabee",
+      "bytes": 1188
+    },
+    {
+      "path": "../../../assets/img/tal.webp",
+      "sha256": "e02672304ae2f732d71faab395e40893c6f238cb2816a6a7d577bf916c54f661",
+      "bytes": 2470
+    },
+    {
+      "path": "../../../assets/img/reed_roots_v43.webp",
+      "sha256": "70fd6d6e64584ec58a9aa59b04ea49706e9490643083ef0583308e5f583efd5d",
+      "bytes": 8702
+    }
+  ],
+  "outputs": [],
+  "tool": {
+    "name": "map_bundle.py",
+    "version": "0.4.0"
+  },
+  "bundle": {
+    "id": "reeds",
+    "version": 2,
+    "world": [
+      1344.0,
+      896.0
+    ],
+    "counts": {
+      "tilesets": 0,
+      "layers": 2,
+      "props": 0,
+      "objects": 6,
+      "portals": 0,
+      "spawns": 1,
+      "anchors": 0,
+      "interactions": 6
+    }
+  },
+  "problems": []
+}

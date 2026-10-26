@@ -14,4 +14,4 @@ function update(dt){if(G.mode!='map'||G.dlg)return;
  G.f+=.11*dt*Math.min(1,mag*1.3);
  G.hist.push([G.x,G.y,G.dir]);while(G.hist.length>14){const h=G.hist.shift();G.bl.x=h[0];G.bl.y=h[1];G.bl.dir=h[2];G.bl.f=G.f-1}
  for(const z of M.zones){const i=inZ(z);if(i&&!z.in){z.in=1;z.enter();if(G.dlg||G.mode!='map')return}z.in=i}
- if(M.id=='reeds'&&cell(G.x,G.y-4)==','){G.acc+=moved;if(G.acc>=40){G.acc-=40;G.steps++;if(G.steps>4&&Math.random()<.14){G.steps=0;const n=1+rnd(3),ks=['小水妖','蘆葦精'];startBattle(Array.from({length:n},()=>ks[rnd(2)]),{bg:'bg_reeds'})}}}}
+ if(M.id=='reeds'&&(M.encounterAt?M.encounterAt(G.x,G.y):cell(G.x,G.y-4)==',')){G.acc+=moved;if(G.acc>=40){G.acc-=40;G.steps++;if(G.steps>4&&Math.random()<.14){G.steps=0;const n=1+rnd(3),ks=['小水妖','蘆葦精'];startBattle(Array.from({length:n},()=>ks[rnd(2)]),{bg:'bg_reeds'})}}}}

@@ -16,7 +16,7 @@ export async function polish(b,url){
     assert.deepEqual(await pg.evaluate(key=>[I[key].naturalWidth,I[key].naturalHeight,I['pt_'+key].naturalWidth],[key][0]),[192,192,512]);
     assert.equal(await pg.evaluate("G_().dlg.l[G_().dlg.i][0]"),name);
    }
-   await pg.evaluate("G_().dlg=null;G_().party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']));G_().flags.tal=1;G_().flags.reedSolved=1;loadMap('reeds',12.5*T2,9.5*T2,'down');campfire();window.positionBefore=[G_().x,G_().y];");
+   await pg.evaluate("G_().dlg=null;G_().party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']));G_().flags.tal=1;G_().flags.reedSolved=1;loadMap('reeds',REEDS_LAYOUT.campfire.x+48,REEDS_LAYOUT.campfire.y+35,'left');campfire();window.positionBefore=[G_().x,G_().y];");
    await run(1600);await pg.evaluate('G_().dlg.i=13');await run(1200);await shot('camp');
    assert.equal(await pg.evaluate("activeScene().id"),'camp');
    assert.equal(await pg.evaluate("scenePortrait('白苓','bl')"),'pt_bl_quiet');
@@ -42,7 +42,7 @@ export async function polish(b,url){
    assert.equal(await pg.evaluate('JSON.stringify(S)'),await pg.evaluate('window.scriptBefore'),'台詞資料不可變動');
    assert.equal(await pg.evaluate('JSON.stringify({EN,SK,ITEMS})'),await pg.evaluate('window.balanceBefore'),'戰鬥數值不可變動');
    // 新素材載入失敗仍可繪製，不使用舊 NPC 借圖，且不產生 JS 例外。
-   await pg.evaluate("G_().B=null;G_().dlg=null;loadMap('reeds',12.5*T2,9.5*T2,'down');I.campfire=new Image();drawWorld(performance.now());G_().flags={};loadMap('village',6.6*T,17.2*T,'up');I.lin=new Image();I.pt_lin=new Image();M_().npcs.find(n=>n.k==='lin').talk();drawWorld(performance.now());drawDlg()");
+   await pg.evaluate("G_().B=null;G_().dlg=null;loadMap('reeds',REEDS_LAYOUT.campfire.x+48,REEDS_LAYOUT.campfire.y+35,'left');I.campfire=new Image();drawWorld(performance.now());G_().flags={};loadMap('village',6.6*T,17.2*T,'up');I.lin=new Image();I.pt_lin=new Image();M_().npcs.find(n=>n.k==='lin').talk();drawWorld(performance.now());drawDlg()");
    assert.deepEqual(await jsErrors(),[]);console.log(`[polish ${W}x${H}] NPC art, fire, camera, dissolve, dawn, rescue, skip, fallback; errors=[] → PASS`);
   }finally{await ctx.close()}
  }

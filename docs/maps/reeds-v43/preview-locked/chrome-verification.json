@@ -1,0 +1,165 @@
+{
+  "routes": {
+    "ok": true,
+    "speed": 96,
+    "budget": 1.6,
+    "tickHz": 60,
+    "cell": 4,
+    "spawns": [
+      {
+        "id": "arrival",
+        "valid": true,
+        "reachableCells": 5500
+      }
+    ],
+    "results": [
+      {
+        "target": "stele",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 84,
+        "distance": 134.06,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          234,
+          118
+        ]
+      },
+      {
+        "target": "chest-0",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 674,
+        "distance": 1078.03,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          1178,
+          118
+        ]
+      },
+      {
+        "target": "chest-1",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 442,
+        "distance": 707.105,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          174,
+          322
+        ]
+      },
+      {
+        "target": "talisman",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 463,
+        "distance": 740.296,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          658,
+          322
+        ]
+      },
+      {
+        "target": "shortcut",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 503,
+        "distance": 803.241,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          654,
+          386
+        ]
+      },
+      {
+        "target": "eastRoots",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 626,
+        "distance": 1000.533,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          906,
+          386
+        ]
+      }
+    ],
+    "portals": []
+  },
+  "ysort": {
+    "status": "pass",
+    "object": "chest-0",
+    "pixel": [
+      1215,
+      97,
+      99
+    ],
+    "behind": {
+      "withActor": [
+        96,
+        54,
+        23,
+        255
+      ],
+      "withoutActor": [
+        96,
+        54,
+        23,
+        255
+      ]
+    },
+    "front": {
+      "withActor": [
+        242,
+        245,
+        234,
+        255
+      ],
+      "withoutActor": [
+        112,
+        69,
+        26,
+        255
+      ]
+    }
+  },
+  "errors": []
+}

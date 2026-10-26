@@ -1,0 +1,201 @@
+{
+  "schema": "generate2dmap.scene_snapshot.v1",
+  "runtime": {
+    "name": "map-runtime",
+    "version": "1.1.2"
+  },
+  "world": {
+    "width": 1344,
+    "height": 896,
+    "actorRadius": 8,
+    "ySquash": 1,
+    "cell": 4,
+    "tickHz": 60,
+    "solids": 7,
+    "portals": 0,
+    "oneWay": false
+  },
+  "actor": {
+    "x": 100,
+    "y": 122,
+    "valid": true,
+    "facing": [
+      1,
+      0
+    ],
+    "latched": [],
+    "travelled": 0,
+    "pathLength": 0
+  },
+  "ready": true,
+  "error": null,
+  "tick": 37,
+  "title": "蘆葦蕩小迷宮",
+  "source": {
+    "file": "map-bundle-locked.json",
+    "sha256": "937267b0dd8bc219b881b5e18898f49a132aa25c8babe45ded9e62cae0d751fb",
+    "schema": "generate2dmap.map_bundle.v2"
+  },
+  "start": "arrival",
+  "speed": 96,
+  "zoom": 1,
+  "debug": true,
+  "assets": {
+    "total": 4,
+    "loaded": 4,
+    "failed": []
+  },
+  "drawOrder": [
+    "chest-0",
+    "talisman",
+    "chest-1",
+    "shortcut",
+    "eastRoots",
+    "chest-2"
+  ],
+  "exitsFired": [],
+  "interactionsReached": [],
+  "events": [
+    {
+      "tick": 0,
+      "type": "arrive",
+      "id": "arrival"
+    },
+    {
+      "tick": 3,
+      "type": "routes",
+      "ok": true,
+      "failing": 0
+    },
+    {
+      "tick": 11,
+      "type": "arrive",
+      "id": "arrival"
+    }
+  ],
+  "routes": {
+    "ok": true,
+    "speed": 96,
+    "budget": 1.6,
+    "tickHz": 60,
+    "cell": 4,
+    "spawns": [
+      {
+        "id": "arrival",
+        "valid": true,
+        "reachableCells": 5500
+      }
+    ],
+    "results": [
+      {
+        "target": "stele",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 84,
+        "distance": 134.06,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          234,
+          118
+        ]
+      },
+      {
+        "target": "chest-0",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 674,
+        "distance": 1078.03,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          1178,
+          118
+        ]
+      },
+      {
+        "target": "chest-1",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 442,
+        "distance": 707.105,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          174,
+          322
+        ]
+      },
+      {
+        "target": "talisman",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 463,
+        "distance": 740.296,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          658,
+          322
+        ]
+      },
+      {
+        "target": "shortcut",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 503,
+        "distance": 803.241,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          654,
+          386
+        ]
+      },
+      {
+        "target": "eastRoots",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 626,
+        "distance": 1000.533,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          906,
+          386
+        ]
+      }
+    ],
+    "portals": []
+  }
+}

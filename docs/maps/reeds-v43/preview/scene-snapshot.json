@@ -1,0 +1,212 @@
+{
+  "schema": "generate2dmap.scene_snapshot.v1",
+  "runtime": {
+    "name": "map-runtime",
+    "version": "1.1.2"
+  },
+  "world": {
+    "width": 1344,
+    "height": 896,
+    "actorRadius": 8,
+    "ySquash": 1,
+    "cell": 4,
+    "tickHz": 60,
+    "solids": 5,
+    "portals": 1,
+    "oneWay": false
+  },
+  "actor": {
+    "x": 100,
+    "y": 122,
+    "valid": true,
+    "facing": [
+      1,
+      0
+    ],
+    "latched": [],
+    "travelled": 0,
+    "pathLength": 0
+  },
+  "ready": true,
+  "error": null,
+  "tick": 32,
+  "title": "蘆葦蕩小迷宮",
+  "source": {
+    "file": "map-bundle.json",
+    "sha256": "a3f7864bc80925f8baf83d5575ae4f04f737d77ac5a817a1f6baecf7a216de2a",
+    "schema": "generate2dmap.map_bundle.v2"
+  },
+  "start": "arrival",
+  "speed": 96,
+  "zoom": 1,
+  "debug": true,
+  "assets": {
+    "total": 2,
+    "loaded": 2,
+    "failed": []
+  },
+  "drawOrder": [
+    "chest-0",
+    "chest-1",
+    "chest-2"
+  ],
+  "exitsFired": [],
+  "interactionsReached": [],
+  "events": [
+    {
+      "tick": 0,
+      "type": "arrive",
+      "id": "arrival"
+    },
+    {
+      "tick": 0,
+      "type": "routes",
+      "ok": true,
+      "failing": 0
+    },
+    {
+      "tick": 2,
+      "type": "arrive",
+      "id": "arrival"
+    }
+  ],
+  "routes": {
+    "ok": true,
+    "speed": 96,
+    "budget": 1.6,
+    "tickHz": 60,
+    "cell": 4,
+    "spawns": [
+      {
+        "id": "arrival",
+        "valid": true,
+        "reachableCells": 9729
+      },
+      {
+        "id": "camp",
+        "valid": true,
+        "reachableCells": 9729
+      }
+    ],
+    "results": [
+      {
+        "target": "temple-exit",
+        "kind": "exit",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 1020,
+        "distance": 1631.504,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          1231.6,
+          730
+        ],
+        "fired": true,
+        "inwardFired": false
+      },
+      {
+        "target": "stele",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 84,
+        "distance": 134.06,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          234,
+          118
+        ]
+      },
+      {
+        "target": "chest-0",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 674,
+        "distance": 1078.03,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          1178,
+          118
+        ]
+      },
+      {
+        "target": "chest-1",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 442,
+        "distance": 707.105,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          174,
+          322
+        ]
+      },
+      {
+        "target": "chest-2",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 966,
+        "distance": 1544.11,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          622,
+          746
+        ]
+      },
+      {
+        "target": "camp",
+        "kind": "interaction",
+        "from": "arrival",
+        "ok": true,
+        "reachable": true,
+        "reason": null,
+        "ticks": 634,
+        "distance": 1013.37,
+        "maxStep": 1.6,
+        "zeroMotionTicks": 0,
+        "blocked": false,
+        "firedEnRoute": [],
+        "end": [
+          706,
+          574
+        ]
+      }
+    ],
+    "portals": [
+      {
+        "id": "temple-exit",
+        "activation": "intent",
+        "to": "temple",
+        "arrivals": []
+      }
+    ]
+  }
+}

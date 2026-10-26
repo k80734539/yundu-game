@@ -22,16 +22,17 @@ export async function playthrough(b,url,W,H,touch=true){
  await tp(20*T,14.5*T,'down');await wait(pg,300);await shot('village');await tp(22*T,18.3*T,'down');await wait(pg,300);await shot('dock');
  await tp(21*T,22.4*T,'down');await hold('ArrowDown',900);await P('ok');await flush();await P('ok');await P('ok');await wait(pg,200);await shot('boat');await flush();
  await wait(pg,300);await shot('battle_river');await fight();
- await flush();await tp(1.5*T2,1.85*T2,'down');await wait(pg,300);await shot('reeds_start');
- await tp(8.5*T2,7.6*T2,'right');await wait(pg,300);await shot('reeds');
+ await flush();await tp(100,122,'right');await wait(pg,300);await shot('reeds_start');
+ await tp(800,122,'right');await wait(pg,300);await shot('reeds');
  let got=false;const t0=Date.now();
  while(Date.now()-t0<40000&&!got){for(const k of['ArrowRight','ArrowLeft']){await pg.keyboard.down(k);for(let i=0;i<25;i++){await wait(pg,60);if(await E('G.mode')==='battle'){got=true;break}}await pg.keyboard.up(k);if(got)break}}
  if(got){await wait(pg,900);await P('ok');await wait(pg,300);await shot('battle');await fight()}
- for(const[[cx,cy],d]of[[[18,2],'up'],[[2,7],'left'],[[4,11],'right']]){await tp((cx+.5)*T2,(cy+.5)*T2+10,d);await P('ok');await flush()}
- await tp(6.5*T2,6.7*T2,'up');await wait(pg,200);await shot('reeds_tal');await hold('ArrowUp',500);await flush();
- await tp(10.5*T2,7.5*T2,'up');for(let i=0;i<3;i++){await P('ok');await flush()}
- await tp(11.5*T2,9.5*T2+6,'right');await hold('ArrowRight',400);await wait(pg,200);await shot('reeds_camp');await flush();
- await tp(18.5*T2,11.6*T2,'down');await hold('ArrowDown',600);await wait(pg,500);await shot('temple_intro');await flush();await wait(pg,2700);
+ for(const[x,y]of[[1215,142],[140,354]]){await tp(x,y,'up');await P('ok');await flush()}
+ await tp(670,300,'down');await wait(pg,200);await shot('reeds_tal');await hold('ArrowDown',500);await flush();
+ await tp(670,390,'down');for(let i=0;i<3;i++){await P('ok');await flush()}
+ await tp(750,580,'left');await hold('ArrowLeft',400);await wait(pg,200);await shot('reeds_camp');await flush();
+ await tp(660,778,'up');await P('ok');await flush();
+ await tp(1220,760,'right');await hold('ArrowRight',600);await wait(pg,500);await shot('temple_intro');await flush();await wait(pg,2700);
  await tp(2.5*T2,8.5*T2,'up');await P('ok');await flush();await tp(10.5*T2,6.25*T2,'down');await P('ok');await flush();
  await tp(12.5*T2,11*T2,'up');await wait(pg,300);await shot('temple');
  await tp(10.5*T2,5.3*T2,'up');await wait(pg,200);await shot('temple_boss');await P('ok');await flush();await wait(pg,400);await shot('battle_boss');await fight();

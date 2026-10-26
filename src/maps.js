@@ -57,7 +57,7 @@ function buildVillage(){const W=42*T,H=28*T;M={id:'village',W,H,T,obj:[],sol:[],
 }
 function npc(k,x,y,n,talk,mark){const o={k,x,y,dir:'down',n,talk,mark,npc:1};M.npcs.push(o);M.sol.push([x-11,y-9,22,10]);if(talk)M.inter.push({x,y:y-14,r:30,act:()=>{faceTo(o);talk()}});return o}
 function faceTo(o){if(!I[o.k+'_down0'])return;const dx=G.x-o.x,dy=G.y-o.y;o.dir=Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up')}
-function buildGrid(id){const R=GRID[id],W=20*T2,H=R.length*T2,plateKey=id=='reeds'?'reeds_plate_v40':'temple_plate_v40',hasPlate=!!I[plateKey]?.naturalWidth;M={id,W,H,T:T2,rows:R,obj:[],sol:[],zones:[],inter:[],npcs:[],lights:[],night:1};
+function buildGrid(id){if(id=='reeds')return buildReedsMaze();const R=GRID[id],W=20*T2,H=R.length*T2,plateKey='temple_plate_v40',hasPlate=!!I[plateKey]?.naturalWidth;M={id,W,H,T:T2,rows:R,obj:[],sol:[],zones:[],inter:[],npcs:[],lights:[],night:1};
  const r=rng(id=='reeds'?3:5),[g,c]=cvs(W,H);
  const fillTex=(k,x,y,w,h)=>{c.fillStyle=c.createPattern(I[k],'repeat');c.fillRect(x,y,w,h)};
  if(id=='reeds'){if(!hasPlate){fillTex('t_mud',0,0,W,H);
@@ -96,6 +96,8 @@ function buildGrid(id){const R=GRID[id],W=20*T2,H=R.length*T2,plateKey=id=='reed
  const sol=id=='reeds'?'~':'';M.blocked=(x,y)=>x<8||x>W-8||y<20||y>H-4||(sol&&sol.includes(cell(x,y)))}
 function loadMap(id,x,y,dir){G.map=id;G.x=x;G.y=y;G.dir=dir||'down';G.mode='map';G.steps=0;G.acc=0;G.hist=[];G.bl={x,y,dir:G.dir,f:0};G.f=0;G.lt=performance.now();
  if(id=='village')buildVillage();else buildGrid(id);M.name=NAMES[id];
+ // 舊版可先走到南側；新迷宮封橋時，讀入這類存檔須返回入口，不能留在隔離區。
+ if(M.maze&&!G.flags.reedSolved&&G.y>Math.min(...REEDS_LAYOUT.gates.map(g=>g.rect[1]))){[G.x,G.y]=REEDS_LAYOUT.nodes.spawn;G.bl.x=G.x;G.bl.y=G.y}
  // 更新碰撞後，舊存檔可能位於新障礙內；移到最近空地，避免讀檔後被困住。
  if(blocked(G.x,G.y)){place:for(let r=8;r<=192;r+=8)for(let dy=-r;dy<=r;dy+=8)for(let dx=-r;dx<=r;dx+=8){if(Math.abs(dx)!=r&&Math.abs(dy)!=r)continue;if(!blocked(x+dx,y+dy)){G.x=x+dx;G.y=y+dy;break place}}G.bl.x=G.x;G.bl.y=G.y}
  for(const z of M.zones)z.in=inZ(z);saveCP({map:id,x:G.x,y:G.y,dir})}
