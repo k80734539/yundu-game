@@ -90,6 +90,9 @@ function buildGrid(id){if(id=='reeds')return buildReedsMaze();const R=GRID[id],W
    if(!hasPlate)addObj({k:'pool',x:16.6*T2,y:9.8*T2,s:.8});M.sol.push([16.6*T2-56,9.8*T2-60,112,58]);
   if(!G.flags.boss){const h=npc('hebo',10.5*T2,4.1*T2,'河伯',bossTalk,()=>1);h.boss=1;M.inter[M.inter.length-1].r=60;M.inter[M.inter.length-1].y=4.1*T2-30}}
  M.ground=g;if(hasPlate){c.clearRect(0,0,W,H);c.drawImage(I[plateKey],0,0,W,H);M.mapPlate=1}
+ // 河神廟：有底圖時改用可走區域遮罩（temple_walk_v44.png，與底圖同尺寸），不再靠格子與手寫矩形；河伯本身仍保留 npc 的小碰撞框。
+ if(id=='temple'&&hasPlate&&I.temple_walk_v44?.naturalWidth){M.walkImg=I.temple_walk_v44;M.walk=walkMask(M.walkImg,W,H);M.sol=M.sol.filter(s=>M.npcs.some(n=>s[0]==n.x-11&&s[1]==n.y-9));
+  M.blocked=(x,y)=>x<8||x>W-8||y<20||y>H-4||!VILLAGE_FOOT.every(([dx,dy])=>M.walk(x+dx,y+dy));return}
  const sol=id=='reeds'?'~':'';M.blocked=(x,y)=>x<8||x>W-8||y<20||y>H-4||(sol&&sol.includes(cell(x,y)))}
 function loadMap(id,x,y,dir){G.map=id;G.x=x;G.y=y;G.dir=dir||'down';G.mode='map';G.steps=0;G.acc=0;G.hist=[];G.bl={x,y,dir:G.dir,f:0};G.f=0;G.lt=performance.now();
  if(id=='village')buildVillage();else buildGrid(id);M.name=NAMES[id];
