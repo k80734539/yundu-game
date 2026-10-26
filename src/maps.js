@@ -6,44 +6,54 @@ const GRID={
 reeds:["rrrrrrrrrrrrrrrrrrrr","r..,,,,r....,,,,,,Cr","r.rrrr,r.rr.rrrrrr,r","r.rS.,,,,,r.....r,,r","r.r.rrrr,rrrr.r.r,rr","r...,,Tr,,,,,.r.,,,r","rrrrrr.r,rrrrrr.rr,r","rC,,,,.,,,,,,,,,,r,r","rrrrr,rrrrrrrr,rr,rr","r....,,,,,r.F.,,,,,r","r.rrrrrrr,r.rrrrrr.r","r.,,,C.r,,,,,,,,,,.r","rrrrrrrr,rrrrrrrrrEr","~~~~~~~~~~~~~~~~~~~~","~~~~~~~~~~~~~~~~~~~~"],
 temple:["####################","#~~~~~~~~~~~~~~~~~~#","#~~~~~~~~~~~~~~~~~~#","#~~~~~~~~...~~~~~~~#","#...l....i..i....l.#","#..................#","#....i..........i..#","#........AAA.......#","#........AAA.......#","#....i..........i..#","#..................#","#..................#","#........i..i......#","############.......#","############..######"]};
 let M=null;
-const waterY=x=>17.6*T+Math.sin(x/70)*10+Math.sin(x/23)*4;
+const waterY=x=>(G.flags.dawn?22.3:G.flags.flood?21.2:22.5)*T+Math.sin(x/92)*12+Math.sin(x/31)*4;
 function cvs(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;return[c,c.getContext('2d')]}
 function cell(x,y){const R=M.rows;if(!R)return'';const r=R[Math.floor(y/M.T)];return r?(r[Math.floor(x/M.T)]||'#'):'#'}
 function addObj(o){o.s=o.s||1;M.obj.push(o);if(o.sol)M.sol.push(o.sol);return o}
 function decals(c,R,n,ok,scale){for(let i=0;i<n;i++){const x=R()*M.W,y=R()*M.H;if(!ok(x,y))continue;const im=I['d'+Math.floor(R()*10)],s=(scale||1)*(.7+R()*.5);c.globalAlpha=.85;c.drawImage(im,x-im.width*s/2,y-im.height*s/2,im.width*s,im.height*s)}c.globalAlpha=1}
 function blobs(c,R,n,cols){for(let i=0;i<n;i++){const x=R()*M.W,y=R()*M.H,r=60+R()*140,g=c.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,cols[i%cols.length]);g.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=g;c.fillRect(x-r,y-r,2*r,2*r)}}
-function buildVillage(){const W=30*T,H=22*T;M={id:'village',W,H,T,obj:[],sol:[],zones:[],inter:[],npcs:[],lights:[]};
+function buildVillage(){const W=42*T,H=28*T;M={id:'village',W,H,T,obj:[],sol:[],zones:[],inter:[],npcs:[],lights:[]};
  const o=(k,tx,ty,fw,fh,x={})=>addObj({k,x:tx*T,y:ty*T,sol:fw?[tx*T-fw*T/2,ty*T-fh*T,fw*T,fh*T]:null,...x});
- o('cottage',5,6.2,5.6,2.2);o('hall',15,6.2,8,2.2);o('hut',25,6.2,6,2.2);
- for(let i=0;i<10;i++)o('fence',1.7+i*3.3,1.2,3.3,.5);
- o('willow',3,15.6,1.2,.6);o('willow',27.2,15.4,1.2,.6);o('camphor',9.5,11.4,1,.5);o('camphor',21.5,11.6,1,.5);o('camphor',28,9.6,1,.5);o('camphor',1.6,9.8,1,.5);
- o('well',8,15,2.4,1);o('stall',21.5,15,3.6,1.1);
- for(const[x,y]of[[12.2,8.6],[17.8,8.6],[12.4,14],[17.6,14],[3.6,8.6],[22.6,8.6]]){o('lantern',x,y,.5,.3);M.lights.push([x*T+9,y*T-50,60,'rgba(255,170,90,.35)'])}
- o('dock',15,19.6,0,0,{flat:1});o('boat',17.4,20.3,3,1.2,{s:1.3,boat:1});
+ // 四區圍繞中央廣場展開；房屋留出朝南入口，短籬笆框出院落但不切斷主路。
+ o('cottage',8,6.2,5.6,2.2);o('cottage',13.2,7.2,5.6,2.2);o('hall',21,5.8,8,2.2);o('hut',35,6.2,6,2.2);o('cottage',5.2,10,5.6,2.2);
+ for(const[x,y,s]of[[5.3,5.4,1],[10.8,5.4,1],[12,8.6,1],[15.2,8.6,1],[31.6,5.5,1],[37.9,5.5,1],[33,8.7,1],[38,8.7,1],[4,12.1,1],[9,12.1,1]])o('fence',x,y,2.2,.35,{s});
+ // 樹叢沿聚落邊緣排布，在屋後與巷口形成自然邊界。
+ for(const[x,y,k,s]of[[2.4,4,'willow',1.1],[17.2,3.2,'camphor',.85],[29.5,3.4,'willow',1],[40,4.6,'camphor',.9],[2.2,9.2,'willow',.95],[14.8,11.8,'camphor',.8],[28.8,10.2,'camphor',.9],[40,12.3,'willow',1],[3,18.2,'willow',1],[39.4,18,'willow',1.1],[11.2,20.2,'camphor',.85],[32,19.8,'camphor',.9]])o(k,x,y,1.05,.52,{s});
+ o('well',16.8,15.2,2.4,1);o('stall',30,14.1,3.6,1.1);o('stall',34.7,14.9,3.6,1.1,{s:.82});
+ // 南西側保留一小片菜圃與倉棚，讓住宅巷有生活用途，也把空地切成尺度較親切的小院。
+ o('hut',10.5,19,5,1.8,{s:.78});for(const[x,y]of[[7,18],[9.3,18],[11.6,18],[13.2,18.9],[13.2,21],[7,20.8]])o('fence',x,y,1.6,.32,{s:.9});
+ // 廣場、各區路口與河岸棧橋都有暖燈作為方向地標。
+ for(const[x,y]of[[18,11.5],[23,11.5],[16,15],[24.5,15],[29,12],[36,12],[13,16.7],[20,19],[25,19],[18.6,22.3],[22.5,22.3]]){o('lantern',x,y,.5,.3);M.lights.push([x*T+9,y*T-50,60,'rgba(255,170,90,.35)'])}
+ o('dock',21,23.1,0,0,{flat:1});o('boat',23.3,24.2,3,1.2,{s:1.3,boat:1});
  const[g,c]=cvs(W,H);c.fillStyle=c.createPattern(I.t_grass,'repeat');c.fillRect(0,0,W,H);
- const R=rng(7);blobs(c,R,40,['rgba(40,70,20,.22)','rgba(190,200,90,.16)','rgba(20,50,30,.2)']);
+ const R=rng(7);blobs(c,R,90,['rgba(40,70,20,.22)','rgba(190,200,90,.16)','rgba(20,50,30,.2)']);
  const[m,mc]=cvs(W,H);mc.strokeStyle='#fff';mc.lineCap=mc.lineJoin='round';mc.filter='blur(5px)';
  const line=(w,...p)=>{mc.lineWidth=w;mc.beginPath();mc.moveTo(p[0]*T,p[1]*T);for(let i=2;i<p.length;i+=2)mc.lineTo(p[i]*T,p[i+1]*T);mc.stroke()};
- line(48,1,9.6,8,9.4,15,9.8,22,9.4,29,9.6);line(46,15,6.4,15,9.8,15.2,14,14.9,18);line(36,5,6.4,5.2,9.4);line(36,25,6.4,24.8,9.4);line(30,15,14,10,14.6,8.6,15.6);line(30,15.1,14.2,20,14.8,21.5,15.4);
+ line(50,20.8,1,20.8,5,20.5,10,20,13.5,20.7,18,21,22,21,26,21,41); // north-south market road to dock
+ line(42,2,13.7,8,13.4,15,13.2,20,13.1,27,13.4,40,13.8); // central square and fish market
+ line(34,7.4,6.8,7.6,10,8.5,13.4);line(34,13.5,8.4,20,8.3,27,8.5,35,8.3);line(34,35,7.2,35.5,10,35,13.4);
+ line(34,8.4,13.4,11,14.2,13.5,16.7);line(34,27,13.4,30,14.4,34,16.2,36,18.5);
+ line(30,12.6,13.2,15,12.5,18,12.5,20,13.1);line(30,20,13.1,23.3,12.5,26,12.7,28,13.3);
+ line(36,5,13.7,5.1,18,7,20.7);line(36,35,13.7,36,18,34,20.7);
  const md=mc.getImageData(0,0,W,H).data;
  const[d,dc]=cvs(W,H);dc.drawImage(m,0,0);dc.globalCompositeOperation='source-in';dc.fillStyle=dc.createPattern(I.t_dirt,'repeat');dc.fillRect(0,0,W,H);c.drawImage(d,0,0);
- decals(c,R,420,(x,y)=>md[(Math.floor(y)*W+Math.floor(x))*4+3]<20&&y<waterY(x)-24&&y>1.4*T);
+ decals(c,R,980,(x,y)=>md[(Math.floor(y)*W+Math.floor(x))*4+3]<20&&y<waterY(x)-24&&y>1.4*T);
  c.fillStyle='rgba(120,95,60,.55)';c.filter='blur(4px)';c.beginPath();c.moveTo(0,H);for(let x=0;x<=W;x+=8)c.lineTo(x,waterY(x)-10);c.lineTo(W,H);c.fill();c.filter='none';
  M.ground=g;M.water=x=>waterY(x);
- M.blocked=(x,y)=>{if(x<12||x>W-12||y<1.6*T||y>H-4)return 1;const onDock=x>13.2*T&&x<16.8*T&&y<20.6*T;return y>waterY(x)-4&&!onDock};
+ M.blocked=(x,y)=>{if(x<12||x>W-12||y<1.6*T||y>H-4)return 1;const onDock=x>19.1*T&&x<22.9*T&&y>20.1*T&&y<24.4*T;return y>waterY(x)-4&&!onDock};
  const f=G.flags;
  const ph=phase(),P=(a,b,c)=>[a,b,c][ph-1];
  if(!f.cure){
-  npc('wang',12*T,16.6*T,'王大叔',()=>{if(ph==1&&!f.ferry){f.ferry=1;say(S.wang1.concat(S.wang1Hint))}else say(P(S.wang1r,S.wang2,S.wang3))});
-  npc('chief',13.6*T,8.3*T,'村長',()=>{if(ph==1&&!f.chief){f.chief=1;say(S.chief1)}else say(P(S.chief1r,S.chief2,S.chief3))},()=>!f.chief);
-  npc('granny',24.6*T,9.4*T,'阿婆',()=>{if(ph==3)return cure();if(!f.quest){f.quest=1;G.party[0].arm=3;G.inv.魚乾+=3;say(S.granny1.concat(S.granny1Get))}else say(S.granny2)},()=>!f.quest||(ph==3&&!f.cure));
-  npc('lin',6.6*T,16.2*T,'林嬸',()=>say(P(S.lin1,S.lin2,S.lin3),null,'lin'));
-  npc('zhou',19.6*T,16.9*T,'老周',()=>say(P(S.zhou1,S.zhou2,S.zhou3),null,'zhou'));
-  M.inter.push({x:5*T,y:6.6*T,r:36,act:()=>say(P(S.home1,S.home2,S.home3))});
-  M.inter.push({x:27*T,y:6.7*T,r:30,act:()=>say(ph==2?S.stone2:ph==1?S.stone1:[['','小石頭睡得正香，阿婆守在床邊。']])});
-  if(!f.dawn){M.inter.push({x:17.6*T,y:19.9*T,r:44,act:boardBoat});
-  M.zones.push({x0:13.4*T,y0:19.7*T,x1:16.8*T,y1:20.7*T,enter:boardBoat})}
- }else npc('yx',15*T,16.4*T,'雲纖',null);
+  npc('wang',19*T,19.2*T,'王大叔',()=>{if(ph==1&&!f.ferry){f.ferry=1;say(S.wang1.concat(S.wang1Hint))}else say(P(S.wang1r,S.wang2,S.wang3))});
+  npc('chief',21*T,9.3*T,'村長',()=>{if(ph==1&&!f.chief){f.chief=1;say(S.chief1)}else say(P(S.chief1r,S.chief2,S.chief3))},()=>!f.chief);
+  npc('granny',35*T,9.3*T,'阿婆',()=>{if(ph==3)return cure();if(!f.quest){f.quest=1;G.party[0].arm=3;G.inv.魚乾+=3;say(S.granny1.concat(S.granny1Get))}else say(S.granny2)},()=>!f.quest||(ph==3&&!f.cure));
+  npc('lin',7.5*T,15.4*T,'林嬸',()=>say(P(S.lin1,S.lin2,S.lin3),null,'lin'));
+  npc('zhou',29*T,15.8*T,'老周',()=>say(P(S.zhou1,S.zhou2,S.zhou3),null,'zhou'));
+  M.inter.push({x:8*T,y:7.8*T,r:36,act:()=>say(P(S.home1,S.home2,S.home3))});
+  M.inter.push({x:37*T,y:7.8*T,r:30,act:()=>say(ph==2?S.stone2:ph==1?S.stone1:[['','小石頭睡得正香，阿婆守在床邊。']])});
+  if(!f.dawn){M.inter.push({x:21*T,y:23.1*T,r:48,act:boardBoat});
+  M.zones.push({x0:19.4*T,y0:22.4*T,x1:22.6*T,y1:24.2*T,enter:boardBoat})}
+ }else npc('yx',21*T,21.2*T,'雲纖',null);
 }
 function npc(k,x,y,n,talk,mark){const o={k,x,y,dir:'down',n,talk,mark,npc:1};M.npcs.push(o);M.sol.push([x-11,y-9,22,10]);if(talk)M.inter.push({x,y:y-14,r:30,act:()=>{faceTo(o);talk()}});return o}
 function faceTo(o){if(!I[o.k+'_down0'])return;const dx=G.x-o.x,dy=G.y-o.y;o.dir=Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up')}

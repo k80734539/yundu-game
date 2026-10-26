@@ -4,7 +4,7 @@ export async function touchBattle(b,url){let ok=true;const dir=outDir('touch');
  for(const[W,H]of SIZES){const {ctx,pg,E,P,jsErrors}=await newPage(b,W,H,{dpr:3});
   await pg.goto(url);await wait(pg,1200);await P('ok');await wait(pg,100);
   for(let i=0;i<40&&await E('!!G.dlg');i++)await P('ok');
-  await pg.evaluate("G_().flags.chief=1;G_().flags.quest=1;TP(15*32,18.6*32,'down')");
+  await pg.evaluate("G_().flags.chief=1;G_().flags.quest=1;TP(21*32,22.4*32,'down')");
   await pg.keyboard.down('ArrowDown');await wait(pg,900);await pg.keyboard.up('ArrowDown');
   for(let i=0;i<40&&await E('G.mode')!=='battle';i++){await P('ok');await wait(pg,50)}
   await pg.evaluate("G_().party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']))");

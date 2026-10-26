@@ -2,7 +2,7 @@
 // 劇情/對話腳本與事件旗標
 // ---------- story ----------
 function newGame(){G={mode:'map',party:[mk('陳青舟','qz',60,12,10,3,4,['橫掃'])],inv:{魚乾:1,清心草:0},flags:{},opened:{},dlg:null,B:null};
- loadMap('village',5*T,7.6*T,'down');say(S.open.concat(S.openHint()))}
+ loadMap('village',20*T,14*T,'down');say(S.open.concat(S.openHint()))}
 function saveCP(o){G.cp=JSON.stringify({o,party:G.party,inv:G.inv,flags:G.flags,opened:G.opened});autoSave(o)}
 function heal(){G.party.forEach(p=>{p.hp=p.mhp;p.mp=p.mmp;p.st=''})}
 function retry(){const s=JSON.parse(G.cp);Object.assign(G,{party:s.party,inv:s.inv,flags:s.flags,opened:s.opened,B:null,dlg:null});
@@ -36,6 +36,6 @@ function startNight(){G.mode='boat';G.boatT=performance.now();G.party=G.party.fi
   G.party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']));loadMap('reeds',1.5*T2,1.85*T2,'down');say(S.wake.concat(S.wakeSys))}}),'night')}
 function bossTalk(){if(!G.flags.templeSeal)return say(S.bossNoSeal);say(S.boss,()=>startBattle(['河伯'],{noEsc:1,bg:'bg_temple',onWin:()=>{G.flags.boss=1;G.flags.pearl=1;M.npcs=M.npcs.filter(n=>!n.boss);
  say(S.bossWin.concat(S.bossSys),dawn,'hebo')}}))}
-function dawn(){G.flags.dawn=1;loadMap('village',15*T,19.2*T,'up');G.dawnT=performance.now();heal();say(S.dawn.concat(S.dawnHint))}
-function cure(){const f=G.flags;f.cure=1;f.pearl=0;say(S.cure,()=>{loadMap('village',15*T,19.2*T,'up');say(S.yx.concat(S.teaser),()=>{G.mode='end';G.endT=performance.now()},'yx')})}
+function dawn(){G.flags.dawn=1;loadMap('village',21*T,22.4*T,'up');G.dawnT=performance.now();heal();say(S.dawn.concat(S.dawnHint))}
+function cure(){const f=G.flags;f.cure=1;f.pearl=0;say(S.cure,()=>{loadMap('village',21*T,22.4*T,'up');say(S.yx.concat(S.teaser),()=>{G.mode='end';G.endT=performance.now()},'yx')})}
 function status(){say([['狀態',G.party.map(p=>p.n+' Lv'+p.lv+'  HP '+p.hp+'/'+p.mhp+'  MP '+p.mp+'/'+p.mmp+(p.st?' 【'+p.st+'】':'')).join('\n')+'\n道具：魚乾×'+G.inv.魚乾+'  清心草×'+G.inv.清心草+(G.party[0].arm?'  裝備：護身符':'')]])}
