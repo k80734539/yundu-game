@@ -17,7 +17,7 @@ export async function spriteSize(browser,url,sizes=[[390,664],[844,390]]){
    await pg.evaluate("press('ok');G_().dlg=null;G_().party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']));loadMap('reeds',10*T2,5*T2,'down')");
    // 圖片網址帶 ?v=（資源版本，避免舊 JS／新圖或新 JS／舊圖混用）
    assert.equal(await pg.evaluate("Object.keys(ASSETS).every(k=>I[k].src.includes('?v='+ASSET_V))"),true);
-   // 村莊靜態物件已併入背景；改在有 y-sort 物件的蘆葦蕩逐一走到物件後方，剪影必須被畫出且寬度 <100
+   // 底圖場景把固定植被繪入背景；掃過仍動態繪製的物件，再加入測試遮擋物驗證 y-sort 剪影尺寸。
    const n=await pg.evaluate("M_().obj.length");
    let ghosts=0;
    for(let i=0;i<n;i++){
@@ -25,7 +25,8 @@ export async function spriteSize(browser,url,sizes=[[390,664],[844,390]]){
     const r=await pg.evaluate("window.__di");
     for(const d of r){assert.ok(d.w<100,`sprite ${d.k} drawn ${d.w}px wide (obj ${i}, alpha ${d.a})`);if(d.a<1&&d.k.startsWith('qz_'))ghosts++}
    }
-   assert.ok(ghosts>0,'沒有任何物件遮住青舟（測試失效）');
+   if(!ghosts){await pg.evaluate("M_().obj.push({k:'willow',x:G_().x,y:G_().y+10,s:1,ghost:1});window.__di=[]");await pg.clock.runFor(34);for(const d of await pg.evaluate('window.__di')){assert.ok(d.w<100,`overlay sprite drawn ${d.w}px wide`);if(d.a<1&&d.k.startsWith('qz_'))ghosts++}}
+   assert.ok(ghosts>0,'遮擋測試物件未觸發青舟半透明剪影');
    // 真實按鍵長時間走路：四向、斜向、停下再走，每一幀畫出的角色 sprite 都 <100px，幀序在 0–3 內
    await pg.evaluate("loadMap('village',15*T,10*T,'down');window.__di=[]");
    const hold=async(ks,ms)=>{for(const k of ks)await pg.keyboard.down(k);await pg.clock.runFor(ms);for(const k of ks)await pg.keyboard.up(k)};

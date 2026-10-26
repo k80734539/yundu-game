@@ -11,9 +11,9 @@ function drawWorld(now){const t=now/1000;
  // water
  if(M.id=='village'){X.save();X.beginPath();X.moveTo(0,M.H);for(let x=0;x<=M.W;x+=8)X.lineTo(x,waterY(x));X.lineTo(M.W,M.H);X.clip();X.globalAlpha=M.id=='village'?.14:1;X.fillStyle=X.createPattern(I.t_water,'repeat');X.translate(t*9%128,Math.sin(t)*3);X.fillRect(-128,17*T-128,M.W+256,M.H);X.globalAlpha=1;X.restore();
   X.strokeStyle=M.id=='village'?'rgba(228,246,239,.16)':'rgba(255,255,255,.35)';X.lineWidth=M.id=='village'?1:2;X.beginPath();for(let x=0;x<=M.W;x+=8){const y=waterY(x)+2+Math.sin(t*3+x/30)*1.5;x?X.lineTo(x,y):X.moveTo(x,y)}X.stroke()}
- else{const wk=M.id=='reeds'?'t_marsh':'t_water';X.save();X.beginPath();M.rows.forEach((row,y)=>[...row].forEach((c,x)=>{if(c=='~')X.rect(x*M.T,y*M.T,M.T,M.T)}));X.clip();X.fillStyle=X.createPattern(I[wk],'repeat');X.translate(t*6%128,Math.sin(t*.8)*3);X.fillRect(-128,-128,M.W+256,M.H+256);X.restore();
-  if(M.id=='temple'){X.fillStyle='rgba(5,20,40,.35)';X.fillRect(M.T,M.T,18*M.T,3*M.T);X.fillStyle='#4a4038';for(let x=1;x<19;x++)if(M.rows[3][x]=='~')X.fillRect(x*M.T,4*M.T-6,M.T,7);X.fillRect(9*M.T,3*M.T,3*M.T,M.T);X.fillStyle='rgba(255,255,255,.08)';X.fillRect(9*M.T,3*M.T,3*M.T,4)}
-  else{X.strokeStyle='rgba(200,220,255,.25)';X.lineWidth=2;X.beginPath();for(let x=0;x<=M.W;x+=8){const y=13*M.T+3+Math.sin(t*2.5+x/25)*1.5;x?X.lineTo(x,y):X.moveTo(x,y)}X.stroke()}}
+ else{const wk=M.id=='reeds'?'t_marsh':'t_water';X.save();X.beginPath();M.rows.forEach((row,y)=>[...row].forEach((c,x)=>{if(c=='~')X.rect(x*M.T,y*M.T,M.T,M.T)}));X.clip();X.globalAlpha=M.mapPlate?.10:1;X.fillStyle=X.createPattern(I[wk],'repeat');X.translate(t*6%128,Math.sin(t*.8)*3);X.fillRect(-128,-128,M.W+256,M.H+256);X.globalAlpha=1;X.restore();
+  if(M.id=='temple'&&!M.mapPlate){X.fillStyle='rgba(5,20,40,.35)';X.fillRect(M.T,M.T,18*M.T,3*M.T);X.fillStyle='#4a4038';for(let x=1;x<19;x++)if(M.rows[3][x]=='~')X.fillRect(x*M.T,4*M.T-6,M.T,7);X.fillRect(9*M.T,3*M.T,3*M.T,M.T);X.fillStyle='rgba(255,255,255,.08)';X.fillRect(9*M.T,3*M.T,3*M.T,4)}
+  else if(!M.mapPlate){X.strokeStyle='rgba(200,220,255,.25)';X.lineWidth=2;X.beginPath();for(let x=0;x<=M.W;x+=8){const y=13*M.T+3+Math.sin(t*2.5+x/25)*1.5;x?X.lineTo(x,y):X.moveTo(x,y)}X.stroke()}}
  // depth-sorted layer
  const L=[];for(const o of M.obj){if(o.mapPlate||o.x<cx-150||o.x>cx+VW+150||o.y<cy-30||o.y>cy+VH+260)continue;L.push({y:o.flat?-1e4+o.flat*10+o.y*.001:o.y,f:()=>drawObj(o,t)})}
  for(const n of M.npcs){L.push({y:n.y,f:()=>{if(drawSceneNPC(n,now))return;if(n.boss){const im=I.hebo,s=.52,w=im.width*s,h=im.height*s,b=Math.sin(t*1.6)*4;X.fillStyle='rgba(0,0,0,.35)';X.beginPath();X.ellipse(n.x,n.y-4,60,12,0,0,7);X.fill();X.drawImage(im,n.x-w/2,n.y-h+8+b,w,h)}else chr(spriteKey(n.k,n.dir,0),n.x,n.y);
@@ -46,7 +46,7 @@ function drawWorld(now){const t=now/1000;
   const L=SA.l+30,R=SW-SA.r-30,Tp=SA.t+fs*2+40,Bt=SH-SA.b-(JOY.touch?190:30);
   if(sx>L&&sx<R&&sy>Tp&&sy<Bt){txt('▼ 渡船',sx,sy-6+bob,fs+2,'#ffe9a8','center')}
   else{const ax=Math.max(L+20,Math.min(R-20,sx)),ay=Math.max(Tp,Math.min(Bt,sy)),an=Math.atan2(sy-ay,sx-ax);X.save();X.translate(ax,ay);X.fillStyle='rgba(0,0,0,.55)';X.beginPath();X.arc(0,0,fs*1.7,0,7);X.fill();X.rotate(an);X.fillStyle='#ffe9a8';X.beginPath();X.moveTo(fs*1.5+bob/2,0);X.lineTo(fs*.6,-fs*.7);X.lineTo(fs*.6,fs*.7);X.fill();X.restore();txt('渡船',ax,ay+fs*.4,fs-2,'#fff','center')}}}
- txt('v39',SW-SA.r-6,SH-SA.b-4,Math.max(10,fs-6),'rgba(255,255,255,.6)','right');
+ txt('v40',SW-SA.r-6,SH-SA.b-4,Math.max(10,fs-6),'rgba(255,255,255,.6)','right');
  const at=now-G.lt;if(M.id=='temple'&&at<2600){X.globalAlpha=Math.min(1,Math.max(0,1-(at-1600)/1000));X.fillStyle='#000';X.fillRect(0,0,SW,SH);cover(I.ext);const fs2=fs+6;box(SW/2-80,SH*.7,160,fs2+22);txt('河神廟',SW/2,SH*.7+fs2+6,fs2,'#f3dfa0','center');X.globalAlpha=1}}
 function dlgTop(){return JOY.touch&&SW>SH}
 function drawBoat(now){drawNightScene(now)}

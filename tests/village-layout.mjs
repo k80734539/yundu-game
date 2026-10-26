@@ -13,13 +13,14 @@ export async function villageLayout(browser,url){
    for(let p=0;p<queue.length;p++){const[i,j]=queue[p];for(const[di,dj]of[[1,0],[-1,0],[0,1],[0,-1]]){const a=i+di,b=j+dj,id=b*cols+a;if(valid(a,b)&&!seen.has(id)){seen.add(id);queue.push([a,b])}}}
    const reachable=(x,y,r)=>queue.some(([i,j])=>Math.hypot((i+.5)*step-x,(j+.5)*step-y)<r);
    const points=[...m.npcs.filter(n=>n.talk).map(n=>[n.n,n.x,n.y-14,32]),['家巷',10.8*T,5.8*T,34],['小石頭家',38*T,7.7*T,34],['渡口',21*T,23.1*T,46]];
-   const foliageBlocked=blocked(25*T,16*T),approachClear=!blocked(25*T,14.5*T)&&!blocked(29*T,16*T);
+   const solids=[['upper-left home',3.2,3],['west home',5,8],['main hall',22,3],['east home',38,3],['southwest home',4,17],['southeast home',36,16.5],['central tree trunk',14.8,11.8],['market tree trunk',28.8,10.2],['west-edge tree trunk',2.2,9.2],['well',12.7,12.1],['market stall',26,11.5],['yard fence',5.3,5.4],['market shrub and wall',25,16]];
+   const landmarkBlocked=solids.map(([name,x,y])=>[name,blocked(x*T,y*T)]),approaches=[[20,14],[25,14.5],[29,16],[21,16.5],[30,17]].map(([x,y])=>!blocked(x*T,y*T));
    const levels=(()=>{const a=waterY(21*T);G_().flags.flood=1;const b=waterY(21*T);G_().flags.dawn=1;const c=waterY(21*T);return[a,b,c]})();
-   return{world:[m.W,m.H],objects:m.obj.length,reachable:points.map(([n,x,y,r])=>[n,reachable(x,y,r)]),foliageBlocked,approachClear,levels};
+   return{world:[m.W,m.H],objects:m.obj.length,reachable:points.map(([n,x,y,r])=>[n,reachable(x,y,r)]),landmarkBlocked,approaches,levels};
   });
   assert.deepEqual(q.world,[42*32,28*32]);assert(q.objects>=45,`village dressing count ${q.objects}`);
   assert(q.reachable.every(([,ok])=>ok),`unreachable town destinations: ${JSON.stringify(q.reachable)}`);
-  assert(q.foliageBlocked,'market-side foliage must block the reported pass-through spot');assert(q.approachClear,'open approaches around market-side foliage remain walkable');
+  assert(q.landmarkBlocked.every(([,ok])=>ok),`landmark should block movement: ${JSON.stringify(q.landmarkBlocked)}`);assert(q.approaches.every(Boolean),'open routes around landmarks must remain walkable');
   assert(q.levels[1]<q.levels[0]-24&&q.levels[2]>q.levels[1]+24,'waterfront recedes after flood and recovers at dawn');
   assert.deepEqual(await jsErrors(),[]);console.log(`[village-layout] 42×28 world, ${q.objects} props, all village destinations reachable, flood shoreline changes PASS`);
  }finally{await ctx.close()}

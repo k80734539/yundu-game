@@ -19,7 +19,7 @@ function campfire(){const f=G.flags;if(!f.tal)return say([['白苓','這裡生�
 function loreStone(){if(G.flags.lore)return say(S.loreR);G.flags.lore=1;say(S.lore)}
 function exitReeds(){const f=G.flags;if(!f.tal){G.y-=14;return say(S.exitNo)}if(!f.camp){G.y-=14;return say(S.exitNoCamp)}
  if(!f.reedSolved){G.y-=14;return say(S.exitNoTrial)}
- loadMap('temple',12.5*T2,13.8*T2,'up');heal();saveCP({map:'temple',x:12.5*T2,y:13.8*T2,dir:'up'});say(S.temple.concat(S.templeHint))}
+ loadMap('temple',10.5*T2,13.8*T2,'up');heal();saveCP({map:'temple',x:10.5*T2,y:13.8*T2,dir:'up'});say(S.temple.concat(S.templeHint))}
 function plaque(){if(G.flags.plaque)return say(S.plaqueR);G.flags.plaque=1;say(S.plaque)}
 function stele(){G.flags.steleSeen=1;say(S.stele)}
 function templeSeal(){const f=G.flags;if(!f.steleSeen)return say(S.sealNoClue);if(f.templeSeal)return say(S.sealRepeat);f.templeSeal=1;say(S.seal)}
