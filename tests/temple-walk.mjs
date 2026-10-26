@@ -13,7 +13,7 @@ export async function templeWalk(browser,url){
    const sx=Math.floor(G_().x/step),sy=Math.floor(G_().y/step),queue=[[sx,sy]],seen=new Set([sy*cols+sx]);
    for(let p=0;p<queue.length;p++){const[i,j]=queue[p];for(const[di,dj]of[[1,0],[-1,0],[0,1],[0,-1]]){const a=i+di,b=j+dj,id=b*cols+a;if(valid(a,b)&&!seen.has(id)){seen.add(id);queue.push([a,b])}}}
    const reachable=(x,y,r)=>queue.some(([i,j])=>Math.hypot((i+.5)*step-x,(j+.5)*step-y)<r);
-   const points=m.inter.map(it=>[Math.round(it.x)+','+Math.round(it.y),it.x,it.y,it.r+12]);
+   const points=m.inter.map(it=>[Math.round(it.x)+','+Math.round(it.y),it.x,it.y,it.r+12]).concat([['左路盡頭（石碑前）',128,425,20],['右路盡頭（石泉前）',790,515,20],['左路中段',320,408,14],['左路中段2',216,444,14],['左路中段3',155,462,14],['右路中段',745,470,14]]);
    const solids=[['hall wall',400,70],['well basin',512,355],['left lamp',438,300],['pool',850,462],['left tree',330,290],['right tree',650,290],['water west',60,300],['water south',300,690]].map(([n,x,y])=>[n,blocked(x,y)]);
    const open=[[512,500],[512,440],[512,250],[512,610],[200,470],[120,422],[760,490]].map(([x,y])=>!blocked(x,y));
    let s=7;const rnd=()=>(s=(s*1103515245+12345)%2147483648)/2147483648,bad=[];let n=0;
