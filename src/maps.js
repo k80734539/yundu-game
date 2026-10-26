@@ -29,7 +29,7 @@ function buildVillage(){const W=42*T,H=28*T;M={id:'village',W,H,T,obj:[],sol:[],
  // 靜態村景美術；碰撞仍以資料定義，確保屋舍、井與攤位不可穿越。
  M.sol.push(
   [1*T,1.2*T,5*T,4*T], [8*T,1.4*T,6*T,4.3*T], [18*T,1.6*T,7*T,4*T],
-  [31*T,1.4*T,5*T,4.4*T], [36*T,1.4*T,5*T,4.4*T], [4*T,6*T,5*T,4*T],
+  [31*T,6*T,5*T,4*T], [36*T,1.4*T,5*T,4.4*T], [4*T,6*T,5*T,4*T],
   [1*T,15*T,7*T,5*T], [33*T,14*T,7*T,5*T],
   [11.7*T,11.4*T,2*T,1.5*T], [25*T,10.5*T,4*T,2*T], [29*T,11.3*T,3.5*T,1.6*T]
  );
@@ -38,11 +38,11 @@ function buildVillage(){const W=42*T,H=28*T;M={id:'village',W,H,T,obj:[],sol:[],
  const f=G.flags;
  const ph=phase(),P=(a,b,c)=>[a,b,c][ph-1];
  if(!f.cure){
-  npc('wang',19*T,19.2*T,'王大叔',()=>{if(ph==1&&!f.ferry){f.ferry=1;say(S.wang1.concat(S.wang1Hint))}else say(P(S.wang1r,S.wang2,S.wang3))});
-  npc('chief',21*T,9.3*T,'村長',()=>{if(ph==1&&!f.chief){f.chief=1;say(S.chief1)}else say(P(S.chief1r,S.chief2,S.chief3))},()=>!f.chief);
-  npc('granny',35*T,9.3*T,'阿婆',()=>{if(ph==3)return cure();if(!f.quest){f.quest=1;G.party[0].arm=3;G.inv.魚乾+=3;say(S.granny1.concat(S.granny1Get))}else say(S.granny2)},()=>!f.quest||(ph==3&&!f.cure));
-  npc('lin',7.5*T,15.4*T,'林嬸',()=>say(P(S.lin1,S.lin2,S.lin3),null,'lin'));
-  npc('zhou',29*T,15.8*T,'老周',()=>say(P(S.zhou1,S.zhou2,S.zhou3),null,'zhou'));
+  npc('wang',21.4*T,19.7*T,'王大叔',()=>{if(ph==1&&!f.ferry){f.ferry=1;say(S.wang1.concat(S.wang1Hint))}else say(P(S.wang1r,S.wang2,S.wang3))});
+  npc('chief',21.4*T,8.5*T,'村長',()=>{if(ph==1&&!f.chief){f.chief=1;say(S.chief1)}else say(P(S.chief1r,S.chief2,S.chief3))},()=>!f.chief);
+  npc('granny',36.3*T,10.6*T,'阿婆',()=>{if(ph==3)return cure();if(!f.quest){f.quest=1;G.party[0].arm=3;G.inv.魚乾+=3;say(S.granny1.concat(S.granny1Get))}else say(S.granny2)},()=>!f.quest||(ph==3&&!f.cure));
+  npc('lin',14.4*T,13.5*T,'林嬸',()=>say(P(S.lin1,S.lin2,S.lin3),null,'lin'));
+  npc('zhou',31.5*T,13.5*T,'老周',()=>say(P(S.zhou1,S.zhou2,S.zhou3),null,'zhou'));
   M.inter.push({x:10.8*T,y:5.8*T,r:36,act:()=>say(P(S.home1,S.home2,S.home3))});
   M.inter.push({x:38*T,y:7.7*T,r:30,act:()=>say(ph==2?S.stone2:ph==1?S.stone1:[['','小石頭睡得正香，阿婆守在床邊。']])});
   if(!f.dawn){M.inter.push({x:21*T,y:23.1*T,r:48,act:boardBoat});
