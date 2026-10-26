@@ -42,3 +42,11 @@ v28 主角半身頭像：使用者提供的三張四視角角色圖，經軟式�
 
 【v33 背景音樂與錄製音效】
 音樂、環境音及戰鬥／介面音效：使用者提供的 22 份音檔。專案僅進行音訊擷取、裁切、音量平衡與循環交叉淡化；原檔未改動。詳見 docs/audio/manifest-v33.json。缺少錄音時仍使用 v30 原創合成音效回退。
+
+
+【v36 村莊風格小樣】
+村莊單間屋舍 cottage_v36.webp：OpenAI 內建 image_gen 原創生成，參考本專案原有 cottage 與青舟地圖 sprite；透明背景經裁切、等比縮放。尚為局部樣張，未替換其他村莊素材。製作記錄及提示詞見 docs/art/village-v36/cottage-style-preview.md。
+
+
+【v37 蘆花渡村完整場景】
+村莊底圖 village_map_v37.webp：OpenAI 內建 image_gen 原創生成，風格參考使用者提供的水彩村景，構圖重新設計；等比縮放至 1344×896。製作與地圖碰撞配置見 docs/art/village-v37/ 及 docs/maps/village-v37.md。

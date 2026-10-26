@@ -14,10 +14,10 @@ export async function spriteSize(browser,url,sizes=[[390,664],[844,390]]){
   try{
    await pg.addInitScript(SPY);
    await pg.clock.install({time:0});await pg.goto(url);await pg.clock.pauseAt(1000);await pg.clock.runFor(1500);
-   await pg.evaluate("press('ok');G_().dlg=null;G_().party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']))");
+   await pg.evaluate("press('ok');G_().dlg=null;G_().party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']));loadMap('reeds',10*T2,5*T2,'down')");
    // 圖片網址帶 ?v=（資源版本，避免舊 JS／新圖或新 JS／舊圖混用）
    assert.equal(await pg.evaluate("Object.keys(ASSETS).every(k=>I[k].src.includes('?v='+ASSET_V))"),true);
-   // 走到每個物件正後方（會被遮住）：剪影必須被畫出，且寬度 <100
+   // 村莊靜態物件已併入背景；改在有 y-sort 物件的蘆葦蕩逐一走到物件後方，剪影必須被畫出且寬度 <100
    const n=await pg.evaluate("M_().obj.length");
    let ghosts=0;
    for(let i=0;i<n;i++){
@@ -27,7 +27,7 @@ export async function spriteSize(browser,url,sizes=[[390,664],[844,390]]){
    }
    assert.ok(ghosts>0,'沒有任何物件遮住青舟（測試失效）');
    // 真實按鍵長時間走路：四向、斜向、停下再走，每一幀畫出的角色 sprite 都 <100px，幀序在 0–3 內
-   await pg.evaluate("TP(15*T,10*T,'down');window.__di=[]");
+   await pg.evaluate("loadMap('village',15*T,10*T,'down');window.__di=[]");
    const hold=async(ks,ms)=>{for(const k of ks)await pg.keyboard.down(k);await pg.clock.runFor(ms);for(const k of ks)await pg.keyboard.up(k)};
    const seen=new Set();
    for(let round=0;round<3;round++)for(const ks of[['ArrowDown'],['ArrowLeft'],['ArrowUp'],['ArrowRight'],['ArrowDown','ArrowLeft'],['ArrowUp','ArrowRight'],['ArrowUp','ArrowLeft'],['ArrowDown','ArrowRight']]){
