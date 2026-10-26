@@ -13,10 +13,10 @@ function press(k){if(!ready)return;if(typeof soundUi==='function')soundUi(k);if(
  if(G.mode=='map'){if(k=='ok')interact();else if(k=='cancel')status();else if(k=='menu')openMenu()}}
 const KM={ArrowUp:'up',w:'up',W:'up',ArrowDown:'down',s:'down',S:'down',ArrowLeft:'left',a:'left',A:'left',ArrowRight:'right',d:'right',D:'right',' ':'ok',Enter:'ok',z:'ok',Z:'ok',Escape:'cancel',x:'cancel',X:'cancel',c:'cred',C:'cred',m:'menu',M:'menu'};
 const keys={};
-addEventListener('keydown',e=>{const k=KM[e.key];if(!k)return;e.preventDefault();const dir=DV[k];if(dir)keys[k]=1;if(e.repeat&&!dir)return;if(!(dir&&G.mode=='map'&&!G.dlg))press(k)});
+addEventListener('keydown',e=>{const k=KM[e.key];if(!k)return;e.preventDefault();const dir=DV[k];if(dir)keys[k]=1;if(e.repeat&&!dir)return;if(!(dir&&G.mode=='map'&&!G.dlg&&!SV.p))press(k)});
 addEventListener('keyup',e=>{const k=KM[e.key];if(k)keys[k]=0});
 const clearK=()=>{JOY._reset&&JOY._reset();for(const k in keys)keys[k]=0};addEventListener('blur',clearK);document.addEventListener('visibilitychange',clearK);addEventListener('contextmenu',e=>e.preventDefault());
 addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
 JOY.onA=()=>press('ok');JOY.onB=()=>press('cancel');
-(function(){let cur=null,last=0;setInterval(()=>{if(!JOY.on||(G.mode=='map'&&!G.dlg)){cur=null;return}const d=Math.abs(JOY.x)>Math.abs(JOY.y)?(JOY.x>0?'right':'left'):(JOY.y>0?'down':'up');const n=Date.now();if(d!==cur||n-last>=220){cur=d;last=n;press(d)}},30)})();
+(function(){let cur=null,last=0;setInterval(()=>{if(!JOY.on||(G.mode=='map'&&!G.dlg&&!SV.p)){cur=null;return}const d=Math.abs(JOY.x)>Math.abs(JOY.y)?(JOY.x>0?'right':'left'):(JOY.y>0?'down':'up');const n=Date.now();if(d!==cur||n-last>=220){cur=d;last=n;press(d)}},30)})();
 if(!JOY.touch)cv.addEventListener('click',()=>{if(G.mode=='title'&&!G.cred)press('ok')});

@@ -19,6 +19,8 @@ npx playwright install chromium      # 或改用系統 Chrome：export CHROME_PA
 | `node tests/villagers.mjs` | 五位村民：原圖身份對應、透明半身像、192px 地圖角色縮放與腳底、互動碰撞不變、橫直對話截圖 |
 | `node tests/night-rescue.mjs` | 五種手機尺寸＋1894×870 桌機：船艙腳底、水面裁切、竹篙接點、上船連續動作、對話避讓與跳過 |
 | `node tests/village-layout.mjs` | 蘆花渡村 42×28 地圖：碰撞格可達村民、住家、渡口，並驗證退水與黎明水位變化 |
+| `node tests/exploration-ui.mjs` | 四尺寸探索 HUD、選單真實資料、移動暫停、設定保存與鍵盤焦點 |
+| `node tests/temple-walk.mjs` | 河神廟遮罩、左右支路與互動點可達、阻擋及隨機移動 |
 | `node tests/reeds-maze.mjs` | 蘆葦蕩迷宮：實際控制器走完岔路與三寶箱、妖根前後通路、水岸與斜向搖桿碰撞、營火回復與安全存檔、河神廟出口；直式與橫式截圖 |
 | `node tests/battle-feedback.mjs` | 實際音訊、手勢解鎖、靜音保存、無音訊 API、命中定格與受擊回位，不重算傷害 |
 | `node tests/portrait-ui.mjs` | 六尺寸：透明半身圖、戰鬥／對話共用素材、頭像點選隊友、畫面與觸控範圍 |

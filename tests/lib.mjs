@@ -4,8 +4,8 @@ import {chromium} from 'playwright';
 export const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 export const OUT=process.env.OUT_DIR?path.resolve(process.env.OUT_DIR):path.join(ROOT,'tests','out');
 export const SIZES=[[390,664],[375,553],[430,750],[664,390],[844,390]];
-const MIME={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.txt':'text/plain; charset=utf-8','.json':'application/json'};
-// 必須用 http（不是 file://）：maps.js 會對碰撞遮罩 getImageData，file:// 會 taint canvas。
+const MIME={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.txt':'text/plain; charset=utf-8','.json':'application/json'};
+// 使用同源 HTTP 載入資源與截圖；村莊／河神廟碰撞會以 getImageData 取樣可走遮罩。
 export function serve(port=0){return new Promise(res=>{const s=http.createServer((q,r)=>{let p=decodeURIComponent(q.url.split('?')[0]);if(p.endsWith('/'))p+='index.html';const f=path.join(ROOT,p);
  if(!f.startsWith(ROOT)||!fs.existsSync(f)||fs.statSync(f).isDirectory()){r.writeHead(404);r.end();return}r.writeHead(200,{'Content-Type':MIME[path.extname(f)]||'application/octet-stream'});fs.createReadStream(f).pipe(r)});
  s.listen(port,'127.0.0.1',()=>res({url:`http://127.0.0.1:${s.address().port}/`,close:()=>s.close()}))})}

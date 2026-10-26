@@ -40,6 +40,7 @@ src/battle_motion.js  v22 斜角站位動作：BFR（480×420 影格、腳底 y=
 src/battle_ui.js      drawBattle：全螢幕背景、敵左上／我方下方左中右橫排＋橢圓影子、八角指令鈕、底部三張角色卡、KO 溶解、傷害數字；觸控 bTap / B.hit 點擊區
 src/screens.js        標題、CREDITS、全滅、結局畫面
 src/save.js           存檔系統：localStorage（yundu_save_auto/1/2/3，SAVE_VER 版本號＋migrateSave）、右上「選單」DOM 按鈕與存讀檔面板、標題「繼續遊戲／讀取存檔」
+src/exploration_ui.js 探索 HUD 與旅途手札；樣式 exploration_ui.css
 src/main.js           frame() 主迴圈（try/catch → window.__err）、測試掛勾
 docs/art/             美術規範 style-guide.md、現況審核 audit.md、各素材製作文件與 audit/ contact sheets
 assets/img/           所有圖片（webp/png/jpg），由舊版 base64 抽出
@@ -49,7 +50,7 @@ CREDITS.txt           素材來源（必須保留）
 tests/                Playwright 測試，見 tests/README.md
 package.json          只給測試用（npm test）
 ```
-**載入順序**（index.html）：joystick → assets → engine → data → maps → story → battle → input → update → ui → cinematics → render → audio_assets → audio → audio_playback → fx → battle_motion → battle_ui → screens → save → main。
+**載入順序**（index.html）：joystick → assets → engine → data → maps → story → battle → input → update → ui → cinematics → render → audio_assets → audio → audio_playback → fx → battle_motion → battle_ui → screens → save → exploration_ui → main。
 - 存檔：saveCP() 會同時寫入自動存檔；改 G 的存檔欄位或格式時，把 SAVE_VER +1 並在 migrateSave() 補升級。存檔只在 canSave()（地圖自由行動、無對話/戰鬥/演出 G.cut）時允許。
 classic script 的 function 宣告只在該檔執行時才建立，所以**載入時（top-level）立即執行的程式碼只能呼叫前面檔案的東西**；在 frame()/事件中呼叫則不受限。新增檔案時放在正確位置。
 
@@ -73,7 +74,7 @@ classic script 的 function 宣告只在該檔執行時才建立，所以**載�
 - **頭像（v28）**：三位主角以使用者提供四視角原圖的三分之四正面裁成 512×512 透明半身像，戰鬥與對話共用同一張，勿改回舊像素頭像或有底色的方塊。卡片頭像在左、紅／藍數字在右；直式壓縮為兩行且臉部不被資訊列覆蓋。cards 的觸控區包含浮出資訊列的頭像。情境鍵 pt_qz_startled／pt_bl_quiet 目前使用同一原圖的正面視角，不自行生成表情。參見 docs/art/portraits-v28.md 與 tests/portrait-ui.mjs。原色裁切工具為 tools/import-portraits.py。
 
 ## 5. 版本號規則
-- 目前 **v43**（蘆葦蕩迷宮與實際控制器碰撞測試）。每次上線改動都要 +1（下一版 **v44**），三處一起改：
+- 目前 **v47**（探索 HUD 與旅途手札；保留 v46 遮罩碰撞與河神廟左右支路修正）。每次上線改動都要 +1（下一版 **v48**），三處一起改：
   1. `index.html` `<title>雲渡仙緣 第一章 vN</title>`
   2. `src/screens.js` 標題畫面 `'版本 vN'`
   3. `src/render.js` 地圖右下角 `'vN'`
@@ -124,3 +125,6 @@ npm test                                          # 必須 ALL PASS，且無 JS 
 - **市集西南側灌木島碰撞（v41）**：補上舊市集南側障礙矩形西北角的缺口，阻止角色踏入畫面中樹叢；保留西側與南側通路。`tests/village-layout.mjs` 驗證該區受阻及鄰近路徑可行。
 - **市集樹叢精確碰撞（v42）**：v39/v41 的碰撞位置未對齊截圖中的主樹；已以底圖像素重現腳底 (906,446) 的穿越，按樹叢及院牆分段阻擋，移除偏到道路上的舊矩形。碰撞必須以實際 update 移動驗證，不能只測新加的矩形中心。loadMap 會把位於新障礙內的舊存檔位置移到鄰近空地。
 - **蘆葦蕩迷宮（v43）**：1344×896、48px 可行走道路寬，主資料 `docs/maps/reeds-v43/layout.json`，由 `tools/build-reeds-map.py` 產生 `src/reeds_layout.js` 與開／鎖橋 map bundle。`src/reeds_map.js` 使用道路聯集判定腳底，不使用舊 GRID.reeds；兩座妖根橋都由 flags.reedSolved 控制。保留原三個寶箱 key。`healParty()` 專管劇情全隊回復，勿改回與 battle.js 的 heal(t,h) 同名。測試 `tests/reeds-maze.mjs` 使用實際 update 走岔路、開橋、水岸、營火與出口；所有新地圖都應先有路線及碰撞再生成美術，並在圖上目視比對。
+
+- **目前碰撞（v44～v46）**：村莊及河神廟使用 assets/img/village_walk_v44.png 與 temple_walk_v44.png 白色可走遮罩，透過 walkMask/getImageData 取樣腳底六點，?debug=col 顯示紅色擋人區。蘆葦蕩仍使用 REEDS_LAYOUT 道路聯集。保留 tests/temple-walk.mjs 左右支路與盡頭驗證；UI 改版不得覆蓋碰撞更新。
+- **探索 UI（v47）**：探索右上只留選單，聲音開關收在設定；標題及戰鬥保留原 soundBtn。旅途手札顯示真實隊伍／物品、任務、存讀檔與設定。面板開啟時 clearK 並暫停 update 移動；方向鍵／Enter／Esc／M／Tab 支援操作與焦點限制。見 docs/art/exploration-ui-v45/README.md（原設計 v45，整合發佈 v47）及 tests/exploration-ui.mjs。

@@ -40,13 +40,13 @@ const SV={p:null,sel:0,items:[],btn:null,el:null};
  const p=document.createElement('div');p.id='svPanel';p.innerHTML='<div id="svBox"></div>';p.addEventListener('click',e=>{if(e.target===p&&SV.p!='title'){soundUi('cancel');closePanel()}});document.body.appendChild(p);
  for(const el of[b,p]){el.addEventListener('touchstart',e=>e.stopPropagation(),{passive:true});el.addEventListener('touchmove',e=>e.stopPropagation(),{passive:true})}
  SV.btn=b;SV.el=p})();
-function showPanel(kind,title,msg,items,sel){SV.p=kind;SV.items=items;SV.sel=sel||0;while(SV.items[SV.sel]&&SV.items[SV.sel].off)SV.sel++;
+function showPanel(kind,title,msg,items,sel){clearK();SV.p=kind;SV.items=items;SV.sel=sel||0;while(SV.items[SV.sel]&&SV.items[SV.sel].off)SV.sel++;
  const bx=document.getElementById('svBox');bx.innerHTML=(title?'<h3>'+title+'</h3>':'')+(msg?'<p>'+msg+'</p>':'')+'<div class="svL"></div>';const ls=bx.lastChild;
  items.forEach((it,i)=>{const e=document.createElement('button');e.className='svI';e.dataset.i=i;e.disabled=!!it.off;e.innerHTML=it.l+(it.sub?'<small>'+it.sub+'</small>':'');e.onclick=ev=>{ev.preventDefault();if(!it.off){soundUi(['返回','關閉','取消'].includes(it.l)?'cancel':'ok');it.fn()}};ls.appendChild(e)});
- SV.el.className=kind=='title'?'title':'';SV.el.style.display='flex';hl()}
+ SV.el.className=kind;SV.el.setAttribute('role','dialog');SV.el.setAttribute('aria-modal','true');SV.el.setAttribute('aria-label',title||'遊戲選單');SV.el.style.display='flex';hl();const selected=bx.querySelectorAll('.svI')[SV.sel];if(selected)selected.focus({preventScroll:true})}
 function hl(){document.querySelectorAll('#svBox .svI').forEach((e,i)=>e.classList.toggle('on',i==SV.sel))}
-function closePanel(){SV.p=null;SV.el.style.display='none'}
-function openMenu(){if(!canSave())return;showPanel('menu','選單','',[{l:'存檔',sub:'記錄目前進度',fn:saveMenu},{l:'讀檔',sub:'讀取先前的進度',fn:()=>loadMenu('menu')},{l:'關閉',fn:closePanel}])}
+function closePanel(){clearK();SV.p=null;SV.el.style.display='none';if(canSave())SV.btn.focus({preventScroll:true})}
+function openMenu(){if(!canSave())return;showPanel('menu','旅途手札','第一章 · 夜渡　／　'+NAMES[G.map],[{l:'隊伍',sub:'同行之人的狀態',fn:journeyParty},{l:'行囊',sub:'查看隨身補給',fn:journeyBag},{l:'任務',sub:'此行的線索與方向',fn:journeyQuest},{l:'存讀檔',sub:'記錄與重拾旅程',fn:journeySaves},{l:'設定',sub:'音樂與音效',fn:journeySettings},{l:'返回旅途',fn:closePanel}]);journeyDecorate(journeyCards())}
 function saveMenu(){showPanel('save','存檔','選擇要存入的欄位：',['1','2','3'].map(s=>({l:SLOT_NAME[s],sub:slotDesc(readSlot(s)),fn:()=>doSave(s)})).concat([{l:'返回',fn:openMenu}]))}
 function doSave(s){if(!canSave())return closePanel();const ok=writeSlot(s);closePanel();say([['系統',ok?'已存入「'+SLOT_NAME[s]+'」。':'存檔失敗：瀏覽器不允許儲存（可能是私密瀏覽模式）。']])}
 function loadMenu(from){const back=from=='title'?titleMenu:openMenu;showPanel('load','讀檔','選擇要讀取的存檔：',allSaves().map(({s,d})=>({l:SLOT_NAME[s],sub:slotDesc(d),off:!d||d.bad,fn:()=>{closePanel();loadSave(readSlot(s))}})).concat([{l:'返回',fn:back}]))}
@@ -54,12 +54,15 @@ function titleMenu(){const L=latestSave();if(!L){closePanel();return}showPanel('
 function confirmNew(){showPanel('confirm','開始新遊戲？','手動存檔會保留，但「自動存檔」會被新進度覆蓋。',[{l:'確定，開始新遊戲',fn:()=>{closePanel();newGame()}},{l:'取消',fn:titleMenu}],1)}
 // 鍵盤／搖桿／A B 鈕操作面板（由 press() 轉來）
 function svKey(k){const n=SV.items.length;if(!n)return;
- if(k=='up'||k=='down'){let i=SV.sel;for(let c=0;c<n;c++){i=(i+(k=='up'?n-1:1))%n;if(!SV.items[i].off)break}SV.sel=i;hl()}
+ if(k=='up'||k=='down'){let i=SV.sel;for(let c=0;c<n;c++){i=(i+(k=='up'?n-1:1))%n;if(!SV.items[i].off)break}SV.sel=i;hl();const e=document.querySelectorAll('#svBox .svI')[i];if(e){e.focus({preventScroll:true});e.scrollIntoView({block:'nearest'})}}
  else if(k=='ok'){const it=SV.items[SV.sel];it&&!it.off&&it.fn()}
- else if(k=='cancel'||k=='menu'){if(SV.p=='menu')closePanel();else if(SV.p=='save'||SV.p=='load')SV.items[n-1].fn();else if(SV.p=='confirm')titleMenu();else if(SV.p=='title'){closePanel();G.cred=1}}
+ else if(k=='cancel'||k=='menu'){if(SV.p=='menu')closePanel();else if(SV.p=='save'||SV.p=='load')SV.items[n-1].fn();else if(['party','bag','quest','records','settings'].includes(SV.p))openMenu();else if(SV.p=='confirm')titleMenu();else if(SV.p=='title'){closePanel();G.cred=1}}
  else if(k=='cred'&&SV.p=='title'){closePanel();G.cred=1}}
 // 每格同步：選單按鈕顯示、標題選單
-function svSync(){const tt=ready&&G.mode=='title'&&!G.cred;
+function svSync(){explorationSync();const tt=ready&&G.mode=='title'&&!G.cred;
  if(tt&&!SV.p&&hasSave())titleMenu();if(!tt&&(SV.p=='title'||SV.p=='confirm'||(SV.p=='load'&&G.mode=='title')))closePanel();
- if((SV.p=='menu'||SV.p=='save')&&!canSave())closePanel();if(SV.p=='load'&&G.mode!='title'&&!canSave())closePanel();
+ if(SV.p&&!['title','confirm','load'].includes(SV.p)&&!canSave())closePanel();if(SV.p=='load'&&G.mode!='title'&&!canSave())closePanel();
  const sb=canSave()&&!SV.p;if(SV.btn.style.display!=(sb?'block':'none'))SV.btn.style.display=sb?'block':'none'}
+
+SV.el.addEventListener('focusin',e=>{const i=e.target.dataset.i;if(i!=null){SV.sel=+i;hl()}});
+SV.el.addEventListener('keydown',e=>{if(e.key!=='Tab')return;const items=[...document.querySelectorAll('#svBox .svI:not(:disabled)')];const i=items.indexOf(document.activeElement),next=(i+(e.shiftKey?-1:1)+items.length)%items.length;if(items.length){e.preventDefault();items[next].focus()}});

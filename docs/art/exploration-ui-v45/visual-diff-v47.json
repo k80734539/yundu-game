@@ -1,0 +1,252 @@
+[
+  {
+    "size": "375x553",
+    "name": "battle_menu.png",
+    "pixels": 0,
+    "bounds": null
+  },
+  {
+    "size": "375x553",
+    "name": "dialog.png",
+    "pixels": 51264,
+    "bounds": [
+      16,
+      16,
+      737,
+      1097
+    ]
+  },
+  {
+    "size": "375x553",
+    "name": "dock.png",
+    "pixels": 116464,
+    "bounds": [
+      16,
+      10,
+      736,
+      1097
+    ]
+  },
+  {
+    "size": "375x553",
+    "name": "title.png",
+    "pixels": 18302,
+    "bounds": [
+      412,
+      21,
+      707,
+      1067
+    ]
+  },
+  {
+    "size": "375x553",
+    "name": "village.png",
+    "pixels": 116966,
+    "bounds": [
+      16,
+      10,
+      736,
+      1097
+    ]
+  },
+  {
+    "size": "390x664",
+    "name": "battle_menu.png",
+    "pixels": 0,
+    "bounds": null
+  },
+  {
+    "size": "390x664",
+    "name": "dialog.png",
+    "pixels": 52852,
+    "bounds": [
+      16,
+      16,
+      766,
+      1320
+    ]
+  },
+  {
+    "size": "390x664",
+    "name": "dock.png",
+    "pixels": 130983,
+    "bounds": [
+      16,
+      10,
+      766,
+      1319
+    ]
+  },
+  {
+    "size": "390x664",
+    "name": "title.png",
+    "pixels": 17576,
+    "bounds": [
+      442,
+      21,
+      737,
+      1289
+    ]
+  },
+  {
+    "size": "390x664",
+    "name": "village.png",
+    "pixels": 132886,
+    "bounds": [
+      16,
+      10,
+      766,
+      1319
+    ]
+  },
+  {
+    "size": "430x750",
+    "name": "battle_menu.png",
+    "pixels": 0,
+    "bounds": null
+  },
+  {
+    "size": "430x750",
+    "name": "dialog.png",
+    "pixels": 55775,
+    "bounds": [
+      16,
+      16,
+      846,
+      1492
+    ]
+  },
+  {
+    "size": "430x750",
+    "name": "dock.png",
+    "pixels": 137915,
+    "bounds": [
+      16,
+      10,
+      846,
+      1491
+    ]
+  },
+  {
+    "size": "430x750",
+    "name": "title.png",
+    "pixels": 17204,
+    "bounds": [
+      522,
+      22,
+      817,
+      1461
+    ]
+  },
+  {
+    "size": "430x750",
+    "name": "village.png",
+    "pixels": 140669,
+    "bounds": [
+      16,
+      10,
+      846,
+      1492
+    ]
+  },
+  {
+    "size": "664x390",
+    "name": "battle_menu.png",
+    "pixels": 0,
+    "bounds": null
+  },
+  {
+    "size": "664x390",
+    "name": "dialog.png",
+    "pixels": 19742,
+    "bounds": [
+      17,
+      22,
+      1314,
+      771
+    ]
+  },
+  {
+    "size": "664x390",
+    "name": "dock.png",
+    "pixels": 107587,
+    "bounds": [
+      16,
+      10,
+      1314,
+      772
+    ]
+  },
+  {
+    "size": "664x390",
+    "name": "title.png",
+    "pixels": 19643,
+    "bounds": [
+      990,
+      21,
+      1285,
+      741
+    ]
+  },
+  {
+    "size": "664x390",
+    "name": "village.png",
+    "pixels": 108015,
+    "bounds": [
+      16,
+      10,
+      1315,
+      772
+    ]
+  },
+  {
+    "size": "844x390",
+    "name": "battle_menu.png",
+    "pixels": 0,
+    "bounds": null
+  },
+  {
+    "size": "844x390",
+    "name": "dialog.png",
+    "pixels": 24140,
+    "bounds": [
+      16,
+      16,
+      1674,
+      772
+    ]
+  },
+  {
+    "size": "844x390",
+    "name": "dock.png",
+    "pixels": 108525,
+    "bounds": [
+      16,
+      10,
+      1674,
+      772
+    ]
+  },
+  {
+    "size": "844x390",
+    "name": "title.png",
+    "pixels": 19100,
+    "bounds": [
+      1350,
+      21,
+      1645,
+      741
+    ]
+  },
+  {
+    "size": "844x390",
+    "name": "village.png",
+    "pixels": 108150,
+    "bounds": [
+      16,
+      10,
+      1674,
+      772
+    ]
+  }
+]

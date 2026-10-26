@@ -81,7 +81,7 @@ function soundLabel(){
 function closeSound(){if(AUDIO_UI.panel){AUDIO_UI.panel.hidden=true;document.getElementById('soundBtn').setAttribute('aria-expanded','false')}}
 function openSound(){const p=AUDIO_UI.panel;p.hidden=!p.hidden;document.getElementById('soundBtn').setAttribute('aria-expanded',String(!p.hidden));if(!p.hidden){soundUnlock();document.getElementById('musicToggle').focus()}}
 function soundSync(){
- const b=document.getElementById('soundBtn');if(b){b.hidden=!!(G.dlg||G.cut||G.cred||!ready||!['title','map','battle'].includes(G.mode));if(b.hidden)closeSound()}
+ const b=document.getElementById('soundBtn');if(b){b.hidden=!!(G.mode==='map'||G.dlg||G.cut||G.cred||!ready||!['title','map','battle'].includes(G.mode));if(b.hidden)closeSound()}
  audioSyncTracks();
 }
 (function(){

@@ -12,6 +12,7 @@ export async function saveTest(b,url,W,H){const tag=`${W}x${H}`,dir=outDir('save
  chk(await vis('#svBtn'),'menu button hidden on map');await shot('map_button');
  const bb=await pg.locator('#svBtn').boundingBox();chk(bb&&bb.y>=0&&bb.x+bb.width<=W&&bb.y+bb.height<H*0.25,'menu button not top-right');
  await tap('#svBtn');chk(await E('!!0')===false,'');await shot('menu');chk((await pg.evaluate('SV.p'))==='menu','menu not open');
+ await tap('#svBox .svI >> nth=3');chk((await pg.evaluate('SV.p'))==='records','records menu not open');
  await tap('#svBox .svI >> nth=0');await shot('save_slots');chk((await pg.evaluate('SV.p'))==='save','save list not open');
  await tap('#svBox .svI >> nth=0');await wait(pg,100);await flush();
  const want=await E("JSON.stringify({map:G.map,x:Math.round(G.x),y:Math.round(G.y),dir:G.dir,inv:G.inv,flags:G.flags,opened:G.opened,lv:G.party[0].lv})");

@@ -2,7 +2,7 @@
 // 地圖模式更新：自由移動、跟隨、NPC 互動
 // ---------- update ----------
 let lastT=performance.now();
-function update(dt){if(G.mode!='map'||G.dlg)return;
+function update(dt){if(G.mode!='map'||G.dlg||SV.p)return;
  let dx=(keys.right?1:0)-(keys.left?1:0),dy=(keys.down?1:0)-(keys.up?1:0);if(dx&&dy){dx*=.707;dy*=.707}
  if(JOY.on){dx=JOY.x;dy=JOY.y}
  const mag=Math.min(1,Math.hypot(dx,dy));if(mag<.05){G.f=0;G.moving=0;return}

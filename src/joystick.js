@@ -18,9 +18,9 @@ const JOY={x:0,y:0,on:false,onA:null,onB:null,touch:('ontouchstart' in window)||
  ov.addEventListener('touchstart',st,{passive:false});ov.addEventListener('touchmove',mv,{passive:false});ov.addEventListener('touchend',en,{passive:false});ov.addEventListener('touchcancel',en,{passive:false});
  const reset=()=>{jid=null;btn.A.id=btn.B.id=null;upd()};addEventListener('blur',reset);document.addEventListener('visibilitychange',reset);
  JOY._reset=reset;JOY.hidden=false;JOY.hide=h=>{JOY.hidden=h;ov.style.pointerEvents=h?'none':'auto';reset()};
- (function draw(){requestAnimationFrame(draw);c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,W,H);if(JOY.hidden)return;
-  let bx=ax,by=ay,al=.5;if(jid===null){bx=sa('l')+90;by=H-sa('b')-90;al=.22}
+ (function draw(){requestAnimationFrame(draw);c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,W,H);if(JOY.hidden||(typeof SV!=='undefined'&&SV.p))return;
+  let bx=ax,by=ay,al=.35;if(jid===null){bx=sa('l')+90;by=H-sa('b')-90;al=.12}
   c.globalAlpha=al;c.fillStyle='#000';c.strokeStyle='#fff';c.lineWidth=2;c.beginPath();c.arc(bx,by,R,0,7);c.fill();c.globalAlpha=al+.2;c.stroke();
   c.fillStyle='#e8e8f0';c.beginPath();c.arc(bx+JOY.x*R,by+JOY.y*R,24,0,7);c.fill();
-  const P=bpos();for(const k of['A','B']){const[p,q,r]=P[k],dn=btn[k].id!==null;c.globalAlpha=dn?.7:.38;c.fillStyle=k=='A'?'#b8402e':'#2e4a8a';c.beginPath();c.arc(p,q,r,0,7);c.fill();c.globalAlpha=dn?.9:.6;c.stroke();c.fillStyle='#fff';c.font='bold '+(r*.8|0)+'px sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText(k,p,q)}
+  const P=bpos();for(const k of['A','B']){const[p,q,r]=P[k],dn=btn[k].id!==null;const active=typeof nearbyInteraction==='function'&&!!nearbyInteraction();c.globalAlpha=dn?.8:k==='A'&&active?.8:.34;c.fillStyle=k==='A'&&active?'#38685e':'#102432';c.strokeStyle=k==='A'&&active?'#c4e6d6':'#c5b28c';c.beginPath();c.arc(p,q,r,0,7);c.fill();c.globalAlpha=dn?.9:.6;c.stroke();c.fillStyle='#fff';c.font='bold '+(r*.8|0)+'px sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText(k,p,q-5);c.font='12px sans-serif';c.fillStyle=k==='A'&&active?'#ddf4e8':'#eee7d6';c.fillText(k==='A'&&typeof journeyAction==='function'?journeyAction():k==='B'?(typeof G==='undefined'?'返回':G.dlg?'繼續':G.mode==='map'?'狀態':G.mode==='title'&&!G.cred?'素材':'返回'):'互動',p,q+17)}
   c.globalAlpha=1})()})();
