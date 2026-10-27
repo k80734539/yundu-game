@@ -41,16 +41,17 @@ function buildVillage(){const W=42*T,H=28*T;M={id:'village',W,H,T,obj:[],sol:[],
  const f=G.flags;
  const ph=phase(),P=(a,b,c)=>[a,b,c][ph-1];
  if(!f.cure){
-  npc('wang',21.4*T,19.7*T,'王大叔',()=>{if(ph==1&&!f.ferry){f.ferry=1;say(S.wang1.concat(S.wang1Hint))}else say(P(S.wang1r,S.wang2,S.wang3))});
+  npc('wang',21.4*T,19.7*T,'王大叔',()=>{if(ph==1&&!f.ferry){f.ferry=1;say(S.wang1.concat(S.wang1Hint))}else vxTalk('wang',P(S.wang1r,S.wang2,S.wang3))},vxMark('wang'));
   npc('chief',21.4*T,8.5*T,'村長',()=>{if(ph==1&&!f.chief){f.chief=1;say(S.chief1)}else say(P(S.chief1r,S.chief2,S.chief3))},()=>!f.chief);
   npc('granny',36.3*T,10.6*T,'阿婆',()=>{if(ph==3)return cure();if(!f.quest){f.quest=1;G.party[0].arm=3;G.inv.魚乾+=3;say(S.granny1.concat(S.granny1Get))}else say(S.granny2)},()=>!f.quest||(ph==3&&!f.cure));
-  npc('lin',14.4*T,13.5*T,'林嬸',()=>say(P(S.lin1,S.lin2,S.lin3),null,'lin'));
-  npc('zhou',31.5*T,13.5*T,'老周',()=>say(P(S.zhou1,S.zhou2,S.zhou3),null,'zhou'));
+  npc('lin',14.4*T,13.5*T,'林嬸',()=>vxTalk('lin',P(S.lin1,S.lin2,S.lin3),'lin'),vxMark('lin'));
+  npc('zhou',31.5*T,13.5*T,'老周',()=>vxTalk('zhou',P(S.zhou1,S.zhou2,S.zhou3),'zhou'),vxMark('zhou'));
   M.inter.push({x:10.8*T,y:5.8*T,r:36,act:()=>say(P(S.home1,S.home2,S.home3))});
   M.inter.push({x:38.6*T,y:10.3*T,r:30,act:()=>say(ph==2?S.stone2:ph==1?S.stone1:[['','小石頭睡得正香，阿婆守在床邊。']])});
   if(!f.dawn){M.inter.push({x:21*T,y:23.1*T,r:48,act:boardBoat});
   M.zones.push({x0:19.4*T,y0:22.4*T,x1:22.6*T,y1:24.2*T,enter:boardBoat})}
  }else npc('yx',21*T,21.2*T,'雲纖',null);
+ addVillageExplore();
 }
 function npc(k,x,y,n,talk,mark){const o={k,x,y,dir:'down',n,talk,mark,npc:1};M.npcs.push(o);M.sol.push([x-11,y-9,22,10]);if(talk)M.inter.push({x,y:y-14,r:30,act:()=>{faceTo(o);talk()}});return o}
 function faceTo(o){if(!I[o.k+'_down0'])return;const dx=G.x-o.x,dy=G.y-o.y;o.dir=Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up')}
