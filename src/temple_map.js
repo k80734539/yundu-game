@@ -55,7 +55,8 @@ function templeJump(key){
  if(key==='hall'){Object.assign(f,{steleSeen:1,templeLamps:(1<<TEMPLE_LAMP_COUNT)-1,templeFightW:1,templeFightE:1,templeSluice:1})}
  templeTravel(key,'arrival','up');healParty();
  return true}
-function templeHashJump(){const m=/^#temple-(shore|court|hall)$/.exec(location.hash||'');if(m)templeJump(m[1])}
+function templeHashJump(){if(location.hash==='#hebo'){templeJump('hall');G.party.forEach(p=>{while(p.lv<4){p.lv++;p.mhp+=9;p.mmp+=3;p.atk+=2;p.def+=1;p.mag+=2}p.hp=p.mhp;p.mp=p.mmp});startBattle(['河伯'],{noEsc:1,bg:'bg_temple',onWin:()=>{}});return}
+ const m=/^#temple-(shore|court|hall)$/.exec(location.hash||'');if(m)templeJump(m[1])}  // #hebo：直接試打河伯（試玩用）
 // 河伯水影沿用河伯的圖，預先疊成偏藍暗的剪影並快取（不用 ctx.filter，iOS 也看得到）。
 function templeEnsureShadowSprites(sync){
  if(!I.hebo?.naturalWidth)return;
