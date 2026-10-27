@@ -20,7 +20,7 @@ const VX_PICKUPS=[
  {id:'herb',x:1070,y:500,item:'清心草',n:1}
 ];
 // 拾取物圖（Codex 生成後放 assets/img/ 並登記在 assets.js）；高度以世界像素計。
-const VX_PICKUP_ART={網墜:{k:'vx_sinker',h:18},竹籃:{k:'vx_basket',h:22},魚乾:{k:'vx_fish',h:18},清心草:{k:'vx_herb',h:20}};
+const VX_PICKUP_ART={網墜:{k:'vx_sinker',h:20},竹籃:{k:'vx_basket',h:22},魚乾:{k:'vx_fish',h:22},清心草:{k:'vx_herb',h:24}};
 // 委託：state 0 未接、1 已接、2 完成。need：完成條件；reward：[物品,數量]。
 const VX_QUESTS={
  lin:{name:'井水發苦',need:()=>!!G.flags.vx_wellAlgae,reward:['清心草',1]},
@@ -59,6 +59,8 @@ function vxJourneyHtml(){const l=vxQuestList();return l.length?'<ol class="journ
 function vxQuestList(){return Object.entries(VX_QUESTS).filter(([id])=>vxState(id)>0).map(([id,q])=>[q.name,vxState(id)==2])}
 function drawVillagePickup(p,t){const a=VX_PICKUP_ART[p.item],im=a&&I[a.k];
  if(im&&im.naturalWidth){const h=a.h,w=im.naturalWidth/im.naturalHeight*h,b=Math.sin(t*2+p.x)*1.5;
+  // 淡暖光暈：魚乾、清心草跟地面與雜草顏色接近，靠它跳出來。
+  const gy0=p.y-h*.5-2,gr=X.createRadialGradient(p.x,gy0,1,p.x,gy0,h*.95);gr.addColorStop(0,'rgba(255,238,170,.55)');gr.addColorStop(1,'rgba(255,238,170,0)');X.fillStyle=gr;X.beginPath();X.arc(p.x,gy0,h*.95,0,7);X.fill();
   X.fillStyle='rgba(0,0,0,.25)';X.beginPath();X.ellipse(p.x,p.y,w*.45,3,0,0,7);X.fill();X.drawImage(im,p.x-w/2,p.y-h-2+b,w,h)}
  // 閃光：沒有圖時是主體；有圖時縮小、畫在物件右上角當提示。
  const art=im&&im.naturalWidth,s=.6+.4*Math.sin(t*4+p.x),k=art?.55:1,gx=art?p.x+a.h*.35:p.x,gy=art?p.y-a.h-2:p.y-10;

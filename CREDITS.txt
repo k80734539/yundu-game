@@ -56,3 +56,7 @@ v43 蘆葦蕩迷宮：reeds_map_v43.webp 與 reed_roots_v43.webp 由 Codex 內�
 
 【v49 老蘆葦精戰鬥姿勢】
 老蘆葦精六張 512×512 姿勢與小圖 laolu.webp：OpenAI 內建 image_gen 原創生成；依 docs/art/style-guide.md 的夜景色盤、左上主光、水彩淡墨線及既有蘆葦精設計製作。六格原圖、去背、裁切縮放與錨點資訊見 docs/art/laolu-v49/README.md。
+
+
+【v50 村莊拾取物】
+vx_sinker／vx_basket／vx_fish／vx_herb（網墜、竹籃、魚乾、清心草）：Codex 內建 image_gen 原創生成，依 docs/art/style-guide.md 的水彩手繪、淡墨線、光源左上與斜視構圖，風格對齊 village_map_v37.webp。去背與裁邊由 Claude 處理（清除極淡殘影、裁到物件邊界留 2px），詳見 docs/art/village-explore-v50/README.md。
