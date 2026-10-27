@@ -6,7 +6,7 @@ export async function chapter1Mechanics(browser,url){
  const{ctx,pg,jsErrors}=await newPage(browser,844,390,{touch:true,seed:true});
  try{
   await pg.goto(url);await pg.waitForFunction('ready');
-  const data=await pg.evaluate(()=>({skill:SK.渡水一擊,keys:Object.keys(CHESTS),layout:REEDS_LAYOUT.chests.map(c=>c.key)}));
+  const data=await pg.evaluate(()=>({skill:SK.渡水一擊,keys:Object.keys(CHESTS).filter(k=>k.startsWith('reeds:')),layout:REEDS_LAYOUT.chests.map(c=>c.key)}));
   assert.deepEqual(data.skill,{mp:5,tgt:'oneE',d:'水靈單體重擊'});
   assert.deepEqual(data.keys,['reeds:18,1','reeds:1,7','reeds:5,11']);assert.deepEqual(data.layout,data.keys,'the three original chest keys remain at their intended maze locations');
 

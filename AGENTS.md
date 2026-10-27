@@ -29,6 +29,8 @@ src/data.js           CHESTS、EN（敵人）、SK（技能）、ITEMS、PORT（
 src/maps.js           地圖/場景：手繪斜視背景、碰撞遮罩（getImageData）、物件、出入口、loadMap()
 src/script.js         第一章全部對白資料（S 物件），只放文字
 src/village_explore.js 村莊探索：VX_SPOTS 查看點、VX_PICKUPS 拾取物、VX_QUESTS 村民委託（資料表＋互動，對白在 S.vx*）
+src/temple_layout.js  河神廟三張圖的路線資料（由 tools/build-temple-layout.py 從 docs/maps/temple-v52/layout-*.json 產生，不要手改）
+src/temple_map.js     河神廟三張圖：通用建圖 buildTempleMap、路徑線段／空地橢圓碰撞、條件邊（TEMPLE_OPEN）、轉場 templeTravel、舊存檔搬家 templeLegacyTarget
 src/story.js          劇情事件（newGame、say、boat、talisman、boss、ending…）、存檔點 saveCP/retry
 src/battle.js         戰鬥邏輯：startBattle、exec（玩家指令）、enemyPhase、dmg/hit/heal、wr（訊息+特效規格）
 src/input.js          鍵盤與 press(k)（'up/down/left/right/ok/cancel'）
@@ -51,7 +53,7 @@ CREDITS.txt           素材來源（必須保留）
 tests/                Playwright 測試，見 tests/README.md
 package.json          只給測試用（npm test）
 ```
-**載入順序**（index.html）：joystick → assets → engine → data → maps → story → village_explore → battle → input → update → ui → cinematics → render → audio_assets → audio → audio_playback → fx → battle_motion → battle_ui → screens → save → exploration_ui → main。
+**載入順序**（index.html）：joystick → assets → engine → data → maps → temple_layout → temple_map → story → village_explore → battle → input → update → ui → cinematics → render → audio_assets → audio → audio_playback → fx → battle_motion → battle_ui → screens → save → exploration_ui → main。
 - 存檔：saveCP() 會同時寫入自動存檔；改 G 的存檔欄位或格式時，把 SAVE_VER +1 並在 migrateSave() 補升級。存檔只在 canSave()（地圖自由行動、無對話/戰鬥/演出 G.cut）時允許。
 classic script 的 function 宣告只在該檔執行時才建立，所以**載入時（top-level）立即執行的程式碼只能呼叫前面檔案的東西**；在 frame()/事件中呼叫則不受限。新增檔案時放在正確位置。
 
@@ -75,7 +77,7 @@ classic script 的 function 宣告只在該檔執行時才建立，所以**載�
 - **頭像（v28）**：三位主角以使用者提供四視角原圖的三分之四正面裁成 512×512 透明半身像，戰鬥與對話共用同一張，勿改回舊像素頭像或有底色的方塊。卡片頭像在左、紅／藍數字在右；直式壓縮為兩行且臉部不被資訊列覆蓋。cards 的觸控區包含浮出資訊列的頭像。情境鍵 pt_qz_startled／pt_bl_quiet 目前使用同一原圖的正面視角，不自行生成表情。參見 docs/art/portraits-v28.md 與 tests/portrait-ui.mjs。原色裁切工具為 tools/import-portraits.py。
 
 ## 5. 版本號規則
-- 目前 **v51**（第一章收尾：渡口固定小戰、橫式戰鬥角色比例與訊息列調整；村莊探索與拾取物保留）。每次上線改動都要 +1（下一版 **v52**），三處一起改：
+- 目前 **v52**（河神廟三張地圖階段一；v51 第一章收尾保留）。每次上線改動都要 +1（下一版 **v53**），三處一起改：
   1. `index.html` `<title>雲渡仙緣 第一章 vN</title>`
   2. `src/screens.js` 標題畫面 `'版本 vN'`
   3. `src/render.js` 地圖右下角 `'vN'`
@@ -136,3 +138,5 @@ npm test                                          # 必須 ALL PASS，且無 JS 
 - **村莊探索（v50）**：`src/village_explore.js` 以資料表定義村莊互動。`VX_SPOTS` 8 個查看點（井、攤位、繫船柱、廳前石燈、大樹、桃樹、北邊小路、西側院落），台詞 `S.vx_<id>` 可給三段（依 `phase()`）。`VX_PICKUPS` 4 個拾取物，已撿記在 `G.opened['village:<id>']`，不會重生。`VX_QUESTS` 三個委託（林嬸「井水發苦」、老周「找回網墜」、王大叔「河邊的竹籃」），狀態 `flags.vx_q_<id>`（0 未接／1 進行中／2 完成），可交付時村民頭上顯示「！」，旅途手札行程頁列出「村中小事」。委託道具（網墜、竹籃）不在 `ITEMS`，不進戰鬥選單。拾取物圖由 `VX_PICKUP_ART` 指定（`vx_sinker`、`vx_basket`、`vx_fish`、`vx_herb`），圖未登記或未載入時畫閃光作 fallback。不改存檔格式。驗收測試 `tests/village-explore.mjs`（每個點以實際 interact 判定可用、委託流程、不重生、委託道具不進選單）。
 
 - **第一章收尾（v51）**：村長與阿婆委託完成、退水事件發生後，第一次走到渡口先遇 2 隻小水妖；勝利獲得魚乾，逃跑也記為完成，戰敗重來點留在村莊。舊存檔若已有 `flood` 或後續進度會遷移成完成。夜渡改留進階提示。戰鬥訊息列依文字寬度置中、長句換行並為右上聲音鈕留空；橫式角色倍率在 `CFG.battleUi.landscapeScale`，仍經 `BFR.scale` 共用。`tests/ch1-pacing.mjs` 的截圖輸出至忽略的 `tests/out/`；收尾驗收見 `tests/ch1-wrapup.mjs`。
+
+- **河神廟三張圖（v52 階段一）**：設計見 `docs/maps/temple-v52.md`（草案 2），路線草圖與資料在 `docs/maps/temple-v52/`（`layout-*.json` 為資料來源，`python3 tools/build-temple-guides.py` 重畫草圖，`python3 tools/build-temple-layout.py` 產生 `src/temple_layout.js`）。三張圖 `temple_shore`／`temple_court`／`temple_hall`（各 1344×896）；`G.map` 與 `NAMES` 用這三個 id，舊 id `temple` 只留給舊存檔／重來點，`loadMap('temple',…)` 會依旗標搬到新圖（`templeLegacyTarget`）。碰撞：腳底六點需落在路徑線段（寬 `pathWidth`＝48）或空地橢圓內，有條件的邊（`gap`/`flooded`/`barrier`）用 `TEMPLE_OPEN` 判斷，疊水區與鎮水門在條件未滿足時擋人；`?debug=col` 在三張圖都畫紅框。**階段一的底圖是路線草圖**（`assets/img/temple_guide_*.png`），階段三才換成生好的圖；階段二才加機關（撐篙、狐火燒符、水閘、點燈選擇、疊水）與戰鬥，所以目前 `pole`／`sluice` 條件恆為開。三燈：`flags.templeLamps` 位元（A＝1、B＝2、C 右＝4），點亮後互動移除；三燈全亮鎮水門開、中央水道捷徑可走。舊的單張 `temple_map_v40.webp`、`temple_walk_v44.png` 與 maps.js 的 `GRID.temple` 暫留，階段三穩定後再移除。河伯告別演出的位置由 `sceneHeboBase()` 決定。驗收測試 `tests/temple-v52.mjs`（取代已移除的 `temple-walk.mjs`）。
