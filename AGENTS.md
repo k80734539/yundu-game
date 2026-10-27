@@ -75,7 +75,7 @@ classic script 的 function 宣告只在該檔執行時才建立，所以**載�
 - **頭像（v28）**：三位主角以使用者提供四視角原圖的三分之四正面裁成 512×512 透明半身像，戰鬥與對話共用同一張，勿改回舊像素頭像或有底色的方塊。卡片頭像在左、紅／藍數字在右；直式壓縮為兩行且臉部不被資訊列覆蓋。cards 的觸控區包含浮出資訊列的頭像。情境鍵 pt_qz_startled／pt_bl_quiet 目前使用同一原圖的正面視角，不自行生成表情。參見 docs/art/portraits-v28.md 與 tests/portrait-ui.mjs。原色裁切工具為 tools/import-portraits.py。
 
 ## 5. 版本號規則
-- 目前 **v51**（第一章收尾：渡口固定小戰、橫式戰鬥角色比例與訊息列調整；村莊探索與拾取物保留）。每次上線改動都要 +1（下一版 **v52**），三處一起改：
+- 目前 **v52**（河伯戰加入蓄力預告、控妖符、狐火干擾與防禦回復 MP）。每次上線改動都要 +1（下一版 **v53**），三處一起改：
   1. `index.html` `<title>雲渡仙緣 第一章 vN</title>`
   2. `src/screens.js` 標題畫面 `'版本 vN'`
   3. `src/render.js` 地圖右下角 `'vN'`
@@ -136,3 +136,4 @@ npm test                                          # 必須 ALL PASS，且無 JS 
 - **村莊探索（v50）**：`src/village_explore.js` 以資料表定義村莊互動。`VX_SPOTS` 8 個查看點（井、攤位、繫船柱、廳前石燈、大樹、桃樹、北邊小路、西側院落），台詞 `S.vx_<id>` 可給三段（依 `phase()`）。`VX_PICKUPS` 4 個拾取物，已撿記在 `G.opened['village:<id>']`，不會重生。`VX_QUESTS` 三個委託（林嬸「井水發苦」、老周「找回網墜」、王大叔「河邊的竹籃」），狀態 `flags.vx_q_<id>`（0 未接／1 進行中／2 完成），可交付時村民頭上顯示「！」，旅途手札行程頁列出「村中小事」。委託道具（網墜、竹籃）不在 `ITEMS`，不進戰鬥選單。拾取物圖由 `VX_PICKUP_ART` 指定（`vx_sinker`、`vx_basket`、`vx_fish`、`vx_herb`），圖未登記或未載入時畫閃光作 fallback。不改存檔格式。驗收測試 `tests/village-explore.mjs`（每個點以實際 interact 判定可用、委託流程、不重生、委託道具不進選單）。
 
 - **第一章收尾（v51）**：村長與阿婆委託完成、退水事件發生後，第一次走到渡口先遇 2 隻小水妖；勝利獲得魚乾，逃跑也記為完成，戰敗重來點留在村莊。舊存檔若已有 `flood` 或後續進度會遷移成完成。夜渡改留進階提示。戰鬥訊息列依文字寬度置中、長句換行並為右上聲音鈕留空；橫式角色倍率在 `CFG.battleUi.landscapeScale`，仍經 `BFR.scale` 共用。`tests/ch1-pacing.mjs` 的截圖輸出至忽略的 `tests/out/`；收尾驗收見 `tests/ch1-wrapup.mjs`。
+- **河伯戰（v52）**：河伯專屬行動狀態為 NORMAL／CHARGING／RELEASE／STAGGERED；蓄力會佔用一次敵方行動，讓我方有完整回合應對。HP ≤90 時控妖符顯形，符被破壞會取消蓄力並使河伯跳過下一次行動；白苓狐火命中蓄力中的河伯可降低當次濁浪傷害。防禦回復 MP，數值在 `CFG.hebo`／`CFG.guardMp`；不變更存檔格式。驗收見 `tests/hebo-boss-v3.mjs`。

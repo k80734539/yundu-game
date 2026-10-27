@@ -13,7 +13,7 @@ async function beginFerryFight(pg){
 export async function chapterOneWrapup(browser,url){
  const {ctx,pg,jsErrors}=await newPage(browser,390,664,{touch:true,seed:true});
  try{
-  await pg.goto(url+'?v=51');await pg.waitForFunction('ready');
+  await pg.goto(url+'?v=52');await pg.waitForFunction('ready');
   const start=await beginFerryFight(pg);
   assert(start.battle&&start.enemies.length===2&&start.enemies.every(e=>e==='shui'),'the first eligible boarding attempt starts a fixed two-water-demon battle');
   assert.equal(start.checkpoint.map,'village','defeat checkpoint is in the village');
@@ -70,7 +70,7 @@ export async function chapterOneWrapup(browser,url){
 
   const {ctx:ctx2,pg:portrait,jsErrors:portraitErrors}=await newPage(browser,390,664,{touch:true,seed:true});
   try{
-   await portrait.goto(url+'?v=51');await portrait.waitForFunction('ready');
+   await portrait.goto(url+'?v=52');await portrait.waitForFunction('ready');
    const vertical=await portrait.evaluate(()=>{const L=bLayout(3);return{scale:L.s,expected:BFR.scale*L.U}});
    assert.equal(vertical.scale,vertical.expected,'portrait party scale remains unchanged');
    assert.deepEqual(await portraitErrors(),[],'portrait layout has no JavaScript errors');
