@@ -1,0 +1,178 @@
+{
+ "id": "temple_shore",
+ "title": "廟前淺灘",
+ "world": {
+  "width": 1344,
+  "height": 896
+ },
+ "pathWidth": 48,
+ "paintedPathWidth": 100,
+ "nodes": {
+  "arrival": [
+   90,
+   760
+  ],
+  "s1": [
+   330,
+   760
+  ],
+  "s2": [
+   330,
+   560
+  ],
+  "westNook": [
+   120,
+   560
+  ],
+  "fork": [
+   620,
+   560
+  ],
+  "chestNook": [
+   620,
+   780
+  ],
+  "s3": [
+   620,
+   340
+  ],
+  "guard": [
+   900,
+   340
+  ],
+  "gate": [
+   1180,
+   340
+  ]
+ },
+ "edges": [
+  [
+   "arrival",
+   "s1"
+  ],
+  [
+   "s1",
+   "s2"
+  ],
+  [
+   "s2",
+   "westNook"
+  ],
+  [
+   "s2",
+   "fork"
+  ],
+  [
+   "fork",
+   "chestNook"
+  ],
+  [
+   "fork",
+   "s3"
+  ],
+  [
+   "s3",
+   "guard"
+  ],
+  [
+   "guard",
+   "gate"
+  ]
+ ],
+ "clearings": [
+  {
+   "id": "arrival",
+   "x": 90,
+   "y": 760,
+   "rx": 60,
+   "ry": 44
+  },
+  {
+   "id": "westNook",
+   "x": 120,
+   "y": 560,
+   "rx": 60,
+   "ry": 44
+  },
+  {
+   "id": "chestNook",
+   "x": 620,
+   "y": 790,
+   "rx": 60,
+   "ry": 44
+  },
+  {
+   "id": "guard",
+   "x": 900,
+   "y": 340,
+   "rx": 110,
+   "ry": 70
+  },
+  {
+   "id": "gate",
+   "x": 1190,
+   "y": 340,
+   "rx": 64,
+   "ry": 50
+  }
+ ],
+ "zones": {
+  "fromReeds": [
+   24,
+   716,
+   90,
+   90
+  ],
+  "toCourt": [
+   1230,
+   290,
+   80,
+   100
+  ]
+ },
+ "features": [
+  {
+   "id": "incenseStele",
+   "kind": "lore",
+   "x": 120,
+   "y": 540,
+   "note": "斷了香火的舊香碑，一句環境敘事"
+  },
+  {
+   "id": "shoreChest",
+   "kind": "chest",
+   "x": 620,
+   "y": 790,
+   "key": "temple:shore",
+   "note": "魚乾×2"
+  },
+  {
+   "id": "shoreGuard",
+   "kind": "fight",
+   "x": 900,
+   "y": 340,
+   "trigger": [
+    790,
+    290,
+    220,
+    100
+   ],
+   "note": "固定戰鬥一次，擋在去中庭的路上"
+  }
+ ],
+ "encounters": [
+  {
+   "id": "shoreGuard",
+   "enemies": [
+    "小水妖",
+    "小水妖",
+    "蘆葦精"
+   ],
+   "flag": "templeShoreFight",
+   "checkpoint": [
+    330,
+    760
+   ]
+  }
+ ]
+}

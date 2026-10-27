@@ -1,0 +1,140 @@
+{
+ "id": "temple_hall",
+ "title": "水府後殿",
+ "world": {
+  "width": 1344,
+  "height": 896
+ },
+ "pathWidth": 48,
+ "paintedPathWidth": 100,
+ "nodes": {
+  "arrival": [
+   672,
+   830
+  ],
+  "s1": [
+   672,
+   640
+  ],
+  "shrine": [
+   672,
+   430
+  ],
+  "boss": [
+   672,
+   200
+  ],
+  "westAlcove": [
+   330,
+   640
+  ],
+  "eastAlcove": [
+   1014,
+   640
+  ]
+ },
+ "edges": [
+  [
+   "arrival",
+   "s1"
+  ],
+  [
+   "s1",
+   "shrine"
+  ],
+  [
+   "shrine",
+   "boss"
+  ],
+  [
+   "s1",
+   "westAlcove"
+  ],
+  [
+   "s1",
+   "eastAlcove"
+  ]
+ ],
+ "clearings": [
+  {
+   "id": "arrival",
+   "x": 672,
+   "y": 830,
+   "rx": 70,
+   "ry": 44
+  },
+  {
+   "id": "shrine",
+   "x": 672,
+   "y": 430,
+   "rx": 120,
+   "ry": 70
+  },
+  {
+   "id": "boss",
+   "x": 672,
+   "y": 200,
+   "rx": 150,
+   "ry": 80
+  },
+  {
+   "id": "westAlcove",
+   "x": 330,
+   "y": 640,
+   "rx": 80,
+   "ry": 50
+  },
+  {
+   "id": "eastAlcove",
+   "x": 1014,
+   "y": 640,
+   "rx": 80,
+   "ry": 50
+  }
+ ],
+ "zones": {
+  "fromCourt": [
+   620,
+   860,
+   104,
+   36
+  ]
+ },
+ "features": [
+  {
+   "id": "plaque",
+   "kind": "lore",
+   "x": 330,
+   "y": 620,
+   "note": "還願牌（原有 flags.plaque 內容）"
+  },
+  {
+   "id": "hallChest",
+   "kind": "chest",
+   "x": 1014,
+   "y": 620,
+   "key": "temple:hall",
+   "note": "清心草×2"
+  },
+  {
+   "id": "shrineSeal",
+   "kind": "seal",
+   "x": 672,
+   "y": 410,
+   "zone": [
+    622,
+    380,
+    100,
+    80
+   ],
+   "note": "神龕，削弱封印（flags.templeSeal）"
+  },
+  {
+   "id": "hebo",
+   "kind": "boss",
+   "x": 672,
+   "y": 170,
+   "note": "河伯，封印削弱後交談開戰"
+  }
+ ]
+}

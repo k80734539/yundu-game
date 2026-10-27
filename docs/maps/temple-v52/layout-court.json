@@ -1,0 +1,253 @@
+{
+ "id": "temple_court",
+ "title": "鎮水中庭",
+ "world": {
+  "width": 1344,
+  "height": 896
+ },
+ "pathWidth": 48,
+ "paintedPathWidth": 100,
+ "nodes": {
+  "arrival": [
+   672,
+   830
+  ],
+  "center": [
+   672,
+   560
+  ],
+  "north": [
+   672,
+   230
+  ],
+  "west1": [
+   380,
+   560
+  ],
+  "westEnd": [
+   150,
+   560
+  ],
+  "east1": [
+   964,
+   560
+  ],
+  "eastEnd": [
+   1194,
+   560
+  ]
+ },
+ "edges": [
+  [
+   "arrival",
+   "center"
+  ],
+  [
+   "center",
+   "north"
+  ],
+  [
+   "center",
+   "west1"
+  ],
+  [
+   "west1",
+   "westEnd"
+  ],
+  [
+   "center",
+   "east1"
+  ],
+  [
+   "east1",
+   "eastEnd"
+  ]
+ ],
+ "clearings": [
+  {
+   "id": "arrival",
+   "x": 672,
+   "y": 830,
+   "rx": 70,
+   "ry": 44
+  },
+  {
+   "id": "plaza",
+   "x": 672,
+   "y": 560,
+   "rx": 150,
+   "ry": 95
+  },
+  {
+   "id": "north",
+   "x": 672,
+   "y": 230,
+   "rx": 90,
+   "ry": 50
+  },
+  {
+   "id": "westMid",
+   "x": 380,
+   "y": 560,
+   "rx": 95,
+   "ry": 60
+  },
+  {
+   "id": "westEnd",
+   "x": 150,
+   "y": 560,
+   "rx": 70,
+   "ry": 50
+  },
+  {
+   "id": "eastMid",
+   "x": 964,
+   "y": 560,
+   "rx": 95,
+   "ry": 60
+  },
+  {
+   "id": "eastEnd",
+   "x": 1194,
+   "y": 560,
+   "rx": 70,
+   "ry": 50
+  }
+ ],
+ "solids": [
+  {
+   "id": "well",
+   "shape": "ellipse",
+   "x": 672,
+   "y": 560,
+   "rx": 46,
+   "ry": 30,
+   "note": "中央水井／石鼎，繞行"
+  }
+ ],
+ "zones": {
+  "fromShore": [
+   620,
+   860,
+   104,
+   36
+  ],
+  "toHall": [
+   620,
+   120,
+   104,
+   60
+  ]
+ },
+ "features": [
+  {
+   "id": "stele",
+   "kind": "lore",
+   "x": 150,
+   "y": 540,
+   "note": "碑文，讀完才能點燈（flags.steleSeen）；補一句指出三盞燈的位置"
+  },
+  {
+   "id": "lanternA",
+   "kind": "lantern",
+   "x": 190,
+   "y": 480,
+   "stand": [
+    190,
+    520
+   ],
+   "note": "西路盡頭，石碑旁"
+  },
+  {
+   "id": "lanternB",
+   "kind": "lantern",
+   "x": 1150,
+   "y": 480,
+   "stand": [
+    1150,
+    520
+   ],
+   "note": "東路盡頭，石泉旁"
+  },
+  {
+   "id": "lanternC",
+   "kind": "lantern",
+   "x": 600,
+   "y": 190,
+   "stand": [
+    600,
+    230
+   ],
+   "note": "北側廟門左側"
+  },
+  {
+   "id": "pool",
+   "kind": "decor",
+   "x": 1250,
+   "y": 520,
+   "note": "石泉，不可走"
+  },
+  {
+   "id": "wardGate",
+   "kind": "gate",
+   "rect": [
+    648,
+    170,
+    48,
+    40
+   ],
+   "note": "鎮水門；三盞燈全亮才開（flags.templeLamps 位元遮罩）"
+  },
+  {
+   "id": "westFight",
+   "kind": "fight",
+   "x": 380,
+   "y": 560,
+   "trigger": [
+    300,
+    510,
+    160,
+    100
+   ]
+  },
+  {
+   "id": "eastFight",
+   "kind": "fight",
+   "x": 964,
+   "y": 560,
+   "trigger": [
+    884,
+    510,
+    160,
+    100
+   ]
+  }
+ ],
+ "encounters": [
+  {
+   "id": "westFight",
+   "enemies": [
+    "蘆葦精",
+    "蘆葦精"
+   ],
+   "flag": "templeWestFight",
+   "checkpoint": [
+    672,
+    830
+   ]
+  },
+  {
+   "id": "eastFight",
+   "enemies": [
+    "小水妖",
+    "小水妖",
+    "小水妖"
+   ],
+   "flag": "templeEastFight",
+   "checkpoint": [
+    672,
+    830
+   ]
+  }
+ ]
+}
