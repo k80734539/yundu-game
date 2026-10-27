@@ -254,7 +254,8 @@
    "checkpoint": [
     300,
     780
-   ]
+   ],
+   "bg": "bg_river"
   }
  ],
  "routes": {

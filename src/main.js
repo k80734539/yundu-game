@@ -1,7 +1,7 @@
 'use strict';
 // 主迴圈 frame() 與測試掛勾 window.__*
 let hashJumped=false;
-function frame(){requestAnimationFrame(frame);if(ready&&!hashJumped){hashJumped=true;try{templeHashJump()}catch(e){console.error(e)}}if(JOY.hide){const hb=G.mode=='battle';if(JOY.hidden!==hb)JOY.hide(hb)}const now=performance.now(),dt=Math.min(3,(now-lastT)/16.667);lastT=now;
+function frame(){requestAnimationFrame(frame);if(ready&&!hashJumped){hashJumped=true;try{templeEnsureShadowSprites();templeHashJump()}catch(e){console.error(e)}}if(JOY.hide){const hb=G.mode=='battle';if(JOY.hidden!==hb)JOY.hide(hb)}const now=performance.now(),dt=Math.min(3,(now-lastT)/16.667);lastT=now;
  try{if(cv.width!=Math.round(innerWidth*K)||cv.height!=Math.round(innerHeight*K))fit();
   if(ready&&G.mode=='map')update(dt);X.setTransform(1,0,0,1,0,0);X.imageSmoothingEnabled=true;X.imageSmoothingQuality='high';
   if(G.mode=='title'||!ready)drawTitle(now);else if(G.mode=='map')drawWorld(now);else if(G.mode=='boat')drawBoat(now);else if(G.mode=='battle')drawBattle(now);else if(G.mode=='over')drawOver();else if(G.mode=='end')drawEnd(now);

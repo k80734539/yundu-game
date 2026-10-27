@@ -43,11 +43,12 @@ export async function playthrough(b,url,W,H,touch=true){
  await tp(1150,480,'right');await hold('ArrowRight',700);await wait(pg,300);await flush();
  if(await E('G.map')!=='temple_court')throw Error('the shore gate did not lead to the court');
  await tp(150,700,'up');await P('ok');await flush();if(!(await E('G.flags.steleSeen')))throw Error('the stele was not read');
+ await tp(1194,330,'up');await P('ok');await flush();if(!(await E('G.flags.templeSluice')))throw Error('the sluice lever did not drain the east nook');
  for(const[x,y]of await E('M_().inter.filter(it=>it.lampBit!=null).map(it=>[it.x,it.y])')){await tp(x,y,'down');await P('ok');await flush()}
  if((await E('G.flags.templeLamps'))!==7)throw Error('three lanterns were not all lit');await wait(pg,200);await shot('temple_court');
  await tp(672,230,'up');await hold('ArrowUp',1400);await wait(pg,300);await flush();
  if(await E('G.map')!=='temple_hall')throw Error('the ward gate did not lead to the hall');
- await tp(672,500,'down');await P('ok');await flush();if(!(await E('G.flags.templeSeal')))throw Error('the shrine did not weaken the seal');
+ await tp(672,500,'down');await P('ok');await flush();await wait(pg,400);await fight();await flush();if(!(await E('G.flags.templeSeal')))throw Error('beating the Hebo shadow did not weaken the seal');
  await tp(672,200,'up');await wait(pg,200);await shot('temple_boss');await P('ok');await flush();await wait(pg,400);await shot('battle_boss');await fight();
  await wait(pg,300);await shot('dawn');await flush();await tp(36.3*T,10.6*T-14,'up');await P('ok');await wait(pg,150);await shot('cure');await flush();await wait(pg,1300);
  const mode=await E('G.mode'),party=await E("G.party.map(p=>p.n+' Lv'+p.lv)"),errors=await jsErrors(),fl=await E('JSON.parse(JSON.stringify(G.flags))');await shot('end');await ctx.close();

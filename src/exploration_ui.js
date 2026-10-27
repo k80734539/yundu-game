@@ -3,16 +3,21 @@
 function journeyGoal(){const f=G.flags||{};
  if(G.map==='village')return f.cure?'在渡口與雲纖會面':f.dawn?'把河珠交給阿婆':!f.chief||!f.quest?'和村長、阿婆談話':f.flood&&!f.ferryFight?'處理渡口的小水妖':'到渡口搭船';
  if(G.map==='reeds')return !f.tal?'調查妖氣來源':!f.reedSolved?'與白苓合力清除妖根':!f.camp?'到南側營火歇息':'前往出口牌坊';
- if(G.map==='temple_shore')return '穿過淺灘或棧橋，前往廟門';
+ if(G.map==='temple_shore')return f.templeShorePole||f.templeShoreFight?'前往東側的廟門':'穿過淺灘或棧橋，前往廟門';
  if(G.map==='temple_court')return !f.steleSeen?'讀取西側石碑':f.templeLamps!==templeLanternMask()?'點亮三座燈籠（'+templeLampCount()+'/3）':'穿過北邊的鎮水門';
  if(G.map==='temple_hall')return !f.templeSeal?'在神龕前削弱封印':'與河伯交談';
  return !f.steleSeen?'讀取廟中碑文':!f.templeSeal?(f.templeLamps!==templeLanternMask()?'點亮三座燈籠（'+templeLampCount()+'/3）':'在神龕前削弱封印'):'與河伯交談'}
+function templeCourtHint(f){const m=f.templeLamps||0,left=[];
+ if(!(m&1))left.push('西側上層的石燈被銀雲符封住，白苓的狐火能燒開');
+ if(!(m&2))left.push(f.templeSluice?'東側下層水已退，走過去點亮石燈':'東側下層的石燈淹在水下，先到上層東邊扳動水閘');
+ if(!(m&4))left.push('北邊鎮水門旁有兩盞燈，碑文說「日出之側」才是正燈');
+ return left.join('；')+'。'}
 function templeLampCount(){const m=G.flags.templeLamps||0;return (m&1)+((m>>1)&1)+((m>>2)&1)}
 function journeyHint(){const f=G.flags||{};
  if(G.map==='village')return f.cure?'沿村莊主路回到南側渡口。':f.dawn?'阿婆在村莊東側住宅旁等候。':!f.chief||!f.quest?'到北側村長廳前與村長交談，再到東側住宅旁尋找阿婆。':f.flood&&!f.ferryFight?'退水的河邊有小水妖作亂，先擊退或逃離，再登船。':'沿廣場向南，走到木棧橋登船。';
  if(G.map==='reeds')return !f.tal?'沿蘆葦間的道路探索，留意路中的異樣符紙。':!f.reedSolved?'在倒伏妖根前調查，與白苓合作打通橋上的道路。':!f.camp?'過橋後前往南側營火，稍作休息。':'從營火向東探索，再沿道路向南尋找牌坊。';
- if(G.map==='temple_shore')return '南邊淺灘最直接；北邊棧橋繞遠一點。兩條路都通到東側的廟門。';
- if(G.map==='temple_court')return !f.steleSeen?'沿下層往西，到盡頭的石碑讀取碑文。':f.templeLamps!==templeLanternMask()?'三盞燈散在中庭各處：西側上層、東側下層，以及北邊鎮水門旁。靠近石燈按互動。':'三燈全亮，鎮水門已開，從北邊進入水府後殿。';
+ if(G.map==='temple_shore')return '南邊淺灘最直接，但會遇到水影；北邊棧橋有斷口，用竹篙撐開後才能過，沒有戰鬥。兩條路都通到東側的廟門。';
+ if(G.map==='temple_court')return !f.steleSeen?'沿下層往西，到盡頭的石碑讀取碑文。':f.templeLamps!==templeLanternMask()?templeCourtHint(f):'三燈全亮，鎮水門已開，從北邊進入水府後殿。';
  if(G.map==='temple_hall')return !f.templeSeal?'沿走廊到神龕前調查封印，神龕在環形走廊的內側。':'封印已鬆動，沿北邊走廊與河伯交談。';
  return !f.steleSeen?'到庭院西側尋找石碑。':!f.templeSeal?(f.templeLamps!==templeLanternMask()?'沿庭院三處石燈逐一靠近並互動，點亮所有燈籠。':'回到庭院中央，在神龕前調查封印。'):'沿中央石階向北，與河伯交談。'}
 function nearbyInteraction(){if(!M||G.mode!=='map'||G.dlg)return null;const v=DV[G.dir],fx=G.x+v[0]*24,fy=G.y-12+v[1]*22;let best=null,bd=Infinity;

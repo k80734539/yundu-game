@@ -7,10 +7,10 @@ const TEMPLE_IDS={temple_shore:'shore',temple_court:'court',temple_hall:'hall'};
 const TEMPLE_ID_OF=k=>TEMPLE_LAYOUTS[k].id;
 const TEMPLE_FOOT=[[-8,0],[8,0],[-8,-6],[8,-6],[0,0],[0,-6]];
 const TEMPLE_LAMP_COUNT=3;
-// 邊／疊水區的開啟條件。階段二：pole、sluice 會改成真正的機關旗標（templeShorePole、templeSluice）。
+// 邊／疊水區的開啟條件：pole＝棧橋踏板（templeShorePole）、sluice＝水閘（templeSluice）、lamps＝三燈全亮、seal＝封印削弱。
 const TEMPLE_OPEN={
- pole:()=>true,
- sluice:()=>true,
+ pole:()=>!!G.flags.templeShorePole,
+ sluice:()=>!!G.flags.templeSluice,
  lamps:()=>(G.flags.templeLamps||0)===((1<<TEMPLE_LAMP_COUNT)-1),
  seal:()=>!!G.flags.templeSeal
 };
@@ -51,13 +51,42 @@ function templeJump(key){
  Object.assign(f,{ferry:1,chief:1,quest:1,flood:1,ferryFight:1,fish:1,tal:1,reedSeen:1,reedPole:1,reedSolved:1,reedBoss:1,camp:1});
  G.inv.魚乾=3;G.inv.清心草=2;
  if(key!=='shore'){Object.assign(f,{templeShorePole:1,templeShoreFight:1})}
+ if(key==='court'){Object.assign(f,{})}
  if(key==='hall'){Object.assign(f,{steleSeen:1,templeLamps:(1<<TEMPLE_LAMP_COUNT)-1,templeFightW:1,templeFightE:1,templeSluice:1})}
  templeTravel(key,'arrival','up');healParty();
  return true}
 function templeHashJump(){const m=/^#temple-(shore|court|hall)$/.exec(location.hash||'');if(m)templeJump(m[1])}
+// 河伯水影沿用河伯的圖，預先疊成偏藍暗的剪影並快取（不用 ctx.filter，iOS 也看得到）。
+function templeEnsureShadowSprites(){
+ if(I.hebos)return;
+ if(!I.hebo?.naturalWidth)return;
+ const tint=src=>{const c=document.createElement('canvas');c.width=src.naturalWidth||src.width;c.height=src.naturalHeight||src.height;const x=c.getContext('2d');x.drawImage(src,0,0);x.globalCompositeOperation='source-atop';x.fillStyle='rgba(24,44,110,.58)';x.fillRect(0,0,c.width,c.height);const im=new Image();im.src=c.toDataURL('image/png');return im};
+ I.hebos=tint(I.hebo);for(const p of['idle0','idle1','cast','attack','hit','down'])if(I['hebo_'+p]?.naturalWidth)I['hebos_'+p]=tint(I['hebo_'+p]);
+ if(typeof EART!=='undefined'&&EART.hebo)EART.hebos=EART.hebo}
+// 疊水、踏板、鎖門：底圖畫成乾的，由遊戲動態疊上去；條件滿足後淡出／淡入。
+function drawTempleOverlays(now){
+ const L=TEMPLE_LAYOUTS[M.templeMap];if(!L)return;const A=M.templeAnim||{},fade=(id,since)=>since==null?0:Math.max(0,1-(now-since)/1400);
+ const t=now/1000;
+ for(const o of L.overlays||[]){
+  const open=templeIsOpen(o.open),a=open?fade(o.id,A[o.open]):1;if(a<=0)continue;
+  const[x,y,w,h]=o.rect;X.save();X.globalAlpha=.5*a;X.fillStyle='#3a82c8';X.fillRect(x,y,w,h);
+  X.globalAlpha=.35*a;X.strokeStyle='#cfe8ff';X.lineWidth=2;
+  for(let i=0;i<4;i++){const yy=y+(i+.5)*h/4;X.beginPath();for(let xx=0;xx<=w;xx+=8){const py=yy+Math.sin(t*2.2+xx/22+i)*3;xx?X.lineTo(x+xx,py):X.moveTo(x,py)}X.stroke()}
+  X.restore()}
+ const gap=L.features.poleGap;
+ if(gap){const[x,y,w,h]=gap.rect,open=!!G.flags.templeShorePole,a=open?1-fade('pole',A.pole):0;
+  X.save();
+  if(!open){X.fillStyle='rgba(20,50,90,.7)';X.fillRect(x,y,w,h)}
+  else{X.globalAlpha=Math.max(a,A.pole==null?1:0);X.fillStyle='#9a6f46';X.fillRect(x,y+8,w,h-16);X.strokeStyle='#5f4328';X.lineWidth=2;for(let i=1;i<6;i++){X.beginPath();X.moveTo(x+i*w/6,y+8);X.lineTo(x+i*w/6,y+h-8);X.stroke()}}
+  X.restore()}
+ const g=L.features.wardGate;
+ if(g&&!templeIsOpen('lamps')){const[x,y,w,h]=g.rect;X.save();X.globalAlpha=.55+.15*Math.sin(t*3);X.fillStyle='#7a2f4a';X.fillRect(x,y,w,h);X.strokeStyle='#e7a4c0';X.lineWidth=3;X.strokeRect(x,y,w,h);X.restore()}
+ const sb=L.features.sealBarrier;
+ if(sb&&!templeIsOpen('seal')){const[x,y,w,h]=sb.rect;X.save();X.globalAlpha=.55+.15*Math.sin(t*3);X.fillStyle='#2b1f3a';X.fillRect(x,y,w,h);X.strokeStyle='#b58bd6';X.lineWidth=3;X.strokeRect(x,y,w,h);X.restore()}
+}
 function buildTempleMap(key){
  const L=TEMPLE_LAYOUTS[key],W=L.world.width,H=L.world.height,F=L.features,[g,c]=cvs(W,H);
- M={id:L.id,W,H,T:T2,rows:[],obj:[],sol:[],zones:[],inter:[],npcs:[],lights:[],night:1,nightGrade:.18,mapPlate:1,templeMap:key};
+ M={id:L.id,W,H,T:T2,rows:[],obj:[],sol:[],zones:[],inter:[],npcs:[],lights:[],night:1,nightGrade:.18,mapPlate:1,templeMap:key,templeAnim:{}};
  const plate=I['temple_guide_'+key];
  if(plate?.naturalWidth)c.drawImage(plate,0,0,W,H);else{c.fillStyle='#243c51';c.fillRect(0,0,W,H);c.strokeStyle='#bca77c';c.lineCap='round';c.lineWidth=L.pathWidth*2;for(const e of L.edges){c.beginPath();c.moveTo(...L.nodes[e.a]);c.lineTo(...L.nodes[e.b]);c.stroke()}}
  M.ground=g;
@@ -65,19 +94,23 @@ function buildTempleMap(key){
  const zone=(r,enter)=>{const[x,y,w,h]=r;M.zones.push({x0:x,y0:y,x1:x+w,y1:y+h,enter})};
  const chest=f=>{addObj({k:'chest',x:f.x,y:f.y,chest:f.key});M.sol.push([f.x-16,f.y-12,32,12]);M.inter.push({x:f.x,y:f.y+8,r:38,act:()=>openChest(f.key)})};
  const lore=(f,act,r)=>M.inter.push({x:f.x,y:f.y+(f.stand?0:20),r:r||38,act});
- const lamp=(f,bit)=>{const x=f.x,y=f.y,lit=bit!=null&&((G.flags.templeLamps||0)&(1<<bit));
+ const lamp=(f,bit,act)=>{const x=f.x,y=f.y,lit=bit!=null&&((G.flags.templeLamps||0)&(1<<bit));
   const l=[x,y-24,104,lit?'rgba(191,239,240,.5)':'rgba(110,150,160,.13)'];if(bit!=null)l.lamp=bit;M.lights.push(l);
-  if(!lit){const[sx,sy]=f.stand||[x,y+30];M.inter.push({x:sx,y:sy,r:40,lampBit:bit,act:bit!=null?()=>lightTempleLantern(bit):()=>say(S.templeLampDecoy)})}};
+  if(!lit){const[sx,sy]=f.stand||[x,y+30];M.inter.push({x:sx,y:sy,r:40,lampBit:bit,act:act||(bit!=null?()=>lightTempleLantern(bit):()=>say(S.templeLampDecoy))})}};
  if(key==='shore'){
   zone(L.zones.toCourt,()=>templeTravel('court','arrival','up'));
   lore(F.incenseStele,()=>say(S.templeIncense));
   chest(F.shoreChest);
+  zone(F.shoreGuard.trigger,()=>templeFight('shoreGuard'));
+  if(!G.flags.templeShorePole)M.inter.push({x:L.nodes.gapW[0],y:L.nodes.gapW[1],r:64,templePole:1,act:templePole});
  }
  if(key==='court'){
   zone(L.zones.fromShore,()=>templeTravel('shore','gate','left'));
   zone(L.zones.toHall,()=>{if(!templeIsOpen('lamps')){G.y+=40;return say(S.templeWardGateLocked)}templeTravel('hall','arrival','up')});
-  lore(F.stele,stele);
-  lamp(F.lampA,0);lamp(F.lampB,1);lamp(F.lampC_right,2);lamp(F.lampC_left,null);
+  lore(F.stele,()=>{G.flags.steleSeen=1;say(S.stele.concat(S.templeSteleClue))});
+  lamp(F.lampA,0,templeLampA);lamp(F.lampB,1);lamp(F.lampC_right,2);lamp(F.lampC_left,null,templeLampWrong);
+  M.inter.push({x:F.sluiceLever.x,y:F.sluiceLever.y+20,r:44,act:templeSluice});
+  zone(F.westFight.trigger,()=>templeFight('westFight'));zone(F.eastFight.trigger,()=>templeFight('eastFight'));
   lore(F.cloudStatue,()=>say(S.templeCloudStatue));
   chest(F.secretChest);
  }
@@ -86,7 +119,8 @@ function buildTempleMap(key){
   lore(F.plaque,plaque);
   chest(F.hallChest);
   lore(F.cloudMark,()=>say(S.templeCloudMark));
-  M.inter.push({x:F.shrineSeal.x,y:F.shrineSeal.y+20,r:46,act:templeSeal});
+  M.inter.push({x:F.shrineSeal.x,y:F.shrineSeal.y+20,r:46,act:templeShrine});
+  templeEnsureShadowSprites();
   if(!G.flags.boss){const h=npc('hebo',F.hebo.x,F.hebo.y,'河伯',bossTalk,()=>1);h.boss=1;const it=M.inter[M.inter.length-1];it.r=60;it.y=F.hebo.y+30}
  }
  if(DEBUG_COL){M.walkRed=templeRedLayer();M.walkRedState=templeDebugState()}

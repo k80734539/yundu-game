@@ -20,7 +20,7 @@ KIND = {'lantern': ('#ffd36a', '燈籠'), 'lore': ('#c9ddda', '碑'), 'chest': (
         'decor': ('#7aa0b8', '景'), 'gate': ('#ff6b6b', '鎖門'),
         'pole': ('#d8a35a', '撐篙'), 'lever': ('#9ad0ff', '水閘')}
 
-def draw(name):
+def draw(name, play=False):
     data = json.loads((OUT / f'layout-{name}.json').read_text(encoding='utf-8'))
     w, h = data['world']['width'], data['world']['height']
     im = Image.new('RGB', (w, h), WATER)
@@ -33,14 +33,21 @@ def draw(name):
         pa, pb = tuple(data['nodes'][a]), tuple(data['nodes'][b])
         kind = opt.get('kind')
         col = UPPER if (a in upper and b in upper) else PATH
-        if kind == 'flooded':
+        if kind == 'flooded' and not play:
             col = '#6f8ea8'
+        if kind == 'gap' and play:
+            for sx, sy in (pa, pb):
+                d.ellipse((sx - 30, sy - 30, sx + 30, sy + 30), fill=PATH)
+            continue
         if kind == 'gap':
             for sx, sy in (pa, pb):
                 d.ellipse((sx - 30, sy - 30, sx + 30, sy + 30), fill=PATH)
             d.line([pa, pb], fill='#e8707a', width=6)
             mx, my = (pa[0] + pb[0]) // 2, (pa[1] + pb[1]) // 2
             d.text((mx - 40, my - 44), '缺口(撐篙)', fill='#ffb4a8', font=font(18))
+            continue
+        if kind == 'barrier' and play:
+            d.line([pa, pb], fill=col, width=pw)
             continue
         if kind == 'barrier':
             d.line([pa, pb], fill='#8a6a6a', width=pw)
@@ -58,13 +65,13 @@ def draw(name):
                 y = pa[1] + (pb[1] - pa[1]) * t
                 d.line((x - 44, y, x + 44, y), fill='#6a5a3a', width=3)
             d.text(((pa[0] + pb[0]) // 2 + 54, (pa[1] + pb[1]) // 2 - 10), '階梯(上下層)', fill='white', font=font(18))
-        if kind == 'flooded':
+        if kind == 'flooded' and not play:
             mx, my = (pa[0] + pb[0]) // 2, (pa[1] + pb[1]) // 2
             d.text((mx + 14, my - 10), '淹水→' + opt.get('open', ''), fill='#dff0ff', font=font(18))
     for c in data['clearings']:
         col = UPPERCLEAR if c['id'] in upper or any(c['x'] == data['nodes'][n][0] and c['y'] == data['nodes'][n][1] and n in upper for n in data['nodes']) else CLEAR
         d.ellipse((c['x'] - c['rx'] - 12, c['y'] - c['ry'] - 12, c['x'] + c['rx'] + 12, c['y'] + c['ry'] + 12), fill=col)
-    for o in data.get('overlays', []):
+    for o in ([] if play else data.get('overlays', [])):
         x, y, ww, hh = o['rect']
         ov = Image.new('RGBA', (ww, hh), (60, 140, 220, 120))
         im.paste(ov, (x, y), ov)
@@ -77,6 +84,8 @@ def draw(name):
         d.rectangle((x, y, x + ww, y + hh), outline='#83debe', width=4)
         d.text((x + 4, y + 4), '出入口 ' + key, fill='#83debe', font=font(18))
     for f in data.get('features', []):
+        if play and f['kind'] == 'gate':
+            continue
         col, label = KIND.get(f['kind'], ('#ffffff', f['kind']))
         if 'rect' in f:
             x, y, ww, hh = f['rect']
@@ -98,7 +107,7 @@ def draw(name):
     d.rectangle((0, 0, 420, 70), fill='#10202c')
     d.text((14, 8), f"{data['title']}  {w}×{h}", fill='white', font=font(26))
     d.text((14, 42), '米色=下層路面 淺黃=上層 藍斜=疊水區（碰撞寬 %d）' % data['pathWidth'], fill='#cfe0ea', font=font(16))
-    im.save(OUT / f'guide-{name}.png')
+    im.save((ROOT / f'assets/img/temple_guide_{name}.png') if play else (OUT / f'guide-{name}.png'))
     return data
 
 def overview():
@@ -116,5 +125,6 @@ def overview():
 
 for n in ('shore', 'court', 'hall'):
     draw(n)
+    draw(n, play=True)   # 遊玩用底圖：不畫水、鎖門、缺口，由遊戲動態疊加
 overview()
 print('guides written to', OUT)

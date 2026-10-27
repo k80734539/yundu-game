@@ -15,7 +15,7 @@ function learnSkill(p,n){if(p&&!p.skills.includes(n))p.skills.push(n)}
 function nextActor(){const B=G.B;let i=B.ai+1;while(i<G.party.length&&G.party[i].hp<=0)i++;if(i<G.party.length){B.ai=i;B.ph='cmd';B.sel=0}else enemyPhase()}
 function enemyPhase(){const B=G.B,m=[];
  for(const e of alive(B.en)){const ps=alive(G.party);if(!ps.length)break;const i0=m.length;let K,TG;
-  if(e.boss&&B.turn%(B.heboPhase2?CFG.hebo.phaseWaveInterval:CFG.hebo.waveInterval)==0){K='wave';TG=ps;m.push('河伯掀起「濁浪滔天」！');ps.forEach(p=>{m.push(p.n+'受到'+dmg(e.atk*.85,p)+'點傷害！');ko(p,m)})}
+  if(e.boss&&B.turn%(B.heboPhase2?CFG.hebo.phaseWaveInterval:CFG.hebo.waveInterval)==0){K='wave';TG=ps;m.push(e.n+'掀起「濁浪滔天」！');ps.forEach(p=>{m.push(p.n+'受到'+dmg(e.atk*.85,p)+'點傷害！');ko(p,m)})}
   else{const p=ps[rnd(ps.length)];K=e.boss?'tail':e.e=='lu'?'leaf':'splash';TG=[p];m.push(e.n+(e.boss?'甩動龍尾':'撲了過來')+'，'+p.n+'受到'+dmg(e.atk,p)+'點傷害！');ko(p,m);
    if(p.hp>0&&!p.st&&(e.poison&&Math.random()<e.poison||e.boss&&Math.random()<.3)){p.st='中毒';m.push(p.n+'中毒了！')}}wr(m,i0,K,e,TG)}
  alive(G.party).forEach(p=>{if(p.st=='中毒'){const d=Math.max(3,Math.round(p.mhp*.06));p.hp=Math.max(1,p.hp-d);hit(p,d);m.push(p.n+'因中毒損失'+d+'HP。');wr(m,m.length-1,'poison',p,[p])}});
