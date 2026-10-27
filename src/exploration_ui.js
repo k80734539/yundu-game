@@ -1,11 +1,11 @@
 'use strict';
 // 探索 HUD 與旅途手札：沿用角色／旗標／存檔資料，不新增存檔欄位。
 function journeyGoal(){const f=G.flags||{};
- if(G.map==='village')return f.cure?'在渡口與雲纖會面':f.dawn?'把河珠交給阿婆':!f.chief||!f.quest?'和村長、阿婆談話':'到渡口搭船';
+ if(G.map==='village')return f.cure?'在渡口與雲纖會面':f.dawn?'把河珠交給阿婆':!f.chief||!f.quest?'和村長、阿婆談話':f.flood&&!f.ferryFight?'處理渡口的小水妖':'到渡口搭船';
  if(G.map==='reeds')return !f.tal?'調查妖氣來源':!f.reedSolved?'與白苓合力清除妖根':!f.camp?'到南側營火歇息':'前往出口牌坊';
  return !f.steleSeen?'讀取廟中碑文':!f.templeSeal?(f.templeLamps!==templeLanternMask()?'點亮三座燈籠（'+CFG.templeLanterns.filter((_,i)=>(f.templeLamps||0)&(1<<i)).length+'/'+CFG.templeLanterns.length+'）':'在神龕前削弱封印'):'與河伯交談'}
 function journeyHint(){const f=G.flags||{};
- if(G.map==='village')return f.cure?'沿村莊主路回到南側渡口。':f.dawn?'阿婆在村莊東側住宅旁等候。':!f.chief||!f.quest?'到北側村長廳前與村長交談，再到東側住宅旁尋找阿婆。':'沿廣場向南，走到木棧橋登船。';
+ if(G.map==='village')return f.cure?'沿村莊主路回到南側渡口。':f.dawn?'阿婆在村莊東側住宅旁等候。':!f.chief||!f.quest?'到北側村長廳前與村長交談，再到東側住宅旁尋找阿婆。:f.flood&&!f.ferryFight?'退水的河邊有小水妖作亂，先擊退或逃離，再登船。':'沿廣場向南，走到木棧橋登船。';
  if(G.map==='reeds')return !f.tal?'沿蘆葦間的道路探索，留意路中的異樣符紙。':!f.reedSolved?'在倒伏妖根前調查，與白苓合作打通橋上的道路。':!f.camp?'過橋後前往南側營火，稍作休息。':'從營火向東探索，再沿道路向南尋找牌坊。';
  return !f.steleSeen?'到庭院西側尋找石碑。':!f.templeSeal?(f.templeLamps!==templeLanternMask()?'沿庭院三處石燈逐一靠近並互動，點亮所有燈籠。':'回到庭院中央，在神龕前調查封印。'):'沿中央石階向北，與河伯交談。'}
 function nearbyInteraction(){if(!M||G.mode!=='map'||G.dlg)return null;const v=DV[G.dir],fx=G.x+v[0]*24,fy=G.y-12+v[1]*22;let best=null,bd=Infinity;
