@@ -77,7 +77,7 @@ classic script 的 function 宣告只在該檔執行時才建立，所以**載�
 - **頭像（v28）**：三位主角以使用者提供四視角原圖的三分之四正面裁成 512×512 透明半身像，戰鬥與對話共用同一張，勿改回舊像素頭像或有底色的方塊。卡片頭像在左、紅／藍數字在右；直式壓縮為兩行且臉部不被資訊列覆蓋。cards 的觸控區包含浮出資訊列的頭像。情境鍵 pt_qz_startled／pt_bl_quiet 目前使用同一原圖的正面視角，不自行生成表情。參見 docs/art/portraits-v28.md 與 tests/portrait-ui.mjs。原色裁切工具為 tools/import-portraits.py。
 
 ## 5. 版本號規則
-- 目前 **v53**（河神廟三張地圖階段二：機關與戰鬥；v52 階段一保留；併入 Codex 河伯戰 V3）。每次上線改動都要 +1（下一版 **v54**），三處一起改：
+- 目前 **v54**（河伯戰加入潮位與行動預告；併入 Codex 河伯戰 V3；v53 河神廟階段二）。每次上線改動都要 +1（下一版 **v55**），三處一起改：
   1. `index.html` `<title>雲渡仙緣 第一章 vN</title>`
   2. `src/screens.js` 標題畫面 `'版本 vN'`
   3. `src/render.js` 地圖右下角 `'vN'`
@@ -143,3 +143,5 @@ npm test                                          # 必須 ALL PASS，且無 JS 
 
 - **河神廟階段二（v53）**：機關與戰鬥已做。`TEMPLE_OPEN.pole`＝`flags.templeShorePole`（淺灘棧橋缺口，在缺口西端互動，青舟撐出踏板）、`sluice`＝`flags.templeSluice`（中庭上層東側水閘，扳動後東側下層淹水區退水）、`lamps`＝三燈全亮、`seal`＝`flags.templeSeal`。燈 A 要先看封符對白、白苓燒符才亮（`templeLampA`）；燈 B 要先排水；燈 C 右（東，「日出之側」）才是正燈，左邊那盞（`templeLampWrong`）點了會打 2 隻小水妖、不亮、可重試。固定戰鬥資料在 layout JSON 的 `encounters`（敵人、旗標、重來點、戰鬥背景），由 `templeFight(id)` 觸發：走進區域才開戰、每場只一次、逃跑也算完成、戰敗回該場的重來點。神龕 `templeShrine`：先劇情，再打「河伯水影」（`EN['河伯水影']`，數字在 `CFG.templeShadow`，圖沿用河伯並由 `templeEnsureShadowSprites` 預先疊成偏藍暗的快取，`e:'hebos'`），贏了才設 `templeHallShadow`、`templeSeal`。水影用 `e:'hebos'` 所以不會觸發河伯本人的階段變化。疊水、踏板、鎖門由 `drawTempleOverlays` 在底圖上動態畫（底圖要畫成乾的）。**階段一與二的底圖都是路線草圖，`temple_guide_*.png` 為遊玩版（不含水與鎖門），`docs/maps/temple-v52/guide-*.png` 為標註版**，由 `python3 tools/build-temple-guides.py` 一次產生。棧橋拓樸：棧橋東端接匯合點，所以從淺灘繞過去也到得了棧橋與寶箱，撐篙是「不用打那場戰鬥」的另一條路。試玩入口：網址 `#temple-shore`／`#temple-court`／`#temple-hall`（`templeJump`）。測試 `tests/temple-v52.mjs`。
 - **河伯戰（v52）**：河伯專屬行動狀態為 NORMAL／CHARGING／RELEASE／STAGGERED；蓄力會佔用一次敵方行動，讓我方有完整回合應對。HP ≤90 時控妖符顯形，符被破壞會取消蓄力並使河伯跳過下一次行動；白苓狐火命中蓄力中的河伯可降低當次濁浪傷害。防禦回復 MP，數值在 `CFG.hebo`／`CFG.guardMp`；不變更存檔格式。驗收見 `tests/hebo-boss-v3.mjs`。
+
+- **河伯戰潮位與預告（v54，趣味化第一包，設計見 `docs/boss/hebo-fun-v1.md`）**：潮位每回合依 `CFG.hebo.tide.order`（平→漲→退循環）決定，`tideAt(turn)`／`tideNow(B)`；退潮玩家物理傷害 ×`physEbb` 且河伯攻擊 ×`atkEbb`，漲潮狐火（`dmg` 的 `ign` 旗標＝法術）×`magicRise` 且河伯攻擊 ×`atkRise`；`heboForecast(B,n)` 依狀態推演接下來 n 次河伯行動，戰鬥畫面河伯下方 `drawTidePanel` 顯示潮位與預告。回合末訊息提示下一回合潮位。數字暫定，需實戰調整。測試 `tests/hebo-tide.mjs`（與 `tests/hebo-boss-v3.mjs`）。

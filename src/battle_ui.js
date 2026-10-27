@@ -76,6 +76,14 @@ function enemyImage(e,now,x,y,scale){const c=EART[e.e],pose=enemyPose(e,now),im=
  if(c&&im?.naturalWidth){const z=c.factor*scale;return{im,x:x-c.x*z,y:y-c.y*z,w:c.size*z,h:c.size*z,pose}}
  const base=I[e.e];return{im:base,x:x-base.width*scale/2,y:y-base.height*scale,w:base.width*scale,h:base.height*scale,pose:'fallback'}}
 function drawBattleBackground(B){const requested=B.opt.bg||'bg_reeds',key=I[requested]?.naturalWidth?requested:'bg_reeds',im=I[key];if(im?.naturalWidth){B.bgFit=Object.assign(cover(im,.5,.5),{key,width:im.naturalWidth,height:im.naturalHeight})}else{B.bgFit=null;X.fillStyle='#24343c';X.fillRect(-20,-20,SW+40,SH+40)}}
+// 河伯戰：潮位與接下來兩次行動的預告（顏色：退潮藍、平潮白、漲潮橘）
+const TIDE_COL=['#9fd8ff','#ffffff','#ffb36b'],TIDE_TIP=['物理↑ 河伯攻擊↓','','狐火↑ 河伯攻擊↑'];
+function drawTidePanel(B,cx,y,fs){if(!B.hebo)return;const td=tideNow(B),f=heboForecast(B,2),sz=Math.max(11,fs-2),lh=sz+4;
+ const lines=[['潮位 '+TIDE_N[td],TIDE_COL[td]]];if(TIDE_TIP[td])lines.push([TIDE_TIP[td],TIDE_COL[td]]);
+ f.forEach((o,i)=>lines.push([(i?'再來 ':'預告 ')+o.a+'（'+TIDE_N[o.tide][0]+'潮）',o.a==='濁浪'?'#ff9a9a':'#ffe3a6']));
+ X.font=sz+'px '+FONT;const w=Math.max(...lines.map(l=>X.measureText(l[0]).width))+14,x=Math.max(w/2+4,Math.min(SW-w/2-4,cx));
+ X.fillStyle='rgba(8,18,28,.72)';X.fillRect(x-w/2,y-sz-2,w,lines.length*lh+6);
+ lines.forEach((l,k)=>txt(l[0],x,y+k*lh,sz,l[1],'center'))}
 function talismanPlacement(B,L){const i=B.en.findIndex(e=>e.e==='hebo'),q=L.en(B.en.length,true)[Math.max(0,i)],u=L.U;
  return{x:q[0]+135*u,y:q[1]-135*u,r:21*u}}
 function drawTalisman(B,L,now,fs,H){if(!B.talisman)return;const t=B.talisman,P=talismanPlacement(B,L),active=t.hp>0,elapsed=now-(B.talismanBrokenAt||0);
@@ -107,7 +115,8 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
   X.save();X.globalAlpha=ent*(1-da);if(fx&&Math.floor((now-fx.at)/70)%2)X.globalAlpha*=.4;if(da){X.translate(x,y);X.scale(1+da*.25,1-da*.5);X.translate(-x,-y)}const art=enemyImage(e,now,x+(fx?Math.sin(now/20)*3:0),y+(fx?0:bob)-da*20*u,s2);X.drawImage(art.im,art.x,art.y,art.w,art.h);if(da>0){X.globalCompositeOperation='lighter';X.globalAlpha=(1-da)*.6;X.drawImage(art.im,art.x,art.y,art.w,art.h)}X.restore();if(da)return;
   const bw=Math.min(90,Math.max(w*.9,60));lab.push(()=>{X.font=(fs-2)+'px '+FONT;txt(e.n,x,y+fs+4,fs-2,'#fff','center');X.fillStyle='#400';X.fillRect(x-bw/2,y+fs+10,bw,6);X.fillStyle='#e44';X.fillRect(x-bw/2,y+fs+10,bw*e.hp/e.mhp,6);
    if(e.e==='hebo'&&B.hebo){const h=B.hebo,label=h.state===HEBO_STATE.CHARGING?'蓄力中・下次濁浪':h.state===HEBO_STATE.STAGGERED?'失衡・跳過行動':h.interfered?'狐火干擾':B.talisman?.hp>0?'控妖符強化':'';
-    if(label)txt(label,x,y+fs+32,Math.max(11,fs-2),h.state===HEBO_STATE.CHARGING?'#ffe3a6':'#e8bde9','center');if(h.state===HEBO_STATE.CHARGING&&h.interfered)txt('狐火干擾・傷害降低',x,y+fs+49,Math.max(10,fs-3),'#9bdfff','center')}});
+    if(label)txt(label,x,y+fs+32,Math.max(11,fs-2),h.state===HEBO_STATE.CHARGING?'#ffe3a6':'#e8bde9','center');if(h.state===HEBO_STATE.CHARGING&&h.interfered)txt('狐火干擾・傷害降低',x,y+fs+49,Math.max(10,fs-3),'#9bdfff','center')}
+   drawTidePanel(B,x,y+fs+(h.interfered&&h.state===HEBO_STATE.CHARGING?55:38),fs)});
   if(B.ph=='target'&&B.tk=='E'){if(B.sel==i)txt('▼',x,y-h-6+Math.sin(t*8)*3,fs+6,'#ff0','center');H.push({x:x-Math.max(w,60)/2,y:y-h-10,w:Math.max(w,60),h:h+fs+30,fn:()=>{B.sel=i;press('ok')}})}});
  lab.forEach(f=>f());
  drawTalisman(B,L,now,fs,H);

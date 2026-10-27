@@ -5,14 +5,27 @@ function newE(k,i,n){return{...EN[k],n:k+(n>1?'ABC'[i]:''),mhp:EN[k].hp,ph:Math.
 const HEBO_STATE={NORMAL:'NORMAL',CHARGING:'CHARGING',RELEASE:'RELEASE',STAGGERED:'STAGGERED'};
 function startBattle(ks,opt){VPT.length=0;G.B={en:ks.map((k,i)=>newE(k,i,ks.length)),opt,ai:-1,ph:'cmd',sel:0,turn:1,msgs:[],after:null,fx:[]};G.prevMode=G.mode;G.mode='battle';G.bT=performance.now();
  if(ks.includes('河伯'))G.B.hebo={state:HEBO_STATE.NORMAL,normals:0,interfered:false,lastAction:null};
- const B=G.B;G.party.forEach(p=>p.guard=0);B.msgs=[(EN[ks[0]].boss?'頭目戰！':'妖怪出現了！')+' '+B.en.map(e=>e.n).join('、')].concat(opt.intro||[]);B.ph='msg';B.after=nextActor}
+ const B=G.B;G.party.forEach(p=>p.guard=0);B.msgs=[(EN[ks[0]].boss?'頭目戰！':'妖怪出現了！')+' '+B.en.map(e=>e.n).join('、')].concat(opt.intro||[],ks.includes('河伯')?['河伯身周的潮水忽漲忽退！退潮時物理攻擊更強，漲潮時狐火更強，但河伯也更凶。']:[]);B.ph='msg';B.after=nextActor}
 const alive=a=>a.filter(x=>x.hp>0);
 function enemyTargets(B){return B.talisman?.hp>0?B.en.concat(B.talisman):B.en}
-function heboPower(e,B){return e.atk*(B.talisman?.hp>0?CFG.hebo.talismanAttackBoost:1)}
+const TIDE_N=['退潮','平潮','漲潮'];
+function tideAt(turn){const o=CFG.hebo.tide.order;return o[(Math.max(1,turn)-1)%o.length]}
+function tideNow(B){return B&&B.hebo?tideAt(B.turn):1}
+function heboPower(e,B){const T=CFG.hebo.tide,td=tideNow(B);return e.atk*(B.talisman?.hp>0?CFG.hebo.talismanAttackBoost:1)*(td===0?T.atkEbb:td===2?T.atkRise:1)}
+// 預告河伯接下來 n 次行動（依目前狀態推演；每一回合的潮位也列出）
+function heboForecast(B,n){const H=B.hebo;if(!H)return[];let s=H.state,k=H.normals;const out=[];
+ for(let i=0;i<n;i++){let a;
+  if(s===HEBO_STATE.STAGGERED){a='失衡';s=HEBO_STATE.NORMAL;k=0}
+  else if(s===HEBO_STATE.CHARGING){a='濁浪';s=HEBO_STATE.NORMAL;k=0}
+  else if(k>=CFG.hebo.normalBeforeCharge[B.heboPhase2?1:0]){a='蓄力';s=HEBO_STATE.CHARGING}
+  else{a='龍尾';k++}
+  out.push({a,tide:tideAt(B.turn+i)})}
+ return out}
 function hit(t,d,o){const B=G.B;if(B)(B.q=B.q||[]).push(Object.assign({t,d},o||{}))}
 function heal(t,h){hit(t,h,{heal:1});return h}
 function wr(m,i,k,src,tg){const B=G.B;m[i]=[m[i],{k,src,tg:tg||[],hits:(B.q||[]).splice(0)}]}
-function dmg(pw,t,ign,cr){let d=Math.max(1,Math.round(pw-(ign?0:t.def+(t.arm||0))+Math.random()*4-1));if(cr)d=Math.round(d*1.6);if(t.guard)d=Math.ceil(d/2);t.hp=Math.max(0,t.hp-d);hit(t,d,{crit:cr,big:cr||(t.mhp>=60&&d>=t.mhp*.3)});return d}
+function dmg(pw,t,ign,cr){if(t.e==='hebo'&&G.B?.hebo){const T=CFG.hebo.tide,td=tideNow(G.B);if(td===0&&!ign)pw*=T.physEbb;if(td===2&&ign)pw*=T.magicRise}
+ let d=Math.max(1,Math.round(pw-(ign?0:t.def+(t.arm||0))+Math.random()*4-1));if(cr)d=Math.round(d*1.6);if(t.guard)d=Math.ceil(d/2);t.hp=Math.max(0,t.hp-d);hit(t,d,{crit:cr,big:cr||(t.mhp>=60&&d>=t.mhp*.3)});return d}
 function ko(t,m){if(t.hp>0)return;
  if(t===G.B?.talisman){if(!t.broken){t.broken=1;G.B.talismanBrokenAt=performance.now();G.B.hebo.state=HEBO_STATE.STAGGERED;G.B.hebo.normals=0;G.B.hebo.interfered=false;m.push('控妖符碎裂！河伯的蓄力被打斷，身形失衡！')}return}
  m.push(t.n+(EN[t.n.replace(/[ABC]$/,'')]?'被打倒了！':'倒下了！'))}
@@ -40,6 +53,7 @@ function enemyPhase(){const B=G.B,m=[];heboPhase(m);
   m.push(e.n+'撲了過來，'+p.n+'受到'+dmg(e.atk,p)+'點傷害！');ko(p,m);
   if(p.hp>0&&!p.st&&e.poison&&Math.random()<e.poison){p.st='中毒';m.push(p.n+'中毒了！')}wr(m,i0,K,e,[p])}
  alive(G.party).forEach(p=>{if(p.st=='中毒'){const d=Math.max(3,Math.round(p.mhp*.06));p.hp=Math.max(1,p.hp-d);hit(p,d);m.push(p.n+'因中毒損失'+d+'HP。');wr(m,m.length-1,'poison',p,[p])}});
+ if(B.hebo&&alive(B.en).length)m.push('潮水轉為「'+TIDE_N[tideAt(B.turn+1)]+'」。');
  B.msgs=m.length?m:['……'];B.ph='msg';B.after=()=>{if(B.hebo?.state===HEBO_STATE.RELEASE||B.hebo?.state===HEBO_STATE.STAGGERED){B.hebo.state=HEBO_STATE.NORMAL;B.hebo.normals=0}if(!alive(G.party).length){G.mode='over'}else{B.turn++;G.party.forEach(p=>p.guard=0);B.ai=-1;nextActor()}}}
 function win(){const B=G.B,ex=B.en.reduce((s,e)=>s+e.exp,0),m=['勝利！獲得 '+ex+' 經驗值。'];
  if(Math.random()<.35&&!B.opt.onWin){G.inv.魚乾++;m.push('撿到了「魚乾」！')}

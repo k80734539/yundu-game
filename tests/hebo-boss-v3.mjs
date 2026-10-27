@@ -8,6 +8,7 @@ export async function heboBossV3(browser,url){
   await pg.goto(url);await pg.waitForFunction('ready');
   const result=await pg.evaluate(()=>{
    newGame();G.dlg=null;G.party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']));
+   const heboPowerAtDamage=()=>{G.B.turn--;const v=heboPower(G.B.en[0],G.B);G.B.turn++;return v};
    const begin=()=>{__sb(['河伯'],{noEsc:1});G.B.ph='cmd';G.B.ai=0;G.party.forEach(p=>{p.hp=999;p.mhp=999;p.st='';p.guard=0;p.mp=p.mmp})};
    const turn=()=>{enemyPhase();const B=G.B,r={action:B.hebo?.lastAction||'NORMAL',state:B.hebo?.state,msg:B.msgs.map(x=>Array.isArray(x)?x[0]:x),hp:G.party.map(p=>p.hp),turn:B.turn};B.after();return r};
    begin();const first=[turn(),turn(),turn(),turn(),turn(),turn(),turn(),turn()];
@@ -15,7 +16,7 @@ export async function heboBossV3(browser,url){
    G.B.ai=0;G.B.ph='cmd';G.B.pend={t:'atk'};G.B.talisman.hp=1;exec(G.B.talisman);const normalBreak={broken:G.B.talisman.broken,state:G.B.hebo.state,buff:heboPower(G.B.en[0],G.B)};
    begin();G.B.en[0].hp=90;act(['命中']);G.B.talisman.hp=1;G.B.ai=0;G.B.pend={t:'sk',s:'橫掃'};exec(null);const sweepBreak={broken:G.B.talisman.broken,state:G.B.hebo.state};
    begin();G.B.en[0].hp=90;act(['命中']);G.B.hebo.state=HEBO_STATE.CHARGING;G.B.talisman.hp=1;G.B.ai=1;G.B.pend={t:'sk',s:'狐火'};exec(G.B.talisman);const foxBreak={broken:G.B.talisman.broken,state:G.B.hebo.state,interfered:G.B.hebo.interfered};const skip=turn(),afterSkip={state:G.B.hebo.state,turn:G.B.turn},normal=turn();
-   begin();G.B.en[0].hp=90;act(['命中']);G.B.hebo.state=HEBO_STATE.CHARGING;G.B.ai=1;G.B.pend={t:'sk',s:'狐火'};const oldRandom=Math.random;Math.random=()=>0;exec(G.B.en[0]);const interfere={on:G.B.hebo.interfered,mp:G.party[1].mp,msg:G.B.msgs.some(m=>(Array.isArray(m)?m[0]:m).includes('狐火擾亂'))};const hp0=G.party[0].hp;const reduced=turn();const dealt=hp0-G.party[0].hp;const expected=Math.max(1,Math.round(heboPower(G.B.en[0],G.B)*CFG.hebo.wavePower*(1-CFG.hebo.foxfireWaveReduction)-G.party[0].def-1));
+   begin();G.B.en[0].hp=90;act(['命中']);G.B.hebo.state=HEBO_STATE.CHARGING;G.B.ai=1;G.B.pend={t:'sk',s:'狐火'};const oldRandom=Math.random;Math.random=()=>0;exec(G.B.en[0]);const interfere={on:G.B.hebo.interfered,mp:G.party[1].mp,msg:G.B.msgs.some(m=>(Array.isArray(m)?m[0]:m).includes('狐火擾亂'))};const hp0=G.party[0].hp;const reduced=turn();const dealt=hp0-G.party[0].hp;const expected=Math.max(1,Math.round(heboPowerAtDamage()*CFG.hebo.wavePower*(1-CFG.hebo.foxfireWaveReduction)-G.party[0].def-1));
    G.B.hebo.state=HEBO_STATE.CHARGING;G.B.hebo.interfered=false;G.party.forEach(p=>p.hp=999);const full=turn();const fullDealt=999-G.party[0].hp;Math.random=oldRandom;
    begin();G.B.hebo.state=HEBO_STATE.CHARGING;G.party[1].hp=0;G.party[0].mp=0;const blDown=turn();
    begin();G.B.hebo.state=HEBO_STATE.CHARGING;G.party[0].hp=0;const qzDown=turn();
