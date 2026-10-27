@@ -50,6 +50,6 @@ function bKey(k){const B=G.B,u=G.party[B.ai];
   else if(c==2){if(!lists.item.length){B.msgs=['沒有可用的道具。'];B.ph='msg';B.after=()=>{B.ph='cmd'};return}B.ph='item';B.sel=0}
   else if(c==3){u.guard=1;const m=[u.n+'擺出防禦架勢。'];wr(m,0,'guard',u,[u]);act(m)}
   else{if(B.opt.noEsc){B.msgs=['逃不掉！'];B.ph='msg';B.after=()=>{B.ph='cmd'};return}
-   if(Math.random()<.65){B.msgs=['成功逃跑了！'];B.ph='msg';B.after=()=>{G.B=null;G.mode='map'}}else{B.ai=G.party.length;act(['逃跑失敗！'])}}}
+   if(Math.random()<.65){B.msgs=['成功逃跑了！'];B.ph='msg';B.after=()=>{G.B=null;G.mode='map';if(B.opt.onEscape)B.opt.onEscape()}}else{B.ai=G.party.length;act(['逃跑失敗！'])}}}
  else if(B.ph=='skill'){const n=L[B.sel],s=SK[n];if(u.mp<s.mp){B.msgs=['法力不足！'];B.ph='msg';B.after=()=>{B.ph='cmd'};return}B.pend={t:'sk',s:n};goTarget(s.tgt)}
  else if(B.ph=='item'){const n=L[B.sel];if(!n)return;B.pend={t:'it',k:n};goTarget(ITEMS[n].tgt)}}

@@ -34,11 +34,13 @@ function reedTrial(){const f=G.flags;if(!f.tal)return say(S.trialNoTalisman);if(
  if(!f.reedPole){f.reedPole=1;say(S.trialPole);return}
  if(!f.reedSolved){f.reedSolved=1;if(M.maze)M.inter=M.inter.filter(it=>!it.rootGate);say(S.trialFox);return}
  say(S.trialRepeat)}
+function completeFerryFight(won){const f=G.flags;if(f.ferryFight)return;f.ferryFight=1;if(won){G.inv.魚乾=(G.inv.魚乾||0)+CFG.ferryFight.reward;say(S.ferryWin)}else say(S.ferryEscape)}
 function boardBoat(){const f=G.flags;if(f.dawn)return;if(!f.chief||!f.quest){G.y=Math.min(G.y,19.5*T);return say(S.boardNo)}
  if(!f.flood){f.flood=1;return say(S.flood,()=>boardBoat())}
+ if(!f.ferryFight){saveCP({map:'village',x:CFG.ferryFight.checkpoint[0]*T,y:CFG.ferryFight.checkpoint[1]*T,dir:'down'});return say(S.ferryFight,()=>startBattle(Array(CFG.ferryFight.count).fill('小水妖'),{bg:'bg_river',intro:['教學：選「攻擊」後確認目標；「技能」裡的「橫掃」會消耗 MP 攻擊全體敵人。'],onWin:()=>completeFerryFight(true),onEscape:()=>completeFerryFight(false)}))}
  say(S.board,startNight)}
 function startNight(){G.mode='boat';G.boatT=performance.now();G.party=G.party.filter(p=>p.n=='陳青舟');saveCP({boat:1});
- say(S.night,()=>startBattle(['小水妖','小水妖'],{noEsc:1,bg:'bg_river',intro:['教學：選「攻擊」後用方向鍵選目標。「技能」橫掃會消耗MP攻擊全體敵人！'],onWin:()=>{
+ say(S.night,()=>startBattle(['小水妖','小水妖'],{noEsc:1,bg:'bg_river',intro:['進階提示：血量吃緊時可選「防禦」減傷；青舟獨自作戰時，也能保留法力應付後續。'],onWin:()=>{
   G.party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']));loadMap('reeds',...REEDS_LAYOUT.nodes.spawn,'right');say(S.wake.concat(S.wakeSys))}}),'night')}
 function bossTalk(){if(!G.flags.templeSeal)return say(S.bossNoSeal);say(S.boss,()=>startBattle(['河伯'],{noEsc:1,bg:'bg_temple',onWin:()=>{G.flags.boss=1;G.flags.pearl=1;learnSkill(G.party.find(p=>p.e=='qz'),'渡水一擊');M.npcs=M.npcs.filter(n=>!n.boss);
  say(S.bossWin.concat(S.bossSys),dawn,'hebo')}}))}

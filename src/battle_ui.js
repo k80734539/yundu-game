@@ -4,7 +4,7 @@
 // v29: keep opposing diagonal ranks and leave a wider central battle lane.
 const BP_FEET=[[205,700],[250,610],[295,520]],BP_EN={1:[[105,460]],2:[[75,525],[140,365]],3:[[70,540],[115,390],[150,260]],b:[[105,460]]};
 function bLayout(n){const port=SH>SW,aw=SW-SA.l-SA.r,L={port,aw};
- L.U=port?Math.min(SW/390,SH/844):SH/390;L.s=BFR.scale*L.U;L.eu=L.U;
+ L.U=port?Math.min(SW/390,SH/844):SH/390;L.s=BFR.scale*L.U*(port?1:CFG.battleUi.landscapeScale);L.eu=L.U;
  L.ch=port?Math.max(62,Math.round(82*L.U)):54;L.cy=SH-SA.b-L.ch-8;const gap=port?10:8;
  L.cw=port?(aw-24-gap*2)/3:Math.min(210,(aw-24-gap*2)/3);L.cx0=port?SA.l+12:SA.l+(aw-(L.cw*3+gap*2))/2;L.gap=gap;
  const fp=port?(q=>[SW/2+(SA.l-SA.r)/2+(q[0]-195)*L.U,SH-SA.b-(844-q[1])*L.U]):null;
@@ -130,8 +130,8 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
   if(f.crit){X.font='bold '+(fs-1)+'px '+FONT;X.strokeText('會心！',0,-fs-4);X.fillStyle='#ffb02e';X.fillText('會心！',0,-fs-4)}X.restore()}
  if(B.fl){const a=(now-B.fl.at)/B.fl.d;if(a<1){X.fillStyle='rgba('+B.fl.c+','+(B.fl.k*(1-a))+')';X.fillRect(0,0,SW,SH)}else B.fl=null}
  // ---- 上方訊息框（指令選單時讓出左上角的逃跑鈕）
- const left=B.ph=='cmd'?SA.l+14+L.bd+8:SA.l+8,mw=Math.min(SW-SA.r-94-left,640),mx=left,my=SA.t+8;
- if(B.ph=='msg'){const M0=B.msgs[0],T0=Array.isArray(M0)?M0[0]:(M0||''),mk=B.msgs.length+T0;if(Array.isArray(M0)&&M0[1].at==null)startFx(M0[1],now);if(B.mk!==mk){B.mk=mk;B.mT=now;if(T0.includes('升到了'))playSfx('level')}else if(now-B.mT>1500){B.mk=null;press('ok')}X.font=fs+'px '+FONT;const ls=wrap(T0,mw-28).slice(0,3);box(mx,my,mw,ls.length*(fs+8)+22,.93);ls.forEach((l,j)=>txt(l,mx+14,my+fs+10+j*(fs+8),fs));txt('▼',mx+mw-20,my+ls.length*(fs+8)+14,fs-5,'#c9b26b')}
+ const left=B.ph=='cmd'?SA.l+14+L.bd+8:SA.l+8,mw=Math.min(SW-SA.r-CFG.battleUi.soundSafeWidth-left,CFG.battleUi.messageMaxWidth),mx=left,my=SA.t+8;
+ if(B.ph=='msg'){const M0=B.msgs[0],T0=Array.isArray(M0)?M0[0]:(M0||''),mk=B.msgs.length+T0;if(Array.isArray(M0)&&M0[1].at==null)startFx(M0[1],now);if(B.mk!==mk){B.mk=mk;B.mT=now;if(T0.includes('升到了'))playSfx('level')}else if(now-B.mT>1500){B.mk=null;press('ok')}X.font=fs+'px '+FONT;const maxW=Math.max(CFG.battleUi.messageMinWidth,Math.min(CFG.battleUi.messageMaxWidth,SW-SA.l-SA.r-CFG.battleUi.soundSafeWidth-16)),ls=wrap(T0,maxW-CFG.battleUi.messagePadding),textW=Math.max(0,...ls.map(line=>X.measureText(line).width)),boxW=Math.min(maxW,Math.max(CFG.battleUi.messageMinWidth,Math.ceil(textW+CFG.battleUi.messagePadding))),boxX=Math.max(SA.l+8,Math.min((SW-boxW)/2,SW-SA.r-CFG.battleUi.soundSafeWidth-boxW));box(boxX,my,boxW,ls.length*(fs+8)+22,.93);ls.forEach((l,j)=>txt(l,boxX+14,my+fs+10+j*(fs+8),fs));txt('▼',boxX+boxW-20,my+ls.length*(fs+8)+14,fs-5,'#c9b26b')}
  else{X.font=fs+'px '+FONT;const ls=wrap(u2.n+' 的行動'+(info?'：'+info:''),mw-28).slice(0,2);box(mx,my,mw,ls.length*(fs+8)+16,.93);ls.forEach((l,j)=>txt(l,mx+14,my+fs+8+j*(fs+8),fs,'#ffd'))}}
 function bTap(x,y){const B=G.B;if(!B||G.mode!='battle')return;if(B.ph=='msg'){B.mk=null;press('ok');return}
  const h=(B.hit||[]).slice().reverse().find(r=>x>=r.x&&x<=r.x+r.w&&y>=r.y&&y<=r.y+r.h);if(h)h.fn()}
