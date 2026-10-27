@@ -20,6 +20,9 @@ export async function playthrough(b,url,W,H,touch=true){
  await tp(21.4*T,19.7*T-14,'right');await P('ok');await flush();await tp(21.4*T,8.5*T-14,'up');await P('ok');await wait(pg,150);await shot('chief_dlg');await flush();
  await tp(36.3*T,10.6*T-14,'up');await P('ok');await flush();
  await tp(20*T,14.5*T,'down');await wait(pg,300);await shot('village');await tp(22*T,18.3*T,'down');await wait(pg,300);await shot('dock');
+ // v51：第一次走到渡口先觸發開場小戰（2 隻小水妖），打完才能真正登船。
+ await tp(21*T,22.4*T,'down');await hold('ArrowDown',900);await flush();await wait(pg,300);if(await E("G.mode==='battle'")){await shot('battle_ferry');await fight()}else throw Error('opening ferry fight did not start on the first boarding attempt');
+ if(!await E('G.flags.ferryFight'))throw Error('ferry fight did not complete');
  await tp(21*T,22.4*T,'down');await hold('ArrowDown',900);await P('ok');await flush();await P('ok');await P('ok');await wait(pg,200);await shot('boat');await flush();
  await wait(pg,300);await shot('battle_river');await fight();
  await flush();await tp(100,122,'right');await wait(pg,300);await shot('reeds_start');

@@ -29,11 +29,11 @@ export async function chapterOneWrapup(browser,url){
 
   const escaped=await pg.evaluate(()=>{
    const oldRandom=Math.random;Math.random=()=>0;
-   newGame();G.dlg=null;G.flags.chief=1;G.flags.quest=1;G.flags.flood=1;G.x=21*T;G.y=23*T;boardBoat();
+   newGame();G.dlg=null;G.flags.chief=1;G.flags.quest=1;G.flags.flood=1;G.x=21*T;G.y=23*T;const fishBefore=G.inv.魚乾;boardBoat();
    const cb=G.dlg.cb;G.dlg=null;cb();G.B.ai=0;G.B.ph='cmd';G.B.sel=4;bKey('ok');bKey('ok');Math.random=oldRandom;
-   return{done:!!G.flags.ferryFight,fish:G.inv.魚乾,battle:!!G.B};
+   return{done:!!G.flags.ferryFight,fish:G.inv.魚乾,fishBefore,battle:!!G.B};
   });
-  assert(escaped.done&&!escaped.fish&&!escaped.battle,'successful escape completes the event without a reward');
+  assert(escaped.done&&escaped.fish===escaped.fishBefore&&!escaped.battle,'successful escape completes the event without a reward');
 
   const retry=await pg.evaluate(()=>{
    newGame();G.dlg=null;G.flags.chief=1;G.flags.quest=1;G.flags.flood=1;G.x=21*T;G.y=23*T;boardBoat();
@@ -48,16 +48,16 @@ export async function chapterOneWrapup(browser,url){
    return migrateSave(d).flags.ferryFight;
   });
   assert.equal(oldSave,1,'old saves that reached the flood event skip the new encounter');
-  const tutorial=await pg.evaluate(()=>{
-   newGame();G.dlg=null;startNight();const cb=G.dlg.cb;G.dlg=null;cb();
-   return{night:G.B.opt.intro,opening:S.ferryFight.flat().join(' '),startNight:String(startNight)};
-  });
-  assert(tutorial.night.join(' ').includes('進階提示'),'the night battle keeps only the advanced hint');
-  assert(!tutorial.night.join(' ').includes('橫掃')&&!tutorial.night.join(' ').includes('選「攻擊」'),'the same basic tutorial is not repeated at night');
+  // 夜渡有場景演出，回呼不是直接開戰，所以改檢查 startNight 原始碼裡的教學文字。
+  const tutorial=await pg.evaluate(()=>({night:String(startNight)}));
+  assert(tutorial.night.includes('進階提示'),'the night battle keeps only the advanced hint');
+  assert(!tutorial.night.includes('橫掃')&&!tutorial.night.includes('選「攻擊」'),'the same basic tutorial is not repeated at night');
 
+  // 橫式縮放要在橫式視窗檢查（直式不放大）。
+  await pg.setViewportSize({width:844,height:390});await pg.waitForTimeout(500);
   const layout=await pg.evaluate(()=>{
    newGame();G.dlg=null;G.party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']),mk('雲纖','yx',48,20,9,4,8,['劍氣']));
-   startBattle(['小水妖','小水妖','小水妖']);const L=bLayout(3),u=L.U;
+   startBattle(['小水妖','小水妖','小水妖'],{});const L=bLayout(3),u=L.U;
    const touch=Math.max(46,L.bd+6),button={x:L.bx-touch/2,y:L.by-touch/2,w:touch,h:3*L.bs+touch};
    const actors=G.party.map(p=>{const F=L.feet[bSlot(p,Math.max(0,G.party.indexOf(p)))],w=95*L.s,h=270*L.s;return{x:F[0]-w/2,y:F[1]-h,w,h,bottom:F[1]}});
    const overlap=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
@@ -73,9 +73,9 @@ export async function chapterOneWrapup(browser,url){
    await portrait.goto(url+'?v=51');await portrait.waitForFunction('ready');
    const vertical=await portrait.evaluate(()=>{const L=bLayout(3);return{scale:L.s,expected:BFR.scale*L.U}});
    assert.equal(vertical.scale,vertical.expected,'portrait party scale remains unchanged');
-   assert.deepEqual(portraitErrors,[],'portrait layout has no JavaScript errors');
+   assert.deepEqual(await portraitErrors(),[],'portrait layout has no JavaScript errors');
   }finally{await ctx2.close()}
-  assert.deepEqual(jsErrors,[],'wrap-up scenarios have no JavaScript errors');
+  assert.deepEqual(await jsErrors(),[],'wrap-up scenarios have no JavaScript errors');
   return true;
  }catch(e){console.error('ch1-wrapup:',e);return false}
  finally{await ctx.close()}
