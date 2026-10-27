@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
+import {mkdir} from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 import {serve,launch,newPage} from './lib.mjs';
 
 export async function chapterOnePacing(browser,url){
+ await mkdir('tests/out',{recursive:true});
  const captures=[];
  for(const [W,H] of [[390,664],[844,390]]){
   const {ctx,pg,jsErrors}=await newPage(browser,W,H,{touch:true,seed:true});
@@ -15,7 +17,7 @@ export async function chapterOnePacing(browser,url){
    });
    assert.equal(pre.map,'reeds');assert(pre.triggered,'walking through the south-fork choke starts a fixed story encounter');assert(!pre.battle,'the three-line scene plays before the boss');assert(pre.assets,'the six registered 512px frames load');assert.deepEqual({hp:pre.cfg.hp,atk:pre.cfg.atk,def:pre.cfg.def},{hp:78,atk:11,def:2});
    await pg.evaluate(()=>{for(let i=0;i<8&&G.dlg;i++)press('ok')});await pg.waitForFunction('G.B&&G.B.en[0].e==="laolu"');await pg.waitForTimeout(450);
-   await pg.screenshot({path:`docs/art/laolu-v49/battle-${W}x${H}.png`});captures.push(`${W}x${H}`);
+   await pg.screenshot({path:`tests/out/laolu-battle-${W}x${H}.png`});captures.push(`${W}x${H}`);
    const retry=await pg.evaluate(()=>{G.mode='over';retry();return{map:G.map,pos:[G.x,G.y],cleared:!!G.flags.reedBoss,canMove:!blocked(G.x,G.y)}});
    assert.equal(retry.map,'reeds');assert.deepEqual(retry.pos,pre.checkpoint);assert(!retry.cleared&&retry.canMove,'defeat restarts at the safe reeds entrance without flagging a win');
    const victory=await pg.evaluate(()=>{
