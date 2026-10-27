@@ -29,7 +29,7 @@ export async function chapterOneWrapup(browser,url){
   const escaped=await pg.evaluate(()=>{
    const oldRandom=Math.random;Math.random=()=>0;
    newGame();G.dlg=null;G.flags.chief=1;G.flags.quest=1;G.flags.flood=1;G.x=21*T;G.y=23*T;boardBoat();
-   const cb=G.dlg.cb;G.dlg=null;cb();G.B.ph='cmd';G.B.sel=4;bKey('ok');bKey('ok');Math.random=oldRandom;
+   const cb=G.dlg.cb;G.dlg=null;cb();G.B.ai=0;G.B.ph='cmd';G.B.sel=4;bKey('ok');bKey('ok');Math.random=oldRandom;
    return{done:!!G.flags.ferryFight,fish:G.inv.魚乾,battle:!!G.B};
   });
   assert(escaped.done&&!escaped.fish&&!escaped.battle,'successful escape completes the event without a reward');
