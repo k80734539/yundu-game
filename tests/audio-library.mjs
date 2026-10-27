@@ -30,7 +30,7 @@ export async function audioLibrary(browser,url){
   await pg.locator('#svBtn').click();await pg.locator('#svBox .svI').nth(4).click();assert.equal(await pg.evaluate(()=>SV.p),'settings');await pg.screenshot({path:outDir('audio-library','390x664')+'/settings.png'});await pg.keyboard.press('Escape');await pg.keyboard.press('Escape');
   await pg.evaluate(()=>startNight());await music('night');
   await pg.evaluate(()=>{G_().dlg=null;G_().scene=null;loadMap('reeds',12.5*T2,9.5*T2,'down')});await pg.waitForFunction(()=>AMBIENT.current?.key==='insects');
-  await pg.evaluate(()=>{G_().flags.tal=1;G_().flags.reedSolved=1;G_().party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']));campfire()});await music('mist_alt');
+  await pg.evaluate(()=>{G_().flags.tal=1;G_().flags.reedSolved=1;G_().flags.reedBoss=1;G_().party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']));campfire()});await music('mist_alt');
   await pg.evaluate(()=>{G_().dlg=null;__sb(['小水妖'],{})});await music('battle');assert.equal(await pg.evaluate(()=>AMBIENT.current),null,'battle removes exploration ambience');
   await pg.evaluate(()=>__sb(['河伯'],{}));await music('boss');
   // Back-to-back transitions must not let a late decode start an obsolete track.

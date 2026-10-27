@@ -30,10 +30,13 @@ export async function playthrough(b,url,W,H,touch=true){
  for(const[x,y]of[[1215,142],[140,354]]){await tp(x,y,'up');await P('ok');await flush()}
  await tp(670,300,'down');await wait(pg,200);await shot('reeds_tal');await hold('ArrowDown',500);await flush();
  await tp(670,390,'down');for(let i=0;i<3;i++){await P('ok');await flush()}
+ await tp(922,390,'down');const guardStart=Date.now();while(Date.now()-guardStart<15000&&await E("G.mode!=='battle'")){await hold('ArrowDown',250);if(await E('G.dlg'))await flush()}
+ const reedBoss=await E("G.mode==='battle'&&G.B.en.some(e=>e.e==='laolu')");if(reedBoss){await wait(pg,500);await shot('battle_reed_boss');await fight()}if(!reedBoss)throw Error('fixed old reed spirit did not guard the route to camp');
  await tp(750,580,'left');await hold('ArrowLeft',400);await wait(pg,200);await shot('reeds_camp');await flush();
  await tp(660,778,'up');await P('ok');await flush();
  await tp(1220,760,'right');await hold('ArrowRight',600);await wait(pg,500);await shot('temple_intro');await flush();await wait(pg,2700);
- await tp(2.5*T2,8.5*T2,'up');await P('ok');await flush();await tp(10.5*T2,6.25*T2,'down');await P('ok');await flush();
+ await tp(2.5*T2,8.5*T2,'up');await P('ok');await flush();for(const[x,y]of await E('CFG.templeLanterns.map(q=>q.stand)')){await tp(x*T2,y*T2,'down');await P('ok');await flush()}
+ await tp(10.5*T2,6.25*T2,'down');await P('ok');await flush();if(!(await E('G.flags.templeSeal')))throw Error('three lanterns did not allow the seal to be weakened');
  await tp(12.5*T2,11*T2,'up');await wait(pg,300);await shot('temple');
  await tp(10.5*T2,5.3*T2,'up');await wait(pg,200);await shot('temple_boss');await P('ok');await flush();await wait(pg,400);await shot('battle_boss');await fight();
  await wait(pg,300);await shot('dawn');await flush();await tp(36.3*T,10.6*T-14,'up');await P('ok');await wait(pg,150);await shot('cure');await flush();await wait(pg,1300);

@@ -16,7 +16,7 @@ export async function polish(b,url){
     assert.deepEqual(await pg.evaluate(key=>[I[key].naturalWidth,I[key].naturalHeight,I['pt_'+key].naturalWidth],[key][0]),[192,192,512]);
     assert.equal(await pg.evaluate("G_().dlg.l[G_().dlg.i][0]"),name);
    }
-   await pg.evaluate("G_().dlg=null;G_().party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']));G_().flags.tal=1;G_().flags.reedSolved=1;loadMap('reeds',REEDS_LAYOUT.campfire.x+48,REEDS_LAYOUT.campfire.y+35,'left');campfire();window.positionBefore=[G_().x,G_().y];");
+   await pg.evaluate("G_().dlg=null;G_().party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']));G_().flags.tal=1;G_().flags.reedSolved=1;G_().flags.reedBoss=1;loadMap('reeds',REEDS_LAYOUT.campfire.x+48,REEDS_LAYOUT.campfire.y+35,'left');campfire();window.positionBefore=[G_().x,G_().y];");
    await run(1600);await pg.evaluate('G_().dlg.i=13');await run(1200);await shot('camp');
    assert.equal(await pg.evaluate("activeScene().id"),'camp');
    assert.equal(await pg.evaluate("scenePortrait('白苓','bl')"),'pt_bl_quiet');

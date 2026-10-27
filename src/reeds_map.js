@@ -7,21 +7,21 @@ function buildReedsMaze(){const a=REEDS_LAYOUT,W=a.world.width,H=a.world.height,
  M.ground=g;
  M.blocked=(x,y)=>{if(x<8||x>W-8||y<8||y>H-4)return true;
   if(![[-8,0],[8,0],[-8,-6],[8,-6],[0,0],[0,-6]].every(([dx,dy])=>reedsWalkable(x+dx,y+dy)))return true;
-  return !G.flags.reedSolved&&a.gates.some(({rect:[rx,ry,w,h]})=>x+8>rx&&x-8<rx+w&&y>ry&&y-6<ry+h)};
+  return a.gates.some(g=>{const[rx,ry,w,h]=g.rect,passed=G.flags.reedBoss||G.flags.camp||G.flags.templeSeal,locked=!G.flags.reedSolved||(g.id==='shortcut'&&!passed);return locked&&x+8>rx&&x-8<rx+w&&y>ry&&y-6<ry+h})};
  const zone=(r,enter)=>{const[x,y,w,h]=r;M.zones.push({x0:x,y0:y,x1:x+w,y1:y+h,enter})};
  for(const p of a.chests){addObj({k:'chest',x:p.x,y:p.y,chest:p.key});M.sol.push([p.x-16,p.y-12,32,12]);M.inter.push({x:p.x,y:p.y+8,r:38,act:()=>openChest(p.key)})}
  M.sol.push(a.stone.solid,a.campfire.solid);
  M.inter.push({x:a.stone.interact[0],y:a.stone.interact[1],r:38,act:loreStone});
  addObj({k:'tal',x:a.talisman.x,y:a.talisman.y,s:.8,tal:1});zone(a.talisman.zone,talisman);
- for(const p of a.gates){addObj({k:'reed_roots_v43',x:p.x,y:p.y+21,rootGate:1,ghost:0});if(!G.flags.reedSolved)M.inter.push({x:p.x,y:p.y-20,r:44,act:reedTrial,rootGate:1})}
+ for(const p of a.gates){addObj({k:'reed_roots_v43',x:p.x,y:p.y+21,rootGate:1,bossGate:p.id==='shortcut',ghost:0});if(!G.flags.reedSolved)M.inter.push({x:p.x,y:p.y-20,r:44,act:reedTrial,rootGate:1})}
  addObj({k:'rock',x:a.campfire.x,y:a.campfire.y,s:.4,fire:1,mapPlate:1});
- M.lights.push([a.campfire.x,a.campfire.y-16,100,'rgba(255,150,70,.42)']);zone(a.campfire.zone,campfire);
+ M.lights.push([a.campfire.x,a.campfire.y-16,100,'rgba(255,150,70,.42)']);zone(a.campfire.zone,campfire);zone(CFG.reedBoss.trigger,reedBossTrial);
  zone(a.exit.zone,exitReeds);M.lights.push([1280,725,70,'rgba(255,150,70,.24)']);
  M.encounterAt=(x,y)=>reedsWalkable(x,y)&&!(x<335&&y<190)&&Math.hypot(x-a.campfire.x,y-a.campfire.y)>138&&x<1230;
  if(DEBUG_COL){M.walkRed=reedsWalkRedLayer();M.walkRedSolved=!!G.flags.reedSolved}
  const r=rng(43);M.flies=Array.from({length:44},()=>({x:r()*W,y:r()*H,p:r()*6,v:.3+r()*.5}));
 }
-function reedsWalkRedLayer(){const{width:W,height:H}=REEDS_LAYOUT.world,[cv,c]=cvs(W,H);c.fillStyle='#fff';for(const[x,y,w,h]of REEDS_LAYOUT.walkRects)c.fillRect(x,y,w,h);for(const q of REEDS_LAYOUT.clearings){c.beginPath();c.ellipse(q.x,q.y,q.rx,q.ry,0,0,Math.PI*2);c.fill()}const d=c.getImageData(0,0,W,H).data,feet=[[-8,0],[8,0],[-8,-6],[8,-6],[0,0],[0,-6]],sol=M.sol,gates=G.flags.reedSolved?[]:REEDS_LAYOUT.gates.map(g=>g.rect);
+function reedsWalkRedLayer(){const{width:W,height:H}=REEDS_LAYOUT.world,[cv,c]=cvs(W,H);c.fillStyle='#fff';for(const[x,y,w,h]of REEDS_LAYOUT.walkRects)c.fillRect(x,y,w,h);for(const q of REEDS_LAYOUT.clearings){c.beginPath();c.ellipse(q.x,q.y,q.rx,q.ry,0,0,Math.PI*2);c.fill()}const d=c.getImageData(0,0,W,H).data,feet=[[-8,0],[8,0],[-8,-6],[8,-6],[0,0],[0,-6]],sol=M.sol,passed=G.flags.reedBoss||G.flags.camp||G.flags.templeSeal,gates=REEDS_LAYOUT.gates.filter(g=>!G.flags.reedSolved||(g.id==='shortcut'&&!passed)).map(g=>g.rect);
  return walkRedLayer(null,W,H,(x,y)=>{if(x<8||x>W-8||y<8||y>H-4)return false;
   for(const[dx,dy]of feet){const px=x+dx,py=y+dy;if(px<0||py<0||px>=W||py>=H||d[(Math.floor(py)*W+Math.floor(px))*4]<128)return false}
   if(gates.some(([rx,ry,w,h])=>x+8>rx&&x-8<rx+w&&y>ry&&y-6<ry+h))return false;

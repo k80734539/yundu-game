@@ -53,6 +53,12 @@ const EART={
     "y": 474,
     "size": 512
   },
+  "laolu": {
+    "factor": 0.42,
+    "x": 256,
+    "y": 474,
+    "size": 512
+  },
   "hebo": {
     "factor": 0.9259259259259259,
     "x": 256,
@@ -77,7 +83,7 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
  {const c0=B.ph==='msg'&&B.msgs[0];if(Array.isArray(c0)&&c0[1].at==null)startFx(c0[1],now)}
  // ---- 幾何：敵人（左上）與我方（下方左中右橫排）
  const boss=B.en.some(e=>e.boss),ES=L.en(n,boss&&n===1);
- const eScale=e=>(e.boss?.57:e.e=='lu'?.59:.58)*L.eu;  // 小水妖≈70px、蘆葦精≈100px、河伯≈170px（390×844）
+ const eScale=e=>(e.boss?(e.e==='laolu'?.68:.57):e.e=='lu'?.59:.58)*L.eu;  // 老蘆葦精較蘆葦精更高大
  B.po=o=>{const ei=B.en.indexOf(o);if(ei>=0){const im=I[o.e],s2=eScale(o),q=ES[Math.min(ei,ES.length-1)];return[q[0],q[1]-im.height*s2/2,im.width*s2,im.height*s2]}
   const pi=G.party.indexOf(o),F=L.feet[bSlot(o,Math.max(0,pi))];return[F[0],F[1]-135*s,95*s,270*s]};
  B.feetOf=p=>L.feet[bSlot(p,Math.max(0,G.party.indexOf(p)))];
