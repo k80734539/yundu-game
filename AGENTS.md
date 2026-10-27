@@ -28,6 +28,7 @@ src/engine.js         canvas、fit()（visualViewport 尺寸、safe-area SA）�
 src/data.js           CHESTS、EN（敵人）、SK（技能）、ITEMS、PORT（立繪 key）、NAMES、G（遊戲狀態）、mk()
 src/maps.js           地圖/場景：手繪斜視背景、碰撞遮罩（getImageData）、物件、出入口、loadMap()
 src/script.js         第一章全部對白資料（S 物件），只放文字
+src/village_explore.js 村莊探索：VX_SPOTS 查看點、VX_PICKUPS 拾取物、VX_QUESTS 村民委託（資料表＋互動，對白在 S.vx*）
 src/story.js          劇情事件（newGame、say、boat、talisman、boss、ending…）、存檔點 saveCP/retry
 src/battle.js         戰鬥邏輯：startBattle、exec（玩家指令）、enemyPhase、dmg/hit/heal、wr（訊息+特效規格）
 src/input.js          鍵盤與 press(k)（'up/down/left/right/ok/cancel'）
@@ -50,7 +51,7 @@ CREDITS.txt           素材來源（必須保留）
 tests/                Playwright 測試，見 tests/README.md
 package.json          只給測試用（npm test）
 ```
-**載入順序**（index.html）：joystick → assets → engine → data → maps → story → battle → input → update → ui → cinematics → render → audio_assets → audio → audio_playback → fx → battle_motion → battle_ui → screens → save → exploration_ui → main。
+**載入順序**（index.html）：joystick → assets → engine → data → maps → story → village_explore → battle → input → update → ui → cinematics → render → audio_assets → audio → audio_playback → fx → battle_motion → battle_ui → screens → save → exploration_ui → main。
 - 存檔：saveCP() 會同時寫入自動存檔；改 G 的存檔欄位或格式時，把 SAVE_VER +1 並在 migrateSave() 補升級。存檔只在 canSave()（地圖自由行動、無對話/戰鬥/演出 G.cut）時允許。
 classic script 的 function 宣告只在該檔執行時才建立，所以**載入時（top-level）立即執行的程式碼只能呼叫前面檔案的東西**；在 frame()/事件中呼叫則不受限。新增檔案時放在正確位置。
 
@@ -74,7 +75,7 @@ classic script 的 function 宣告只在該檔執行時才建立，所以**載�
 - **頭像（v28）**：三位主角以使用者提供四視角原圖的三分之四正面裁成 512×512 透明半身像，戰鬥與對話共用同一張，勿改回舊像素頭像或有底色的方塊。卡片頭像在左、紅／藍數字在右；直式壓縮為兩行且臉部不被資訊列覆蓋。cards 的觸控區包含浮出資訊列的頭像。情境鍵 pt_qz_startled／pt_bl_quiet 目前使用同一原圖的正面視角，不自行生成表情。參見 docs/art/portraits-v28.md 與 tests/portrait-ui.mjs。原色裁切工具為 tools/import-portraits.py。
 
 ## 5. 版本號規則
-- 目前 **v49**（第一章節奏：蘆葦蕩老蘆葦精、河神廟三燈謎題；v48 收尾內容保留）。每次上線改動都要 +1（下一版 **v50**），三處一起改：
+- 目前 **v50**（村莊探索：查看點、拾取物、三個村民小委託；v49 節奏內容保留）。每次上線改動都要 +1（下一版 **v51**），三處一起改：
   1. `index.html` `<title>雲渡仙緣 第一章 vN</title>`
   2. `src/screens.js` 標題畫面 `'版本 vN'`
   3. `src/render.js` 地圖右下角 `'vN'`
@@ -131,3 +132,5 @@ npm test                                          # 必須 ALL PASS，且無 JS 
 - **第一章收尾（v48）**：河伯勝利時青舟學會渡水一擊（MP／目標／倍率在 `src/data.js` 的 SK／CFG），讀取已通關舊存檔會補技能且不重複；河伯 HP 低於一半後只觸發一次訊息、濁浪間隔由 CFG 控制的 3 回合改為 2 回合。蘆葦蕩 `reeds:18,1` 保持魚乾×2，`reeds:1,7` 護身符使青舟防禦永久+2，`reeds:5,11` 刻字布條記錄 `flags.foundCloth` 並呈現父親字跡對白。第一章不套用五行相剋。檢查 `tests/chapter1-mechanics.mjs` 與 `tests/reeds-debug.mjs`。
 
 - **第一章節奏（v49）**：蘆葦蕩 `REEDS_LAYOUT` 的南岔路加入固定老蘆葦精頭目事件；頭目 HP／攻擊資料在 `CFG.reedBoss.enemy`，捷徑根門會等頭目勝利才開，出蘆葦蕩也受勝利旗標限制。舊存檔若已記錄營火、廟封印或河伯勝利，自動補 `flags.reedBoss`，不改 SAVE_VER。戰敗重來點回蘆葦蕩入口。河神廟石碑後需點亮 `CFG.templeLanterns` 中三個可達互動點，才能削弱封印；狀態用 `flags.templeLamps` 位元旗標，光源顏色由既有 `M.lights` 更新。老蘆葦精圖為 `laolu_idle0/idle1/cast/attack/hit/down.webp` 和小圖 `laolu.webp`，錨點／倍率在 `src/battle_ui.js` 的 EART；來源、提示詞、處理方式與戰鬥截圖見 `docs/art/laolu-v49/`。未新增開場小戰；河伯戰後只補白苓墨刑短暫發作的對白。驗收測試 `tests/ch1-pacing.mjs`。
+
+- **村莊探索（v50）**：`src/village_explore.js` 以資料表定義村莊互動。`VX_SPOTS` 8 個查看點（井、攤位、繫船柱、廳前石燈、大樹、桃樹、北邊小路、西側院落），台詞 `S.vx_<id>` 可給三段（依 `phase()`）。`VX_PICKUPS` 4 個拾取物，已撿記在 `G.opened['village:<id>']`，不會重生。`VX_QUESTS` 三個委託（林嬸「井水發苦」、老周「找回網墜」、王大叔「河邊的竹籃」），狀態 `flags.vx_q_<id>`（0 未接／1 進行中／2 完成），可交付時村民頭上顯示「！」，旅途手札行程頁列出「村中小事」。委託道具（網墜、竹籃）不在 `ITEMS`，不進戰鬥選單。拾取物圖由 `VX_PICKUP_ART` 指定（`vx_sinker`、`vx_basket`、`vx_fish`、`vx_herb`），圖未登記或未載入時畫閃光作 fallback。不改存檔格式。驗收測試 `tests/village-explore.mjs`（每個點以實際 interact 判定可用、委託流程、不重生、委託道具不進選單）。
