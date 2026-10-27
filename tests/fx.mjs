@@ -10,7 +10,7 @@ const CASES=[["sb","G_().party[0].hp=30;__ex({t:'atk'},G_().B.en[0])","slash",[9
  ["sb","G_().B.en[0].hp=1;G_().B.en[0].def=0;__ex({t:'atk'},G_().B.en[0])","ko",[300,200]],
  ["__sb(['蘆葦精'],{})","__ep()","leaf",[230]],
  ["__sb(['河伯'],{noEsc:1,bg:'bg_temple'})","G_().B.turn=1;__ep()","tail",[200]],
- ["__sb(['河伯'],{noEsc:1,bg:'bg_temple'})","G_().B.turn=3;__ep()","wave",[250,300,150]]];
+ ["__sb(['河伯'],{noEsc:1,bg:'bg_temple'})","G_().B.hebo.state=HEBO_STATE.CHARGING;__ep()","wave",[250,300,150]]];
 export async function fx(b,url,sizes=[[390,664],[844,390]]){let ok=true;
  for(const[W,H]of sizes){const dir=outDir('fx',`${W}x${H}`);const {ctx,pg,jsErrors}=await newPage(b,W,H,{seed:true});
   await pg.clock.install({time:0});await pg.goto(url);await pg.clock.pauseAt(1000);await pg.clock.runFor(1500);await wait(pg,500);
