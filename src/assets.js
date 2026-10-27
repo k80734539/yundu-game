@@ -1,7 +1,7 @@
 'use strict';
 // 圖片清單：key -> assets/img 路徑（勿改回 base64 內嵌）
 // 圖片網址會加上 ?v=ASSET_V（與 index.html 的 ?v=N 同步）。改 sprite 規格／換圖時一定要一起 +1，避免舊 JS 畫新圖或新 JS 畫舊快取圖
-const ASSET_V=48;
+const ASSET_V=49;
 const ASSETS={
  "shui_idle0": "assets/img/shui_idle0.webp",
  "shui_idle1": "assets/img/shui_idle1.webp",
@@ -15,6 +15,12 @@ const ASSETS={
  "lu_attack": "assets/img/lu_attack.webp",
  "lu_hit": "assets/img/lu_hit.webp",
  "lu_down": "assets/img/lu_down.webp",
+ "laolu_idle0": "assets/img/laolu_idle0.webp",
+ "laolu_idle1": "assets/img/laolu_idle1.webp",
+ "laolu_cast": "assets/img/laolu_cast.webp",
+ "laolu_attack": "assets/img/laolu_attack.webp",
+ "laolu_hit": "assets/img/laolu_hit.webp",
+ "laolu_down": "assets/img/laolu_down.webp",
  "hebo_idle0": "assets/img/hebo_idle0.webp",
  "hebo_idle1": "assets/img/hebo_idle1.webp",
  "hebo_cast": "assets/img/hebo_cast.webp",
@@ -161,6 +167,7 @@ const ASSETS={
  "hebo": "assets/img/hebo.webp",
  "shui": "assets/img/shui.webp",
  "lu": "assets/img/lu.webp",
+ "laolu": "assets/img/laolu.webp",
  "tal": "assets/img/tal.webp",
  "d0": "assets/img/d0.webp",
  "d1": "assets/img/d1.webp",

@@ -82,7 +82,8 @@ function buildGrid(id){if(id=='reeds')return buildReedsMaze();const R=GRID[id],W
    if(t=='~'){M.sol.push([x*T2,y*T2,T2,T2-(R[y+1]&&R[y+1][x]!='~'?16:0)])}
     if(t=='i'){if(!hasPlate)addObj({k:'pillar',x:cx,y:by-6,s:.9,ghost:1});M.sol.push([cx-14,by-18,28,14])}
     if(t=='l'){if(!hasPlate)addObj({k:'tlamp',x:cx,y:by-6,ghost:1});M.sol.push([cx-8,by-16,16,10]);M.lights.push([cx+8,by-66,90,'rgba(255,150,70,.45)'])}}));
-   if(!hasPlate)addObj({k:'altar',x:10.5*T2,y:9*T2-6,s:1.9,ghost:1});M.sol.push([9*T2+8,7*T2+20,3*T2-16,2*T2-24]);M.lights.push([10.5*T2,7.6*T2,90,'rgba(255,170,90,.35)']);
+  if(!hasPlate)addObj({k:'altar',x:10.5*T2,y:9*T2-6,s:1.9,ghost:1});M.sol.push([9*T2+8,7*T2+20,3*T2-16,2*T2-24]);M.lights.push([10.5*T2,7.6*T2,90,'rgba(255,170,90,.35)']);
+  CFG.templeLanterns.forEach((q,i)=>{const x=q.lamp[0]*T2,y=q.lamp[1]*T2,sx=q.stand[0]*T2,sy=q.stand[1]*T2,l=[x,y-24,104,(G.flags.templeLamps||0)&(1<<i)?'rgba(191,239,240,.5)':'rgba(110,150,160,.13)'];l.lamp=i;M.lights.push(l);M.inter.push({x:sx,y:sy,r:40,act:()=>lightTempleLantern(i)})});
   M.inter.push({x:10.5*T2,y:6.25*T2,r:42,act:templeSeal});
    if(!hasPlate){addObj({k:'statue',x:5.5*T2,y:3.2*T2+40,s:.9,ghost:1});addObj({k:'statue',x:15.5*T2,y:3.2*T2+40,s:.9,mir:1,ghost:1})}M.sol.push([5.5*T2-18,3.2*T2+28,36,14],[15.5*T2-18,3.2*T2+28,36,14]);
    if(!hasPlate)addObj({k:'ding',x:10.5*T2,y:10.2*T2,s:1});M.sol.push([10.5*T2-20,10.2*T2-14,40,14]);

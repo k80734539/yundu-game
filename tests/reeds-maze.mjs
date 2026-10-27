@@ -17,7 +17,7 @@ export async function reedsMaze(browser,url,sizes=[[390,664],[844,390]]){
     if(found<0)return null;const path=[];for(let n=found;;n=parent[n]){path.push([(n%cols+.5)*step,(Math.floor(n/cols)+.5)*step]);if(n===start)break}return path.reverse();
    };
    window.__mazeWalk=target=>{const path=window.__mazeRoute(target,4);if(!path)throw Error('No route to '+target);const map=G_().map;let distance=0,ticks=0;
-    for(const[x,y]of path)for(let i=0;i<20;i++){const dx=x-G_().x,dy=y-G_().y,d=Math.hypot(dx,dy);if(d<.75)break;clearK();if(Math.abs(dx)>.1)keys[dx>0?'right':'left']=1;if(Math.abs(dy)>.1)keys[dy>0?'down':'up']=1;const a=G_().x,b=G_().y;update(Math.min(1,d/2.5));ticks++;clearK();const moved=Math.hypot(G_().x-a,G_().y-b);distance+=moved;if(G_().map!==map)return{distance,ticks,transition:G_().map};if(blocked(G_().x,G_().y))throw Error('Controller entered solid at '+[G_().x,G_().y]);window.__mazeFlush();if(moved<.01)throw Error('Controller stalled at '+[a,b]+' toward '+[x,y])}
+    for(const[x,y]of path)for(let i=0;i<20;i++){const dx=x-G_().x,dy=y-G_().y,d=Math.hypot(dx,dy);if(d<.75)break;clearK();if(Math.abs(dx)>.1)keys[dx>0?'right':'left']=1;if(Math.abs(dy)>.1)keys[dy>0?'down':'up']=1;const a=G_().x,b=G_().y;update(Math.min(1,d/2.5));ticks++;clearK();const moved=Math.hypot(G_().x-a,G_().y-b);distance+=moved;if(G_().map!==map)return{distance,ticks,transition:G_().map};if(G_().B)return{distance,ticks,battle:true,x:G_().x,y:G_().y};if(blocked(G_().x,G_().y))throw Error('Controller entered solid at '+[G_().x,G_().y]);window.__mazeFlush();if(moved<.01)throw Error('Controller stalled at '+[a,b]+' toward '+[x,y])}
     return{distance,ticks,x:G_().x,y:G_().y};
    };
   });
@@ -31,11 +31,12 @@ export async function reedsMaze(browser,url,sizes=[[390,664],[844,390]]){
   await pg.evaluate(()=>__mazeWalk([670,390]));await pg.waitForTimeout(80);await pg.screenshot({path:`${dir}/roots-locked.png`});
   await pg.evaluate(()=>{for(let i=0;i<3;i++){G_().dir='down';press('ok');__mazeFlush()}});
   const opened=await pg.evaluate(()=>({solved:!!G_().flags.reedSolved,gates:REEDS_LAYOUT.gates.map(g=>!blocked(g.x,g.y)),camp:!!__mazeRoute([718,590]),exit:!!__mazeRoute([1260,760]),south:!!__mazeRoute([660,778])}));
-  assert(opened.solved&&opened.gates.every(Boolean)&&opened.camp&&opened.exit&&opened.south,'clearing roots opens both crossings, camp and reward branch');await pg.screenshot({path:`${dir}/shortcut-open.png`});
+  assert(opened.solved&&!opened.gates[0]&&opened.gates[1]&&opened.camp&&opened.exit&&opened.south,'clearing roots opens the east crossing and southern paths, while the shortcut remains guarded by the boss');await pg.screenshot({path:`${dir}/shortcut-boss-locked.png`});
   // Refusing an early departure must put the player on the road, never in the canal.
   await pg.evaluate(()=>{TP(1220,760,'right');clearK();keys.right=1;for(let i=0;i<8&&!G_().dlg;i++)update(1);clearK()});
   assert.equal(await pg.evaluate("G_().map==='reeds'&&!!G_().dlg&&!blocked(G_().x,G_().y)"),true);await pg.evaluate('__mazeFlush()');
-  await pg.evaluate(()=>{G_().party.forEach(p=>{p.hp=1;p.mp=0});__mazeWalk([718,590])});
+  await pg.evaluate(()=>{G_().party.forEach(p=>{p.hp=1;p.mp=0})});const guarded=await pg.evaluate(()=>__mazeWalk([718,590]));assert(guarded.battle,'the real controller is intercepted by the fixed boss before it can reach the camp');
+  await pg.evaluate(()=>{G_().B.en[0].hp=0;win();for(let i=0;i<12&&(G_().B||G_().dlg);i++)press('ok');__mazeFlush()});await pg.evaluate(()=>__mazeWalk([718,590]));
   const camp=await pg.evaluate(()=>{const cp=JSON.parse(G_().cp);return{rest:!!G_().flags.camp,healed:G_().party.every(p=>p.hp===p.mhp&&p.mp===p.mmp),savedFlag:!!cp.flags.camp,checkpointClear:!blocked(cp.o.x,cp.o.y)}});
   assert(camp.rest&&camp.healed&&camp.savedFlag&&camp.checkpointClear,'camp heals and stores a safe checkpoint with completed rest flag: '+JSON.stringify(camp));await pg.waitForTimeout(80);await pg.screenshot({path:`${dir}/camp.png`});
   await pg.evaluate(()=>{__mazeWalk([660,778]);G_().dir='up';press('ok');__mazeFlush()});const treasure=await pg.evaluate(()=>({keys:Object.keys(CHESTS).every(k=>G_().opened[k]&&REEDS_LAYOUT.chests.some(c=>c.key===k)),fish:G_().inv.魚乾,charm:G_().inv.護身符,cloth:G_().inv.刻字布條,arm:G_().party[0].arm,flag:G_().flags.foundCloth}));assert(treasure.keys&&treasure.fish>=2&&treasure.charm===1&&treasure.cloth===1&&treasure.arm===2&&treasure.flag,'three original chest keys award the intended rewards: '+JSON.stringify(treasure));await pg.screenshot({path:`${dir}/treasure-branch.png`});

@@ -52,3 +52,7 @@ v28 主角半身頭像：使用者提供的三張四視角角色圖，經軟式�
 村莊底圖 village_map_v37.webp：OpenAI 內建 image_gen 原創生成，風格參考使用者提供的水彩村景，構圖重新設計；等比縮放至 1344×896。製作與地圖碰撞配置見 docs/art/village-v37/ 及 docs/maps/village-v37.md。
 v40 蘆葦蕩／河神廟探索全景底圖：reeds_map_v40.webp、temple_map_v40.webp。Codex 內建 image_gen 原創生成，源圖及提示詞見 docs/art/map-scenes-v40/。遊戲內縮放為 960×720 WebP；固定地標繪入底圖，人物／任務物件／光效保留即時繪製。
 v43 蘆葦蕩迷宮：reeds_map_v43.webp 與 reed_roots_v43.webp 由 Codex 內建 image_gen（host_image）原創生成，依專案自定路線草圖製作。原始 PNG、參考草圖、提示詞、去背縮放與測試記錄見 docs/art/reeds-v43/、docs/maps/reeds-v43/。
+
+
+【v49 老蘆葦精戰鬥姿勢】
+老蘆葦精六張 512×512 姿勢與小圖 laolu.webp：OpenAI 內建 image_gen 原創生成；依 docs/art/style-guide.md 的夜景色盤、左上主光、水彩淡墨線及既有蘆葦精設計製作。六格原圖、去背、裁切縮放與錨點資訊見 docs/art/laolu-v49/README.md。
