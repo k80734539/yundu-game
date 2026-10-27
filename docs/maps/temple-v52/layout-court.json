@@ -12,56 +12,160 @@
    672,
    830
   ],
-  "center": [
+  "lowC": [
    672,
+   700
+  ],
+  "lowW": [
+   330,
+   700
+  ],
+  "stele": [
+   150,
+   700
+  ],
+  "lowE": [
+   1014,
+   700
+  ],
+  "lampBNook": [
+   1194,
+   700
+  ],
+  "stairWb": [
+   330,
    560
   ],
-  "north": [
+  "stairWt": [
+   330,
+   430
+  ],
+  "upW": [
+   330,
+   330
+  ],
+  "lampANook": [
+   150,
+   330
+  ],
+  "upN": [
    672,
    230
   ],
-  "west1": [
-   380,
+  "upE": [
+   1014,
+   330
+  ],
+  "stairEt": [
+   1014,
+   430
+  ],
+  "stairEb": [
+   1014,
    560
   ],
-  "westEnd": [
-   150,
-   560
-  ],
-  "east1": [
-   964,
-   560
-  ],
-  "eastEnd": [
+  "sluice": [
    1194,
-   560
+   330
+  ],
+  "secretNE": [
+   1194,
+   150
   ]
  },
  "edges": [
   [
    "arrival",
-   "center"
+   "lowC"
   ],
   [
-   "center",
-   "north"
+   "lowC",
+   "lowW"
   ],
   [
-   "center",
-   "west1"
+   "lowW",
+   "stele"
   ],
   [
-   "west1",
-   "westEnd"
+   "lowC",
+   "lowE"
   ],
   [
-   "center",
-   "east1"
+   "lowE",
+   "lampBNook",
+   {
+    "kind": "flooded",
+    "open": "sluice"
+   }
   ],
   [
-   "east1",
-   "eastEnd"
+   "lowW",
+   "stairWb"
+  ],
+  [
+   "stairWb",
+   "stairWt",
+   {
+    "kind": "stairs"
+   }
+  ],
+  [
+   "stairWt",
+   "upW"
+  ],
+  [
+   "upW",
+   "lampANook"
+  ],
+  [
+   "upW",
+   "upN"
+  ],
+  [
+   "upN",
+   "upE"
+  ],
+  [
+   "upE",
+   "stairEt"
+  ],
+  [
+   "stairEt",
+   "stairEb",
+   {
+    "kind": "stairs"
+   }
+  ],
+  [
+   "stairEb",
+   "lowE"
+  ],
+  [
+   "upE",
+   "sluice"
+  ],
+  [
+   "sluice",
+   "secretNE"
+  ],
+  [
+   "upN",
+   "lowC",
+   {
+    "kind": "flooded",
+    "open": "lamps"
+   }
   ]
+ ],
+ "upper": [
+  "stairWt",
+  "upW",
+  "lampANook",
+  "upN",
+  "upE",
+  "stairEt",
+  "sluice",
+  "secretNE"
  ],
  "clearings": [
   {
@@ -72,57 +176,105 @@
    "ry": 44
   },
   {
-   "id": "plaza",
+   "id": "lowPlaza",
    "x": 672,
-   "y": 560,
+   "y": 700,
    "rx": 150,
-   "ry": 95
+   "ry": 80
   },
   {
-   "id": "north",
+   "id": "lowW",
+   "x": 330,
+   "y": 700,
+   "rx": 90,
+   "ry": 60
+  },
+  {
+   "id": "stele",
+   "x": 150,
+   "y": 700,
+   "rx": 70,
+   "ry": 50
+  },
+  {
+   "id": "lowE",
+   "x": 1014,
+   "y": 700,
+   "rx": 90,
+   "ry": 60
+  },
+  {
+   "id": "lampBNook",
+   "x": 1194,
+   "y": 700,
+   "rx": 70,
+   "ry": 50
+  },
+  {
+   "id": "upW",
+   "x": 330,
+   "y": 330,
+   "rx": 90,
+   "ry": 60
+  },
+  {
+   "id": "lampANook",
+   "x": 150,
+   "y": 330,
+   "rx": 70,
+   "ry": 50
+  },
+  {
+   "id": "upN",
    "x": 672,
    "y": 230,
+   "rx": 130,
+   "ry": 55
+  },
+  {
+   "id": "upE",
+   "x": 1014,
+   "y": 330,
    "rx": 90,
-   "ry": 50
-  },
-  {
-   "id": "westMid",
-   "x": 380,
-   "y": 560,
-   "rx": 95,
    "ry": 60
   },
   {
-   "id": "westEnd",
-   "x": 150,
-   "y": 560,
-   "rx": 70,
-   "ry": 50
-  },
-  {
-   "id": "eastMid",
-   "x": 964,
-   "y": 560,
-   "rx": 95,
-   "ry": 60
-  },
-  {
-   "id": "eastEnd",
+   "id": "sluice",
    "x": 1194,
-   "y": 560,
-   "rx": 70,
-   "ry": 50
+   "y": 330,
+   "rx": 60,
+   "ry": 44
+  },
+  {
+   "id": "secretNE",
+   "x": 1194,
+   "y": 150,
+   "rx": 60,
+   "ry": 44
   }
  ],
- "solids": [
+ "overlays": [
   {
-   "id": "well",
-   "shape": "ellipse",
-   "x": 672,
-   "y": 560,
-   "rx": 46,
-   "ry": 30,
-   "note": "中央水井／石鼎，繞行"
+   "id": "waterB",
+   "rect": [
+    1060,
+    660,
+    200,
+    80
+   ],
+   "open": "sluice",
+   "note": "淹水區：底圖畫成乾石路，遊戲疊水；扳動水閘後水退"
+  },
+  {
+   "id": "waterChannel",
+   "rect": [
+    622,
+    250,
+    100,
+    430
+   ],
+   "open": "lamps",
+   "note": "中央水道：底圖畫成乾石路，遊戲疊水；三燈全亮後水退，露出回到入口的捷徑"
   }
  ],
  "zones": {
@@ -134,9 +286,9 @@
   ],
   "toHall": [
    620,
-   120,
+   100,
    104,
-   60
+   50
   ]
  },
  "features": [
@@ -144,68 +296,94 @@
    "id": "stele",
    "kind": "lore",
    "x": 150,
-   "y": 540,
-   "note": "碑文，讀完才能點燈（flags.steleSeen）；補一句指出三盞燈的位置"
+   "y": 680,
+   "note": "碑文：讀完才能點燈（flags.steleSeen）；寫出「鎮水之燈在日出之側」，答案是東邊那盞（燈 C 右）"
   },
   {
-   "id": "lanternA",
+   "id": "lampA",
    "kind": "lantern",
-   "x": 190,
-   "y": 480,
+   "x": 170,
+   "y": 300,
    "stand": [
-    190,
-    520
+    170,
+    340
    ],
-   "note": "西路盡頭，石碑旁"
+   "note": "燈 A：被銀雲符封住，白苓用狐火燒開才能點亮"
   },
   {
-   "id": "lanternB",
+   "id": "lampB",
    "kind": "lantern",
-   "x": 1150,
-   "y": 480,
+   "x": 1214,
+   "y": 670,
    "stand": [
-    1150,
-    520
+    1214,
+    710
    ],
-   "note": "東路盡頭，石泉旁"
+   "note": "燈 B：在淹水區，先扳水閘排水才碰得到"
   },
   {
-   "id": "lanternC",
+   "id": "lampC_left",
    "kind": "lantern",
-   "x": 600,
+   "x": 560,
    "y": 190,
    "stand": [
-    600,
+    560,
     230
    ],
-   "note": "北側廟門左側"
+   "note": "燈 C 左（西）：錯誤的那盞，點了會引來水妖戰"
   },
   {
-   "id": "pool",
-   "kind": "decor",
-   "x": 1250,
-   "y": 520,
-   "note": "石泉，不可走"
+   "id": "lampC_right",
+   "kind": "lantern",
+   "x": 784,
+   "y": 190,
+   "stand": [
+    784,
+    230
+   ],
+   "note": "燈 C 右（東）：正確的那盞"
+  },
+  {
+   "id": "sluiceLever",
+   "kind": "lever",
+   "x": 1194,
+   "y": 310,
+   "note": "水閘拉桿（flags.templeSluice），青舟用竹篙扳動"
+  },
+  {
+   "id": "cloudStatue",
+   "kind": "lore",
+   "x": 240,
+   "y": 290,
+   "note": "石像殘骸上的九霄雲紋（呼應第二章伏筆）"
+  },
+  {
+   "id": "secretChest",
+   "kind": "chest",
+   "x": 1194,
+   "y": 140,
+   "key": "temple:court",
+   "note": "隱藏角落寶箱，清心草×2"
   },
   {
    "id": "wardGate",
    "kind": "gate",
    "rect": [
     648,
-    170,
+    150,
     48,
     40
    ],
-   "note": "鎮水門；三盞燈全亮才開（flags.templeLamps 位元遮罩）"
+   "note": "鎮水門；三盞燈全亮才開"
   },
   {
    "id": "westFight",
    "kind": "fight",
-   "x": 380,
-   "y": 560,
+   "x": 330,
+   "y": 700,
    "trigger": [
-    300,
-    510,
+    250,
+    650,
     160,
     100
    ]
@@ -213,14 +391,21 @@
   {
    "id": "eastFight",
    "kind": "fight",
-   "x": 964,
-   "y": 560,
+   "x": 1014,
+   "y": 330,
    "trigger": [
-    884,
-    510,
+    934,
+    280,
     160,
     100
    ]
+  },
+  {
+   "id": "wrongLampFight",
+   "kind": "fight",
+   "x": 560,
+   "y": 230,
+   "note": "點錯燈 C：2 隻小水妖，可重試"
   }
  ],
  "encounters": [
@@ -230,7 +415,7 @@
     "蘆葦精",
     "蘆葦精"
    ],
-   "flag": "templeWestFight",
+   "flag": "templeFightW",
    "checkpoint": [
     672,
     830
@@ -243,7 +428,19 @@
     "小水妖",
     "小水妖"
    ],
-   "flag": "templeEastFight",
+   "flag": "templeFightE",
+   "checkpoint": [
+    672,
+    830
+   ]
+  },
+  {
+   "id": "wrongLampFight",
+   "enemies": [
+    "小水妖",
+    "小水妖"
+   ],
+   "flag": null,
    "checkpoint": [
     672,
     830

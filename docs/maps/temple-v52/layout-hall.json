@@ -12,47 +12,95 @@
    672,
    830
   ],
-  "s1": [
+  "hall1": [
    672,
-   640
+   700
+  ],
+  "westS": [
+   340,
+   700
+  ],
+  "westN": [
+   340,
+   300
+  ],
+  "eastS": [
+   1004,
+   700
+  ],
+  "eastN": [
+   1004,
+   300
+  ],
+  "northMid": [
+   672,
+   300
   ],
   "shrine": [
    672,
-   430
+   480
+  ],
+  "westAlcove": [
+   160,
+   500
+  ],
+  "eastAlcove": [
+   1184,
+   500
   ],
   "boss": [
    672,
-   200
-  ],
-  "westAlcove": [
-   330,
-   640
-  ],
-  "eastAlcove": [
-   1014,
-   640
+   150
   ]
  },
  "edges": [
   [
    "arrival",
-   "s1"
+   "hall1"
   ],
   [
-   "s1",
+   "hall1",
+   "westS"
+  ],
+  [
+   "westS",
+   "westN"
+  ],
+  [
+   "westN",
+   "northMid"
+  ],
+  [
+   "northMid",
+   "eastN"
+  ],
+  [
+   "eastN",
+   "eastS"
+  ],
+  [
+   "eastS",
+   "hall1"
+  ],
+  [
+   "hall1",
    "shrine"
   ],
   [
-   "shrine",
-   "boss"
-  ],
-  [
-   "s1",
+   "westN",
    "westAlcove"
   ],
   [
-   "s1",
+   "eastN",
    "eastAlcove"
+  ],
+  [
+   "northMid",
+   "boss",
+   {
+    "kind": "barrier",
+    "open": "seal"
+   }
   ]
  ],
  "clearings": [
@@ -64,32 +112,46 @@
    "ry": 44
   },
   {
+   "id": "hall1",
+   "x": 672,
+   "y": 700,
+   "rx": 100,
+   "ry": 60
+  },
+  {
    "id": "shrine",
    "x": 672,
-   "y": 430,
+   "y": 480,
    "rx": 120,
    "ry": 70
   },
   {
-   "id": "boss",
+   "id": "northMid",
    "x": 672,
-   "y": 200,
-   "rx": 150,
-   "ry": 80
+   "y": 300,
+   "rx": 100,
+   "ry": 55
   },
   {
    "id": "westAlcove",
-   "x": 330,
-   "y": 640,
+   "x": 160,
+   "y": 500,
    "rx": 80,
    "ry": 50
   },
   {
    "id": "eastAlcove",
-   "x": 1014,
-   "y": 640,
+   "x": 1184,
+   "y": 500,
    "rx": 80,
    "ry": 50
+  },
+  {
+   "id": "boss",
+   "x": 672,
+   "y": 150,
+   "rx": 150,
+   "ry": 80
   }
  ],
  "zones": {
@@ -104,37 +166,68 @@
   {
    "id": "plaque",
    "kind": "lore",
-   "x": 330,
-   "y": 620,
-   "note": "還願牌（原有 flags.plaque 內容）"
+   "x": 160,
+   "y": 480,
+   "note": "還願牌（原有內容，flags.plaque）"
   },
   {
    "id": "hallChest",
    "kind": "chest",
-   "x": 1014,
-   "y": 620,
+   "x": 1184,
+   "y": 480,
    "key": "temple:hall",
-   "note": "清心草×2"
+   "note": "清心草×2，繞環形走廊才拿得到"
+  },
+  {
+   "id": "cloudMark",
+   "kind": "lore",
+   "x": 600,
+   "y": 440,
+   "note": "神龕旁銀雲紋，和控妖符同一人手筆（第二章伏筆）"
   },
   {
    "id": "shrineSeal",
    "kind": "seal",
    "x": 672,
-   "y": 410,
+   "y": 460,
    "zone": [
     622,
-    380,
+    430,
     100,
     80
    ],
-   "note": "神龕，削弱封印（flags.templeSeal）"
+   "note": "神龕：觸發墨刑事件＋河伯水影中頭目戰，勝利後削弱封印（flags.templeSeal）"
+  },
+  {
+   "id": "sealBarrier",
+   "kind": "gate",
+   "rect": [
+    648,
+    262,
+    48,
+    28
+   ],
+   "note": "封印屏障：封印削弱前擋住通往河伯的路"
   },
   {
    "id": "hebo",
    "kind": "boss",
    "x": 672,
-   "y": 170,
+   "y": 120,
    "note": "河伯，封印削弱後交談開戰"
+  }
+ ],
+ "encounters": [
+  {
+   "id": "shrineShadow",
+   "enemies": [
+    "河伯水影"
+   ],
+   "flag": "templeHallShadow",
+   "checkpoint": [
+    672,
+    830
+   ]
   }
  ]
 }
