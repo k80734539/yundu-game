@@ -23,7 +23,8 @@ npx playwright install chromium      # 或改用系統 Chrome：export CHROME_PA
 | `node tests/temple-walk.mjs` | 河神廟遮罩、左右支路與互動點可達、阻擋及隨機移動 |
 | `node tests/reeds-maze.mjs` | 蘆葦蕩迷宮：實際控制器走完岔路與三寶箱、妖根前後通路、水岸與斜向搖桿碰撞、營火回復與安全存檔、河神廟出口；直式與橫式截圖 |
 | `node tests/reeds-debug.mjs` | `?debug=col` 蘆葦蕩道路聯集碰撞紅色除錯圖層，逐點對照 `blocked()` 並保存直式／橫式截圖 |
-| `node tests/chapter1-mechanics.mjs` | 渡水一擊習得、舊存檔遷移、重打不重複、三寶箱效用、河伯半血階段訊息與濁浪回合間隔 |
+| `node tests/chapter1-mechanics.mjs` | 渡水一擊習得、舊存檔遷移、重打不重複、三寶箱效用、河伯半血階段訊息與蓄力循環 |
+| `node tests/hebo-boss-v3.mjs` | 河伯兩階段、控妖符、狐火干擾、防禦、隊員倒下、勝利、老蘆葦精與手機觸控／鍵盤選取 |
 | `node tests/battle-feedback.mjs` | 實際音訊、手勢解鎖、靜音保存、無音訊 API、命中定格與受擊回位，不重算傷害 |
 | `node tests/portrait-ui.mjs` | 六尺寸：透明半身圖、戰鬥／對話共用素材、頭像點選隊友、畫面與觸控範圍 |
 | `node tests/hero-assets.mjs` | 30 張原色角色圖載入、透明邊緣、裁切、腳底範圍、紅色細節與受擊／倒下姿勢區分 |

@@ -76,6 +76,18 @@ function enemyImage(e,now,x,y,scale){const c=EART[e.e],pose=enemyPose(e,now),im=
  if(c&&im?.naturalWidth){const z=c.factor*scale;return{im,x:x-c.x*z,y:y-c.y*z,w:c.size*z,h:c.size*z,pose}}
  const base=I[e.e];return{im:base,x:x-base.width*scale/2,y:y-base.height*scale,w:base.width*scale,h:base.height*scale,pose:'fallback'}}
 function drawBattleBackground(B){const requested=B.opt.bg||'bg_reeds',key=I[requested]?.naturalWidth?requested:'bg_reeds',im=I[key];if(im?.naturalWidth){B.bgFit=Object.assign(cover(im,.5,.5),{key,width:im.naturalWidth,height:im.naturalHeight})}else{B.bgFit=null;X.fillStyle='#24343c';X.fillRect(-20,-20,SW+40,SH+40)}}
+function talismanPlacement(B,L){const i=B.en.findIndex(e=>e.e==='hebo'),q=L.en(B.en.length,true)[Math.max(0,i)],u=L.U;
+ return{x:q[0]+135*u,y:q[1]-135*u,r:21*u}}
+function drawTalisman(B,L,now,fs,H){if(!B.talisman)return;const t=B.talisman,P=talismanPlacement(B,L),active=t.hp>0,elapsed=now-(B.talismanBrokenAt||0);
+ if(!active&&elapsed>650)return;
+ X.save();X.translate(P.x,P.y);if(active){const pulse=B.hebo?.state===HEBO_STATE.CHARGING?1+Math.sin(now/110)*.08:1;X.scale(pulse,pulse);
+  X.shadowColor='#b97ccf';X.shadowBlur=12;X.fillStyle='#f1d892';X.strokeStyle='#623c57';X.lineWidth=2;X.beginPath();X.moveTo(0,-P.r);X.lineTo(P.r*.7,0);X.lineTo(0,P.r);X.lineTo(-P.r*.7,0);X.closePath();X.fill();X.stroke();X.shadowBlur=0;
+  txt('符',0,fs*.32,Math.max(12,fs),'#563341','center');
+ }else{X.globalAlpha=Math.max(0,1-elapsed/650);X.strokeStyle='#e6c6f2';X.lineWidth=3;X.beginPath();X.arc(0,0,P.r+elapsed*.07,0,Math.PI*2);X.stroke()}
+ X.restore();if(!active)return;
+ const bw=Math.max(58,68*L.U),barY=P.y+P.r+fs+5;txt('控妖符',P.x,P.y+P.r+fs,fs-2,'#ffe1ec','center');X.fillStyle='#392133';X.fillRect(P.x-bw/2,barY,bw,6);X.fillStyle='#e8a9dd';X.fillRect(P.x-bw/2,barY,bw*t.hp/t.mhp,6);
+ if(B.ph==='target'&&B.tk==='E'){if(B.sel===B.en.length)txt('▼',P.x,P.y-P.r-6+Math.sin(now/130)*3,fs+6,'#ff0','center');
+  H.push({x:P.x-27,y:P.y-27,w:54,h:54,fn:()=>{B.sel=B.en.length;press('ok')}})}}
 function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){const a=(now-B.shk.at)/B.shk.d;if(a<1){const k=B.shk.a*(1-a);SX=(Math.random()*2-1)*k;SY=(Math.random()*2-1)*k}else B.shk=null}X.translate(SX,SY);X.fillStyle='#000';X.fillRect(-20,-20,SW+40,SH+40);drawBattleBackground(B);
  const fs=FS(),n=B.en.length,np=G.party.length,ent=Math.min(1,(now-G.bT)/400),H=B.hit=[],L=B.L=bLayout(),u=L.U,s=L.s;B.u=u;
  const u2=G.party[B.ai]||G.party[0];
@@ -84,7 +96,7 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
  // ---- 幾何：敵人（左上）與我方（下方左中右橫排）
  const boss=B.en.some(e=>e.boss),ES=L.en(n,boss&&n===1);
  const eScale=e=>(e.boss?(e.e==='laolu'?.68:.57):e.e=='lu'?.59:.58)*L.eu;  // 老蘆葦精較蘆葦精更高大
- B.po=o=>{const ei=B.en.indexOf(o);if(ei>=0){const im=I[o.e],s2=eScale(o),q=ES[Math.min(ei,ES.length-1)];return[q[0],q[1]-im.height*s2/2,im.width*s2,im.height*s2]}
+ B.po=o=>{if(o===B.talisman){const p=talismanPlacement(B,L);return[p.x,p.y-p.r,p.r*2,p.r*2]}const ei=B.en.indexOf(o);if(ei>=0){const im=I[o.e],s2=eScale(o),q=ES[Math.min(ei,ES.length-1)];return[q[0],q[1]-im.height*s2/2,im.width*s2,im.height*s2]}
   const pi=G.party.indexOf(o),F=L.feet[bSlot(o,Math.max(0,pi))];return[F[0],F[1]-135*s,95*s,270*s]};
  B.feetOf=p=>L.feet[bSlot(p,Math.max(0,G.party.indexOf(p)))];
  X.font=(fs-2)+'px '+FONT;
@@ -93,9 +105,12 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
   const im=I[e.e],s2=eScale(e),w=im.width*s2,h=im.height*s2,q=ES[Math.min(i,ES.length-1)],recoil=bRecoil(e,now),x=q[0]+recoil.dx,y=q[1]+recoil.dy,bob=Math.sin(t*2.2+e.ph)*3*u;
   const fx=B.fx.find(f=>f.t==e&&!f.heal&&now>=f.at&&now-f.at<500);X.fillStyle='rgba(0,0,0,.38)';X.beginPath();X.ellipse(x,y-2*u,w*.4,Math.max(4,6*u),0,0,7);X.fill();
   X.save();X.globalAlpha=ent*(1-da);if(fx&&Math.floor((now-fx.at)/70)%2)X.globalAlpha*=.4;if(da){X.translate(x,y);X.scale(1+da*.25,1-da*.5);X.translate(-x,-y)}const art=enemyImage(e,now,x+(fx?Math.sin(now/20)*3:0),y+(fx?0:bob)-da*20*u,s2);X.drawImage(art.im,art.x,art.y,art.w,art.h);if(da>0){X.globalCompositeOperation='lighter';X.globalAlpha=(1-da)*.6;X.drawImage(art.im,art.x,art.y,art.w,art.h)}X.restore();if(da)return;
-  const bw=Math.min(90,Math.max(w*.9,60));lab.push(()=>{X.font=(fs-2)+'px '+FONT;txt(e.n,x,y+fs+4,fs-2,'#fff','center');X.fillStyle='#400';X.fillRect(x-bw/2,y+fs+10,bw,6);X.fillStyle='#e44';X.fillRect(x-bw/2,y+fs+10,bw*e.hp/e.mhp,6)});
+  const bw=Math.min(90,Math.max(w*.9,60));lab.push(()=>{X.font=(fs-2)+'px '+FONT;txt(e.n,x,y+fs+4,fs-2,'#fff','center');X.fillStyle='#400';X.fillRect(x-bw/2,y+fs+10,bw,6);X.fillStyle='#e44';X.fillRect(x-bw/2,y+fs+10,bw*e.hp/e.mhp,6);
+   if(e.e==='hebo'&&B.hebo){const h=B.hebo,label=h.state===HEBO_STATE.CHARGING?'蓄力中・下次濁浪':h.state===HEBO_STATE.STAGGERED?'失衡・跳過行動':h.interfered?'狐火干擾':B.talisman?.hp>0?'控妖符強化':'';
+    if(label)txt(label,x,y+fs+32,Math.max(11,fs-2),h.state===HEBO_STATE.CHARGING?'#ffe3a6':'#e8bde9','center');if(h.state===HEBO_STATE.CHARGING&&h.interfered)txt('狐火干擾・傷害降低',x,y+fs+49,Math.max(10,fs-3),'#9bdfff','center')}});
   if(B.ph=='target'&&B.tk=='E'){if(B.sel==i)txt('▼',x,y-h-6+Math.sin(t*8)*3,fs+6,'#ff0','center');H.push({x:x-Math.max(w,60)/2,y:y-h-10,w:Math.max(w,60),h:h+fs+30,fn:()=>{B.sel=i;press('ok')}})}});
  lab.forEach(f=>f());
+ drawTalisman(B,L,now,fs,H);
  // ---- 我方（左中右橫排，中間略低；依腳底 y 由上往下畫）
  B.pose={};const order=G.party.map((p,i)=>i).sort((a,b)=>B.feetOf(G.party[a])[1]-B.feetOf(G.party[b])[1]);
  order.forEach(i=>{const p=G.party[i],F=B.feetOf(p),sl=bSlot(p,i),act=i==B.ai&&B.ph!='msg'&&!B.won,ps=bPose(p,sl,now,F,s,L);B.pose[i]=ps.name;
@@ -126,7 +141,7 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
  else if(B.ph=='target'){info=B.tk=='E'?'點選敵人':'點選隊友';octBtn(L.bx,L.by,L.bd,'返',false,fs);push(L.bx,L.by,()=>press('cancel'))}
  // ---- 傷害數字
  for(const f of B.fx){if(now<f.at)continue;const a=(now-f.at)/1000,q=B.po(f.t);const x=q[0],y=q[1]-q[3]*.3;const sc=a<.12?.4+a/.12*(f.crit?1.4:1):(f.crit?1.8:1.4)-Math.min(f.crit?.6:.4,(a-.12)*2.2);
-  const s0=f.heal?'+'+f.d:''+f.d,col=f.heal?'#7f7':f.crit?'#ffe14a':B.en.includes(f.t)?'#fff':'#f88';X.save();X.globalAlpha=Math.min(1,(1-a)*2.2);X.translate(x,y-a*34*u);X.scale(sc,sc);X.font='bold '+(fs+8)+'px '+FONT;X.textAlign='center';X.lineWidth=4;X.strokeStyle=f.heal?'#031':'#000';X.strokeText(s0,0,0);X.fillStyle=col;X.fillText(s0,0,0);
+  const s0=f.heal?'+'+f.d:''+f.d,col=f.heal?'#7f7':f.crit?'#ffe14a':B.en.includes(f.t)||f.t===B.talisman?'#fff':'#f88';X.save();X.globalAlpha=Math.min(1,(1-a)*2.2);X.translate(x,y-a*34*u);X.scale(sc,sc);X.font='bold '+(fs+8)+'px '+FONT;X.textAlign='center';X.lineWidth=4;X.strokeStyle=f.heal?'#031':'#000';X.strokeText(s0,0,0);X.fillStyle=col;X.fillText(s0,0,0);
   if(f.crit){X.font='bold '+(fs-1)+'px '+FONT;X.strokeText('會心！',0,-fs-4);X.fillStyle='#ffb02e';X.fillText('會心！',0,-fs-4)}X.restore()}
  if(B.fl){const a=(now-B.fl.at)/B.fl.d;if(a<1){X.fillStyle='rgba('+B.fl.c+','+(B.fl.k*(1-a))+')';X.fillRect(0,0,SW,SH)}else B.fl=null}
  // ---- 上方訊息框（指令選單時讓出左上角的逃跑鈕）
