@@ -74,7 +74,7 @@ classic script 的 function 宣告只在該檔執行時才建立，所以**載�
 - **頭像（v28）**：三位主角以使用者提供四視角原圖的三分之四正面裁成 512×512 透明半身像，戰鬥與對話共用同一張，勿改回舊像素頭像或有底色的方塊。卡片頭像在左、紅／藍數字在右；直式壓縮為兩行且臉部不被資訊列覆蓋。cards 的觸控區包含浮出資訊列的頭像。情境鍵 pt_qz_startled／pt_bl_quiet 目前使用同一原圖的正面視角，不自行生成表情。參見 docs/art/portraits-v28.md 與 tests/portrait-ui.mjs。原色裁切工具為 tools/import-portraits.py。
 
 ## 5. 版本號規則
-- 目前 **v47**（探索 HUD 與旅途手札；保留 v46 遮罩碰撞與河神廟左右支路修正）。每次上線改動都要 +1（下一版 **v48**），三處一起改：
+- 目前 **v48**（第一章收尾：渡水一擊、蘆葦蕩寶箱用途、河伯二階段；保留 v46 遮罩碰撞與河神廟左右支路修正）。每次上線改動都要 +1（下一版 **v49**），三處一起改：
   1. `index.html` `<title>雲渡仙緣 第一章 vN</title>`
   2. `src/screens.js` 標題畫面 `'版本 vN'`
   3. `src/render.js` 地圖右下角 `'vN'`
@@ -126,5 +126,6 @@ npm test                                          # 必須 ALL PASS，且無 JS 
 - **市集樹叢精確碰撞（v42）**：v39/v41 的碰撞位置未對齊截圖中的主樹；已以底圖像素重現腳底 (906,446) 的穿越，按樹叢及院牆分段阻擋，移除偏到道路上的舊矩形。碰撞必須以實際 update 移動驗證，不能只測新加的矩形中心。loadMap 會把位於新障礙內的舊存檔位置移到鄰近空地。
 - **蘆葦蕩迷宮（v43）**：1344×896、48px 可行走道路寬，主資料 `docs/maps/reeds-v43/layout.json`，由 `tools/build-reeds-map.py` 產生 `src/reeds_layout.js` 與開／鎖橋 map bundle。`src/reeds_map.js` 使用道路聯集判定腳底，不使用舊 GRID.reeds；兩座妖根橋都由 flags.reedSolved 控制。保留原三個寶箱 key。`healParty()` 專管劇情全隊回復，勿改回與 battle.js 的 heal(t,h) 同名。測試 `tests/reeds-maze.mjs` 使用實際 update 走岔路、開橋、水岸、營火與出口；所有新地圖都應先有路線及碰撞再生成美術，並在圖上目視比對。
 
-- **目前碰撞（v44～v46）**：村莊及河神廟使用 assets/img/village_walk_v44.png 與 temple_walk_v44.png 白色可走遮罩，透過 walkMask/getImageData 取樣腳底六點，?debug=col 顯示紅色擋人區。蘆葦蕩仍使用 REEDS_LAYOUT 道路聯集。保留 tests/temple-walk.mjs 左右支路與盡頭驗證；UI 改版不得覆蓋碰撞更新。
+- **目前碰撞（v44～v48）**：村莊及河神廟使用 assets/img/village_walk_v44.png 與 temple_walk_v44.png 白色可走遮罩，透過 walkMask/getImageData 取樣腳底六點，?debug=col 顯示紅色擋人區。蘆葦蕩使用 REEDS_LAYOUT 道路聯集，?debug=col 依道路聯集、腳底取樣、妖根門與地標實體繪製紅色擋人區。保留 tests/temple-walk.mjs 左右支路與盡頭驗證、tests/reeds-debug.mjs；UI 改版不得覆蓋碰撞更新。
 - **探索 UI（v47）**：探索右上只留選單，聲音開關收在設定；標題及戰鬥保留原 soundBtn。旅途手札顯示真實隊伍／物品、任務、存讀檔與設定。面板開啟時 clearK 並暫停 update 移動；方向鍵／Enter／Esc／M／Tab 支援操作與焦點限制。見 docs/art/exploration-ui-v45/README.md（原設計 v45，整合發佈 v47）及 tests/exploration-ui.mjs。
+- **第一章收尾（v48）**：河伯勝利時青舟學會渡水一擊（MP／目標／倍率在 `src/data.js` 的 SK／CFG），讀取已通關舊存檔會補技能且不重複；河伯 HP 低於一半後只觸發一次訊息、濁浪間隔由 CFG 控制的 3 回合改為 2 回合。蘆葦蕩 `reeds:18,1` 保持魚乾×2，`reeds:1,7` 護身符使青舟防禦永久+2，`reeds:5,11` 刻字布條記錄 `flags.foundCloth` 並呈現父親字跡對白。第一章不套用五行相剋。檢查 `tests/chapter1-mechanics.mjs` 與 `tests/reeds-debug.mjs`。
