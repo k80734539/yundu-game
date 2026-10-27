@@ -107,6 +107,18 @@ export async function templeV52(browser,url){
   });
   for(const k of['shore','court','hall']){assert(walks[k].n>60,`${k}: enough walkable samples (${walks[k].n})`);assert.equal(walks[k].bad.length,0,`${k}: random walks entered a solid: ${JSON.stringify(walks[k].bad)}`)}
 
+  // 6. 試玩入口：templeJump／網址 hash 直接站到三張圖的入口，狀態合理。
+  const jump=await pg.evaluate(()=>{
+   const out=[];
+   for(const k of['shore','court','hall']){templeJump(k);out.push([G.map,G.party.length,!blocked(G.x,G.y),G.flags.reedSolved,G.flags.templeLamps||0,G.party[0].lv])}
+   history.replaceState(null,'','#temple-court');G.dlg=null;newGame();templeHashJump();const viaHash=G.map;
+   history.replaceState(null,'','#nonsense');newGame();G.dlg=null;const before=G.map;templeHashJump();const ignored=G.map===before;
+   history.replaceState(null,'','#');
+   return{out,viaHash,ignored}
+  });
+  assert.deepEqual(jump.out.map(x=>x[0]),['temple_shore','temple_court','temple_hall']);
+  assert(jump.out.every(x=>x[1]===2&&x[2]&&x[3]&&x[5]===3),`jump state: ${JSON.stringify(jump.out)}`);
+  assert.equal(jump.out[2][4],7,'the hall jump arrives with all lamps lit');assert.equal(jump.viaHash,'temple_court');assert(jump.ignored,'unrelated hashes do nothing');
   assert.deepEqual(await jsErrors(),[]);
   console.log('[temple-v52] three maps, routes reachable, conditional gates, transitions, lamps once, legacy saves, random walks PASS');
  }finally{await ctx.close()}

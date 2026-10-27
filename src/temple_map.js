@@ -41,6 +41,20 @@ function templeRedLayer(){const L=TEMPLE_LAYOUTS[M.templeMap],W=L.world.width,H=
  return walkRedLayer(null,W,H,(x,y)=>!templeBlocked(L,x,y)&&!sol.some(([sx,sy,w,h])=>x+8>sx&&x-8<sx+w&&y>sy&&y-6<sy+h))}
 function templeDebugState(){return [G.flags.templeLamps||0,G.flags.templeSeal?1:0,G.flags.templeSluice?1:0,G.flags.templeShorePole?1:0].join(':')}
 
+// 試玩入口：網址加 #temple-shore／#temple-court／#temple-hall，開啟後直接站在該張圖的入口（隊伍與旗標補到「剛走到這裡」的狀態）。
+// 只在網址 hash 完全符合時啟動，一般遊玩不受影響；也供測試呼叫 templeJump(key)。
+function templeJump(key){
+ if(!TEMPLE_LAYOUTS[key])return false;
+ newGame();G.dlg=null;const f=G.flags,qz=G.party[0];
+ const lv=(p,n)=>{while(p.lv<n){p.lv++;p.mhp+=9;p.mmp+=3;p.atk+=2;p.def+=1;p.mag+=2}p.hp=p.mhp;p.mp=p.mmp};
+ const bl=mk('白苓','bl',45,24,6,2,11,['狐火','春霖']);G.party.push(bl);lv(qz,3);lv(bl,3);
+ Object.assign(f,{ferry:1,chief:1,quest:1,flood:1,ferryFight:1,fish:1,tal:1,reedSeen:1,reedPole:1,reedSolved:1,reedBoss:1,camp:1});
+ G.inv.魚乾=3;G.inv.清心草=2;
+ if(key!=='shore'){Object.assign(f,{templeShorePole:1,templeShoreFight:1})}
+ if(key==='hall'){Object.assign(f,{steleSeen:1,templeLamps:(1<<TEMPLE_LAMP_COUNT)-1,templeFightW:1,templeFightE:1,templeSluice:1})}
+ templeTravel(key,'arrival','up');healParty();
+ return true}
+function templeHashJump(){const m=/^#temple-(shore|court|hall)$/.exec(location.hash||'');if(m)templeJump(m[1])}
 function buildTempleMap(key){
  const L=TEMPLE_LAYOUTS[key],W=L.world.width,H=L.world.height,F=L.features,[g,c]=cvs(W,H);
  M={id:L.id,W,H,T:T2,rows:[],obj:[],sol:[],zones:[],inter:[],npcs:[],lights:[],night:1,nightGrade:.18,mapPlate:1,templeMap:key};
