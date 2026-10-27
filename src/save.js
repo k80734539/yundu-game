@@ -14,6 +14,8 @@ function migrateSave(d){if(!d||typeof d!='object')return null;if(d.ver==null)ret
  if(d.flags.boss){const qz=d.party.find(p=>p.e=='qz'||p.n=='陳青舟');if(qz){qz.skills=Array.isArray(qz.skills)?qz.skills:[];learnSkill(qz,'渡水一擊')}}
  // v49：已抵營火或進入河神廟的舊存檔視為通過老蘆葦精，避免新事件阻塞已完成進度。
  if(d.flags.camp||d.flags.templeSeal||d.flags.boss)d.flags.reedBoss=1;
+ // v51：舊存檔若已看過退水事件或進入後續章節，視為完成渡口遭遇，避免重複或卡關。
+ if(d.flags.flood||d.flags.dawn||d.flags.tal||d.flags.reedSolved||d.flags.camp||d.flags.reedBoss||d.flags.templeSeal||d.flags.boss||d.flags.pearl||d.flags.cure)d.flags.ferryFight=1;
  d.dir=DV[d.dir]?d.dir:'down';return d}
 function readSlot(s){const raw=lsGet(SAVE_KEY+s);if(raw==null)return null;let d=null;try{d=migrateSave(JSON.parse(raw))}catch(e){d=null}return d||{bad:1}}
 function snapshot(o){o=o||{};const boat=!!o.boat;return{ver:SAVE_VER,t:Date.now(),boat:boat?1:0,map:boat?'river':(o.map||G.map),x:o.x!=null?o.x:G.x,y:o.y!=null?o.y:G.y,dir:o.dir||G.dir,
