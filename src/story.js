@@ -24,11 +24,11 @@ function loreStone(){if(G.flags.lore)return say(S.loreR);G.flags.lore=1;say(S.lo
 function reedBossTrial(){if(G.flags.reedBoss||G.flags.camp||G.flags.templeSeal)return;const[x,y]=CFG.reedBoss.checkpoint;saveCP({map:'reeds',x,y,dir:'right'});say(S.reedBoss,()=>startBattle(['老蘆葦精'],{noEsc:1,bg:'bg_reeds',onWin:()=>{G.flags.reedBoss=1;saveCP({map:'reeds',x:G.x,y:G.y,dir:G.dir});say(S.reedBossWin)}}))}
 function exitReeds(){const f=G.flags,back=()=>{if(M.maze)G.x=Math.min(G.x,REEDS_LAYOUT.exit.zone[0]-10);else G.y-=14};if(!f.tal){back();return say(S.exitNo)}if(!f.camp){back();return say(S.exitNoCamp)}if(!f.reedBoss&&!f.templeSeal){back();return say(S.exitNoBoss)}
  if(!f.reedSolved){back();return say(S.exitNoTrial)}
- loadMap('temple',10.5*T2,13.8*T2,'up');healParty();saveCP({map:'temple',x:10.5*T2,y:13.8*T2,dir:'up'});say(S.temple.concat(S.templeHint))}
+ templeTravel('shore','arrival','right');healParty();{const[px,py]=templePos('shore','arrival');saveCP({map:'temple_shore',x:px,y:py,dir:'right'})}say(S.temple.concat(S.templeHint))}
 function plaque(){if(G.flags.plaque)return say(S.plaqueR);G.flags.plaque=1;say(S.plaque)}
 function stele(){G.flags.steleSeen=1;say(S.stele)}
 function templeSeal(){const f=G.flags;if(!f.steleSeen)return say(S.sealNoClue);if(f.templeSeal)return say(S.sealRepeat);if((f.templeLamps||0)!==templeLanternMask())return say(S.sealNoLamps);f.templeSeal=1;say(S.seal)}
-function lightTempleLantern(i){const f=G.flags;if(!f.steleSeen)return say(S.lanternNoStele);const bit=1<<i;if((f.templeLamps||0)&bit)return say(S.lanternRepeat[i]);f.templeLamps=(f.templeLamps||0)|bit;const glow=M.lights.find(l=>l.lamp===i);if(glow)glow[3]='rgba(191,239,240,.5)';const lines=[['','燈芯泛起青白微光，水紋沿著石燈亮了一圈。']];if(f.templeLamps===templeLanternMask())lines.push(['提示','三盞燈都亮了。回到神龕前，現在可以削弱封印。']);say(lines)}
+function lightTempleLantern(i){const f=G.flags;if(!f.steleSeen)return say(S.lanternNoStele);const bit=1<<i;if((f.templeLamps||0)&bit)return;f.templeLamps=(f.templeLamps||0)|bit;const glow=M.lights.find(l=>l.lamp===i);if(glow)glow[3]='rgba(191,239,240,.5)';M.inter=M.inter.filter(it=>it.lampBit!==i);const lines=[['','燈芯泛起青白微光，水紋沿著石燈亮了一圈。']];if(f.templeLamps===templeLanternMask())lines.push(['提示','三盞燈都亮了。北邊的鎮水門開了，從中庭北側進入水府後殿。']);say(lines)}
 function reedTrial(){const f=G.flags;if(!f.tal)return say(S.trialNoTalisman);if(G.party.length<2)return say(S.trialNoPartner);
  if(!f.reedSeen){f.reedSeen=1;say(S.trialLook);return}
  if(!f.reedPole){f.reedPole=1;say(S.trialPole);return}

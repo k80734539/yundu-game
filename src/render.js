@@ -8,8 +8,9 @@ function drawWorld(now){const t=now/1000;
  X.fillStyle=M.id=='village'?'#3a5f63':M.id=='reeds'?'#12180e':'#120e14';X.fillRect(cx-2,cy-2,VW+4,VH+4);
  if(activeScene()&&M.id==='village'){X.fillStyle=X.createPattern(I.t_water,'repeat');X.fillRect(cx,Math.max(cy,M.H),VW,VH)}
  X.drawImage(M.ground,0,0);
+ if(DEBUG_COL&&M.templeMap){const st=templeDebugState();if(M.walkRedState!==st){M.walkRed=templeRedLayer();M.walkRedState=st}}
  if(DEBUG_COL&&M.maze){const state=[G.flags.reedSolved,G.flags.reedBoss||G.flags.camp||G.flags.templeSeal].join(':');if(M.walkRedState!==state){M.walkRed=reedsWalkRedLayer();M.walkRedState=state}}
- if(DEBUG_COL&&(M.walkImg||M.maze)){X.save();X.globalAlpha=.4;X.drawImage(M.walkRed||(M.walkRed=walkRedLayer(M.walkImg,M.W,M.H)),0,0);X.restore()}
+ if(DEBUG_COL&&(M.walkImg||M.maze||M.templeMap)){X.save();X.globalAlpha=.4;X.drawImage(M.walkRed||(M.walkRed=walkRedLayer(M.walkImg,M.W,M.H)),0,0);X.restore()}
  // water
  if(M.id=='village'){X.save();X.beginPath();X.moveTo(0,M.H);for(let x=0;x<=M.W;x+=8)X.lineTo(x,waterY(x));X.lineTo(M.W,M.H);X.clip();X.globalAlpha=M.id=='village'?.14:1;X.fillStyle=X.createPattern(I.t_water,'repeat');X.translate(t*9%128,Math.sin(t)*3);X.fillRect(-128,17*T-128,M.W+256,M.H);X.globalAlpha=1;X.restore();
   X.strokeStyle=M.id=='village'?'rgba(228,246,239,.16)':'rgba(255,255,255,.35)';X.lineWidth=M.id=='village'?1:2;X.beginPath();for(let x=0;x<=M.W;x+=8){const y=waterY(x)+2+Math.sin(t*3+x/30)*1.5;x?X.lineTo(x,y):X.moveTo(x,y)}X.stroke()}
@@ -22,7 +23,7 @@ function drawWorld(now){const t=now/1000;
  for(const n of M.npcs){L.push({y:n.y,f:()=>{if(drawSceneNPC(n,now))return;if(n.boss){const im=I.hebo,s=.52,w=im.width*s,h=im.height*s,b=Math.sin(t*1.6)*4;X.fillStyle='rgba(0,0,0,.35)';X.beginPath();X.ellipse(n.x,n.y-4,60,12,0,0,7);X.fill();X.drawImage(im,n.x-w/2,n.y-h+8+b,w,h)}else chr(spriteKey(n.k,n.dir,0),n.x,n.y);
   if(n.mark&&n.mark()){const yy=n.y-(n.boss?170:72)+Math.sin(t*5)*3;X.font='bold 20px sans-serif';X.textAlign='center';X.lineWidth=4;X.strokeStyle='#120a10';X.strokeText('!',n.x,yy);X.fillStyle='#ffd84a';X.fillText('!',n.x,yy);X.textAlign='left'}}})}
  const scene=activeScene(),two=G.party.length>1&&(G.hist.length>=14||!!scene);
- if(scene?.id==='hebo')L.push({y:4.1*T2,f:()=>drawHeboFarewell(now)});
+ if(scene?.id==='hebo')L.push({y:sceneHeboBase().y,f:()=>drawHeboFarewell(now)});
  const qp=sceneParty('qz',now),bp=two?sceneParty('bl',now):null;
  if(two&&!sceneStagesParty())L.push({y:bp.y-.1,f:()=>drawStoryCharacter('bl',bp)});
  const pk=spriteKey('qz',G.dir,G.f);if(!sceneStagesParty())L.push({y:qp.y,f:()=>drawStoryCharacter('qz',qp)});
@@ -47,7 +48,7 @@ function drawWorld(now){const t=now/1000;
   const L=SA.l+30,R=SW-SA.r-30,Tp=SA.t+fs*2+40,Bt=SH-SA.b-(JOY.touch?190:30);
   if(sx>L&&sx<R&&sy>Tp&&sy<Bt){txt('▼ 渡船',sx,sy-6+bob,fs+2,'#ffe9a8','center')}
   else{const ax=Math.max(L+20,Math.min(R-20,sx)),ay=Math.max(Tp,Math.min(Bt,sy)),an=Math.atan2(sy-ay,sx-ax);X.save();X.translate(ax,ay);X.fillStyle='rgba(0,0,0,.55)';X.beginPath();X.arc(0,0,fs*1.7,0,7);X.fill();X.rotate(an);X.fillStyle='#ffe9a8';X.beginPath();X.moveTo(fs*1.5+bob/2,0);X.lineTo(fs*.6,-fs*.7);X.lineTo(fs*.6,fs*.7);X.fill();X.restore();txt('渡船',ax,ay+fs*.4,fs-2,'#fff','center')}}}
- txt('v51',SW-SA.r-6,SH-SA.b-4,Math.max(10,fs-6),'rgba(255,255,255,.6)','right');
- const at=now-G.lt;if(M.id=='temple'&&at<2600){X.globalAlpha=Math.min(1,Math.max(0,1-(at-1600)/1000));X.fillStyle='#000';X.fillRect(0,0,SW,SH);cover(I.ext);const fs2=fs+6;box(SW/2-80,SH*.7,160,fs2+22);txt('河神廟',SW/2,SH*.7+fs2+6,fs2,'#f3dfa0','center');X.globalAlpha=1}}
+ txt('v52',SW-SA.r-6,SH-SA.b-4,Math.max(10,fs-6),'rgba(255,255,255,.6)','right');
+ const at=now-G.lt;if((M.id=='temple'||M.templeMap)&&at<2600){X.globalAlpha=Math.min(1,Math.max(0,1-(at-1600)/1000));X.fillStyle='#000';X.fillRect(0,0,SW,SH);cover(I.ext);const fs2=fs+6;box(SW/2-80,SH*.7,160,fs2+22);txt(M.name||'河神廟',SW/2,SH*.7+fs2+6,fs2,'#f3dfa0','center');X.globalAlpha=1}}
 function dlgTop(){return JOY.touch&&SW>SH}
 function drawBoat(now){drawNightScene(now)}

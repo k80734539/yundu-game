@@ -43,7 +43,7 @@ export async function reedsMaze(browser,url,sizes=[[390,664],[844,390]]){
   // Patrol each normal bank using real movement, including a diagonal attempt at the edge.
   const banks=await pg.evaluate(()=>{const result=[];for(const joy of [false,true]){TP(800,122,'down');clearK();if(joy){JOY.on=true;JOY.x=.7;JOY.y=.7}else keys.down=1;for(let i=0;i<100;i++)update(1);clearK();result.push({clear:!blocked(G_().x,G_().y),y:G_().y})}return result});assert(banks.every(p=>p.clear&&p.y<=146),'keyboard and diagonal joystick cannot leave the raised bank');
   const edges=await pg.evaluate(()=>[[800,122,'up'],[800,122,'down'],[414,230,'left'],[414,230,'right'],[800,338,'up'],[800,338,'down'],[1220,660,'left'],[1220,660,'right'],[530,760,'up'],[530,760,'down']].map(([x,y,dir])=>{TP(x,y,dir);clearK();keys[dir]=1;for(let i=0;i<30;i++)update(3);clearK();return{dir,clear:!blocked(G_().x,G_().y),distance:Math.hypot(G_().x-x,G_().y-y)}}));assert(edges.every(e=>e.clear&&e.distance<=35),'ten independently sampled road edges stop movement toward the water: '+JSON.stringify(edges));
-  await pg.evaluate(()=>__mazeWalk([1260,760]));assert.equal(await pg.evaluate('G_().map'),'temple','walking through the gateway enters the temple');assert.deepEqual(await jsErrors(),[]);
+  await pg.evaluate(()=>__mazeWalk([1260,760]));assert.equal(await pg.evaluate('G_().map'),'temple_shore','walking through the gateway enters the temple shore');assert.deepEqual(await jsErrors(),[]);
   console.log(`[reeds-maze ${W}x${H}] actual walks, three treasures, locked/open shortcuts, shoreline, touch input, safe camp, temple transition PASS`);
  }finally{await ctx.close()}}
  return true;

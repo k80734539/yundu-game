@@ -55,7 +55,7 @@ function buildVillage(){const W=42*T,H=28*T;M={id:'village',W,H,T,obj:[],sol:[],
 }
 function npc(k,x,y,n,talk,mark){const o={k,x,y,dir:'down',n,talk,mark,npc:1};M.npcs.push(o);M.sol.push([x-11,y-9,22,10]);if(talk)M.inter.push({x,y:y-14,r:30,act:()=>{faceTo(o);talk()}});return o}
 function faceTo(o){if(!I[o.k+'_down0'])return;const dx=G.x-o.x,dy=G.y-o.y;o.dir=Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up')}
-function buildGrid(id){if(id=='reeds')return buildReedsMaze();const R=GRID[id],W=20*T2,H=R.length*T2,plateKey='temple_plate_v40',hasPlate=!!I[plateKey]?.naturalWidth;M={id,W,H,T:T2,rows:R,obj:[],sol:[],zones:[],inter:[],npcs:[],lights:[],night:1};
+function buildGrid(id){if(id=='reeds')return buildReedsMaze();if(TEMPLE_IDS[id])return buildTempleMap(TEMPLE_IDS[id]);const R=GRID[id],W=20*T2,H=R.length*T2,plateKey='temple_plate_v40',hasPlate=!!I[plateKey]?.naturalWidth;M={id,W,H,T:T2,rows:R,obj:[],sol:[],zones:[],inter:[],npcs:[],lights:[],night:1};
  const r=rng(id=='reeds'?3:5),[g,c]=cvs(W,H);
  const fillTex=(k,x,y,w,h)=>{c.fillStyle=c.createPattern(I[k],'repeat');c.fillRect(x,y,w,h)};
  if(id=='reeds'){if(!hasPlate){fillTex('t_mud',0,0,W,H);
@@ -96,7 +96,7 @@ function buildGrid(id){if(id=='reeds')return buildReedsMaze();const R=GRID[id],W
  if(id=='temple'&&hasPlate&&I.temple_walk_v44?.naturalWidth){M.walkImg=I.temple_walk_v44;M.walk=walkMask(M.walkImg,W,H);M.sol=M.sol.filter(s=>M.npcs.some(n=>s[0]==n.x-11&&s[1]==n.y-9));
   M.blocked=(x,y)=>x<8||x>W-8||y<20||y>H-4||!VILLAGE_FOOT.every(([dx,dy])=>M.walk(x+dx,y+dy));return}
  const sol=id=='reeds'?'~':'';M.blocked=(x,y)=>x<8||x>W-8||y<20||y>H-4||(sol&&sol.includes(cell(x,y)))}
-function loadMap(id,x,y,dir){G.map=id;G.x=x;G.y=y;G.dir=dir||'down';G.mode='map';G.steps=0;G.acc=0;G.hist=[];G.bl={x,y,dir:G.dir,f:0};G.f=0;G.lt=performance.now();
+function loadMap(id,x,y,dir){if(id=='temple'){const t=templeLegacyTarget();id=t.id;[x,y]=templePos(TEMPLE_IDS[id],t.node);dir='up'}G.map=id;G.x=x;G.y=y;G.dir=dir||'down';G.mode='map';G.steps=0;G.acc=0;G.hist=[];G.bl={x,y,dir:G.dir,f:0};G.f=0;G.lt=performance.now();
  if(id=='village')buildVillage();else buildGrid(id);M.name=NAMES[id];
  // 舊版可先走到南側；新迷宮封橋時，讀入這類存檔須返回入口，不能留在隔離區。
  if(M.maze&&!G.flags.reedSolved&&G.y>Math.min(...REEDS_LAYOUT.gates.map(g=>g.rect[1]))){[G.x,G.y]=REEDS_LAYOUT.nodes.spawn;G.bl.x=G.x;G.bl.y=G.y}

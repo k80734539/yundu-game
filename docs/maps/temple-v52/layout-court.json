@@ -71,6 +71,10 @@
   "secretNE": [
    1194,
    150
+  ],
+  "hallDoor": [
+   672,
+   125
   ]
  },
  "edges": [
@@ -155,6 +159,10 @@
     "kind": "flooded",
     "open": "lamps"
    }
+  ],
+  [
+   "upN",
+   "hallDoor"
   ]
  ],
  "upper": [
@@ -165,7 +173,8 @@
   "upE",
   "stairEt",
   "sluice",
-  "secretNE"
+  "secretNE",
+  "hallDoor"
  ],
  "clearings": [
   {
@@ -251,6 +260,13 @@
    "y": 150,
    "rx": 60,
    "ry": 44
+  },
+  {
+   "id": "hallDoor",
+   "x": 672,
+   "y": 125,
+   "rx": 70,
+   "ry": 30
   }
  ],
  "overlays": [
@@ -374,7 +390,7 @@
     48,
     40
    ],
-   "note": "鎮水門；三盞燈全亮才開"
+   "note": "鎮水門；三盞燈全亮才開。門在上層北側往水府後殿的短路上"
   },
   {
    "id": "westFight",

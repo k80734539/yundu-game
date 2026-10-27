@@ -38,10 +38,17 @@ export async function playthrough(b,url,W,H,touch=true){
  await tp(750,580,'left');await hold('ArrowLeft',400);await wait(pg,200);await shot('reeds_camp');await flush();
  await tp(660,778,'up');await P('ok');await flush();
  await tp(1220,760,'right');await hold('ArrowRight',600);await wait(pg,500);await shot('temple_intro');await flush();await wait(pg,2700);
- await tp(2.5*T2,8.5*T2,'up');await P('ok');await flush();for(const[x,y]of await E('CFG.templeLanterns.map(q=>q.stand)')){await tp(x*T2,y*T2,'down');await P('ok');await flush()}
- await tp(10.5*T2,6.25*T2,'down');await P('ok');await flush();if(!(await E('G.flags.templeSeal')))throw Error('three lanterns did not allow the seal to be weakened');
- await tp(12.5*T2,11*T2,'up');await wait(pg,300);await shot('temple');
- await tp(10.5*T2,5.3*T2,'up');await wait(pg,200);await shot('temple_boss');await P('ok');await flush();await wait(pg,400);await shot('battle_boss');await fight();
+ // v52 河神廟三張圖：淺灘 → 中庭（讀碑、點三燈、鎮水門）→ 水府後殿（神龕封印、河伯）
+ if(await E('G.map')!=='temple_shore')throw Error('the reeds exit did not lead to the temple shore');
+ await tp(1150,480,'right');await hold('ArrowRight',700);await wait(pg,300);await flush();
+ if(await E('G.map')!=='temple_court')throw Error('the shore gate did not lead to the court');
+ await tp(150,700,'up');await P('ok');await flush();if(!(await E('G.flags.steleSeen')))throw Error('the stele was not read');
+ for(const[x,y]of await E('M_().inter.filter(it=>it.lampBit!=null).map(it=>[it.x,it.y])')){await tp(x,y,'down');await P('ok');await flush()}
+ if((await E('G.flags.templeLamps'))!==7)throw Error('three lanterns were not all lit');await wait(pg,200);await shot('temple_court');
+ await tp(672,230,'up');await hold('ArrowUp',1400);await wait(pg,300);await flush();
+ if(await E('G.map')!=='temple_hall')throw Error('the ward gate did not lead to the hall');
+ await tp(672,500,'down');await P('ok');await flush();if(!(await E('G.flags.templeSeal')))throw Error('the shrine did not weaken the seal');
+ await tp(672,200,'up');await wait(pg,200);await shot('temple_boss');await P('ok');await flush();await wait(pg,400);await shot('battle_boss');await fight();
  await wait(pg,300);await shot('dawn');await flush();await tp(36.3*T,10.6*T-14,'up');await P('ok');await wait(pg,150);await shot('cure');await flush();await wait(pg,1300);
  const mode=await E('G.mode'),party=await E("G.party.map(p=>p.n+' Lv'+p.lv)"),errors=await jsErrors(),fl=await E('JSON.parse(JSON.stringify(G.flags))');await shot('end');await ctx.close();
  const ok=mode==='end'&&errors.length===0&&got&&!!fl.flood&&!!fl.reedSolved&&!!fl.camp&&!!fl.templeSeal&&!!fl.cure&&!!fl.tal&&!!fl.boss;

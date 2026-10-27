@@ -11,7 +11,9 @@ function scenePortrait(n,pk){const s=activeScene();if(!s)return 'pt_'+pk;
  if(s.id==='night'&&n==='陳青舟'&&s.beat>=4&&s.beat<=9)return 'pt_qz_startled';
  if(s.id==='camp'&&n==='白苓'&&s.beat>=4&&s.beat<30)return 'pt_bl_quiet';return 'pt_'+pk}
 function scenePortraitAlpha(now){const s=activeScene();return s?.72+.28*cinEase((now-s.beatAt)/CIN.hold):1}
-function sceneHeboAnchor(){return{x:10.5*T2,y:4.1*T2+(SW>SH?85:0)}}
+// 河伯告別演出的基準點：新版水府後殿用河伯站位；舊版單張河神廟維持原座標。
+function sceneHeboBase(){if(M.templeMap==='hall'){const h=TEMPLE_LAYOUTS.hall.features.hebo;return{x:h.x,y:h.y}}return{x:10.5*T2,y:4.1*T2}}
+function sceneHeboAnchor(){const b=sceneHeboBase();return{x:b.x,y:b.y+(SW>SH?85:0)}}
 function sceneCamera(cx,cy,now){const s=tickScene(now);if(!s||s.id==='night')return{cx,cy,z:1};
  const fire=M.obj.find(o=>o.fire);let x=G.x,y=G.y-30;
  if(s.id==='camp'&&fire){x=fire.x+(G.dlg.l[s.beat]?.[0]==='白苓'?10:-10);y=fire.y-28;}
@@ -32,7 +34,7 @@ function sceneParty(which,now){const s=activeScene();const orig=which==='qz'?{x:
  const fire=M.obj.find(o=>o.fire);let x=orig.x,y=orig.y,dir=orig.dir,rot=0;
  if(s.id==='camp'&&fire){x=fire.x+(which==='qz'?-44:44);y=fire.y+18;dir=which==='qz'?'right':'left';rot=which==='bl'&&s.beat>=12?.035:0;}
  if(s.id==='yx'){x=15*T+(which==='qz'?-20:20);y=18.2*T+(which==='bl'?8:s.beat>=6?-12*(s.beat===6?cinEase((now-s.beatAt)/CIN.walk):1):0);dir='up';}
- if(s.id==='hebo'){x=10.5*T2+(which==='qz'?-44:44);y=4.1*T2+(SW>SH?156:112);dir='up';}
+ if(s.id==='hebo'){const b=sceneHeboBase();x=b.x+(which==='qz'?-44:44);y=b.y+(SW>SH?156:112);dir='up';}
  const p=cinEase((now-s.at)/CIN.walk),pause=now-s.beatAt<CIN.hold;
  return{x:cinLerp(orig.x,x,p),y:cinLerp(orig.y,y,p)+(pause?0:Math.sin(now/750+(which==='qz'?0:1))*.7),dir,f:p<1?(now-s.at)/170:0,rot};
 }
@@ -79,10 +81,13 @@ function drawSceneVeil(cx,cy,now){const s=activeScene();if(s?.id!=='camp')return
  X.save();const p=cinEase((now-s.at)/CIN.fade),g=X.createRadialGradient(fire.x,fire.y-25,28,fire.x,fire.y-25,205);
  g.addColorStop(0,'rgba(5,8,25,0)');g.addColorStop(.55,'rgba(5,8,25,'+(.2*p)+')');g.addColorStop(1,'rgba(3,6,19,'+(.65*p)+')');X.fillStyle=g;X.fillRect(cx,cy,VW,VH);X.restore();
 }
-function drawTempleCandles(now){if(M.id!=='temple')return;const t=now/1000;X.save();X.globalCompositeOperation='lighter';
- M.lights.forEach((l,i)=>{const f=.65+.15*Math.sin(t*8+i*2)+.12*Math.sin(t*13+i),x=l[0],y=l[1];light(x,y,l[2]*(.85+f*.16),'rgba(255,164,80,'+(.15*f)+')');
+function drawTempleCandles(now){if(M.id!=='temple'&&!M.templeMap)return;const t=now/1000;
+ // 新三張圖：石燈生圖時是熄滅的，只有點亮的燈才畫燈焰；舊單張圖維持原本所有燈都有火。
+ const LT=M.templeMap?M.lights.filter(l=>l.lamp!=null&&((G.flags.templeLamps||0)&(1<<l.lamp))):M.lights;
+ X.save();X.globalCompositeOperation='lighter';
+ LT.forEach((l,i)=>{const f=.65+.15*Math.sin(t*8+i*2)+.12*Math.sin(t*13+i),x=l[0],y=l[1];light(x,y,l[2]*(.85+f*.16),'rgba(255,164,80,'+(.15*f)+')');
  X.fillStyle='rgba(255,226,162,.85)';X.beginPath();X.ellipse(x+Math.sin(t*7+i)*1.5,y-2,2.5,6+Math.sin(t*11+i),-.1,0,7);X.fill();});X.restore();
- X.save();M.lights.forEach((l,i)=>{X.fillStyle='rgba(2,5,17,'+(.045+.015*Math.sin(t*5+i))+')';X.beginPath();X.moveTo(l[0]-5,l[1]+10);X.lineTo(l[0]+35+Math.sin(t*4+i)*8,l[1]+115);X.lineTo(l[0]+63,l[1]+115);X.lineTo(l[0]+5,l[1]+10);X.fill();});X.restore();
+ X.save();LT.forEach((l,i)=>{X.fillStyle='rgba(2,5,17,'+(.045+.015*Math.sin(t*5+i))+')';X.beginPath();X.moveTo(l[0]-5,l[1]+10);X.lineTo(l[0]+35+Math.sin(t*4+i)*8,l[1]+115);X.lineTo(l[0]+63,l[1]+115);X.lineTo(l[0]+5,l[1]+10);X.fill();});X.restore();
 }
 function drawSceneOverlay(now){const s=activeScene();UI();X.save();
  if(s){const a=(now-s.at)/CIN.fade;if(a<1){X.fillStyle='rgba(3,8,22,'+(.65*(1-cinEase(a)))+')';X.fillRect(0,0,SW,SH);}
