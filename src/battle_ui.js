@@ -78,12 +78,13 @@ function enemyImage(e,now,x,y,scale){const c=EART[e.e],pose=enemyPose(e,now),im=
 function drawBattleBackground(B){const requested=B.opt.bg||'bg_reeds',key=I[requested]?.naturalWidth?requested:'bg_reeds',im=I[key];if(im?.naturalWidth){B.bgFit=Object.assign(cover(im,.5,.5),{key,width:im.naturalWidth,height:im.naturalHeight})}else{B.bgFit=null;X.fillStyle='#24343c';X.fillRect(-20,-20,SW+40,SH+40)}}
 // 河伯戰：潮位與接下來兩次行動的預告（顏色：退潮藍、平潮白、漲潮橘）
 const TIDE_COL=['#9fd8ff','#ffffff','#ffb36b'],TIDE_TIP=['物理↑ 河伯攻擊↓','','狐火↑ 河伯攻擊↑'];
-function drawTidePanel(B,cx,y,fs){if(!B.hebo)return;const td=tideNow(B),f=heboForecast(B,2),sz=Math.max(11,fs-2),lh=sz+4;
+function drawTidePanel(B,lx,y,fs){if(!B.hebo)return;const td=tideNow(B),f=heboForecast(B,2),sz=Math.max(11,fs-2),lh=sz+4;
  const lines=[['潮位 '+TIDE_N[td],TIDE_COL[td]]];if(TIDE_TIP[td])lines.push([TIDE_TIP[td],TIDE_COL[td]]);
+ const qi=Math.floor((B.qi||0)/CFG.hebo.qiMax*10);lines.push(['渡氣 '+'▮'.repeat(qi)+'▯'.repeat(10-qi)+(qi>=10?' 滿！':''),qi>=10?'#9ff0a0':'#bcd']);
  f.forEach((o,i)=>lines.push([(i?'再來 ':'預告 ')+o.a+'（'+TIDE_N[o.tide][0]+'潮）',o.a==='濁浪'?'#ff9a9a':'#ffe3a6']));
- X.font=sz+'px '+FONT;const w=Math.max(...lines.map(l=>X.measureText(l[0]).width))+14,x=Math.max(w/2+4,Math.min(SW-w/2-4,cx));
- X.fillStyle='rgba(8,18,28,.72)';X.fillRect(x-w/2,y-sz-2,w,lines.length*lh+6);
- lines.forEach((l,k)=>txt(l[0],x,y+k*lh,sz,l[1],'center'))}
+ X.font=sz+'px '+FONT;const w=Math.max(...lines.map(l=>X.measureText(l[0]).width))+14,x=Math.max(SA.l+4,Math.min(lx,SW-SA.r-84-w));
+ X.fillStyle='rgba(8,18,28,.72)';X.fillRect(x,y-sz-2,w,lines.length*lh+6);
+ lines.forEach((l,k)=>txt(l[0],x+7,y+k*lh,sz,l[1],'left'))}
 function talismanPlacement(B,L){const i=B.en.findIndex(e=>e.e==='hebo'),q=L.en(B.en.length,true)[Math.max(0,i)],u=L.U;
  return{x:q[0]+135*u,y:q[1]-135*u,r:21*u}}
 function drawTalisman(B,L,now,fs,H){if(!B.talisman)return;const t=B.talisman,P=talismanPlacement(B,L),active=t.hp>0,elapsed=now-(B.talismanBrokenAt||0);
@@ -116,7 +117,7 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
   const bw=Math.min(90,Math.max(w*.9,60));lab.push(()=>{X.font=(fs-2)+'px '+FONT;txt(e.n,x,y+fs+4,fs-2,'#fff','center');X.fillStyle='#400';X.fillRect(x-bw/2,y+fs+10,bw,6);X.fillStyle='#e44';X.fillRect(x-bw/2,y+fs+10,bw*e.hp/e.mhp,6);
    if(e.e==='hebo'&&B.hebo){const h=B.hebo,label=h.state===HEBO_STATE.CHARGING?'蓄力中・下次濁浪':h.state===HEBO_STATE.STAGGERED?'失衡・跳過行動':h.interfered?'狐火干擾':B.talisman?.hp>0?'控妖符強化':'';
     if(label)txt(label,x,y+fs+32,Math.max(11,fs-2),h.state===HEBO_STATE.CHARGING?'#ffe3a6':'#e8bde9','center');if(h.state===HEBO_STATE.CHARGING&&h.interfered)txt('狐火干擾・傷害降低',x,y+fs+49,Math.max(10,fs-3),'#9bdfff','center')}
-   drawTidePanel(B,x,y+fs+(h.interfered&&h.state===HEBO_STATE.CHARGING?55:38),fs)});
+   drawTidePanel(B,x+w*.5+6,y-h+fs+4,fs)});
   if(B.ph=='target'&&B.tk=='E'){if(B.sel==i)txt('▼',x,y-h-6+Math.sin(t*8)*3,fs+6,'#ff0','center');H.push({x:x-Math.max(w,60)/2,y:y-h-10,w:Math.max(w,60),h:h+fs+30,fn:()=>{B.sel=i;press('ok')}})}});
  lab.forEach(f=>f());
  drawTalisman(B,L,now,fs,H);
@@ -140,7 +141,7 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
   G4.forEach(([ch,i])=>{const cx=L.bx,cy=L.by+i*L.bs,sel=B.sel==i;octBtn(cx,cy,L.bd,ch,sel,fs);push(cx,cy,()=>{B.sel=i;press('ok')})});
   octBtn(L.ex[0],L.ex[1],L.bd,'逃',B.sel==4,fs);push(L.ex[0],L.ex[1],()=>{B.sel=4;press('ok')})}
  else if(B.ph=='skill'||B.ph=='item'){let LL;
-  if(B.ph=='skill'){LL=u2.skills.map(sk=>sk+' '+SK[sk].mp+'MP');info=SK[u2.skills[B.sel]]?SK[u2.skills[B.sel]].d:''}
+  if(B.ph=='skill'){const SKL=bSkills(u2,B);LL=SKL.map(sk=>sk+(SK[sk].mp?' '+SK[sk].mp+'MP':'・渡氣'));info=SK[SKL[B.sel]]?SK[SKL[B.sel]].d:''}
   else{const ks=Object.keys(G.inv).filter(i=>G.inv[i]>0);LL=ks.map(k=>k+'×'+G.inv[k]);info=ks[B.sel]?ITEMS[ks[B.sel]].d:''}
   const lh=fs+16,pw=Math.min(L.aw-24,Math.max(190,fs*11)),ph=(LL.length+1)*lh+12,px=SW-SA.r-12-pw,py=Math.max(SA.t+80,Math.min(L.cy-8-ph,L.by-24));box(px,py,pw,ph,.95);
   [...LL,'◀ 返回'].forEach((l,i)=>{const isB=i==LL.length,sel=!isB&&i==B.sel,iy=py+6+i*lh;
@@ -153,11 +154,16 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
   const s0=f.heal?'+'+f.d:''+f.d,col=f.heal?'#7f7':f.crit?'#ffe14a':B.en.includes(f.t)||f.t===B.talisman?'#fff':'#f88';X.save();X.globalAlpha=Math.min(1,(1-a)*2.2);X.translate(x,y-a*34*u);X.scale(sc,sc);X.font='bold '+(fs+8)+'px '+FONT;X.textAlign='center';X.lineWidth=4;X.strokeStyle=f.heal?'#031':'#000';X.strokeText(s0,0,0);X.fillStyle=col;X.fillText(s0,0,0);
   if(f.crit){X.font='bold '+(fs-1)+'px '+FONT;X.strokeText('會心！',0,-fs-4);X.fillStyle='#ffb02e';X.fillText('會心！',0,-fs-4)}X.restore()}
  if(B.fl){const a=(now-B.fl.at)/B.fl.d;if(a<1){X.fillStyle='rgba('+B.fl.c+','+(B.fl.k*(1-a))+')';X.fillRect(0,0,SW,SH)}else B.fl=null}
+ // ---- 撐篙擋浪光環
+ if(B.ph=='parry'&&B.parry){const P=CFG.hebo.parry,tt=now-B.parry.t0;if(tt>P.dur+P.good){parryResolve('miss');return}
+  const q=G.party.find(p=>p.e==='qz'&&p.hp>0)||G.party[0],F=B.feetOf(q),cx=F[0],cy=F[1]-120*s,Rt=30*u+8,R0=Rt*3.6,k=Math.max(0,Math.min(1,tt/P.dur)),r=tt<=P.dur?R0-(R0-Rt)*k:Rt*(1-(tt-P.dur)/P.good*.6),near=Math.abs(tt-P.dur)<=P.perfect;
+  X.save();X.fillStyle='rgba(0,10,20,.28)';X.fillRect(-20,-20,SW+40,SH+40);X.lineWidth=Math.max(3,4*u);X.strokeStyle='rgba(255,255,255,.9)';X.beginPath();X.arc(cx,cy,Rt,0,7);X.stroke();
+  X.strokeStyle=near?'#7dffa0':'#ffd86b';X.shadowColor=X.strokeStyle;X.shadowBlur=12;X.beginPath();X.arc(cx,cy,Math.max(2,r),0,7);X.stroke();X.restore();H.length=0;H.push({x:-20,y:-20,w:SW+40,h:SH+40,fn:()=>parryTap(performance.now())})}
  // ---- 上方訊息框（指令選單時讓出左上角的逃跑鈕）
  const left=B.ph=='cmd'?SA.l+14+L.bd+8:SA.l+8,mw=Math.min(SW-SA.r-CFG.battleUi.soundSafeWidth-left,CFG.battleUi.messageMaxWidth),mx=left,my=SA.t+8;
  if(B.ph=='msg'){const M0=B.msgs[0],T0=Array.isArray(M0)?M0[0]:(M0||''),mk=B.msgs.length+T0;if(Array.isArray(M0)&&M0[1].at==null)startFx(M0[1],now);if(B.mk!==mk){B.mk=mk;B.mT=now;if(T0.includes('升到了'))playSfx('level')}else if(now-B.mT>1500){B.mk=null;press('ok')}X.font=fs+'px '+FONT;const maxW=Math.max(CFG.battleUi.messageMinWidth,Math.min(CFG.battleUi.messageMaxWidth,SW-SA.l-SA.r-CFG.battleUi.soundSafeWidth-16)),ls=wrap(T0,maxW-CFG.battleUi.messagePadding),textW=Math.max(0,...ls.map(line=>X.measureText(line).width)),boxW=Math.min(maxW,Math.max(CFG.battleUi.messageMinWidth,Math.ceil(textW+CFG.battleUi.messagePadding))),boxX=Math.max(SA.l+8,Math.min((SW-boxW)/2,SW-SA.r-CFG.battleUi.soundSafeWidth-boxW));box(boxX,my,boxW,ls.length*(fs+8)+22,.93);ls.forEach((l,j)=>txt(l,boxX+14,my+fs+10+j*(fs+8),fs));txt('▼',boxX+boxW-20,my+ls.length*(fs+8)+14,fs-5,'#c9b26b')}
- else{X.font=fs+'px '+FONT;const ls=wrap(u2.n+' 的行動'+(info?'：'+info:''),mw-28).slice(0,2);box(mx,my,mw,ls.length*(fs+8)+16,.93);ls.forEach((l,j)=>txt(l,mx+14,my+fs+8+j*(fs+8),fs,'#ffd'))}}
-function bTap(x,y){const B=G.B;if(!B||G.mode!='battle')return;if(B.ph=='msg'){B.mk=null;press('ok');return}
+ else{X.font=fs+'px '+FONT;const ls=wrap(B.ph==='parry'?'看準光環縮到圈上的一瞬間，點一下撐篙擋浪！':u2.n+' 的行動'+(info?'：'+info:''),mw-28).slice(0,2);box(mx,my,mw,ls.length*(fs+8)+16,.93);ls.forEach((l,j)=>txt(l,mx+14,my+fs+8+j*(fs+8),fs,'#ffd'))}}
+function bTap(x,y){const B=G.B;if(!B||G.mode!='battle')return;if(B.ph=='parry'){parryTap(performance.now());return}if(B.ph=='msg'){B.mk=null;press('ok');return}
  const h=(B.hit||[]).slice().reverse().find(r=>x>=r.x&&x<=r.x+r.w&&y>=r.y&&y<=r.y+r.h);if(h)h.fn()}
 {const tp=(x,y)=>{if(G.mode=='battle')bTap(x,y)};cv.addEventListener('touchstart',e=>{if(G.mode!='battle')return;e.preventDefault();const r=cv.getBoundingClientRect();for(const t of e.changedTouches)tp(t.clientX-r.left,t.clientY-r.top)},{passive:false});
  cv.addEventListener('mousedown',e=>{const r=cv.getBoundingClientRect();tp(e.clientX-r.left,e.clientY-r.top)});}

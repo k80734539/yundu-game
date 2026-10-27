@@ -4,12 +4,18 @@
 function newE(k,i,n){return{...EN[k],n:k+(n>1?'ABC'[i]:''),mhp:EN[k].hp,ph:Math.random()*6}}
 const HEBO_STATE={NORMAL:'NORMAL',CHARGING:'CHARGING',RELEASE:'RELEASE',STAGGERED:'STAGGERED'};
 function startBattle(ks,opt){VPT.length=0;G.B={en:ks.map((k,i)=>newE(k,i,ks.length)),opt,ai:-1,ph:'cmd',sel:0,turn:1,msgs:[],after:null,fx:[]};G.prevMode=G.mode;G.mode='battle';G.bT=performance.now();
- if(ks.includes('河伯'))G.B.hebo={state:HEBO_STATE.NORMAL,normals:0,interfered:false,lastAction:null};
+ if(ks.includes('河伯')){G.B.hebo={state:HEBO_STATE.NORMAL,normals:0,interfered:false,lastAction:null,shift:0};G.B.qi=0;G.party.forEach(p=>{if(p.e==='bl')learnSkill(p,'引潮')})}
  const B=G.B;G.party.forEach(p=>p.guard=0);B.msgs=[(EN[ks[0]].boss?'頭目戰！':'妖怪出現了！')+' '+B.en.map(e=>e.n).join('、')].concat(opt.intro||[],ks.includes('河伯')?['河伯身周的潮水忽漲忽退！退潮時物理攻擊更強，漲潮時狐火更強，但河伯也更凶。']:[]);B.ph='msg';B.after=nextActor}
 const alive=a=>a.filter(x=>x.hp>0);
 function enemyTargets(B){return B.talisman?.hp>0?B.en.concat(B.talisman):B.en}
 const TIDE_N=['退潮','平潮','漲潮'];
-function tideAt(turn){const o=CFG.hebo.tide.order;return o[(Math.max(1,turn)-1)%o.length]}
+function tideAt(turn){const o=CFG.hebo.tide.order,sh=(G.B&&G.B.hebo&&G.B.hebo.shift)||0;return o[(Math.max(1,turn)-1+sh)%o.length]}
+function addQi(n){const B=G.B;if(B&&B.hebo)B.qi=Math.min(CFG.hebo.qiMax,(B.qi||0)+n)}
+function bSkills(u,B){return u.skills.concat(B&&B.hebo&&(B.qi||0)>=CFG.hebo.qiMax&&u.e==='qz'?['雲渡一擊']:[])}
+// 撐篙擋浪：濁浪釋放前停下來，玩家在光環縮到圈上的瞬間點一下
+function parryGradeAt(now){const B=G.B,P=CFG.hebo.parry,d=Math.abs(now-B.parry.t0-P.dur);return d<=P.perfect?'perfect':d<=P.good?'good':'miss'}
+function parryResolve(grade){const B=G.B,P=CFG.hebo.parry;if(!B||!B.parry)return;B.parry=null;B.parryGrade=grade;if(grade==='perfect')addQi(P.qiPerfect);else if(grade==='good')addQi(P.qiGood);enemyPhase()}
+function parryTap(now){const B=G.B;if(!B||!B.parry)return;parryResolve(parryGradeAt(now))}
 function tideNow(B){return B&&B.hebo?tideAt(B.turn):1}
 function heboPower(e,B){const T=CFG.hebo.tide,td=tideNow(B);return e.atk*(B.talisman?.hp>0?CFG.hebo.talismanAttackBoost:1)*(td===0?T.atkEbb:td===2?T.atkRise:1)}
 // 預告河伯接下來 n 次行動（依目前狀態推演；每一回合的潮位也列出）
@@ -27,7 +33,7 @@ function wr(m,i,k,src,tg){const B=G.B;m[i]=[m[i],{k,src,tg:tg||[],hits:(B.q||[])
 function dmg(pw,t,ign,cr){if(t.e==='hebo'&&G.B?.hebo){const T=CFG.hebo.tide,td=tideNow(G.B);if(td===0&&!ign)pw*=T.physEbb;if(td===2&&ign)pw*=T.magicRise}
  let d=Math.max(1,Math.round(pw-(ign?0:t.def+(t.arm||0))+Math.random()*4-1));if(cr)d=Math.round(d*1.6);if(t.guard)d=Math.ceil(d/2);t.hp=Math.max(0,t.hp-d);hit(t,d,{crit:cr,big:cr||(t.mhp>=60&&d>=t.mhp*.3)});return d}
 function ko(t,m){if(t.hp>0)return;
- if(t===G.B?.talisman){if(!t.broken){t.broken=1;G.B.talismanBrokenAt=performance.now();G.B.hebo.state=HEBO_STATE.STAGGERED;G.B.hebo.normals=0;G.B.hebo.interfered=false;m.push('控妖符碎裂！河伯的蓄力被打斷，身形失衡！')}return}
+ if(t===G.B?.talisman){if(!t.broken){t.broken=1;addQi(CFG.hebo.qiBreak);G.B.talismanBrokenAt=performance.now();G.B.hebo.state=HEBO_STATE.STAGGERED;G.B.hebo.normals=0;G.B.hebo.interfered=false;m.push('控妖符碎裂！河伯的蓄力被打斷，身形失衡！')}return}
  m.push(t.n+(EN[t.n.replace(/[ABC]$/,'')]?'被打倒了！':'倒下了！'))}
 function heboPhase(m){const B=G.B,hebo=B.en.find(e=>e.e=='hebo');if(!hebo||hebo.hp<=0||hebo.hp>hebo.mhp*CFG.hebo.phaseHp||B.heboPhase2)return;
  B.heboPhase2=1;B.talisman={n:'控妖符',e:'talisman',hp:CFG.hebo.talismanHp,mhp:CFG.hebo.talismanHp,def:CFG.hebo.talismanDef,arm:0};
@@ -41,12 +47,18 @@ function heboTurn(e,B,m,ps){const H=B.hebo;
  if(H.state===HEBO_STATE.CHARGING){H.state=HEBO_STATE.RELEASE;H.lastAction=HEBO_STATE.RELEASE;const i0=m.length;
   m.push(H.interfered?'狐火擾亂水流，河伯的「濁浪滔天」威力減弱！':'河伯掀起「濁浪滔天」！');
   const power=heboPower(e,B)*CFG.hebo.wavePower*(H.interfered?1-CFG.hebo.foxfireWaveReduction:1);
-  ps.forEach(p=>{m.push(p.n+'受到'+dmg(power,p)+'點傷害！');ko(p,m)});wr(m,i0,'wave',e,ps);H.interfered=false;return}
+  const gr=B.parryGrade,PC=CFG.hebo.parry,pm=gr==='perfect'?PC.perfectMul:gr==='good'?PC.goodMul:1;
+  if(gr==='perfect')m.push('青舟撐篙，正正擋住浪頭！');else if(gr==='good')m.push('青舟撐篙，卸去了部分浪勢。');
+  ps.forEach(p=>{m.push(p.n+'受到'+dmg(power*pm,p)+'點傷害！');ko(p,m)});wr(m,i0,'wave',e,ps);H.interfered=false;B.parryGrade=null;
+  if(gr==='perfect'){const q=G.party.find(p=>p.e==='qz'&&p.hp>0)||ps[0];m.push('浪頭反彈，河伯受到'+dmg(q.atk*PC.reflect,e)+'點傷害！');ko(e,m);wr(m,m.length-1,'slash',q,[e])}
+  return}
  if(H.normals>=CFG.hebo.normalBeforeCharge[B.heboPhase2?1:0]){H.state=HEBO_STATE.CHARGING;H.lastAction=HEBO_STATE.CHARGING;H.interfered=false;m.push('河伯捲起河水蓄力！下一次行動將施放「濁浪滔天」！');return}
  H.lastAction=HEBO_STATE.NORMAL;H.normals++;const p=ps[rnd(ps.length)],i0=m.length;
  m.push(e.n+'甩動龍尾，'+p.n+'受到'+dmg(heboPower(e,B),p)+'點傷害！');ko(p,m);
  if(p.hp>0&&!p.st&&Math.random()<.3){p.st='中毒';m.push(p.n+'中毒了！')}wr(m,i0,'tail',e,[p])}
-function enemyPhase(){const B=G.B,m=[];heboPhase(m);
+function enemyPhase(){const B=G.B,m=[];
+ if(B.hebo&&B.hebo.state===HEBO_STATE.CHARGING&&B.parryGrade==null&&!B.opt.noParry&&alive(G.party).some(p=>p.e==='qz')&&alive(B.en).some(e=>e.e==='hebo')){B.ph='parry';B.parry={t0:performance.now()};B.msgs=[];return}
+ heboPhase(m);
  for(const e of alive(B.en)){const ps=alive(G.party);if(!ps.length)break;
   if(e.e==='hebo'){heboTurn(e,B,m,ps);continue}
   const p=ps[rnd(ps.length)],i0=m.length,K=e.e==='lu'||e.e==='laolu'?'leaf':'splash';
@@ -54,7 +66,7 @@ function enemyPhase(){const B=G.B,m=[];heboPhase(m);
   if(p.hp>0&&!p.st&&e.poison&&Math.random()<e.poison){p.st='中毒';m.push(p.n+'中毒了！')}wr(m,i0,K,e,[p])}
  alive(G.party).forEach(p=>{if(p.st=='中毒'){const d=Math.max(3,Math.round(p.mhp*.06));p.hp=Math.max(1,p.hp-d);hit(p,d);m.push(p.n+'因中毒損失'+d+'HP。');wr(m,m.length-1,'poison',p,[p])}});
  if(B.hebo&&alive(B.en).length)m.push('潮水轉為「'+TIDE_N[tideAt(B.turn+1)]+'」。');
- B.msgs=m.length?m:['……'];B.ph='msg';B.after=()=>{if(B.hebo?.state===HEBO_STATE.RELEASE||B.hebo?.state===HEBO_STATE.STAGGERED){B.hebo.state=HEBO_STATE.NORMAL;B.hebo.normals=0}if(!alive(G.party).length){G.mode='over'}else{B.turn++;G.party.forEach(p=>p.guard=0);B.ai=-1;nextActor()}}}
+ B.msgs=m.length?m:['……'];B.ph='msg';B.after=()=>{if(B.hebo?.state===HEBO_STATE.RELEASE||B.hebo?.state===HEBO_STATE.STAGGERED){B.hebo.state=HEBO_STATE.NORMAL;B.hebo.normals=0}B.parryGrade=null;if(!alive(B.en).length){win();return}if(!alive(G.party).length){G.mode='over'}else{B.turn++;G.party.forEach(p=>p.guard=0);B.ai=-1;nextActor()}}}
 function win(){const B=G.B,ex=B.en.reduce((s,e)=>s+e.exp,0),m=['勝利！獲得 '+ex+' 經驗值。'];
  if(Math.random()<.35&&!B.opt.onWin){G.inv.魚乾++;m.push('撿到了「魚乾」！')}
  G.party.forEach(p=>{if(p.hp<=0)p.hp=1;p.exp+=ex;while(p.exp>=p.lv*20){p.exp-=p.lv*20;p.lv++;p.mhp+=9;p.mmp+=3;p.atk+=2;p.def+=1;p.mag+=2;p.hp=p.mhp;p.mp=p.mmp;m.push(p.n+'升到了 Lv'+p.lv+'！HP/MP全滿！')}});
@@ -65,15 +77,21 @@ function exec(t){const B=G.B,u=G.party[B.ai],P=B.pend,m=[];
   if(P.s=='橫掃'){m.push(u.n+'使出「橫掃」！竹篙掃過一片水花！');alive(enemyTargets(B)).forEach(e=>{m.push(e.n+'受到'+dmg(u.atk*.85,e)+'點傷害！');ko(e,m)});wr(m,0,'sweep',u)}
   if(P.s=='渡水一擊'){m.push(u.n+'使出「渡水一擊」！水靈纏上竹篙，重擊'+t.n+'，造成'+dmg(u.atk*CFG.skills.渡水一擊.power,t)+'點傷害！');ko(t,m);wr(m,0,'sweep',u,[t])}
   if(P.s=='狐火'){m.push(u.n+'喚出「狐火」！藍色火焰燒向'+t.n+'，造成'+dmg(u.mag*2.2,t,1)+'點傷害！');ko(t,m);wr(m,0,'foxfire',u,[t]);
-   if(u.e==='bl'&&t.e==='hebo'&&t.hp>0&&B.hebo?.state===HEBO_STATE.CHARGING&&!B.hebo.interfered){B.hebo.interfered=true;m.push('狐火擾亂河伯周身的水流，下一次濁浪威力減弱！')}}
+   if(u.e==='bl'&&t.e==='hebo'&&t.hp>0&&B.hebo?.state===HEBO_STATE.CHARGING&&!B.hebo.interfered){B.hebo.interfered=true;addQi(CFG.hebo.qiFox);m.push('狐火擾亂河伯周身的水流，下一次濁浪威力減弱！')}}
+  if(P.s=='引潮'){if(!B.hebo){m.push('這裡沒有潮水可引。')}else{B.hebo.shift++;addQi(CFG.hebo.qiPull);m.push(u.n+'引動潮水！潮位轉為「'+TIDE_N[tideNow(B)]+'」。');wr(m,0,'guard',u,[u])}}
+  if(P.s=='雲渡一擊'){m.push('青舟與白苓合力使出「雲渡一擊」！');B.qi=0;const o=CFG.hebo.tide.order,cur=(B.turn-1+B.hebo.shift)%o.length,want=o.indexOf(0);B.hebo.shift+=(want-cur+o.length)%o.length;
+   alive(B.en).forEach(e=>{const d=Math.round(e.mhp*CFG.hebo.combo.hpFrac);e.hp=Math.max(0,e.hp-d);hit(e,d,{big:1,crit:1});m.push(e.n+'受到'+d+'點傷害！');ko(e,m);
+    if(e.e==='hebo'&&e.hp>0){B.hebo.state=HEBO_STATE.STAGGERED;B.hebo.normals=0;B.hebo.interfered=false;m.push('河伯被打得失去平衡，下一次行動無法行動！潮水退去。')}});
+   wr(m,0,'sweep',u,alive(B.en))}
   if(P.s=='春霖'){m.push(u.n+'施展「春霖」，細雨灑落全隊。');alive(G.party).forEach(p=>{const h=Math.min(p.mhp-p.hp,22+u.mag);p.hp+=heal(p,h);m.push(p.n+'回復'+h+'HP。')});wr(m,0,'rain',u,alive(G.party))}}
  else if(P.t=='it'){G.inv[P.k]--;if(P.k=='魚乾'){const h=Math.min(t.mhp-t.hp,40);t.hp+=heal(t,h);m.push(u.n+'使用魚乾，'+t.n+'回復'+h+'HP。');wr(m,0,'item',u,[t])}
   else{t.st='';const h=Math.min(t.mhp-t.hp,15);t.hp+=heal(t,h);m.push(u.n+'使用清心草，'+t.n+'的異常狀態解除了，回復'+h+'HP。');wr(m,0,'item',u,[t])}}
  act(m)}
-function goTarget(kind){const B=G.B;if(kind=='allE'||kind=='allA')return exec(null);B.tk=kind=='oneE'?'E':'A';B.ph='target';const L=B.tk=='E'?enemyTargets(B):G.party;B.sel=L.findIndex(x=>x.hp>0)}
+function goTarget(kind){const B=G.B;if(kind=='allE'||kind=='allA'||kind=='self')return exec(null);B.tk=kind=='oneE'?'E':'A';B.ph='target';const L=B.tk=='E'?enemyTargets(B):G.party;B.sel=L.findIndex(x=>x.hp>0)}
 function bKey(k){const B=G.B,u=G.party[B.ai];
+ if(B.ph=='parry'){if(k=='ok')parryTap(performance.now());return}
  if(B.ph=='msg'){if(k=='ok'){const o=B.msgs.shift();if(Array.isArray(o)&&o[1].at==null)startFx(o[1],performance.now());finishBattleMotion(performance.now());if(!B.msgs.length){const f=B.after;B.after=null;f&&f()}}return}
- const lists={cmd:['攻擊','技能','道具','防禦','逃跑'],skill:u.skills,item:Object.keys(G.inv).filter(i=>G.inv[i]>0&&ITEMS[i])},L=lists[B.ph];
+ const lists={cmd:['攻擊','技能','道具','防禦','逃跑'],skill:bSkills(u,B),item:Object.keys(G.inv).filter(i=>G.inv[i]>0&&ITEMS[i])},L=lists[B.ph];
  if(B.ph=='target'){const A=B.tk=='E'?enemyTargets(B):G.party;if(k=='cancel'){B.ph='cmd';B.sel=0;return}
   if(k=='left'||k=='up'||k=='right'||k=='down'){const s=(k=='left'||k=='up')?-1:1;let i=B.sel;do{i=(i+s+A.length)%A.length}while(A[i].hp<=0&&B.tk=='E');B.sel=i}
   if(k=='ok')exec(A[B.sel]);return}
@@ -84,7 +102,7 @@ function bKey(k){const B=G.B,u=G.party[B.ai];
   if(c==0){B.pend={t:'atk'};goTarget('oneE')}
   else if(c==1){B.ph='skill';B.sel=0}
   else if(c==2){if(!lists.item.length){B.msgs=['沒有可用的道具。'];B.ph='msg';B.after=()=>{B.ph='cmd'};return}B.ph='item';B.sel=0}
-  else if(c==3){u.guard=1;const gain=Math.min(CFG.guardMp,u.mmp-u.mp);u.mp+=gain;const m=[u.n+'擺出防禦架勢，回復'+gain+' MP。'];wr(m,0,'guard',u,[u]);act(m)}
+  else if(c==3){u.guard=1;const gain=Math.min(CFG.guardMp,u.mmp-u.mp);u.mp+=gain;if(B.hebo)addQi(CFG.hebo.qiGuard);const m=[u.n+'擺出防禦架勢，回復'+gain+' MP。'];wr(m,0,'guard',u,[u]);act(m)}
   else{if(B.opt.noEsc){B.msgs=['逃不掉！'];B.ph='msg';B.after=()=>{B.ph='cmd'};return}
    if(Math.random()<.65){B.msgs=['成功逃跑了！'];B.ph='msg';B.after=()=>{G.B=null;G.mode='map';if(B.opt.onEscape)B.opt.onEscape()}}else{B.ai=G.party.length;act(['逃跑失敗！'])}}}
  else if(B.ph=='skill'){const n=L[B.sel],s=SK[n];if(u.mp<s.mp){B.msgs=['法力不足！'];B.ph='msg';B.after=()=>{B.ph='cmd'};return}B.pend={t:'sk',s:n};goTarget(s.tgt)}

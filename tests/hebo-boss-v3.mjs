@@ -9,7 +9,7 @@ export async function heboBossV3(browser,url){
   const result=await pg.evaluate(()=>{
    newGame();G.dlg=null;G.party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']));
    const heboPowerAtDamage=()=>{G.B.turn--;const v=heboPower(G.B.en[0],G.B);G.B.turn++;return v};
-   const begin=()=>{__sb(['河伯'],{noEsc:1});G.B.ph='cmd';G.B.ai=0;G.party.forEach(p=>{p.hp=999;p.mhp=999;p.st='';p.guard=0;p.mp=p.mmp})};
+   const begin=()=>{__sb(['河伯'],{noEsc:1,noParry:1});G.B.ph='cmd';G.B.ai=0;G.party.forEach(p=>{p.hp=999;p.mhp=999;p.st='';p.guard=0;p.mp=p.mmp})};
    const turn=()=>{enemyPhase();const B=G.B,r={action:B.hebo?.lastAction||'NORMAL',state:B.hebo?.state,msg:B.msgs.map(x=>Array.isArray(x)?x[0]:x),hp:G.party.map(p=>p.hp),turn:B.turn};B.after();return r};
    begin();const first=[turn(),turn(),turn(),turn(),turn(),turn(),turn(),turn()];
    begin();G.B.en[0].hp=90;const beforeTurn=G.B.turn;act(['命中']);const phase={hp:G.B.talisman?.hp,def:G.B.talisman?.def,buff:heboPower(G.B.en[0],G.B),turn:G.B.turn,warning:G.B.msgs.filter(m=>m==='控妖符的紋路閃了一下……').length};act(['命中']);phase.warningAgain=G.B.msgs.filter(m=>m==='控妖符的紋路閃了一下……').length;phase.noExtraAction=G.B.turn===beforeTurn;
