@@ -17,6 +17,7 @@ export async function chapterOneWrapup(browser,url){
   const start=await beginFerryFight(pg);
   assert(start.battle&&start.enemies.length===2&&start.enemies.every(e=>e==='shui'),'the first eligible boarding attempt starts a fixed two-water-demon battle');
   assert.equal(start.checkpoint.map,'village','defeat checkpoint is in the village');
+  assert.deepEqual([start.checkpoint.x,start.checkpoint.y],[20*32,14*32],'defeat checkpoint is the safe village starting area, away from the boarding trigger');
   assert(start.intro.join(' ').includes('攻擊')&&start.intro.join(' ').includes('橫掃'),'the opening fight carries the basic battle tutorial');
   const won=await pg.evaluate(()=>{
    G.B.msgs=[];G.B.en.forEach(e=>e.hp=0);win();for(let i=0;i<30&&G.B;i++)bKey('ok');
