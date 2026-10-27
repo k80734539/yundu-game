@@ -57,12 +57,14 @@ function templeJump(key){
  return true}
 function templeHashJump(){const m=/^#temple-(shore|court|hall)$/.exec(location.hash||'');if(m)templeJump(m[1])}
 // 河伯水影沿用河伯的圖，預先疊成偏藍暗的剪影並快取（不用 ctx.filter，iOS 也看得到）。
-function templeEnsureShadowSprites(){
- if(I.hebos)return;
+function templeEnsureShadowSprites(sync){
  if(!I.hebo?.naturalWidth)return;
  const tint=src=>{const c=document.createElement('canvas');c.width=src.naturalWidth||src.width;c.height=src.naturalHeight||src.height;const x=c.getContext('2d');x.drawImage(src,0,0);x.globalCompositeOperation='source-atop';x.fillStyle='rgba(24,44,110,.58)';x.fillRect(0,0,c.width,c.height);const im=new Image();im.src=c.toDataURL('image/png');return im};
- I.hebos=tint(I.hebo);for(const p of['idle0','idle1','cast','attack','hit','down'])if(I['hebo_'+p]?.naturalWidth)I['hebos_'+p]=tint(I['hebo_'+p]);
- if(typeof EART!=='undefined'&&EART.hebo)EART.hebos=EART.hebo}
+ if(!I.hebos)I.hebos=tint(I.hebo);        // 底圖一定要有，戰鬥畫面的備援會用到
+ if(typeof EART!=='undefined'&&EART.hebo)EART.hebos=EART.hebo;
+ // 各姿勢圖編碼很吃時間：進後殿時一張一張分批做，避免卡頓；要開打前用 sync 一次補齊。
+ let delay=0;for(const p of['idle0','idle1','cast','attack','hit','down']){const k='hebos_'+p;if(I[k]||!I['hebo_'+p]?.naturalWidth)continue;
+  if(sync)I[k]=tint(I['hebo_'+p]);else{delay+=80;setTimeout(()=>{if(!I[k])I[k]=tint(I['hebo_'+p])},delay)}}}
 // 疊水、踏板、鎖門：底圖畫成乾的，由遊戲動態疊上去；條件滿足後淡出／淡入。
 function drawTempleOverlays(now){
  const L=TEMPLE_LAYOUTS[M.templeMap];if(!L)return;const A=M.templeAnim||{},fade=(id,since)=>since==null?0:Math.max(0,1-(now-since)/1400);

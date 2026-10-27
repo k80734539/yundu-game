@@ -36,7 +36,7 @@ export async function chapterOnePacing(browser,url){
    });
    assert.equal(old.temple,1);assert.equal(old.camp,1);assert.equal(old.templeVer,old.campVer,'old-save migrations preserve SAVE_VER');
    const lamps=await pg.evaluate(()=>{
-    G.dlg=null;G.flags={steleSeen:1};loadMap('temple_court',...templePos('court','arrival'),'up');G.dlg=null;
+    G.dlg=null;G.flags={steleSeen:1,templeSluice:1};loadMap('temple_court',...templePos('court','arrival'),'up');G.dlg=null;
     const targets=M.inter.filter(it=>it.lampBit!=null).map(it=>[it.x,it.y]);
     const reachable=targets.map(([x,y])=>!blocked(x,y));const before=G.flags.templeLamps||0;templeSeal();const sealInitiallyBlocked=!G.flags.templeSeal;
     for(let i=0;i<targets.length;i++)lightTempleLantern(i);

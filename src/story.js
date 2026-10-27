@@ -40,7 +40,7 @@ function templeLampWrong(){if(!G.flags.steleSeen)return say(S.lanternNoStele);co
  say(S.templeLampWrong,()=>startBattle(e.enemies.slice(),{bg:e.bg||'bg_temple',onWin:()=>say(S.templeLampWrongWin),onEscape:()=>say(S.templeLampWrongWin)}))}
 function templeShrine(){const f=G.flags;if(!f.steleSeen)return say(S.sealNoClue);if(f.templeSeal)return say(S.sealRepeat);if((f.templeLamps||0)!==templeLanternMask())return say(S.sealNoLamps);
  if(f.templeHallShadow){f.templeSeal=1;return say(S.seal)}
- saveCP({map:'temple_hall',x:672,y:830,dir:'up'});
+ saveCP({map:'temple_hall',x:672,y:830,dir:'up'});templeEnsureShadowSprites(true);
  say(S.templeShrineInk,()=>startBattle(['河伯水影'],{bg:'bg_temple',noEsc:1,onWin:()=>{f.templeHallShadow=1;f.templeSeal=1;say(S.templeShadowWin.concat(S.seal))}}))}
 function lightTempleLantern(i){const f=G.flags;if(!f.steleSeen)return say(S.lanternNoStele);const bit=1<<i;if((f.templeLamps||0)&bit)return;f.templeLamps=(f.templeLamps||0)|bit;const glow=M.lights.find(l=>l.lamp===i);if(glow)glow[3]='rgba(191,239,240,.5)';M.inter=M.inter.filter(it=>it.lampBit!==i);const lines=[['','燈芯泛起青白微光，水紋沿著石燈亮了一圈。']];if(f.templeLamps===templeLanternMask()){lines.push(['提示','三盞燈都亮了。北邊的鎮水門開了，中央水道的水也退了，從中庭北側進入水府後殿。']);if(M.templeAnim)M.templeAnim.lamps=performance.now()}say(lines)}
 function reedTrial(){const f=G.flags;if(!f.tal)return say(S.trialNoTalisman);if(G.party.length<2)return say(S.trialNoPartner);
