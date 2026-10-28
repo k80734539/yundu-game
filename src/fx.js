@@ -6,7 +6,7 @@ function vp(o){if(VPT.length>=VMAX)VPT.shift();VPT.push(Object.assign({vx:0,vy:0
 function burst(x,y,n,col,sp,o){for(let i=0;i<n;i++){const a=Math.random()*6.283,v=sp*(.35+Math.random()*.9);vp(Object.assign({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,col:Array.isArray(col)?col[i%col.length]:col,sz:1.5+Math.random()*3,life:280+Math.random()*320},o||{}))}}
 function shake(a,d){if(G.B)G.B.shk={at:performance.now(),a,d:d||300}}
 function flash(d,c,k){if(G.B)G.B.fl={at:performance.now(),d:d||160,c:c||'255,255,255',k:k||.45}}
-const VIMP={slash:110,claw:150,sweep:200,foxfire:330,rain:320,item:160,guard:60,splash:170,leaf:220,tail:190,wave:520,poison:120,drink:300,whirl:260,spear:280,roar:300},VDUR={slash:380,claw:420,sweep:520,foxfire:620,rain:850,item:600,guard:500,splash:500,leaf:520,tail:480,wave:900,poison:500,drink:800,whirl:640,spear:700,roar:800};
+const VIMP={slash:110,claw:150,sweep:200,foxfire:330,rain:320,item:160,guard:60,splash:170,leaf:220,tail:190,wave:520,poison:120,drink:300,whirl:260,spear:280,roar:300,step:300,press:340,mist:260},VDUR={slash:380,claw:420,sweep:520,foxfire:620,rain:850,item:600,guard:500,splash:500,leaf:520,tail:480,wave:900,poison:500,drink:800,whirl:640,spear:700,roar:800,step:800,press:760,mist:900};
 function startFx(sp,now){const B=G.B;if(!B||sp.at!=null)return;sp.at=now;const pl=G.party.includes(sp.src)?bPlan(sp.src.e,sp.k):null;if(pl){sp.plan=pl;sp.delay=pl.delay;(B.an=B.an||[]).push({p:sp.src,sp,plan:pl,at:now})}if(!sp.tg.length)sp.tg=[...new Set(sp.hits.map(h=>h.t))];(B.vx=B.vx||[]).push(sp);const im=VIMP[sp.k]||150;
  sp.hits.forEach((h,i)=>{const at=now+(sp.delay||0)+im+(sp.k=='sweep'?i*70:sp.k=='wave'?i*90:0);B.fx.push({t:h.t,d:h.d,crit:h.crit,heal:h.heal,big:h.big,at,sp});if(h.t.hp<=0&&B.en.includes(h.t))h.t.dieAt=at})}
 function glowLine(pts,w,col,a){X.save();X.globalCompositeOperation='lighter';X.lineCap='round';X.lineJoin='round';for(const[k,c]of[[3,col],[1.6,col],[.6,'#fff']]){X.globalAlpha=a*(k==3?.25:k>1?.55:1);X.strokeStyle=c;X.lineWidth=w*k;X.beginPath();pts.forEach((p,i)=>i?X.lineTo(p[0],p[1]):X.moveTo(p[0],p[1]));X.stroke()}X.restore()}
@@ -63,6 +63,18 @@ function drawVFX(now){const B=G.B,u=B.u||1,dt=Math.min(50,now-(B.vlt||now))/16.7
     if(fire){burst(q[0],q[1]+q[3]*.2,16,['#cff','#58c8ff','#fff'],6*u);shake(big?10:7,260);if(big)flash(140)}});break;
   case'roar':{if(!S)break;const RI=I.fx_charge_ring;for(let k=0;k<3;k++){const tt=t-k*140;if(tt<0||tt>620)continue;const a=1-tt/620,rs=(60+tt*.9)*u;if(RI?.naturalWidth){X.save();X.globalCompositeOperation='lighter';X.globalAlpha=a*.7;X.drawImage(RI,S[0]-rs,S[1]-S[3]*.4-rs,rs*2,rs*2);X.restore()}else{X.save();X.globalAlpha=a;X.strokeStyle='#bff';X.lineWidth=3*u;X.beginPath();X.arc(S[0],S[1]-S[3]*.4,rs,0,7);X.stroke();X.restore()}}
     if(fire){shake(9,520);flash(150,'200,230,255')}break}
+  case'step':P.forEach(q=>{const k=Math.min(1,Math.max(0,(t-imp)/420));
+    if(t<imp){const p=t/imp;X.save();X.globalAlpha=.55*p;X.strokeStyle='#9fd8ff';X.lineWidth=2*u;X.beginPath();X.ellipse(q[0],q[1]+q[3]*.4,(70-48*p)*u,(20-12*p)*u,0,0,7);X.stroke();X.restore()}
+    else if(t<imp+560){for(let r=0;r<3;r++){const kk=Math.max(0,k-r*.18);if(kk<=0)continue;X.save();X.globalAlpha=(1-kk)*.9;X.strokeStyle=r?'#cfeaff':'#fff';X.lineWidth=(5-r)*u;X.beginPath();X.ellipse(q[0],q[1]+q[3]*.42,(20+kk*130)*u,(7+kk*34)*u,0,0,7);X.stroke();X.restore()}
+      const SPI=I.fx_splash;if(SPI?.naturalWidth){const w=(150+k*70)*u;X.save();X.globalAlpha=Math.max(0,1-k);X.drawImage(SPI,q[0]-w/2,q[1]-w*.28,w,w);X.restore()}}
+    if(fire){burst(q[0],q[1]+q[3]*.3,30,['#fff','#9fd8ff','#c9b27a'],8*u,{g:.25*u});shake(big?16:12,380);flash(160,'230,245,255',.35)}});break;
+  case'press':P.forEach(q=>{const RI=I.fx_charge_ring;
+    if(t<imp+380&&RI?.naturalWidth){const p=Math.min(1,t/imp),rs=(1.35-.8*p)*Math.max(140*u,q[2]*1.1);X.save();X.globalCompositeOperation='lighter';X.globalAlpha=.75*(t<imp?1:Math.max(0,1-(t-imp)/380));X.drawImage(RI,q[0]-rs/2,q[1]-q[3]*.45-rs/2,rs,rs);X.restore()}
+    if(t<imp)for(let k=0;k<2;k++)if(Math.random()<dt)vp({x:q[0]+(Math.random()-.5)*q[2],y:q[1]-q[3]*1.1,vy:9*u,col:'#bff',sz:2,life:220,ln:14*u});
+    if(fire){burst(q[0],q[1]+q[3]*.2,26,['#fff','#7fd0ff'],8*u);shake(12,340);flash(150,'180,225,255',.3)}});break;
+  case'mist':P.forEach(q=>{const a=Math.sin(Math.min(1,t/VDUR.mist)*Math.PI);for(let k=0;k<4;k++){const ang=t/420+k*1.7,rx=(q[2]*.28)*Math.cos(ang),ry=(q[3]*.18)*Math.sin(ang*1.3);orb(q[0]+rx,q[1]-q[3]*.35+ry,(46+k*10)*u,'rgba(235,245,255,.55)','rgba(200,225,245,0)',.5*a)}
+    if(t<VDUR.mist-200&&Math.random()<.6*dt)vp({x:q[0]+(Math.random()-.5)*q[2]*.9,y:q[1]-q[3]*.1+Math.random()*q[3]*.4,vx:(Math.random()-.5)*1.2*u,vy:-.5*u,col:'#e6f2ff',sz:3+Math.random()*3,life:700});
+    if(fire)burst(q[0],q[1]-q[3]*.3,14,['#e6f2ff','#bfe0ff'],4*u)});break;
   case'poison':P.forEach(q=>{if(t<380&&Math.random()<.8*dt)vp({x:q[0]+(Math.random()-.5)*q[2],y:q[1]+q[3]*.3,vy:-(.6+Math.random())*u,col:Math.random()<.5?'#b46cff':'#e0a0ff',sz:3+Math.random()*3,life:500,ring:1})});break}}
  // particles
  X.save();X.globalCompositeOperation='lighter';for(let i=VPT.length-1;i>=0;i--){const p=VPT[i],a=1-(now-p.b)/p.life;if(a<=0){VPT.splice(i,1);continue}

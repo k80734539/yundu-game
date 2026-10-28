@@ -32,6 +32,7 @@ export async function heboTide(browser,url){
    const beginP=()=>{__sb(['河伯'],{noEsc:1,noMoves:1});G.B.ph='cmd';G.B.ai=0;G.party.forEach(p=>{p.hp=999;p.mhp=999;p.st='';p.guard=0;p.mp=p.mmp});G.B.hebo.state=HEBO_STATE.CHARGING;G.B.turn=1};
    const parryRun=(off)=>{beginP();Math.random=()=>0.25;G.B.en[0].hp=G.B.en[0].mhp;enemyPhase();const ph1=G.B.ph;const t0=G.B.parry.t0;parryTap(t0+1000+off);Math.random=old;const lost=999-G.party[0].hp,hh=G.B.en[0].hp,qi=G.B.qi;return{ph1,lost,hh,qi,mhp:G.B.en[0].mhp,grade:G.B.parryGrade,ph:G.B.ph}};
    out.parry={perfect:parryRun(0),good:parryRun(200),miss:parryRun(600),early:parryRun(-700)};
+   out.juice=['perfect','good','miss'].map(g=>{beginP();enemyPhase();parryResolve(g);return !!(G.B.pop&&G.B.zoom)});
    // 逾時由畫面更新自動判定為失誤（模擬：parry 過期）
    beginP();enemyPhase();const t0=G.B.parry.t0;out.timeoutGrade=parryGradeAt(t0+1000+400);
    // noParry 與青舟倒下時不會停下
@@ -115,6 +116,7 @@ export async function heboTide(browser,url){
   assert.equal(r.spearF,'spear');assert(r.mark,'spear marks its target ahead of time');assert.equal(r.spearGuard,0,'guarding the marked hero blocks the spear');assert(r.spearHit>0,'unguarded target gets hit');
   assert.deepEqual(r.roar.weak,[3,3]);assert(r.roar.atk<r.roar.base,'weak lowers attack');assert(r.roarGone.every(w=>w===0),'weak wears off');assert(r.cleanse.every(w=>w===0),'春霖 cleanses weak');
   assert.equal(r.chain.fc3.join(),'wave,wave,tail','forecast shows the chained second wave');assert.equal(r.chain.p1,'parry');assert.equal(r.chain.p2,'parry','second wave opens a second parry');assert.deepEqual([r.chain.st1.state,r.chain.st1.chained],['CHARGING',1]);assert.equal(r.chain.st2.chained,0);
+  assert.deepEqual(r.juice,[true,true,false],'parry feedback (zoom + big text) on perfect/good, not on miss');
   assert(r.comboHidden&&r.comboShown);assert.deepEqual([r.combo.dmg,r.combo.qi,r.combo.state,r.combo.tide],[r.combo.expect,0,'STAGGERED',0]);assert.equal(r.qiGuard,r.cfg.qiGuard);
 
   assert.deepEqual(r.order,[1,2,0,1,2,0]);assert(r.intro,'intro mentions tide');

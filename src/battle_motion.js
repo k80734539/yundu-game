@@ -17,7 +17,8 @@ const BPLAN={
  yx:{slash:{delay:230,dur:650,pull:1,seq:[[180,'charge'],[340,'slash0'],[470,'slash1'],[650,'recover']],sl:[[0,0],[100,0],[340,1],[430,1],[620,0]]},
      skill:{delay:120,dur:700,seq:[[700,'skill']]}}
 };
-function bPlan(e,k){const P=BPLAN[e];if(!P)return null;if(P[k])return P[k];if(e==='yx'&&(k==='sweep'||k==='foxfire'||k==='rain'))return P.skill;return null}
+const BALIAS={step:'slash',press:'slash',mist:'foxfire'};
+function bPlan(e,k){k=BALIAS[k]||k;const P=BPLAN[e];if(!P)return null;if(P[k])return P[k];if(e==='yx'&&(k==='sweep'||k==='foxfire'||k==='rain'))return P.skill;return null}
 function bLerp(a,t){if(t<=a[0][0])return a[0][1];for(let i=1;i<a.length;i++)if(t<=a[i][0]){const p=a[i-1],q=a[i];return p[1]+(q[1]-p[1])*motionEase((t-p[0])/(q[0]-p[0]||1))}return a[a.length-1][1]}
 // Hold only the attacker's drawing clock briefly; damage, input and message timers keep running.
 function bImpactHold(sp){return sp.hits.some(h=>!h.heal&&h.d>0)?(sp.hits.some(h=>!h.heal&&(h.crit||h.big))?80:55):0}

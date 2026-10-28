@@ -49,10 +49,10 @@ function audioSyncTracks(){if(!SFX.ctx||SFX.ctx.state!=='running'||document.hidd
 function battleSound(k,stage,big=false,src=null,critical=false){
  let key=null,rate=1;
  if(stage==='start'){
-  if(['slash','sweep'].includes(k)&&src?.e!=='yx')key='pole';
-  else if(['foxfire','wave'].includes(k)){key='gather';rate=2}
+  if(['slash','sweep','step','press'].includes(k)&&src?.e!=='yx')key='pole';
+  else if(['foxfire','wave','mist','roar','whirl'].includes(k)){key='gather';rate=k==='roar'?1.2:2}
  }else{
-  key=({rain:'heal',item:'item',splash:'water',wave:'wave',tail:'water',leaf:'leaf',foxfire:'fox'})[k]||null;
+  key=({rain:'heal',item:'item',splash:'water',wave:'wave',tail:'water',leaf:'leaf',foxfire:'fox',step:'wood',press:'water',spear:'water',roar:'wave',whirl:'water',drink:'heal',mist:'fox'})[k]||null;
   if(['slash','sweep','claw'].includes(k)&&src?.e!=='yx')key='wood';
   if(critical)playSfx('critical',1.5);
  }

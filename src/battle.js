@@ -17,7 +17,12 @@ function qiFullLine(m){const B=G.B;if(B&&B.qiFull){B.qiFull=0;m.push('青舟：�
 function bSkills(u,B){return u.skills.concat(B&&B.hebo&&(B.qi||0)>=CFG.hebo.qiMax&&u.e==='qz'?['雲渡一擊']:[])}
 // 撐篙擋浪：濁浪釋放前停下來，玩家在光環縮到圈上的瞬間點一下
 function parryGradeAt(now){const B=G.B,P=CFG.hebo.parry,d=Math.abs(now-B.parry.t0-P.dur);return d<=P.perfect?'perfect':d<=P.good?'good':'miss'}
-function parryResolve(grade){const B=G.B,P=CFG.hebo.parry;if(!B||!B.parry)return;G.flags.parrySeen=1;B.parry=null;B.parryGrade=grade;if(grade==='perfect')addQi(P.qiPerfect);else if(grade==='good')addQi(P.qiGood);enemyPhase()}
+// 擋浪成功的手感：畫面拉近一下、閃光、震動、粒子、大字
+function parryJuice(grade){const B=G.B,c=B.parryC||[SW/2,SH/2],now=performance.now(),pf=grade==='perfect';
+ B.pop={at:now,txt:pf?'完美！':'擋住！',x:c[0],y:c[1]-30,col:pf?'#ffe27a':'#cfe8ff'};B.zoom={at:now,d:pf?560:360,k:pf?.075:.035,cx:c[0],cy:c[1]};
+ if(pf){shake(14,380);flash(240,'255,244,200',.6);burst(c[0],c[1],36,['#fff','#ffe27a','#9fe0ff'],9);playSfx('critical',1.4,1);playSfx('wood',1.6,1.2)}
+ else{shake(6,220);flash(120,'200,230,255',.3);burst(c[0],c[1],18,['#fff','#9fe0ff'],6);playSfx('wood',1.3,1)}}
+function parryResolve(grade){const B=G.B,P=CFG.hebo.parry;if(!B||!B.parry)return;G.flags.parrySeen=1;if(grade!=='miss')parryJuice(grade);B.parry=null;B.parryGrade=grade;if(grade==='perfect')addQi(P.qiPerfect);else if(grade==='good')addQi(P.qiGood);enemyPhase()}
 function parryTap(now){const B=G.B;if(!B||!B.parry)return;parryResolve(parryGradeAt(now))}
 function tideNow(B){return B&&B.hebo?tideAt(B.turn):1}
 function heboPower(e,B){const T=CFG.hebo.tide,td=tideNow(B);return e.atk*(B.talisman?.hp>0?CFG.hebo.talismanAttackBoost:1)*(td===0?T.atkEbb:td===2?T.atkRise:1)}
@@ -105,9 +110,9 @@ function exec(t){const B=G.B,u=G.party[B.ai],P=B.pend,m=[];
   if(P.s=='渡水一擊'){m.push(u.n+'使出「渡水一擊」！水靈纏上竹篙，重擊'+t.n+'，造成'+dmg(atkOf(u)*CFG.skills.渡水一擊.power,t)+'點傷害！');ko(t,m);wr(m,0,'sweep',u,[t])}
   if(P.s=='狐火'){m.push(u.n+'喚出「狐火」！藍色火焰燒向'+t.n+'，造成'+dmg(magOf(u)*2.2,t,1)+'點傷害！');ko(t,m);wr(m,0,'foxfire',u,[t]);
    if(u.e==='bl'&&t.e==='hebo'&&t.hp>0&&B.hebo?.state===HEBO_STATE.CHARGING&&!B.hebo.interfered){B.hebo.interfered=true;addQi(CFG.hebo.qiFox);m.push('狐火擾亂河伯周身的水流，下一次濁浪威力減弱！')}}
-  if(P.s=='踏灘'){m.push(u.n+'踏上退去的灘塗，竹篙帶著全身的力道重擊'+t.n+'，造成'+dmg(atkOf(u)*CFG.hebo.stepPower+t.def,t)+'點傷害！');ko(t,m);wr(m,0,'sweep',u,[t])}
-  if(P.s=='壓浪'){const hb=B.en.find(e=>e.e==='hebo');m.push(u.n+'以竹篙壓住湧起的浪頭，濁浪沒能掀起來！');B.hebo.state=HEBO_STATE.STAGGERED;B.hebo.normals=0;B.hebo.interfered=false;addQi(CFG.hebo.qiBreak);wr(m,0,'guard',u,[hb||u])}
-  if(P.s=='迷霧'){B.mist=1;m.push(u.n+'放出一團迷霧，河伯的視線變得模糊，下一次攻擊威力減弱！');wr(m,0,'guard',u,[u])}
+  if(P.s=='踏灘'){m.push(u.n+'踏上退去的灘塗，竹篙帶著全身的力道重擊'+t.n+'，造成'+dmg(atkOf(u)*CFG.hebo.stepPower+t.def,t)+'點傷害！');ko(t,m);wr(m,0,'step',u,[t])}
+  if(P.s=='壓浪'){const hb=B.en.find(e=>e.e==='hebo');m.push(u.n+'以竹篙壓住湧起的浪頭，濁浪沒能掀起來！');B.hebo.state=HEBO_STATE.STAGGERED;B.hebo.normals=0;B.hebo.interfered=false;addQi(CFG.hebo.qiBreak);wr(m,0,'press',u,[hb||u])}
+  if(P.s=='迷霧'){B.mist=1;m.push(u.n+'放出一團迷霧，河伯的視線變得模糊，下一次攻擊威力減弱！');wr(m,0,'mist',u,[B.en.find(e=>e.e==='hebo')||u])}
   if(P.s=='引潮'){if(!B.hebo){m.push('這裡沒有潮水可引。')}else{if(!G.flags.heboPullSeen){G.flags.heboPullSeen=1;m.push('白苓：「我來引一引潮水。」')}B.hebo.shift++;addQi(CFG.hebo.qiPull);m.push(u.n+'引動潮水！潮位轉為「'+TIDE_N[tideNow(B)]+'」。');wr(m,0,'guard',u,[u])}}
   if(P.s=='雲渡一擊'){m.push('青舟與白苓合力使出「雲渡一擊」！');B.qi=0;const o=CFG.hebo.tide.order,cur=(B.turn-1+B.hebo.shift)%o.length,want=o.indexOf(0);B.hebo.shift+=(want-cur+o.length)%o.length;
    alive(B.en).forEach(e=>{const d=Math.round(e.mhp*CFG.hebo.combo.hpFrac);e.hp=Math.max(0,e.hp-d);hit(e,d,{big:1,crit:1});m.push(e.n+'受到'+d+'點傷害！');ko(e,m);
