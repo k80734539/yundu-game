@@ -144,7 +144,7 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
   const bw=Math.min(90,Math.max(w*.9,60));lab.push(()=>{X.font=(fs-2)+'px '+FONT;txt(e.n,x,y+fs+4,fs-2,'#fff','center');X.fillStyle='#400';X.fillRect(x-bw/2,y+fs+10,bw,6);X.fillStyle='#e44';X.fillRect(x-bw/2,y+fs+10,bw*e.hp/e.mhp,6);
    if(e.e==='hebo'&&B.hebo){const h=B.hebo,label=h.state===HEBO_STATE.CHARGING?'蓄力中・下次濁浪':h.state===HEBO_STATE.STAGGERED?'失衡・跳過行動':h.interfered?'狐火干擾':B.talisman?.hp>0?'控妖符強化':'';
     if(label)txt(label,x,y+fs+32,Math.max(11,fs-2),h.state===HEBO_STATE.CHARGING?'#ffe3a6':'#e8bde9','center');if(h.state===HEBO_STATE.CHARGING&&h.interfered)txt('狐火干擾・傷害降低',x,y+fs+49,Math.max(10,fs-3),'#9bdfff','center')}
-   drawIntent(B,x+art.w*.32+6,y-h+fs+4,fs,H,now);drawTideGauge(B,fs,H,now)});
+   drawTideGauge(B,fs,H,now)});
   if(B.ph=='target'&&B.tk=='E'){if(B.sel==i)txt('▼',x,y-h-6+Math.sin(t*8)*3,fs+6,'#ff0','center');H.push({x:x-Math.max(w,60)/2,y:y-h-10,w:Math.max(w,60),h:h+fs+30,fn:()=>{B.sel=i;press('ok')}})}});
  lab.forEach(f=>f());
  drawTalisman(B,L,now,fs,H);
