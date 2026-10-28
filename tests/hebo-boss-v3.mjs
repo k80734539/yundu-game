@@ -30,8 +30,8 @@ export async function heboBossV3(browser,url){
   });
   assert.deepEqual(result.first.map(x=>x.action),['NORMAL','NORMAL','CHARGING','RELEASE','NORMAL','NORMAL','CHARGING','RELEASE']);
   assert.equal(result.first[2].hp[0],result.first[1].hp[0],'charging causes no immediate damage');
-  assert.deepEqual([result.phase.hp,result.phase.def,result.phase.buff,result.phase.warning,result.phase.warningAgain,result.phase.noExtraAction],[50,0,24,1,0,true]);
-  assert.deepEqual(result.normalBreak,{broken:1,state:'STAGGERED',buff:20});
+  assert.deepEqual([result.phase.hp,result.phase.def,result.phase.buff,result.phase.warning,result.phase.warningAgain,result.phase.noExtraAction],[60,0,36,1,0,true]);
+  assert.deepEqual(result.normalBreak,{broken:1,state:'STAGGERED',buff:30});
   assert.deepEqual(result.sweepBreak,{broken:1,state:'STAGGERED'});
   assert.deepEqual(result.foxBreak,{broken:1,state:'STAGGERED',interfered:false});
   assert.equal(result.skip.action,'STAGGERED');assert.equal(result.afterSkip.state,'NORMAL');assert.equal(result.normal.action,'NORMAL','breaking the talisman skips one action only');

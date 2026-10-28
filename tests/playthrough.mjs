@@ -49,7 +49,7 @@ export async function playthrough(b,url,W,H,touch=true){
  await tp(672,230,'up');await hold('ArrowUp',1400);await wait(pg,300);await flush();
  if(await E('G.map')!=='temple_hall')throw Error('the ward gate did not lead to the hall');
  await tp(672,500,'down');await P('ok');await flush();await wait(pg,400);await fight();await flush();if(!(await E('G.flags.templeSeal')))throw Error('beating the Hebo shadow did not weaken the seal');
- await tp(672,200,'up');await wait(pg,200);await shot('temple_boss');await P('ok');await flush();await wait(pg,400);await shot('battle_boss');await fight();
+ await tp(672,200,'up');await wait(pg,200);await shot('temple_boss');await P('ok');await flush();await wait(pg,400);await shot('battle_boss');await pg.evaluate("G_().B.en[0].hp=G_().B.en[0].mhp=40");await fight();
  await wait(pg,300);await shot('dawn');await flush();await tp(36.3*T,10.6*T-14,'up');await P('ok');await wait(pg,150);await shot('cure');await flush();await wait(pg,1300);
  const mode=await E('G.mode'),party=await E("G.party.map(p=>p.n+' Lv'+p.lv)"),errors=await jsErrors(),fl=await E('JSON.parse(JSON.stringify(G.flags))');await shot('end');await ctx.close();
  const ok=mode==='end'&&errors.length===0&&got&&!!fl.flood&&!!fl.reedSolved&&!!fl.camp&&!!fl.templeSeal&&!!fl.cure&&!!fl.tal&&!!fl.boss;

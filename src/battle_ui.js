@@ -36,7 +36,7 @@ function drawCard(L,p,i,act,fs,now){
  X.shadowColor='#000';X.shadowBlur=3;
  txt(p.n,L.port?x+7:right,L.port?hpy:y+12,nf,act?'#ffe6ab':'#e8e6d8',L.port?'left':'right');
  txt(Math.max(0,p.hp)+'/'+p.mhp,right,hpy,nf,'#efa588','right');txt(Math.max(0,p.mp)+'/'+p.mmp,right,mpy,nf,'#83cce6','right');
- if(p.st||p.guard)txt(p.st?'毒':'防',x+7,mpy,nf-1,p.st?'#e9a4cb':'#c8ded5');X.shadowBlur=0;
+ if(p.st||p.guard||p.weak||p.sealed)txt(p.st?'毒':p.sealed?'封':p.weak?'弱':'防',x+7,mpy,nf-1,p.st?'#e9a4cb':p.sealed||p.weak?'#ffd68a':'#c8ded5');X.shadowBlur=0;
  X.restore();
  return{x,y:L.py,w,h:y+h-L.py,portrait:{x:bx,y:by,w:d,h:d},infoTop:L.infoTop}}
 // v24: supplied enemy poses, one shared scale and ground anchor per creature.
@@ -70,7 +70,7 @@ function enemyPose(e,now){const B=G.B;
  if(e.hp<=0&&e.dieAt!=null&&now>=e.dieAt)return 'down';
  if(B.fx.some(f=>f.t===e&&!f.heal&&now>=f.at&&now-f.at<450))return 'hit';
  const a=(B.vx||[]).findLast(sp=>sp.src===e&&sp.at!=null&&now>=sp.at&&now-sp.at<(VDUR[sp.k]||500));
- if(a){if(a.k==='wave')return e.e==='hebo'?'wave':'cast';if(e.e==='hebo'&&(a.k==='drink'||a.k==='whirl'))return a.k;return now-a.at<100?'cast':'attack'}
+ if(a){if(a.k==='wave')return e.e==='hebo'?'wave':'cast';if(e.e==='hebo'&&(a.k==='drink'||a.k==='whirl'))return a.k;if(e.e==='hebo'&&a.k==='roar')return 'cast';return now-a.at<100?'cast':'attack'}
  if(e.e==='hebo'&&B.hebo){const hs=B.hebo.state;if(hs===HEBO_STATE.CHARGING)return 'charge'+(Math.floor(now/280)%2);if(hs===HEBO_STATE.STAGGERED)return 'stagger';if(B.heboPhase2)return 'rage'+((Math.floor(now/600)+Math.floor(e.ph))%2)}
  return 'idle'+((Math.floor(now/600)+Math.floor(e.ph))%2)}
 function enemyImage(e,now,x,y,scale){const c=EART[e.e],pose=enemyPose(e,now);let im=I[e.e+'_'+pose];if(!im?.naturalWidth&&/^(charge|stagger|rage|wave)/.test(pose))im=I[e.e+'_idle0'];
@@ -78,9 +78,9 @@ function enemyImage(e,now,x,y,scale){const c=EART[e.e],pose=enemyPose(e,now);let
  const base=I[e.e];return{im:base,x:x-base.width*scale/2,y:y-base.height*scale,w:base.width*scale,h:base.height*scale,pose:'fallback'}}
 function drawBattleBackground(B){const requested=B.opt.bg||'bg_reeds',key=I[requested]?.naturalWidth?requested:'bg_reeds',im=I[key];if(im?.naturalWidth){B.bgFit=Object.assign(cover(im,.5,.5),{key,width:im.naturalWidth,height:im.naturalHeight})}else{B.bgFit=null;X.fillStyle='#24343c';X.fillRect(-20,-20,SW+40,SH+40)}}
 // 河伯戰：行動預告氣泡、水位條、渡氣珠（圖示來自 ui_*.webp，沒載入時畫簡單圓形）
-const TIDE_COL=['#9fd8ff','#ffffff','#ffb36b'],INTENT_RING={tail:'#ffffff',charge:'#ffd86b',wave:'#ff6b6b',stagger:'#b9a0ff',drink:'#ffd86b',whirl:'#ffd86b'};
-const INTENT_TXT={tail:'龍尾：打一人',charge:'蓄力！下一擊濁浪',wave:'濁浪：全隊大傷・可擋',stagger:'失衡：動不了',drink:'吞水：回復體力',whirl:'漩渦：封一人法術'};
-const INTENT_TIP={tail:'龍尾橫掃：隨機打其中一個人。',charge:'河伯正在蓄力，下一次行動就是濁浪滔天。',wave:'濁浪滔天：全隊大傷害！點準光環就能撐篙擋住。',stagger:'河伯失衡了，這回合動不了，趁機猛攻！',drink:'吞水：河伯會回復一些體力。',whirl:'漩渦：打一個人，並封住他下一回合的法術。'};
+const TIDE_COL=['#9fd8ff','#ffffff','#ffb36b'],INTENT_RING={tail:'#ffffff',charge:'#ffd86b',wave:'#ff6b6b',stagger:'#b9a0ff',drink:'#ffd86b',whirl:'#ffd86b',spear:'#ff8a5c',roar:'#ffd86b'},INTENT_ICON={spear:'charge',roar:'tail'};
+const INTENT_TXT={tail:'龍尾：打一人',charge:'蓄力！下一擊濁浪',wave:'濁浪：全隊大傷・可擋',stagger:'失衡：動不了',drink:'吞水：回復體力',whirl:'漩渦：封一人法術',spear:'水柱：標記的人防禦',roar:'龍吼：全隊攻擊下降'};
+const INTENT_TIP={tail:'龍尾橫掃：隨機打其中一個人。',charge:'河伯正在蓄力，下一次行動就是濁浪滔天。',wave:'濁浪滔天：全隊大傷害！點準光環就能撐篙擋住。',stagger:'河伯失衡了，這回合動不了，趁機猛攻！',drink:'吞水：河伯會回復一些體力。',whirl:'漩渦：打一個人，並封住他下一回合的法術。',spear:'水柱突刺：腳下有水紋的那個人會被重擊，那個人「防禦」就能完全擋住。',roar:'龍吼：全隊受到一點傷害，攻擊力下降兩回合。春霖或清心草可以解除。'};
 function uiIcon(key,x,y,s,ring,alpha){const im=I[key];X.save();X.globalAlpha=alpha==null?1:alpha;
  X.fillStyle='rgba(8,18,28,.78)';X.beginPath();X.arc(x+s/2,y+s/2,s/2,0,7);X.fill();
  if(im?.naturalWidth){const k=s*.8/Math.max(im.naturalWidth,im.naturalHeight);X.drawImage(im,x+s/2-im.naturalWidth*k/2,y+s/2-im.naturalHeight*k/2,im.naturalWidth*k,im.naturalHeight*k)}
@@ -90,7 +90,7 @@ function setTip(B,t,now){B.tipTxt=t;B.tipT=now}
 function drawIntent(B,lx,y,fs,H,now){if(!B.hebo)return;const f=heboForecast(B,2),sz=Math.max(11,fs-3),ic=Math.max(28,fs*1.9),ar=Math.max(10,ic*.4);
  // 小型：兩個圖示＋箭頭，沒有底板；第一個圖示下方只有兩個字，細節點圖示才顯示
  const w=ic+ar+ic*.84+8,x=Math.max(SA.l+4,Math.min(lx,SW-SA.r-84-w)),s2=ic*.84;
- const draw=(o,xx,yy,s,dim)=>uiIcon('ui_intent_'+o.k,xx,yy,s,INTENT_RING[o.k],dim);
+ const draw=(o,xx,yy,s,dim)=>uiIcon('ui_intent_'+(INTENT_ICON[o.k]||o.k),xx,yy,s,INTENT_RING[o.k],dim);
  draw(f[0],x,y,ic,1);
  X.save();X.globalAlpha=.8;X.fillStyle='#e8f4ff';X.font=sz+'px '+FONT;X.textAlign='center';X.fillText('›',x+ic+ar/2,y+ic/2+sz*.3);X.restore();
  if(f[1])draw(f[1],x+ic+ar,y+(ic-s2)/2,s2,.8);
@@ -153,6 +153,7 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
  order.forEach(i=>{const p=G.party[i],F=B.feetOf(p),sl=bSlot(p,i),act=i==B.ai&&B.ph!='msg'&&!B.won,ps=bPose(p,sl,now,F,s,L);B.pose[i]=ps.name;
   const im=I[ps.pre+'_'+ps.name]?.naturalWidth?I[ps.pre+'_'+ps.name]:I[ps.pre+'_idle0'];const hx=ps.hit?Math.sin(now/20)*4*u:0,x=F[0]+ps.dx+hx,y=F[1]+ps.dy,al=ent*(p.hp>0||ps.name==='down'?1:.35);
   X.fillStyle='rgba(0,0,0,.38)';X.beginPath();X.ellipse(x,y-2*u,58*s,Math.max(5,15*s),0,0,7);X.fill();
+  if(B.hebo&&B.hebo.mark===p&&p.hp>0){const k=(now%900)/900;X.save();X.strokeStyle='rgba(255,138,92,'+(.95-.45*k)+')';X.lineWidth=Math.max(2,3*u);for(let r=0;r<2;r++){const kk=(k+r*.5)%1;X.beginPath();X.ellipse(x,y-2*u,(34+kk*46)*s*1.4,(10+kk*14)*s*1.4,0,0,7);X.stroke()}X.restore();txt('水紋',x,y+fs+2,Math.max(11,fs-3),'#ffb08a','center')}
   if(im?.naturalWidth){X.save();X.globalAlpha=al;if(ps.hit&&Math.floor((now-(B.fx.find(f=>f.t===p&&!f.heal&&now>=f.at&&now-f.at<HIT_MS)||{at:0}).at)/70)%2)X.globalAlpha*=.6;X.drawImage(im,x-BFR.fx*s,y-BFR.fy*s,BFR.w*s,BFR.h*s);X.restore()}
   if(p.guard&&p.hp>0)shield(x,y-125*s,70*s,140*s,.3+Math.sin(t*4)*.1);
   if(act||(B.ph=='target'&&B.tk=='A'&&B.sel==i))txt('▼',x,y-290*s+Math.sin(t*6)*2,fs,'#ff0','center');
@@ -167,13 +168,13 @@ function drawBattle(now){const B=G.B,t=now/1000;UI();let SX=0,SY=0;if(B.shk){con
  if(B.ph=='cmd'){const G4=[['攻',0],['技',1],['道',2],['防',3]];
   G4.forEach(([ch,i])=>{const cx=L.bx,cy=L.by+i*L.bs,sel=B.sel==i;octBtn(cx,cy,L.bd,ch,sel,fs);push(cx,cy,()=>{B.sel=i;press('ok')})});
   octBtn(L.ex[0],L.ex[1],L.bd,'逃',B.sel==4,fs);push(L.ex[0],L.ex[1],()=>{B.sel=4;press('ok')})}
- else if(B.ph=='skill'||B.ph=='item'){let LL;
-  if(B.ph=='skill'){const SKL=bSkills(u2,B);LL=SKL.map(sk=>sk+(SK[sk].mp?' '+SK[sk].mp+'MP':'・渡氣'));info=SK[SKL[B.sel]]?SK[SKL[B.sel]].d:''}
+ else if(B.ph=='skill'||B.ph=='item'){let LL,SKL=null;
+  if(B.ph=='skill'){SKL=bSkills(u2,B);LL=SKL.map(sk=>sk+(SK[sk].mp?' '+SK[sk].mp+'MP':'・渡氣'));info=SK[SKL[B.sel]]?SK[SKL[B.sel]].d:''}
   else{const ks=Object.keys(G.inv).filter(i=>G.inv[i]>0);LL=ks.map(k=>k+'×'+G.inv[k]);info=ks[B.sel]?ITEMS[ks[B.sel]].d:''}
   const lh=fs+16,pw=Math.min(L.aw-24,Math.max(190,fs*11)),ph=(LL.length+1)*lh+12,px=SW-SA.r-12-pw,py=Math.max(SA.t+80,Math.min(L.cy-8-ph,L.by-24));box(px,py,pw,ph,.95);
   [...LL,'◀ 返回'].forEach((l,i)=>{const isB=i==LL.length,sel=!isB&&i==B.sel,iy=py+6+i*lh;
    if(sel){X.fillStyle='rgba(255,230,120,.16)';rr(px+5,iy,pw-10,lh-2,5);X.fill()}
-   txt((sel?'▶ ':'')+l,px+16,iy+lh/2+fs*.36,fs,isB?'#9cf':sel?'#ffe9a8':'#fff');
+   const off=SKL&&!isB&&!skillUsable(u2,SKL[i],B);txt((sel?'▶ ':'')+l,px+16,iy+lh/2+fs*.36,fs,isB?'#9cf':off?'#7f8e94':sel?'#ffe9a8':'#fff');
    H.push({x:px,y:iy,w:pw,h:lh,fn:isB?()=>press('cancel'):()=>{B.sel=i;press('ok')}})})}
  else if(B.ph=='target'){info=B.tk=='E'?'點選敵人':'點選隊友';octBtn(L.bx,L.by,L.bd,'返',false,fs);push(L.bx,L.by,()=>press('cancel'))}
  // ---- 傷害數字

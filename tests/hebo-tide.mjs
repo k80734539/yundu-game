@@ -65,8 +65,36 @@ export async function heboTide(browser,url){
     enemyPhase();out.sealCleared=G.party.filter(p=>p.sealed).length;
     // 隨機招式：預告第一項 = 實際行動
     Math.random=(()=>{let s=7;return()=>(s=(s*16807)%2147483647)/2147483647})();mkB();G.B.opt.noMoves=0;G.B.hebo.moves=[];heboRefill(G.B);G.B.en[0].hp=G.B.en[0].mhp*.9;
-    const seq2=[];for(let i=0;i<10&&G.B.hebo;i++){const f=heboForecast(G.B,2),a0=f[0].k;enemyPhase();if(G.B.ph==='parry'){G.B.opt.noParry=1;enemyPhase()}const real=G.B.msgs.map(m=>String(Array.isArray(m)?m[0]:m)).join('|');const kind=/吞下河水/.test(real)?'drink':/漩渦/.test(real)?'whirl':/龍尾/.test(real)?'tail':/濁浪/.test(real)&&/掀起|威力/.test(real)?'wave':/蓄力/.test(real)?'charge':/失衡/.test(real)?'stagger':'?';seq2.push([a0,kind]);G.party.forEach(p=>{p.hp=999;p.sealed=0});G.B.after()}
+    const seq2=[];for(let i=0;i<10&&G.B.hebo;i++){const f=heboForecast(G.B,2),a0=f[0].k;enemyPhase();if(G.B.ph==='parry'){G.B.opt.noParry=1;enemyPhase()}const real=G.B.msgs.map(m=>String(Array.isArray(m)?m[0]:m)).join('|');const kind=/吞下河水/.test(real)?'drink':/水柱從/.test(real)?'spear':/仰天長吼/.test(real)?'roar':/漩渦/.test(real)?'whirl':/龍尾/.test(real)?'tail':/濁浪/.test(real)&&/掀起|威力/.test(real)?'wave':/蓄力/.test(real)?'charge':/失衡/.test(real)?'stagger':'?';seq2.push([a0,kind]);G.party.forEach(p=>{p.hp=999;p.sealed=0});G.B.after()}
     out.seq2=seq2;Math.random=old}
+   // ---- 第三包：青舟與白苓的招式、水柱突刺、龍吼、濁浪連環
+   {const mk2=()=>{__sb(['河伯'],{noEsc:1,noParry:1,noMoves:1});G.B.ph='cmd';G.B.ai=0;G.party.forEach(p=>{p.hp=999;p.mhp=999;p.st='';p.guard=0;p.sealed=0;p.weak=0;p.mp=p.mmp});G.B.hebo.state=HEBO_STATE.NORMAL;G.B.en[0].hp=G.B.en[0].mhp};
+    const old2=Math.random;
+    mk2();out.learned={qz:G.party[0].skills.slice(),bl:G.party[1].skills.slice()};
+    // 踏灘：只有退潮能用，無視防禦
+    G.B.turn=3;out.stepEbb=skillUsable(G.party[0],'踏灘',G.B);G.B.turn=1;out.stepMid=skillUsable(G.party[0],'踏灘',G.B);
+    G.B.turn=3;G.B.ai=0;G.B.pend={t:'sk',s:'踏灘'};Math.random=()=>0.25;const hp1=G.B.en[0].hp;exec(G.B.en[0]);Math.random=old2;out.step={dmg:hp1-G.B.en[0].hp,mp:G.party[0].mp,mmp:G.party[0].mmp};
+    // 壓浪：漲潮且河伯蓄力才能用，使河伯失衡
+    mk2();G.B.turn=2;G.B.hebo.state=HEBO_STATE.CHARGING;out.pressOk=skillUsable(G.party[0],'壓浪',G.B);G.B.hebo.state=HEBO_STATE.NORMAL;out.pressNoCharge=skillUsable(G.party[0],'壓浪',G.B);
+    G.B.hebo.state=HEBO_STATE.CHARGING;G.B.turn=1;out.pressMid=skillUsable(G.party[0],'壓浪',G.B);G.B.turn=2;G.B.ai=0;G.B.pend={t:'sk',s:'壓浪'};exec(null);out.press={state:G.B.hebo.state};
+    // 選單：不可用招式回覆原因且不扣 MP
+    mk2();G.B.turn=1;G.B.ai=0;G.B.ph='skill';G.B.sel=G.party[0].skills.indexOf('踏灘');const mp0=G.party[0].mp;bKey('ok');out.stepBlocked={ph:G.B.ph,mp:G.party[0].mp===mp0,msg:String(G.B.msgs[0]).includes('不是退潮')};
+    // 迷霧：下一次攻擊減弱，只用一次
+    mk2();Math.random=()=>0.25;const base=(()=>{G.B.hebo.moves=['tail','tail','tail','tail'];G.party.forEach(p=>p.hp=999);enemyPhase();const lost=999-Math.min(...G.party.map(p=>p.hp));G.B.after();return lost})();
+    mk2();G.B.mist=1;G.B.hebo.moves=['tail','tail','tail','tail'];G.party.forEach(p=>p.hp=999);Math.random=()=>0.25;enemyPhase();const lostMist=999-Math.min(...G.party.map(p=>p.hp));Math.random=old2;out.mist={base,lostMist,used:G.B.mist};
+    // 水柱：標記預告、被標記者防禦完全擋下、未防禦吃重傷
+    mk2();G.B.opt.noMoves=0;G.B.hebo.moves=['spear','tail','tail','tail'];const f=heboForecast(G.B,1)[0];out.spearF=f.k;out.mark=!!G.B.hebo.mark;const target=G.B.hebo.mark;target.guard=1;const th=target.hp;enemyPhase();out.spearGuard=th-target.hp;G.B.after();
+    mk2();G.B.opt.noMoves=0;G.B.hebo.moves=['spear','tail','tail','tail'];heboForecast(G.B,1);const t2=G.B.hebo.mark;t2.guard=0;const th2=t2.hp;Math.random=()=>0.25;enemyPhase();Math.random=old2;out.spearHit=th2-t2.hp;
+    // 龍吼：全隊虛弱，攻擊力下降，春霖解除，兩回合後自然消失
+    mk2();G.B.opt.noMoves=0;G.B.hebo.moves=['roar','tail','tail','tail'];G.party.forEach(p=>p.hp=999);enemyPhase();out.roar={weak:G.party.map(p=>p.weak),atk:Math.round(atkOf(G.party[0])*10)/10,base:G.party[0].atk};
+    G.B.after();enemyPhase();out.roarTick=G.party.map(p=>p.weak);G.B.after();enemyPhase();G.B.after();enemyPhase();out.roarGone=G.party.map(p=>p.weak);
+    mk2();G.party.forEach(p=>p.weak=3);G.B.ai=1;G.B.pend={t:'sk',s:'春霖'};exec(null);out.cleanse=G.party.map(p=>p.weak);
+    // 濁浪連環：階段二的第一波之後再來第二波（可再擋一次）
+    mk2();G.B.opt.noMoves=0;G.B.heboPhase2=1;G.B.talisman=null;G.B.opt.noParry=0;G.B.hebo.state=HEBO_STATE.CHARGING;G.B.hebo.chained=0;
+    const fc3=heboForecast(G.B,3).map(o=>o.k);enemyPhase();const p1=G.B.ph;parryResolve('miss');const st1={state:G.B.hebo.state,chained:G.B.hebo.chained};G.B.msgs.length=0;G.B.after();enemyPhase();const p2=G.B.ph;parryResolve('miss');const st2={state:G.B.hebo.state,chained:G.B.hebo.chained};
+    out.chain={fc3,p1,p2,st1,st2};
+    // 強制二階段時的預告也要與連環一致
+    Math.random=old2}
    out.cfg=CFG.hebo;return out;
   });
   assert(Object.values(r.parry).every(x=>x.ph1==='parry'&&x.ph==='msg'),'parry pauses, then resolves into messages');
@@ -79,6 +107,14 @@ export async function heboTide(browser,url){
   assert.equal(r.poses.charge.slice(0,6),'charge');assert.equal(r.poses.stagger,'stagger');assert(r.poses.rage.startsWith('rage'));assert.equal(r.poses.wave,'wave');assert(r.poses.normal.startsWith('idle'));assert(r.poseImgs.every(Boolean),'new hebo pose images loaded');
   assert.deepEqual(r.drink.fc,['drink','whirl']);assert.equal(r.drink.healed,r.drink.expect);assert.deepEqual(r.whirl.fc,['whirl']);assert.equal(r.whirl.sealed,1);assert.equal(r.sealStillThere,1,'seal lasts through the next player phase');assert(r.sealBlocked,'sealed hero cannot open skills');assert.equal(r.sealCleared,0,'seal ends after that turn');
   assert(r.seq2.length>=8&&r.seq2.every(([f,a])=>f===a),'forecast with random moves matches actions: '+JSON.stringify(r.seq2));assert(new Set(r.seq2.map(x=>x[0])).size>=3,'random moves actually vary');
+  assert.deepEqual(r.learned.qz.filter(k=>['渡水一擊','踏灘','壓浪'].includes(k)),['渡水一擊','踏灘','壓浪']);assert(r.learned.bl.includes('迷霧'));
+  assert(r.stepEbb&&!r.stepMid,'踏灘 only in ebb tide');assert(r.step.dmg>0&&r.step.mp===r.step.mmp-6,'踏灘 costs 6 MP and hits: '+JSON.stringify(r.step));
+  assert(r.pressOk&&!r.pressNoCharge&&!r.pressMid,'壓浪 needs rising tide + charging');assert.equal(r.press.state,'STAGGERED');
+  assert(r.stepBlocked.ph==='msg'&&r.stepBlocked.mp&&r.stepBlocked.msg,'blocked skill explains and costs nothing');
+  assert(r.mist.lostMist<r.mist.base&&r.mist.used===0,'迷霧 weakens and is consumed: '+JSON.stringify(r.mist));
+  assert.equal(r.spearF,'spear');assert(r.mark,'spear marks its target ahead of time');assert.equal(r.spearGuard,0,'guarding the marked hero blocks the spear');assert(r.spearHit>0,'unguarded target gets hit');
+  assert.deepEqual(r.roar.weak,[3,3]);assert(r.roar.atk<r.roar.base,'weak lowers attack');assert(r.roarGone.every(w=>w===0),'weak wears off');assert(r.cleanse.every(w=>w===0),'春霖 cleanses weak');
+  assert.equal(r.chain.fc3.join(),'wave,wave,tail','forecast shows the chained second wave');assert.equal(r.chain.p1,'parry');assert.equal(r.chain.p2,'parry','second wave opens a second parry');assert.deepEqual([r.chain.st1.state,r.chain.st1.chained],['CHARGING',1]);assert.equal(r.chain.st2.chained,0);
   assert(r.comboHidden&&r.comboShown);assert.deepEqual([r.combo.dmg,r.combo.qi,r.combo.state,r.combo.tide],[r.combo.expect,0,'STAGGERED',0]);assert.equal(r.qiGuard,r.cfg.qiGuard);
 
   assert.deepEqual(r.order,[1,2,0,1,2,0]);assert(r.intro,'intro mentions tide');
