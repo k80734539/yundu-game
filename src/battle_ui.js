@@ -70,9 +70,10 @@ function enemyPose(e,now){const B=G.B;
  if(e.hp<=0&&e.dieAt!=null&&now>=e.dieAt)return 'down';
  if(B.fx.some(f=>f.t===e&&!f.heal&&now>=f.at&&now-f.at<450))return 'hit';
  const a=(B.vx||[]).findLast(sp=>sp.src===e&&sp.at!=null&&now>=sp.at&&now-sp.at<(VDUR[sp.k]||500));
- if(a){if(a.k==='wave')return 'cast';return now-a.at<100?'cast':'attack'}
+ if(a){if(a.k==='wave')return e.e==='hebo'?'wave':'cast';return now-a.at<100?'cast':'attack'}
+ if(e.e==='hebo'&&B.hebo){const hs=B.hebo.state;if(hs===HEBO_STATE.CHARGING)return 'charge'+(Math.floor(now/280)%2);if(hs===HEBO_STATE.STAGGERED)return 'stagger';if(B.heboPhase2)return 'rage'+((Math.floor(now/600)+Math.floor(e.ph))%2)}
  return 'idle'+((Math.floor(now/600)+Math.floor(e.ph))%2)}
-function enemyImage(e,now,x,y,scale){const c=EART[e.e],pose=enemyPose(e,now),im=I[e.e+'_'+pose];
+function enemyImage(e,now,x,y,scale){const c=EART[e.e],pose=enemyPose(e,now);let im=I[e.e+'_'+pose];if(!im?.naturalWidth&&/^(charge|stagger|rage|wave)/.test(pose))im=I[e.e+'_idle0'];
  if(c&&im?.naturalWidth){const z=c.factor*scale;return{im,x:x-c.x*z,y:y-c.y*z,w:c.size*z,h:c.size*z,pose}}
  const base=I[e.e];return{im:base,x:x-base.width*scale/2,y:y-base.height*scale,w:base.width*scale,h:base.height*scale,pose:'fallback'}}
 function drawBattleBackground(B){const requested=B.opt.bg||'bg_reeds',key=I[requested]?.naturalWidth?requested:'bg_reeds',im=I[key];if(im?.naturalWidth){B.bgFit=Object.assign(cover(im,.5,.5),{key,width:im.naturalWidth,height:im.naturalHeight})}else{B.bgFit=null;X.fillStyle='#24343c';X.fillRect(-20,-20,SW+40,SH+40)}}

@@ -47,6 +47,12 @@ export async function heboTide(browser,url){
    G.B.ai=0;G.B.pend={t:'sk',s:'雲渡一擊'};const hp0=G.B.en[0].hp;exec(null);out.combo={dmg:hp0-G.B.en[0].hp,expect:Math.round(G.B.en[0].mhp*CFG.hebo.combo.hpFrac),qi:G.B.qi,state:G.B.hebo.state,tide:tideNow(G.B)};
    // 渡氣來源
    beginP();G.B.hebo.state=HEBO_STATE.NORMAL;G.B.qi=0;G.B.ai=0;G.B.sel=3;G.B.ph='cmd';bKey('ok');out.qiGuard=G.B.qi;
+   // 河伯姿勢：蓄力／失衡／階段二待機／濁浪釋放，圖都存在
+   beginP();const B0=G.B,hb=B0.en[0],nowT=1000;
+   const pz={};B0.hebo.state=HEBO_STATE.NORMAL;pz.normal=enemyPose(hb,nowT);B0.hebo.state=HEBO_STATE.CHARGING;pz.charge=enemyPose(hb,nowT);B0.hebo.state=HEBO_STATE.STAGGERED;pz.stagger=enemyPose(hb,nowT);
+   B0.hebo.state=HEBO_STATE.NORMAL;B0.heboPhase2=1;pz.rage=enemyPose(hb,nowT);B0.heboPhase2=0;
+   B0.vx=[{src:hb,k:'wave',at:nowT-10}];pz.wave=enemyPose(hb,nowT);B0.vx=[];
+   out.poses=pz;out.poseImgs=['charge0','charge1','stagger','rage0','rage1','wave'].map(k=>!!I['hebo_'+k]?.naturalWidth);
    out.cfg=CFG.hebo;return out;
   });
   assert(Object.values(r.parry).every(x=>x.ph1==='parry'&&x.ph==='msg'),'parry pauses, then resolves into messages');
@@ -56,6 +62,7 @@ export async function heboTide(browser,url){
   assert.deepEqual([r.parry.perfect.qi,r.parry.good.qi,r.parry.miss.qi],[r.cfg.parry.qiPerfect,r.cfg.parry.qiGood,0]);
   assert.equal(r.timeoutGrade,'miss');assert.equal(r.noParryPhase,'msg');assert.equal(r.qzDownPhase,'msg');assert(r.reflectWin,'reflect can win the battle');
   assert(r.pull.has&&r.pull.after===r.pull.exp&&r.pull.fc===r.pull.after,'pull advances tide and forecast follows: '+JSON.stringify(r.pull));assert.equal(r.pull.mp,16);assert.equal(r.pull.qi,r.cfg.qiPull);assert(r.pullElsewhere);
+  assert.equal(r.poses.charge.slice(0,6),'charge');assert.equal(r.poses.stagger,'stagger');assert(r.poses.rage.startsWith('rage'));assert.equal(r.poses.wave,'wave');assert(r.poses.normal.startsWith('idle'));assert(r.poseImgs.every(Boolean),'new hebo pose images loaded');
   assert(r.comboHidden&&r.comboShown);assert.deepEqual([r.combo.dmg,r.combo.qi,r.combo.state,r.combo.tide],[r.combo.expect,0,'STAGGERED',0]);assert.equal(r.qiGuard,r.cfg.qiGuard);
 
   assert.deepEqual(r.order,[1,2,0,1,2,0]);assert(r.intro,'intro mentions tide');
