@@ -77,7 +77,7 @@ classic script 的 function 宣告只在該檔執行時才建立，所以**載�
 - **頭像（v28）**：三位主角以使用者提供四視角原圖的三分之四正面裁成 512×512 透明半身像，戰鬥與對話共用同一張，勿改回舊像素頭像或有底色的方塊。卡片頭像在左、紅／藍數字在右；直式壓縮為兩行且臉部不被資訊列覆蓋。cards 的觸控區包含浮出資訊列的頭像。情境鍵 pt_qz_startled／pt_bl_quiet 目前使用同一原圖的正面視角，不自行生成表情。參見 docs/art/portraits-v28.md 與 tests/portrait-ui.mjs。原色裁切工具為 tools/import-portraits.py。
 
 ## 5. 版本號規則
-- 目前 **v56**（河伯新姿勢接進戰鬥；v55 擋浪、引潮、渡氣與合擊；v54 潮位與預告）。每次上線改動都要 +1（下一版 **v57**），三處一起改：
+- 目前 **v57**（河伯姿勢圖清掉頂端殘影；v56 河伯新姿勢接進戰鬥；v55 擋浪、引潮、渡氣與合擊；v54 潮位與預告）。每次上線改動都要 +1（下一版 **v58**），三處一起改：
   1. `index.html` `<title>雲渡仙緣 第一章 vN</title>`
   2. `src/screens.js` 標題畫面 `'版本 vN'`
   3. `src/render.js` 地圖右下角 `'vN'`
@@ -148,4 +148,4 @@ npm test                                          # 必須 ALL PASS，且無 JS 
 
 - **河伯戰第二包（v55）**：①撐篙擋浪：河伯 CHARGING 後的敵方回合，`enemyPhase` 先進入 `B.ph='parry'`（`B.parry.t0`），光環縮到圈上的瞬間點螢幕／按確定（`parryTap`），誤差 ≤`perfect` ms 完美（傷害×`perfectMul` 並反彈）、≤`good` ms 普通、其餘或逾時失誤，之後 `parryResolve` 重新呼叫 `enemyPhase`，由 `heboTurn` 的釋放段套用 `B.parryGrade`；測試或青舟倒下用 `opt.noParry` 略過。②引潮（白苓，`SK.引潮`，tgt `self`）：`B.hebo.shift++`，潮位整個循環往前一格，`tideAt` 與預告同步。③渡氣 `B.qi`（0–`CFG.hebo.qiMax`）：完美／普通擋浪、狐火干擾、破符、防禦、引潮累積；滿了青舟的法術選單出現「雲渡一擊」（`bSkills`），打掉河伯最大血量 `combo.hpFrac`、使其失衡、潮位改退潮、清空渡氣。潮位倍率已拉大（`physEbb`/`magicRise` 1.6）。數字都在 `CFG.hebo`，暫定。測試 `tests/hebo-tide.mjs`。
 
-- **河伯新姿勢（v56）**：Codex 生成的 `hebo_charge0/1`（蓄力循環）、`hebo_stagger`（失衡）、`hebo_rage0/1`（階段二待機）、`hebo_wave`（濁浪釋放）已接進 `enemyPose`（只限 `e.e==='hebo'`，圖缺時退回 idle0）；`hebo_drink`（吞水）、`hebo_whirl`（漩渦）與 `fx_whirl.webp` 已登記但還沒用，留給「變招」。素材製作見 `docs/art/hebo-poses/`，驗收 `tests/hebo-poses.mjs`。已知小瑕疵：`hebo_wave` 右緣、`hebo_drink` 上緣被圖框切成直線。
+- **河伯新姿勢（v56）**：Codex 生成的 `hebo_charge0/1`（蓄力循環）、`hebo_stagger`（失衡）、`hebo_rage0/1`（階段二待機）、`hebo_wave`（濁浪釋放）已接進 `enemyPose`（只限 `e.e==='hebo'`，圖缺時退回 idle0）；`hebo_drink`（吞水）、`hebo_whirl`（漩渦）與 `fx_whirl.webp` 已登記但還沒用，留給「變招」。素材製作見 `docs/art/hebo-poses/`，驗收 `tests/hebo-poses.mjs`。已知小瑕疵：`hebo_wave` 右緣、`hebo_drink` 上緣被圖框切成直線。v56b 已用程式刪掉 `hebo_rage0`、`hebo_whirl`、`hebo_drink` 頂端漂浮的細碎條紋（來自圖集上一格的殘影，戰鬥畫面上會像角色頭上的殘影）。
