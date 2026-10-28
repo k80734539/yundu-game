@@ -98,12 +98,15 @@ function drawIntent(B,lx,y,fs,H,now){if(!B.hebo)return;const f=heboForecast(B,2)
  X.save();X.shadowColor='#000';X.shadowBlur=4;txt(lab,x+ic/2,y+ic+sz+1,sz,col,'center');X.restore();
  H.push({x:x,y:y,w:ic,h:ic+sz+4,fn:()=>setTip(B,'河伯下一步：'+INTENT_TIP[f[0].k],performance.now())});
  if(f[1])H.push({x:x+ic+ar,y:y,w:s2,h:ic,fn:()=>setTip(B,'再下一步：'+INTENT_TIP[f[1].k],performance.now())})}
-function drawTideGauge(B,fs,H,now){if(!B.hebo)return;const td=tideNow(B),gw=Math.max(24,fs*1.9),gh=Math.min(SH*.3,150),gx=SA.l+6,gy=SA.t+Math.max(66,fs*3.6),seg=gh/3,segOf=t=>2-t;
+function drawTideGauge(B,fs,H,now){if(!B.hebo)return;const td=tideNow(B),gw=Math.max(24,fs*1.9),gh=Math.min(SH*.26,140),gx=SA.l+6,gy=SA.t+Math.max(82,fs*4.4),seg=gh/3,segOf=t=>2-t;
  [2,1,0].forEach((t,i)=>{X.fillStyle=t===td?TIDE_COL[t]:'rgba(20,34,46,.55)';X.globalAlpha=t===td?.55:1;X.fillRect(gx+gw*.2,gy+i*seg+2,gw*.6,seg-4);X.globalAlpha=1});
  const gi=I.ui_tide_gauge;if(gi?.naturalWidth)X.drawImage(gi,gx,gy,gw,gh);else{X.strokeStyle='#c9a85c';X.lineWidth=2;X.strokeRect(gx+gw*.2,gy,gw*.6,gh)}
  const my=gy+segOf(td)*seg+seg/2,mk=I.ui_tide_marker;if(mk?.naturalWidth)X.drawImage(mk,gx+gw*.5-gw*.36,my-gw*.36,gw*.72,gw*.72);
  const ti=gw*1.15;uiIcon('ui_tide_'+['ebb','mid','rise'][td],gx+gw+4,my-ti/2,ti,TIDE_COL[td]);
- const q=B.qi||0,full=q>=CFG.hebo.qiMax,n=Math.floor(q/(CFG.hebo.qiMax/5)),ps=Math.max(16,fs*1.35),py=gy+gh+8;
+ const q=B.qi||0,full=q>=CFG.hebo.qiMax,n=Math.floor(q/(CFG.hebo.qiMax/5)),ps=Math.max(16,fs*1.35),lsz=Math.max(11,fs-3),py=gy+gh+10+lsz+4;
+ const hint=!G.flags.heboUiSeen&&B.turn<=1;if(B.turn>=2)G.flags.heboUiSeen=1;
+ X.save();X.shadowColor='#000';X.shadowBlur=4;txt('潮位',gx+gw/2,gy-5,lsz,'#cfe','center');txt('渡氣',gx+gw/2,py-5,lsz,'#cfe','center');X.restore();
+ if(hint){const pu=.45+.55*Math.abs(Math.sin(now/260));X.save();X.strokeStyle='rgba(255,230,120,'+pu+')';X.lineWidth=2.5;X.strokeRect(gx-3,gy-lsz-9,gw+ti+12,gh+lsz+14);X.strokeRect(gx-3,py-lsz-9,gw+8,5*(ps+1)+lsz+12);X.restore()}
  for(let i=0;i<5;i++){const on=full||(4-i)<n,im=I[on?'ui_qi_full':'ui_qi_empty'],yy=py+i*(ps+1);X.save();if(full)X.globalAlpha=.75+.25*Math.sin(now/180+i);if(im?.naturalWidth)X.drawImage(im,gx+(gw-ps)/2,yy,ps,ps);else{X.fillStyle=on?'#9fe':'#345';X.beginPath();X.arc(gx+gw/2,yy+ps/2,ps/2-2,0,7);X.fill()}X.restore()}
  H.push({x:gx,y:gy,w:gw+ti+8,h:gh,fn:()=>setTip(B,TIDE_TIP[td]+'。',performance.now())});
  H.push({x:gx,y:py,w:gw,h:5*(ps+1),fn:()=>setTip(B,'渡氣 '+q+'／'+CFG.hebo.qiMax+'：擋浪、破符、狐火干擾、防禦、引潮都會累積；滿了法術裡會出現「雲渡一擊」。',performance.now())})}

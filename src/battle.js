@@ -5,7 +5,7 @@ function newE(k,i,n){return{...EN[k],n:k+(n>1?'ABC'[i]:''),mhp:EN[k].hp,ph:Math.
 const HEBO_STATE={NORMAL:'NORMAL',CHARGING:'CHARGING',RELEASE:'RELEASE',STAGGERED:'STAGGERED'};
 function startBattle(ks,opt){VPT.length=0;G.B={en:ks.map((k,i)=>newE(k,i,ks.length)),opt,ai:-1,ph:'cmd',sel:0,turn:1,msgs:[],after:null,fx:[]};G.prevMode=G.mode;G.mode='battle';G.bT=performance.now();
  if(ks.includes('河伯')){G.B.hebo={state:HEBO_STATE.NORMAL,normals:0,interfered:false,lastAction:null,shift:0,moves:[]};G.B.qi=0;heboRefill(G.B);G.party.forEach(p=>{if(p.e==='bl')learnSkill(p,'引潮')})}
- const B=G.B;G.party.forEach(p=>p.guard=0);B.msgs=[(EN[ks[0]].boss?'頭目戰！':'妖怪出現了！')+' '+B.en.map(e=>e.n).join('、')].concat(opt.intro||[],ks.includes('河伯')?['白苓：「他額頭的符在牽著他……小心他蓄力，那是濁浪的前兆！」','青舟：「看準浪頭，我用竹篙擋。」','河伯身周的潮水忽漲忽退，留意左邊的水位條。']:[]);B.ph='msg';B.after=nextActor}
+ const B=G.B;G.party.forEach(p=>p.guard=0);B.msgs=[(EN[ks[0]].boss?'頭目戰！':'妖怪出現了！')+' '+B.en.map(e=>e.n).join('、')].concat(opt.intro||[],ks.includes('河伯')?['白苓：「他額頭的符在牽著他……小心他蓄力，那是濁浪的前兆！」','青舟：「看準浪頭，我用竹篙擋。」','白苓：「看左邊的水位條，潮水會影響我們誰比較強；下面的珠子滿了，就能合力出招。」']:[]);B.ph='msg';B.after=nextActor}
 const alive=a=>a.filter(x=>x.hp>0);
 function enemyTargets(B){return B.talisman?.hp>0?B.en.concat(B.talisman):B.en}
 const TIDE_N=['退潮','平潮','漲潮'];
