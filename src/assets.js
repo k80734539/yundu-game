@@ -1,7 +1,7 @@
 'use strict';
 // 圖片清單：key -> assets/img 路徑（勿改回 base64 內嵌）
 // 圖片網址會加上 ?v=ASSET_V（與 index.html 的 ?v=N 同步）。改 sprite 規格／換圖時一定要一起 +1，避免舊 JS 畫新圖或新 JS 畫舊快取圖
-const ASSET_V=59;
+const ASSET_V=60;
 const ASSETS={
  "shui_idle0": "assets/img/shui_idle0.webp",
  "shui_idle1": "assets/img/shui_idle1.webp",

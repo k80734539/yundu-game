@@ -87,13 +87,17 @@ function uiIcon(key,x,y,s,ring,alpha){const im=I[key];X.save();X.globalAlpha=alp
  else{X.fillStyle=ring||'#fff';X.beginPath();X.arc(x+s/2,y+s/2,s*.22,0,7);X.fill()}
  if(ring){X.strokeStyle=ring;X.lineWidth=Math.max(2,s*.07);X.beginPath();X.arc(x+s/2,y+s/2,s/2-1,0,7);X.stroke()}X.restore()}
 function setTip(B,t,now){B.tipTxt=t;B.tipT=now}
-function drawIntent(B,lx,y,fs,H,now){if(!B.hebo)return;const f=heboForecast(B,2),sz=Math.max(11,fs-3),ic=Math.max(30,fs*2.1),gap=5;
- X.font=sz+'px '+FONT;const tw=Math.max(...f.map(o=>X.measureText(INTENT_TXT[o.k]).width)),hdr='河伯下一步',w=ic+8+Math.max(tw,X.measureText(hdr).width-ic)+12,h=sz+8+f.length*(ic+gap)+2,x=Math.max(SA.l+4,Math.min(lx,SW-SA.r-84-w));
- X.fillStyle='rgba(8,18,28,.6)';X.fillRect(x,y-sz-6,w,h);txt(hdr,x+8,y,sz,'#cfe','left');
- f.forEach((o,i)=>{const yy=y+4+i*(ic+gap),dim=i?.82:1,col=o.k==='wave'?'#ff9a9a':o.k==='stagger'?'#d8c8ff':'#ffe9b0',s2=i?ic*.88:ic;
-  uiIcon('ui_intent_'+({tail:'tail',charge:'charge',wave:'wave',stagger:'stagger',drink:'drink',whirl:'whirl'})[o.k],x+6,yy+(ic-s2)/2,s2,INTENT_RING[o.k],dim);
-  X.globalAlpha=dim;txt(INTENT_TXT[o.k],x+6+ic+6,yy+ic/2+sz*.35,sz,col,'left');X.globalAlpha=1;
-  H.push({x:x,y:yy,w:w,h:ic,fn:()=>setTip(B,INTENT_TIP[o.k],performance.now())})})}
+function drawIntent(B,lx,y,fs,H,now){if(!B.hebo)return;const f=heboForecast(B,2),sz=Math.max(11,fs-3),ic=Math.max(28,fs*1.9),ar=Math.max(10,ic*.4);
+ // 小型：兩個圖示＋箭頭，沒有底板；第一個圖示下方只有兩個字，細節點圖示才顯示
+ const w=ic+ar+ic*.84+8,x=Math.max(SA.l+4,Math.min(lx,SW-SA.r-84-w)),s2=ic*.84;
+ const draw=(o,xx,yy,s,dim)=>uiIcon('ui_intent_'+o.k,xx,yy,s,INTENT_RING[o.k],dim);
+ draw(f[0],x,y,ic,1);
+ X.save();X.globalAlpha=.8;X.fillStyle='#e8f4ff';X.font=sz+'px '+FONT;X.textAlign='center';X.fillText('›',x+ic+ar/2,y+ic/2+sz*.3);X.restore();
+ if(f[1])draw(f[1],x+ic+ar,y+(ic-s2)/2,s2,.8);
+ const lab=f[0].a,col=f[0].k==='wave'?'#ff9a9a':f[0].k==='stagger'?'#d8c8ff':'#ffe9b0';
+ X.save();X.shadowColor='#000';X.shadowBlur=4;txt(lab,x+ic/2,y+ic+sz+1,sz,col,'center');X.restore();
+ H.push({x:x,y:y,w:ic,h:ic+sz+4,fn:()=>setTip(B,'河伯下一步：'+INTENT_TIP[f[0].k],performance.now())});
+ if(f[1])H.push({x:x+ic+ar,y:y,w:s2,h:ic,fn:()=>setTip(B,'再下一步：'+INTENT_TIP[f[1].k],performance.now())})}
 function drawTideGauge(B,fs,H,now){if(!B.hebo)return;const td=tideNow(B),gw=Math.max(24,fs*1.9),gh=Math.min(SH*.3,150),gx=SA.l+6,gy=SA.t+Math.max(66,fs*3.6),seg=gh/3,segOf=t=>2-t;
  [2,1,0].forEach((t,i)=>{X.fillStyle=t===td?TIDE_COL[t]:'rgba(20,34,46,.55)';X.globalAlpha=t===td?.55:1;X.fillRect(gx+gw*.2,gy+i*seg+2,gw*.6,seg-4);X.globalAlpha=1});
  const gi=I.ui_tide_gauge;if(gi?.naturalWidth)X.drawImage(gi,gx,gy,gw,gh);else{X.strokeStyle='#c9a85c';X.lineWidth=2;X.strokeRect(gx+gw*.2,gy,gw*.6,gh)}
