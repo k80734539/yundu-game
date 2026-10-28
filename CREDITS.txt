@@ -63,3 +63,4 @@ hebo_charge0/1、hebo_stagger、hebo_drink、hebo_whirl、hebo_rage0/1、hebo_wa
 
 【v50 村莊拾取物】
 vx_sinker／vx_basket／vx_fish／vx_herb（網墜、竹籃、魚乾、清心草）：Codex 內建 image_gen 原創生成，依 docs/art/style-guide.md 的水彩手繪、淡墨線、光源左上與斜視構圖，風格對齊 village_map_v37.webp。去背與裁邊由 Claude 處理（清除極淡殘影、裁到物件邊界留 2px），詳見 docs/art/village-explore-v50/README.md。
+ui_intent_*、ui_tide_*、ui_qi_*、fx_tail_sweep、fx_wave_big、fx_splash、fx_charge_ring 與重畫的 hebo_wave：OpenAI 內建 image_gen 原創生成，透明背景，經程式清除碎片後使用。

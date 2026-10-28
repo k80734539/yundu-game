@@ -1,7 +1,7 @@
 'use strict';
 // 圖片清單：key -> assets/img 路徑（勿改回 base64 內嵌）
 // 圖片網址會加上 ?v=ASSET_V（與 index.html 的 ?v=N 同步）。改 sprite 規格／換圖時一定要一起 +1，避免舊 JS 畫新圖或新 JS 畫舊快取圖
-const ASSET_V=57;
+const ASSET_V=58;
 const ASSETS={
  "shui_idle0": "assets/img/shui_idle0.webp",
  "shui_idle1": "assets/img/shui_idle1.webp",
@@ -36,6 +36,23 @@ const ASSETS={
  "hebo_rage1": "assets/img/hebo_rage1.webp",
  "hebo_wave": "assets/img/hebo_wave.webp",
  "fx_whirl": "assets/img/fx_whirl.webp",
+ "ui_intent_tail": "assets/img/ui_intent_tail.webp",
+ "ui_intent_charge": "assets/img/ui_intent_charge.webp",
+ "ui_intent_wave": "assets/img/ui_intent_wave.webp",
+ "ui_intent_stagger": "assets/img/ui_intent_stagger.webp",
+ "ui_intent_drink": "assets/img/ui_intent_drink.webp",
+ "ui_intent_whirl": "assets/img/ui_intent_whirl.webp",
+ "ui_tide_ebb": "assets/img/ui_tide_ebb.webp",
+ "ui_tide_mid": "assets/img/ui_tide_mid.webp",
+ "ui_tide_rise": "assets/img/ui_tide_rise.webp",
+ "ui_qi_empty": "assets/img/ui_qi_empty.webp",
+ "ui_qi_full": "assets/img/ui_qi_full.webp",
+ "ui_tide_gauge": "assets/img/ui_tide_gauge.webp",
+ "ui_tide_marker": "assets/img/ui_tide_marker.webp",
+ "fx_tail_sweep": "assets/img/fx_tail_sweep.webp",
+ "fx_wave_big": "assets/img/fx_wave_big.webp",
+ "fx_splash": "assets/img/fx_splash.webp",
+ "fx_charge_ring": "assets/img/fx_charge_ring.webp",
  "qzd_idle0": "assets/img/qzd_idle0.webp",
  "qzd_idle1": "assets/img/qzd_idle1.webp",
  "qzd_charge": "assets/img/qzd_charge.webp",
