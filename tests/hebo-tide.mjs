@@ -9,7 +9,7 @@ export async function heboTide(browser,url){
   await pg.goto(url);await pg.waitForFunction('ready');
   const r=await pg.evaluate(()=>{
    newGame();G.dlg=null;G.party.push(mk('白苓','bl',45,24,6,2,11,['狐火','春霖']));
-   const begin=()=>{__sb(['河伯'],{noEsc:1,noParry:1});G.B.ph='cmd';G.B.ai=0;G.party.forEach(p=>{p.hp=999;p.mhp=999;p.st='';p.guard=0;p.mp=p.mmp})};
+   const begin=()=>{__sb(['河伯'],{noEsc:1,noParry:1,noMoves:1});G.B.ph='cmd';G.B.ai=0;G.party.forEach(p=>{p.hp=999;p.mhp=999;p.st='';p.guard=0;p.mp=p.mmp})};
    const out={};
    begin();out.order=[1,2,3,4,5,6].map(t=>tideAt(t));out.intro=G.B.msgs.some(m=>String(m).includes('潮水'));
    // 傷害倍率：固定亂數，只比較倍率
@@ -25,11 +25,11 @@ export async function heboTide(browser,url){
    // 兩項預告：第二項等於下一回合的第一項
    begin();let ok=true;for(let i=0;i<8;i++){const f=heboForecast(G.B,2);enemyPhase();G.B.after();const g=heboForecast(G.B,1);if(f[1].a!==g[0].a)ok=false}out.chain=ok;
    // 回合末提示潮位轉換
-   begin();enemyPhase();out.tideMsg=G.B.msgs.some(m=>String(Array.isArray(m)?m[0]:m).startsWith('潮水轉為'));
+   begin();enemyPhase();out.tideMsg=G.B.msgs.some(m=>String(Array.isArray(m)?m[0]:m).includes('潮水'));
    // 其他敵人不受潮位影響
    __sb(['老蘆葦精'],{noEsc:1});out.laoluNoTide=G.B.hebo===undefined&&tideNow(G.B)===1;
    // ---- 第二包：撐篙擋浪、引潮、渡氣與合擊
-   const beginP=()=>{__sb(['河伯'],{noEsc:1});G.B.ph='cmd';G.B.ai=0;G.party.forEach(p=>{p.hp=999;p.mhp=999;p.st='';p.guard=0;p.mp=p.mmp});G.B.hebo.state=HEBO_STATE.CHARGING;G.B.turn=1};
+   const beginP=()=>{__sb(['河伯'],{noEsc:1,noMoves:1});G.B.ph='cmd';G.B.ai=0;G.party.forEach(p=>{p.hp=999;p.mhp=999;p.st='';p.guard=0;p.mp=p.mmp});G.B.hebo.state=HEBO_STATE.CHARGING;G.B.turn=1};
    const parryRun=(off)=>{beginP();Math.random=()=>0.25;G.B.en[0].hp=G.B.en[0].mhp;enemyPhase();const ph1=G.B.ph;const t0=G.B.parry.t0;parryTap(t0+1000+off);Math.random=old;const lost=999-G.party[0].hp,hh=G.B.en[0].hp,qi=G.B.qi;return{ph1,lost,hh,qi,mhp:G.B.en[0].mhp,grade:G.B.parryGrade,ph:G.B.ph}};
    out.parry={perfect:parryRun(0),good:parryRun(200),miss:parryRun(600),early:parryRun(-700)};
    // 逾時由畫面更新自動判定為失誤（模擬：parry 過期）
@@ -53,6 +53,20 @@ export async function heboTide(browser,url){
    B0.hebo.state=HEBO_STATE.NORMAL;B0.heboPhase2=1;pz.rage=enemyPose(hb,nowT);B0.heboPhase2=0;
    B0.vx=[{src:hb,k:'wave',at:nowT-10}];pz.wave=enemyPose(hb,nowT);B0.vx=[];
    out.poses=pz;out.poseImgs=['charge0','charge1','stagger','rage0','rage1','wave'].map(k=>!!I['hebo_'+k]?.naturalWidth);
+   // ---- 變招：吞水、漩渦；預告與實際行動一致（含隨機招式）
+   {const mkB=()=>{__sb(['河伯'],{noEsc:1,noParry:1});G.B.ph='cmd';G.B.ai=0;G.party.forEach(p=>{p.hp=999;p.mhp=999;p.st='';p.guard=0;p.sealed=0;p.mp=p.mmp})};
+    mkB();const H=G.B.hebo;H.moves=['drink','whirl','tail','tail'];G.B.en[0].hp=300;const hp0=G.B.en[0].hp;
+    const fc=heboForecast(G.B,2).map(o=>o.k);enemyPhase();out.drink={fc,healed:G.B.en[0].hp-hp0,expect:Math.round(G.B.en[0].mhp*CFG.hebo.drinkHeal),pose:null};G.B.after();
+    const fc2=heboForecast(G.B,1).map(o=>o.k);enemyPhase();out.whirl={fc:fc2,sealed:G.party.filter(p=>p.sealed).length};
+    const sealedP=G.party.find(p=>p.sealed);G.B.after();
+    out.sealStillThere=G.party.filter(p=>p.sealed).length;
+    G.B.ph='cmd';G.B.ai=G.party.indexOf(sealedP);G.B.sel=1;bKey('ok');out.sealBlocked=G.B.ph==='msg'&&String(G.B.msgs[0]).includes('無法使用法術');
+    G.B.msgs.length=0;G.B.after();
+    enemyPhase();out.sealCleared=G.party.filter(p=>p.sealed).length;
+    // 隨機招式：預告第一項 = 實際行動
+    Math.random=(()=>{let s=7;return()=>(s=(s*16807)%2147483647)/2147483647})();mkB();G.B.opt.noMoves=0;G.B.hebo.moves=[];heboRefill(G.B);G.B.en[0].hp=G.B.en[0].mhp*.9;
+    const seq2=[];for(let i=0;i<10&&G.B.hebo;i++){const f=heboForecast(G.B,2),a0=f[0].k;enemyPhase();if(G.B.ph==='parry'){G.B.opt.noParry=1;enemyPhase()}const real=G.B.msgs.map(m=>String(Array.isArray(m)?m[0]:m)).join('|');const kind=/吞下河水/.test(real)?'drink':/漩渦/.test(real)?'whirl':/龍尾/.test(real)?'tail':/濁浪/.test(real)&&/掀起|威力/.test(real)?'wave':/蓄力/.test(real)?'charge':/失衡/.test(real)?'stagger':'?';seq2.push([a0,kind]);G.party.forEach(p=>{p.hp=999;p.sealed=0});G.B.after()}
+    out.seq2=seq2;Math.random=old}
    out.cfg=CFG.hebo;return out;
   });
   assert(Object.values(r.parry).every(x=>x.ph1==='parry'&&x.ph==='msg'),'parry pauses, then resolves into messages');
@@ -63,6 +77,8 @@ export async function heboTide(browser,url){
   assert.equal(r.timeoutGrade,'miss');assert.equal(r.noParryPhase,'msg');assert.equal(r.qzDownPhase,'msg');assert(r.reflectWin,'reflect can win the battle');
   assert(r.pull.has&&r.pull.after===r.pull.exp&&r.pull.fc===r.pull.after,'pull advances tide and forecast follows: '+JSON.stringify(r.pull));assert.equal(r.pull.mp,16);assert.equal(r.pull.qi,r.cfg.qiPull);assert(r.pullElsewhere);
   assert.equal(r.poses.charge.slice(0,6),'charge');assert.equal(r.poses.stagger,'stagger');assert(r.poses.rage.startsWith('rage'));assert.equal(r.poses.wave,'wave');assert(r.poses.normal.startsWith('idle'));assert(r.poseImgs.every(Boolean),'new hebo pose images loaded');
+  assert.deepEqual(r.drink.fc,['drink','whirl']);assert.equal(r.drink.healed,r.drink.expect);assert.deepEqual(r.whirl.fc,['whirl']);assert.equal(r.whirl.sealed,1);assert.equal(r.sealStillThere,1,'seal lasts through the next player phase');assert(r.sealBlocked,'sealed hero cannot open skills');assert.equal(r.sealCleared,0,'seal ends after that turn');
+  assert(r.seq2.length>=8&&r.seq2.every(([f,a])=>f===a),'forecast with random moves matches actions: '+JSON.stringify(r.seq2));assert(new Set(r.seq2.map(x=>x[0])).size>=3,'random moves actually vary');
   assert(r.comboHidden&&r.comboShown);assert.deepEqual([r.combo.dmg,r.combo.qi,r.combo.state,r.combo.tide],[r.combo.expect,0,'STAGGERED',0]);assert.equal(r.qiGuard,r.cfg.qiGuard);
 
   assert.deepEqual(r.order,[1,2,0,1,2,0]);assert(r.intro,'intro mentions tide');

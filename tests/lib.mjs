@@ -15,6 +15,8 @@ export const SEED="{let s=12345;Math.random=()=>{s=(s*1103515245+12345)%21474836
 export async function newPage(b,W,H,{touch=true,dpr=2,seed=false}={}){const ctx=await b.newContext({viewport:{width:W,height:H},deviceScaleFactor:dpr,hasTouch:touch,isMobile:touch});const pg=await ctx.newPage();const errs=[];
  pg.on('pageerror',e=>errs.push(String(e)));pg.on('console',m=>{if(m.type()==='error')errs.push(m.text())});
  if(seed)await pg.addInitScript(SEED);
+ // 頁面載入偶爾超過 1 秒，clock.pauseAt(1000) 會因時間已過而丟錯；改成錯過就在目前時間暫停
+ {const orig=pg.clock.pauseAt.bind(pg.clock);pg.clock.pauseAt=async t=>{try{return await orig(t)}catch(e){if(!/past/.test(String(e)))throw e;const now=await pg.evaluate(()=>Date.now());return await orig(now+1)}}}
  const E=e=>pg.evaluate('(()=>{const G=G_();return '+e+'})()');const P=k=>pg.evaluate(`press('${k}')`);
  const jsErrors=async()=>errs.concat(await pg.evaluate('window.__err||[]'));
  return {ctx,pg,E,P,errs,jsErrors}}
