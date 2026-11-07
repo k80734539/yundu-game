@@ -136,3 +136,23 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 .opt-btns { display: flex; gap: 6px; margin-top: 8px; }
 
 /* ---------- NPC 名牌 ---------- */
+
+/* ---------- 對話框 ---------- */
+#dialog { left: 50%; bottom: 60px; transform: translateX(-50%); width: min(520px, 92vw); cursor: pointer; }
+.dlg-body { display: flex; gap: 8px; padding: 8px 10px 4px; }
+.dlg-face { width: 72px; height: 72px; flex: none; border: 1px solid #a8b4d0; border-radius: 4px; image-rendering: pixelated; }
+.dlg-text { flex: 1; min-height: 72px; font-size: 14px; line-height: 22px; color: #1e2236; white-space: pre-wrap; }
+.dlg-opts { padding: 0 10px 4px 90px; display: flex; flex-direction: column; gap: 3px; }
+.dlg-opt { padding: 3px 8px; border: 1px solid #8a9ac0; border-radius: 3px; background: linear-gradient(#fff, #e4eaf6); cursor: pointer; font-size: 13px; }
+.dlg-opt:hover { background: linear-gradient(#fff, #cfe0ff); border-color: #3a5490; }
+.dlg-opt.new { color: #b06a00; } .dlg-opt.done { color: #1a8a3a; font-weight: bold; }
+.dlg-hint { text-align: right; padding: 0 10px 6px; font-size: 11px; color: #6a7aa0; animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: .3; } }
+
+/* ---------- 任務 ---------- */
+.q-box { border: 1px solid #c8d0e4; border-radius: 4px; padding: 5px 6px; margin-bottom: 5px; background: #f8faff; line-height: 17px; }
+.q-ok { color: #fff; background: #2aa04a; border-radius: 3px; padding: 0 4px; font-size: 11px; }
+#qtrack { position: absolute; right: 6px; top: 150px; width: 210px; background: rgba(16,18,32,.55); border: 1px solid rgba(120,140,200,.5); border-radius: 4px; color: #fff; padding: 3px 6px 5px; cursor: pointer; text-shadow: 0 1px 1px #000; }
+.qt-head { font-size: 11px; color: #ffe08a; font-weight: bold; margin-bottom: 2px; }
+.qt-item { margin-top: 3px; } .qt-name { font-size: 12px; font-weight: bold; } .qt-prog { font-size: 11px; color: #c8d8f0; }
+.qt-item.done .qt-name { color: #8aff9a; }

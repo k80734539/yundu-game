@@ -29,6 +29,9 @@ import { iconCanvas } from '../render/IconArt';
 import { Npc } from '../entities/Npc';
 import type { HotSlot } from '../ui/Hotbar';
 import type { PropInst } from '../systems/MapLoader';
+import { Quests } from '../systems/Quests';
+import type { Dialog } from '../ui/Dialog';
+import { textImage } from '../render/Font';
 import { cellDist, mulberry32 } from './math';
 
 const K_PROP = 0, K_STRIP = 1, K_ACTOR = 2, K_ITEM = 3;
@@ -67,6 +70,8 @@ export class Game {
   skillCd: Record<string, number> = {}; skillCdMax: Record<string, number> = {};
   savePoint = { map: 'aurora', x: 25, y: 30 };
   talkTarget: Npc | null = null;
+  quests: Quests;
+  flags: Record<string, any> = { visited: {} };
 
   constructor(canvas: HTMLCanvasElement, public uiRoot: HTMLElement) {
     this.r = new Renderer(canvas);
@@ -75,6 +80,9 @@ export class Game {
     this.inv = new Inventory(() => Math.floor(this.player.d.weight / 10), () => { this.player.recalc(); this.player.refreshLook(); this.ev.emit('inv'); this.ev.emit('stats'); });
     this.player.equipsFn = () => this.inv.equipInfos();
     this.spawner = new Spawner(this);
+    this.quests = new Quests(this);
+    this.ev.on('kill', (id: string) => this.quests.onKill(id));
+    this.ev.on('pickup', (id: string) => this.quests.onPickup(id));
     this.spawner.init();
     this.ui = new UI(this, uiRoot);
     this.newGameItems();
@@ -237,6 +245,14 @@ export class Game {
       npc.x = npc.px = ppx; npc.y = npc.py = ppy;
     }
   }
+  dialogClosed() { /* 對話結束 */ }
+  fullHeal() {
+    const p = this.player; p.hp = p.maxHp; p.sp = p.maxSp;
+    for (let i = 0; i < 16; i++) this.fx.glow(p.x, p.y, Math.random() * 80, '#a0ffb0', 0.9, 2, 50);
+    this.fx.dmg(p.x, p.y, 'FULL', 'heal', 130); this.audio?.sfx('heal');
+  }
+  /** 轉職選單（階段 7） */
+  jobMenu(d: Dialog) { d.say('轉職功能準備中。'); }
   talkTo(npc: Npc) {
     const p = this.player;
     npc.face(p.x, p.y); p.face(npc.x, npc.y);
@@ -290,6 +306,7 @@ export class Game {
     this.lights = this.props.filter((r) => r.def.anim === 'flame' || r.p.type === 'lamp' || r.def.anim === 'crystal').map((r) => ({ x: r.fx, y: r.fy - (r.p.type === 'lamp' ? 80 : r.def.anim === 'flame' ? 50 : 20), r: r.def.anim === 'crystal' ? 70 : 130 }));
     this.spawnNpcs();
     this.talkTarget = null;
+    this.flags.visited[def.id] = true;
     this.ui.onMap();
     const lv = def.level ? `建議等級 Lv${def.level[0]}~${def.level[1]}` : '';
     this.ui.showBanner(def.name, lv);
@@ -385,10 +402,11 @@ export class Game {
     if (w) this.r.setZoom(this.r.zoomBias - w);
     for (const c of this.input.takeClicks()) {
       if (c.button !== 0) continue;
+      if (this.ui.dialog.isOpen) { this.ui.dialog.advance(); continue; }
       this.onClick(c.x, c.y, false);
     }
     // 按住滑鼠持續往游標方向走（RO 操作）
-    if (this.input.down) {
+    if (this.input.down && !this.ui.dialog.isOpen) {
       this.holdT += dt;
       if (this.holdT > 0.25 && !this.player.chase) { this.holdT = 0.05; this.onClick(this.input.mx, this.input.my, true); }
     } else this.holdT = 0;
@@ -769,7 +787,12 @@ export class Game {
       c.fillStyle = k > 0.25 ? '#3ce060' : '#ff5040'; c.fillRect(bx, by, Math.round(w * k), 3);
       if (e === this.player && e.maxSp > 0) { c.fillStyle = '#202040'; c.fillRect(bx, by + 3, w, 3); c.fillStyle = '#4090ff'; c.fillRect(bx, by + 3, Math.round(w * Math.max(0, e.sp / e.maxSp)), 3); }
     }
-    if (e instanceof Npc) { this.label(c, e.name, x, y + 14, '#a8e8ff'); return; }
+    if (e instanceof Npc) {
+      this.label(c, e.name, x, y + 14, '#a8e8ff');
+      const mk = this.quests.mark(e.def.id);
+      if (mk) { const img = textImage(mk, mk === '?' ? '#60ff80' : '#ffe040', 3); c.drawImage(img, Math.round(x - img.width / 2), Math.round(y + e.bbox.y0 - 30 + Math.sin(this.time * 4) * 3)); }
+      return;
+    }
     if (this.hover === e && !mvp) this.label(c, e instanceof Monster ? `${e.name} Lv${e.def.lv}` : e.name, x, y + 22, e instanceof Monster ? '#ffffff' : '#a0e0ff');
   }
   label(c: CanvasRenderingContext2D, text: string, x: number, y: number, color = '#fff') {

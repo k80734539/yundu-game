@@ -14,12 +14,14 @@ import { ShopWindow } from './ShopWindow';
 import { OptionsWindow } from './OptionsWindow';
 import { ItemInfo } from './ItemInfo';
 import type { DragData } from './Drag';
+import { Dialog } from './Dialog';
+import { QuestWindow, QuestTracker } from './QuestWindow';
 
 /** UI 管理器：DOM 視窗、快捷鍵、訊息、橫幅 */
 export class UI {
   winPos: Record<string, [number, number]> = {};
   wins: Record<string, Win> = {};
-  hud: Hud; chat: Chat; mini: Minimap; world: WorldMap; info: ItemInfo; hot: Hotbar; shop: ShopWindow;
+  hud: Hud; chat: Chat; mini: Minimap; world: WorldMap; info: ItemInfo; hot: Hotbar; shop: ShopWindow; dialog: Dialog; qtrack: QuestTracker;
   banner: HTMLDivElement;
   private bannerT = 0;
   constructor(public g: Game, public root: HTMLElement) {
@@ -38,6 +40,9 @@ export class UI {
     this.shop = this.add(new ShopWindow(this)) as ShopWindow;
     this.add(new OptionsWindow(this));
     this.hot = new Hotbar(this);
+    this.add(new QuestWindow(this));
+    this.qtrack = new QuestTracker(this);
+    this.dialog = new Dialog(this);
     g.ev.on('stats', () => this.refresh());
   }
   add(w: Win) { this.wins[w.id] = w; return w; }
@@ -56,7 +61,7 @@ export class UI {
     requestAnimationFrame(() => b.classList.add('show'));
     this.bannerT = dur;
   }
-  onMap() { this.mini.onMap(); this.world.render(); }
+  onMap() { this.mini.onMap(); this.world.render(); this.qtrack.render(); }
   /** 拖曳放開：快捷列 → 設定；遊戲畫面 → 丟到地上 */
   dropOn(t: Element | null, d: DragData) {
     const hot = (t as HTMLElement | null)?.closest?.('[data-hot]') as HTMLElement | null;
@@ -66,12 +71,14 @@ export class UI {
   update(dt: number) {
     this.hud.update();
     this.hot.update();
+    this.dialog.update(dt);
     this.mini.update(dt);
     this.world.update(dt);
     if (this.bannerT > 0) { this.bannerT -= dt; if (this.bannerT <= 0) this.banner.querySelector('.b')?.classList.remove('show'); }
   }
   /** 回傳 true 表示按鍵已被 UI 處理 */
   onKey(k: KeyCombo): boolean {
+    if (this.dialog.onKey(k.key)) return true;
     const key = k.key.toLowerCase();
     if (k.alt) {
       const map: Record<string, string> = { a: 'status', e: 'inventory', q: 'equip', s: 'skills', u: 'quests' };
@@ -89,12 +96,7 @@ export class UI {
     return false;
   }
   /** 和 NPC 說話（階段 6 換成對話框） */
-  talk(npc: import('../entities/Npc').Npc) {
-    const d = npc.def;
-    const first = d.dialog.start?.text; const line = Array.isArray(first) ? first[0] : first;
-    if (line) this.msg(`${d.name}：${line}`, 'npc');
-    if (d.shop) this.shop.openShop(d.shop, 'buy');
-  }
+  talk(npc: import('../entities/Npc').Npc) { this.dialog.open(npc); }
   command(t: string) {
     if (!t.startsWith('/')) { this.msg(`${this.g.player.ch.name}：${t}`, 'me'); return; }
     const [cmd, ...args] = t.slice(1).split(/\s+/);

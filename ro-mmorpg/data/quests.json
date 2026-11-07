@@ -1,1 +1,256 @@
-[]
+[
+ {
+  "id": "q_tut1",
+  "name": "初次狩獵",
+  "npc": "guide",
+  "type": "kill",
+  "target": "jelly",
+  "count": 5,
+  "desc": "城外南方草原有很多粉紅色的啵啵團。先去打倒 5 隻，熟悉戰鬥吧！",
+  "done": "做得好！這是一點心意，藥水要記得放在快捷列喔。",
+  "reward": {
+   "exp": 45,
+   "jexp": 30,
+   "zeny": 100,
+   "items": [
+    [
+     "red_potion",
+     5
+    ]
+   ]
+  }
+ },
+ {
+  "id": "q_tut2",
+  "name": "黏液收集",
+  "npc": "guide",
+  "type": "collect",
+  "target": "jelly",
+  "count": 5,
+  "desc": "啵啵團會掉落黏液。帶 5 個黏液回來給我，我教你怎麼賺錢。",
+  "done": "收集品可以賣給商人換 Zeny。這些翅膀送你，迷路時很好用。",
+  "reward": {
+   "exp": 60,
+   "jexp": 40,
+   "items": [
+    [
+     "fly_wing",
+     3
+    ],
+    [
+     "butterfly_wing",
+     1
+    ]
+   ]
+  },
+  "prev": "q_tut1",
+  "consume": true
+ },
+ {
+  "id": "q_cap1",
+  "name": "草原的害蟲",
+  "npc": "captain",
+  "type": "kill",
+  "target": "caterpillar",
+  "count": 8,
+  "desc": "綠毛蟲在啃食農田的作物，去南方草原消滅 8 隻。",
+  "done": "辛苦了！農夫們會感謝你的。",
+  "reward": {
+   "exp": 90,
+   "jexp": 50,
+   "zeny": 300
+  }
+ },
+ {
+  "id": "q_girl",
+  "name": "兔子玩偶",
+  "npc": "girl",
+  "type": "collect",
+  "target": "fluff",
+  "count": 6,
+  "desc": "跳跳兔把我的玩偶咬破了……可以幫我收集 6 團絨毛，讓媽媽補好它嗎？",
+  "done": "哇！謝謝你！這個緞帶送給你，是我最喜歡的！",
+  "reward": {
+   "exp": 80,
+   "jexp": 45,
+   "items": [
+    [
+     "ribbon",
+     1
+    ]
+   ]
+  },
+  "consume": true
+ },
+ {
+  "id": "q_herb1",
+  "name": "孢子研究",
+  "npc": "herbalist",
+  "type": "collect",
+  "target": "spore",
+  "count": 5,
+  "desc": "微風森林的蘑菇仔身上的孢子是藥材的原料，請帶 5 個回來。",
+  "done": "太好了，這樣就能做新藥了。這些藍色藥水給你。",
+  "reward": {
+   "exp": 160,
+   "jexp": 90,
+   "items": [
+    [
+     "blue_potion",
+     3
+    ]
+   ]
+  },
+  "reqLv": 4,
+  "consume": true
+ },
+ {
+  "id": "q_cap2",
+  "name": "森林蜂患",
+  "npc": "captain",
+  "type": "kill",
+  "target": "buzz",
+  "count": 10,
+  "desc": "嗡嗡蜂會主動攻擊路人，去微風森林討伐 10 隻。小心牠們成群結隊！",
+  "done": "不錯的身手！這雙涼鞋拿去吧。",
+  "reward": {
+   "exp": 320,
+   "jexp": 170,
+   "zeny": 800,
+   "items": [
+    [
+     "sandals",
+     1
+    ]
+   ]
+  },
+  "reqLv": 6,
+  "prev": "q_cap1"
+ },
+ {
+  "id": "q_herb2",
+  "name": "海岸的蟹鉗",
+  "npc": "herbalist",
+  "type": "collect",
+  "target": "crab_claw",
+  "count": 6,
+  "desc": "金沙海岸的鉗鉗蟹，蟹鉗可以入藥。幫我收集 6 個。",
+  "done": "謝謝！黃色藥水的效果很好喔。",
+  "reward": {
+   "exp": 650,
+   "jexp": 320,
+   "items": [
+    [
+     "yellow_potion",
+     5
+    ]
+   ]
+  },
+  "reqLv": 10,
+  "prev": "q_herb1",
+  "consume": true
+ },
+ {
+  "id": "q_cap3",
+  "name": "礦坑的哥布林",
+  "npc": "captain",
+  "type": "kill",
+  "target": "goblin",
+  "count": 12,
+  "desc": "古老礦坑 B1 出現了哥布林的據點，消滅 12 隻。牠們會互相支援，別被包圍。",
+  "done": "幹得好，礦工們可以回去工作了。",
+  "reward": {
+   "exp": 1300,
+   "jexp": 650,
+   "zeny": 2000
+  },
+  "reqLv": 12,
+  "prev": "q_cap2"
+ },
+ {
+  "id": "q_herb3",
+  "name": "沼澤的毒孢子",
+  "npc": "herbalist",
+  "type": "collect",
+  "target": "poison_spore",
+  "count": 8,
+  "desc": "迷霧沼澤的毒傘菇……毒孢子可以做成解毒劑。需要 8 個。",
+  "done": "你真可靠！白色藥水是最高級的回復藥。",
+  "reward": {
+   "exp": 2400,
+   "jexp": 1200,
+   "items": [
+    [
+     "white_potion",
+     5
+    ]
+   ]
+  },
+  "reqLv": 18,
+  "prev": "q_herb2",
+  "consume": true
+ },
+ {
+  "id": "q_cap4",
+  "name": "沼澤的殭屍",
+  "npc": "captain",
+  "type": "kill",
+  "target": "zombie",
+  "count": 15,
+  "desc": "迷霧沼澤的殭屍越來越多，討伐 15 隻。",
+  "done": "你已經是鎮上的英雄了。",
+  "reward": {
+   "exp": 3200,
+   "jexp": 1600,
+   "zeny": 5000
+  },
+  "reqLv": 18,
+  "prev": "q_cap3"
+ },
+ {
+  "id": "q_mvp1",
+  "name": "討伐啵啵王",
+  "npc": "captain",
+  "type": "kill",
+  "target": "kingjelly",
+  "count": 1,
+  "desc": "微風森林深處有一隻巨大的啵啵王。若你有自信，就去討伐牠吧！",
+  "done": "真不敢相信……你打倒了啵啵王！這是王國的獎賞。",
+  "reward": {
+   "exp": 5000,
+   "jexp": 2500,
+   "zeny": 10000,
+   "items": [
+    [
+     "brooch",
+     1
+    ]
+   ]
+  },
+  "reqLv": 15,
+  "prev": "q_cap2"
+ },
+ {
+  "id": "q_mvp2",
+  "name": "遠古巨像",
+  "npc": "captain",
+  "type": "kill",
+  "target": "golem",
+  "count": 1,
+  "desc": "古老礦坑 B2 的最深處沉睡著遠古巨像。只有最強的冒險者才能挑戰。",
+  "done": "傳說中的巨像……你就是傳說本身。",
+  "reward": {
+   "exp": 30000,
+   "jexp": 15000,
+   "zeny": 50000,
+   "items": [
+    [
+     "arc_wand",
+     1
+    ]
+   ]
+  },
+  "reqLv": 30,
+  "prev": "q_cap4"
+ }
+]
