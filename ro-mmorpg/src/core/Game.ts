@@ -37,6 +37,7 @@ import { Projectile } from '../entities/Projectile';
 import { engage as aiEngage } from '../systems/AI';
 import { magicVsMonster } from '../systems/Combat';
 import { Save } from '../systems/Save';
+import { Audio } from '../systems/Audio';
 import { refineRate, refineMaterial, refineFee } from '../systems/Refine';
 import { expNeed, jobExpNeed } from '../systems/Stats';
 import { cellDist, mulberry32 } from './math';
@@ -65,7 +66,7 @@ export class Game {
   rnd = mulberry32(Date.now() & 0xffff);
   holdT = 0;
   ui!: UI;
-  audio: any = null;
+  audio: Audio = new Audio();
   save: any = null;
   inv: Inventory;
   spawner: Spawner;
@@ -160,7 +161,7 @@ export class Game {
       if (d.heal) { const v = Math.round(d.heal * (0.9 + this.rnd() * 0.2) * (1 + p.d.total.vit / 100)); p.hp = Math.min(p.maxHp, p.hp + v); this.fx.dmg(p.x, p.y, v, 'heal', 120); }
       if (d.healSp) { const v = Math.round(d.healSp * (1 + p.d.total.int / 100)); p.sp = Math.min(p.maxSp, p.sp + v); this.fx.dmg(p.x, p.y, v, 'sp', 135); }
       for (let i = 0; i < 8; i++) this.fx.glow(p.x, p.y, 20 + Math.random() * 60, d.healSp ? '#80b8ff' : '#90ff90', 0.6, 2, 40);
-      this.audio?.sfx('potion');
+      this.audio.sfx('potion');
     } else if (d.buff === 'flywing') {
       const pos = this.map.randomWalkable(this.rnd); if (!pos) return false;
       this.teleport(pos[0], pos[1]);
@@ -177,7 +178,7 @@ export class Game {
     for (const m of this.monsters) if (m.aggroOn === p) giveUp(m);
     this.cam.follow(p.x, p.y, 0, true);
     this.fx.ring(p.x, p.y, '#a0e0ff', 0.5, 40);
-    this.audio?.sfx('warp');
+    this.audio.sfx('warp');
   }
   useHot(i: number) {
     const s = this.hotbar[i]; if (!s) return;
@@ -191,14 +192,14 @@ export class Game {
     const d = DB.item[id], cost = d.price * n, ch = this.player.ch;
     if (ch.zeny < cost) { this.msg('Zeny 不足！', 'warn'); return; }
     if (!this.inv.add(id, n)) { this.msg('負重不足，無法購買！', 'warn'); return; }
-    ch.zeny -= cost; this.msg(`購買了 ${d.name} ×${n}（-${cost} Z）`, 'item'); this.audio?.sfx('coin'); this.ev.emit('stats'); this.ev.emit('inv');
+    ch.zeny -= cost; this.msg(`購買了 ${d.name} ×${n}（-${cost} Z）`, 'item'); this.audio.sfx('coin'); this.ev.emit('stats'); this.ev.emit('inv');
   }
   sell(uid: number, n: number) {
     const it = this.inv.get(uid); if (!it || this.inv.isEquipped(uid)) return;
     n = Math.min(n, it.n);
     const d = DB.item[it.id], gain = Math.floor(d.price / 2) * n;
     this.inv.remove(uid, n); this.player.ch.zeny += gain;
-    this.msg(`出售了 ${d.name} ×${n}（+${gain} Z）`, 'item'); this.audio?.sfx('coin'); this.ev.emit('stats'); this.ev.emit('inv');
+    this.msg(`出售了 ${d.name} ×${n}（+${gain} Z）`, 'item'); this.audio.sfx('coin'); this.ev.emit('stats'); this.ev.emit('inv');
   }
   dropItem(uid: number) {
     const it = this.inv.get(uid); if (!it) return;
@@ -310,12 +311,12 @@ export class Game {
       it.refine++;
       this.msg(`精煉成功！${this.inv.displayName(it)}`, 'item');
       for (let i = 0; i < 24; i++) this.fx.glow(p.x, p.y, Math.random() * 90, '#fff0a0', 1, 2, 70);
-      this.fx.dmg(p.x, p.y, 'SUCCESS', 'heal', 150); this.audio?.sfx('refine_ok');
+      this.fx.dmg(p.x, p.y, 'SUCCESS', 'heal', 150); this.audio.sfx('refine_ok');
       if (it.refine >= 7) this.announce(`【公告】${ch.name} 把 ${d.name} 精煉到了 +${it.refine}！`);
     } else {
       this.msg(`精煉失敗……${d.name} 碎掉了。`, 'warn');
       this.fx.burst(p.x, p.y, 60, '#a0a0b0', 24, 120, 'dot', 0.6, 3);
-      this.fx.dmg(p.x, p.y, 'FAIL', 'take', 150); this.audio?.sfx('refine_fail');
+      this.fx.dmg(p.x, p.y, 'FAIL', 'take', 150); this.audio.sfx('refine_fail');
       this.inv.remove(uid, 1);
     }
     this.player.recalc(); this.ev.emit('inv'); this.ev.emit('stats'); this.save.saveSoon();
@@ -325,7 +326,7 @@ export class Game {
     const cd = DB.item[c.id], ed = DB.item[e.id];
     if ((ed.slots || 0) <= e.cards.length) return;
     e.cards.push(c.id); this.inv.remove(cardUid, 1);
-    this.msg(`把 ${cd.name} 插入了 ${ed.name}！`, 'item'); this.audio?.sfx('refine_ok');
+    this.msg(`把 ${cd.name} 插入了 ${ed.name}！`, 'item'); this.audio.sfx('refine_ok');
     this.player.recalc(); this.ev.emit('inv'); this.ev.emit('stats'); this.save.saveSoon();
   }
   updateBuffs(dt: number) {
@@ -379,7 +380,7 @@ export class Game {
   fullHeal() {
     const p = this.player; p.hp = p.maxHp; p.sp = p.maxSp;
     for (let i = 0; i < 16; i++) this.fx.glow(p.x, p.y, Math.random() * 80, '#a0ffb0', 0.9, 2, 50);
-    this.fx.dmg(p.x, p.y, 'FULL', 'heal', 130); this.audio?.sfx('heal');
+    this.fx.dmg(p.x, p.y, 'FULL', 'heal', 130); this.audio.sfx('heal');
   }
   /** 轉職選單（階段 7） */
   talkTo(npc: Npc) {
@@ -401,7 +402,7 @@ export class Game {
     for (let i = 0; i < 26; i++) this.fx.glow(p.x, p.y, Math.random() * 30, kind === 'base' ? '#ffe070' : '#d8a0ff', 1.2, 2 + (i % 2), 70 + Math.random() * 60);
     this.fx.ring(p.x, p.y, kind === 'base' ? '#ffe070' : '#d8a0ff', 0.8, 50);
     this.fx.dmg(p.x, p.y, kind === 'base' ? 'LV UP' : 'JOB UP', 'crit', 150);
-    this.audio?.sfx('levelup');
+    this.audio.sfx('levelup');
   }
   command(cmd: string, args: string[]) {
     const p = this.player;
@@ -438,6 +439,7 @@ export class Game {
     this.talkTarget = null;
     this.flags.visited[def.id] = true;
     this.ui.onMap();
+    this.audio.bgm(def.bgm);
     const lv = def.level ? `建議等級 Lv${def.level[0]}~${def.level[1]}` : '';
     this.ui.showBanner(def.name, lv);
     this.ev.emit('map', def.id);
@@ -448,7 +450,7 @@ export class Game {
     if (this.warp) return;
     this.warp = { to, tx, ty, t: 0, done: false };
     this.player.stop(); this.player.chase = null;
-    this.audio?.sfx('warp');
+    this.audio.sfx('warp');
   }
   updateWarp(dt: number) {
     const w = this.warp;
@@ -458,7 +460,7 @@ export class Game {
     if (w.t >= 0.25 && !w.done) { w.done = true; this.loadMap(w.to, w.tx, w.ty); this.warp = null; this.fade = 1; }
   }
   mvpStatus(id: string): string { return this.spawner.status(id); }
-  announce(text: string) { this.msg(text, 'ann'); this.ui.showBanner(text, '', 'ann', 4); this.audio?.sfx('announce'); }
+  announce(text: string) { this.msg(text, 'ann'); this.ui.showBanner(text, '', 'ann', 4); this.audio.sfx('announce'); }
   checkPortals() {
     const p = this.player;
     for (const po of this.map.def.portals) {
@@ -605,7 +607,7 @@ export class Game {
       if (this.skills.pending) { /* 正在走向技能目標 */ }
       else if (cellDist(p.x, p.y, tg.x, tg.y) <= range && p.atkAnimT < 0) {
         p.path = [];
-        if (p.atkCd <= 0) { p.face(tg.x, tg.y); p.target = tg; p.startAttack(Math.min(0.45, this.attackDelay(p) * 0.8)); p.atkCd = this.attackDelay(p); }
+        if (p.atkCd <= 0) { p.face(tg.x, tg.y); p.target = tg; p.startAttack(Math.min(0.45, this.attackDelay(p) * 0.8)); p.atkCd = this.attackDelay(p); if (this.attackMode() === 'melee') this.audio.sfx('swing'); }
       } else if (p.atkAnimT < 0) {
         p.repathT -= dt;
         if (p.repathT <= 0 || !p.path.length) { p.repathT = 0.3; p.setPath(this.pf.find(p.x, p.y, tg.x, tg.y, 3000, range)); }
@@ -692,7 +694,7 @@ export class Game {
   playerAttackHit(t: Actor) {
     const mode = this.attackMode(), p = this.player;
     if (mode === 'melee' || !(t instanceof Monster)) { this.resolveAttack(p, t); return; }
-    if (mode === 'arrow') { this.addProjectile(new Projectile('arrow', p.x, p.y, 70, t, () => this.resolveAttack(p, t), 18)); this.audio?.sfx('bow'); }
+    if (mode === 'arrow') { this.addProjectile(new Projectile('arrow', p.x, p.y, 70, t, () => this.resolveAttack(p, t), 18)); this.audio.sfx('bow'); }
     else {
       this.addProjectile(new Projectile('orb', p.x, p.y, 80, t, () => {
         if (t.dead) return;
@@ -700,7 +702,7 @@ export class Game {
         this.fx.burst(t.x, t.y, -t.bbox.y0 * 0.5, '#c0a0ff', 8, 70, 'spark', 0.35, 2);
         this.applyDamage(p, t, r.dmg, 'deal');
       }, 12));
-      this.audio?.sfx('magic');
+      this.audio.sfx('magic');
     }
   }
   /** 攻擊命中點：RO 式命中／爆擊／防禦公式 */
@@ -709,11 +711,11 @@ export class Game {
     const h = -d.bbox.y0 + 10;
     if (a === this.player && d instanceof Monster) {
       const r = playerVsMonster(this.player.d, d.def, this.rnd);
-      if (r.kind === 'miss') { this.fx.dmg(d.x, d.y, 'MISS', 'miss', h); onHurt(this, d); return; }
+      if (r.kind === 'miss') { this.fx.dmg(d.x, d.y, 'MISS', 'miss', h); this.audio.sfx('miss'); onHurt(this, d); return; }
       this.applyDamage(a, d, r.dmg, r.kind);
     } else if (a instanceof Monster && d === this.player) {
       const r = monsterVsPlayer(a.def, this.player.d, this.rnd);
-      if (r.kind === 'miss') { this.fx.dmg(d.x, d.y, r.lucky ? 'LUCKY' : 'MISS', 'miss', h); return; }
+      if (r.kind === 'miss') { this.fx.dmg(d.x, d.y, r.lucky ? 'LUCKY' : 'MISS', 'miss', h); this.audio.sfx('miss'); return; }
       this.applyDamage(a, d, r.dmg, 'take');
     }
   }
@@ -724,6 +726,7 @@ export class Game {
     if (d === this.player && this.player.state === 'sit') this.player.state = 'idle';
     d.flashT = 0.12; d.hurtT = d === this.player && this.player.buffs.endure ? 0 : 0.15;
     this.fx.dmg(d.x, d.y, dmg, d === this.player ? 'take' : kind, h);
+    this.audio.sfx(d === this.player ? 'hurt' : kind === 'crit' ? 'crit' : 'hit');
     this.fx.burst(d.x, d.y, -d.bbox.y0 * 0.5, kind === 'crit' ? '#ffe070' : '#ffffff', kind === 'crit' ? 14 : 7, kind === 'crit' ? 110 : 70);
     // 打擊停頓與畫面震動
     if (a === this.player || d === this.player) this.hitStop = Math.max(this.hitStop, kind === 'crit' || kind === 'skill' ? 0.09 : 0.045);
@@ -735,6 +738,7 @@ export class Game {
     d.hp = 0; d.state = 'dead'; d.deadT = 0; d.path = []; d.atkAnimT = -1;
     if (d === this.player) { this.onPlayerDeath(); return; }
     if (d instanceof Monster) {
+      this.audio.sfx('die');
       if (this.player.chase === d) this.player.chase = null;
       this.spawner.onKill(d);
       if (by === this.player && !d.summoned) {
@@ -773,7 +777,7 @@ export class Game {
     if (this.inv.add(it.def.id, it.n, it.extra)) {
       this.items = this.items.filter((x) => x !== it);
       this.msg(`獲得 ${it.def.name}${it.n > 1 ? ' ×' + it.n : ''}`, 'item');
-      this.audio?.sfx('pickup');
+      this.audio.sfx('pickup');
       this.ev.emit('pickup', it.def.id);
     } else this.msg('負重已滿，無法撿取！', 'warn');
   }
@@ -789,7 +793,7 @@ export class Game {
       ch.baseExp -= lostB; ch.jobExp -= lostJ;
     }
     this.msg(ch.job === 'novice' ? '你倒下了……（初心者不會損失經驗）' : `你倒下了……損失經驗 ${lostB} / 職業經驗 ${lostJ}`, 'warn');
-    this.audio?.sfx('death');
+    this.audio.sfx('death');
     this.ui.showDeath(lostB, lostJ);
     this.ev.emit('stats');
   }
