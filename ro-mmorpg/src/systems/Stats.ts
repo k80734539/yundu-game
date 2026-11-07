@@ -61,6 +61,7 @@ export function derive(ch: CharData, equips: EquipInfo[], buffs: Record<string, 
   if (buffs.concentration) { bonus.agi += buffs.concentration; bonus.dex += buffs.concentration; }
   if (buffs.blessing) { bonus.str += buffs.blessing; bonus.int += buffs.blessing; bonus.dex += buffs.blessing; }
   if (buffs.agiup) bonus.agi += buffs.agiup;
+  if (buffs.endure) defB += buffs.endure;
   const t = zero();
   for (const k of STAT_KEYS) t[k] = ch.stats[k] + bonus[k];
   const lv = ch.baseLv;

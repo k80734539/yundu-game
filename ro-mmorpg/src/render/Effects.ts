@@ -5,7 +5,7 @@ import { isoX, isoY } from './iso';
 export type DmgKind = 'deal' | 'take' | 'crit' | 'miss' | 'heal' | 'sp' | 'skill';
 export class DmgText { alive = false; x = 0; y = 0; t = 0; img: HTMLCanvasElement | null = null; vx = 0; kind: DmgKind = 'deal'; big = false; }
 export class Particle {
-  alive = false; x = 0; y = 0; z = 0; vx = 0; vy = 0; vz = 0; g = 0; life = 0; max = 1; color = '#fff'; size = 2; kind: 'dot' | 'ring' | 'spark' | 'glow' | 'text' = 'dot'; r = 0;
+  alive = false; x = 0; y = 0; z = 0; vx = 0; vy = 0; vz = 0; g = 0; life = 0; max = 1; color = '#fff'; size = 2; kind: 'dot' | 'ring' | 'spark' | 'glow' | 'text' | 'bolt' | 'arrow' = 'dot'; r = 0;
 }
 /** 特效：傷害數字、粒子、地面圓環。座標用等角像素（iso），z 為離地高度 */
 export class Effects {
@@ -38,6 +38,18 @@ export class Effects {
     p.x = isoX(wx, wy) + (Math.random() * 2 - 1) * 14; p.y = isoY(wx, wy) + (Math.random() * 2 - 1) * 6; p.z = z; p.vx = 0; p.vy = 0; p.vz = rise; p.g = 0;
     p.life = p.max = life; p.color = color; p.kind = 'glow'; p.size = size; p.r = 0;
   }
+  /** 閃電：從天上劈下的鋸齒線 */
+  lightning(wx: number, wy: number) {
+    const p = this.parts.get();
+    p.x = isoX(wx, wy); p.y = isoY(wx, wy); p.z = 0; p.vx = p.vy = p.vz = 0; p.g = 0; p.life = p.max = 0.22; p.kind = 'bolt'; p.color = '#fff8a0'; p.size = 3; p.r = Math.random() * 1000;
+    this.burst(wx, wy, 0, '#fff8a0', 10, 120, 'spark', 0.4, 2);
+    this.ring(wx, wy, '#f0e060', 0.35, 40);
+  }
+  /** 箭雨：一支從天而降的箭 */
+  arrowRain(wx: number, wy: number) {
+    const p = this.parts.get();
+    p.x = isoX(wx, wy); p.y = isoY(wx, wy); p.z = 220; p.vx = 0; p.vy = 0; p.vz = -900; p.g = 0; p.life = p.max = 0.26; p.kind = 'arrow'; p.color = '#d8c8a0'; p.size = 2; p.r = 0;
+  }
   update(dt: number) {
     this.texts.each((d) => { d.t += dt; d.x += d.vx * dt; if (d.t > 1.1) d.alive = false; });
     this.parts.each((p) => {
@@ -51,6 +63,19 @@ export class Effects {
     this.parts.each((p) => {
       const k = p.life / p.max;
       const x = Math.round(p.x - L), y = Math.round(p.y - Tp - p.z);
+      if (p.kind === 'bolt') {
+        c.strokeStyle = k > 0.5 ? '#ffffff' : p.color; c.lineWidth = p.size; c.beginPath();
+        let yy = y - 400, xx = x; c.moveTo(xx, yy);
+        for (let i = 0; i < 8; i++) { yy += 50; xx = x + Math.sin(p.r + i * 2.3) * 14 * (1 - i / 8); c.lineTo(Math.round(xx), Math.round(yy)); }
+        c.lineTo(x, y); c.stroke();
+        c.globalAlpha = k * 0.5; c.fillStyle = '#fff8c0'; c.beginPath(); c.ellipse(x, y, 30, 14, 0, 0, Math.PI * 2); c.fill(); c.globalAlpha = 1;
+        return;
+      }
+      if (p.kind === 'arrow') {
+        if (p.z <= 0) { p.z = 0; p.vz = 0; }
+        c.fillStyle = '#5a3a20'; c.fillRect(x, y - 16, 2, 16); c.fillStyle = p.color; c.fillRect(x, y - 2, 2, 3); c.fillStyle = '#ffffff'; c.fillRect(x - 1, y - 18, 4, 3);
+        return;
+      }
       if (p.kind === 'ring') {
         const r = p.r * (1.2 - k * 0.7);
         c.globalAlpha = k; c.strokeStyle = p.color; c.lineWidth = 2;

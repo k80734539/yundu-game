@@ -15,6 +15,8 @@ import { OptionsWindow } from './OptionsWindow';
 import { ItemInfo } from './ItemInfo';
 import type { DragData } from './Drag';
 import { Dialog } from './Dialog';
+import { DB } from '../data';
+import { iconURL } from '../render/IconArt';
 import { QuestWindow, QuestTracker } from './QuestWindow';
 
 /** UI 管理器：DOM 視窗、快捷鍵、訊息、橫幅 */
@@ -24,6 +26,8 @@ export class UI {
   hud: Hud; chat: Chat; mini: Minimap; world: WorldMap; info: ItemInfo; hot: Hotbar; shop: ShopWindow; dialog: Dialog; qtrack: QuestTracker;
   banner: HTMLDivElement;
   private bannerT = 0;
+  buffEl!: HTMLDivElement;
+  private buffKey = '';
   constructor(public g: Game, public root: HTMLElement) {
     try { this.winPos = JSON.parse(localStorage.getItem('rom.ui') || '{}'); } catch { this.winPos = {}; }
     const exp = h('div'); exp.id = 'expline'; exp.appendChild(h('i')); root.appendChild(exp);
@@ -43,6 +47,7 @@ export class UI {
     this.add(new QuestWindow(this));
     this.qtrack = new QuestTracker(this);
     this.dialog = new Dialog(this);
+    this.buffEl = h('div'); this.buffEl.id = 'buffs'; root.appendChild(this.buffEl);
     g.ev.on('stats', () => this.refresh());
   }
   add(w: Win) { this.wins[w.id] = w; return w; }
@@ -72,6 +77,16 @@ export class UI {
     this.hud.update();
     this.hot.update();
     this.dialog.update(dt);
+    const bt = this.g.buffT, keys = Object.keys(bt);
+    const bk = keys.map((k) => k + Math.ceil(bt[k])).join(',');
+    if (bk !== this.buffKey) {
+      this.buffKey = bk; this.buffEl.innerHTML = '';
+      for (const k of keys) {
+        const sk = DB.skill[k]; if (!sk) continue;
+        const d = h('div', 'buff'); const img = h('img') as HTMLImageElement; img.src = iconURL(sk.icon.k, sk.icon.c); d.append(img, h('span', '', String(Math.ceil(bt[k])))); d.title = sk.name;
+        this.buffEl.appendChild(d);
+      }
+    }
     this.mini.update(dt);
     this.world.update(dt);
     if (this.bannerT > 0) { this.bannerT -= dt; if (this.bannerT <= 0) this.banner.querySelector('.b')?.classList.remove('show'); }

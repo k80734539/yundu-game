@@ -31,13 +31,13 @@ export class Input {
     window.addEventListener('keydown', (e) => {
       const t = e.target as HTMLElement;
       const typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA');
-      if (typing && e.key !== 'Escape' && e.key !== 'Enter') return;
+      if (typing && !/^F[1-9]$/.test(e.key)) return; // 聊天輸入中仍可用 F1~F9（RO 也是）
       // 阻止瀏覽器預設（F1 說明、F5 重新整理、Alt 選單）
       if (/^F[1-9]$/.test(e.key) || (e.altKey && e.key !== 'Alt') || e.key === 'Insert' || e.key === 'Tab') e.preventDefault();
       if (e.key === 'Alt') e.preventDefault();
       this.keys.add(e.code);
       this.keyQ.push({ key: e.key, code: e.code, alt: e.altKey, ctrl: e.ctrlKey, shift: e.shiftKey });
-    });
+    }, true); // capture：聊天框 stopPropagation 也收得到 F1~F9
     window.addEventListener('keyup', (e) => { this.keys.delete(e.code); if (e.key === 'Alt') e.preventDefault(); });
     window.addEventListener('blur', () => { this.keys.clear(); this.down = false; });
   }

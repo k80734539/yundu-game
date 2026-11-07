@@ -16,6 +16,9 @@ export class Monster extends Actor {
   skillCd = 2;
   summoned = false;
   announcedFight = false;
+  provokeT = 0; provokeDef = 0;
+  frozenT = 0;
+  slide: { fx: number; fy: number; tx: number; ty: number; t: number; dur: number } | null = null;
   constructor(public def: MonsterDef, x: number, y: number) {
     super(x, y);
     this.homeX = x; this.homeY = y;
