@@ -56,3 +56,12 @@ export function h<K extends keyof HTMLElementTagNameMap>(tag: K, cls = '', text 
 export function btn(label: string, fn: () => void, cls = ''): HTMLSpanElement {
   const b = h('span', 'btn ' + cls, label); b.addEventListener('click', (e) => { e.stopPropagation(); fn(); }); return b;
 }
+/** 頁內確認框（不用瀏覽器的 confirm()，有些嵌入環境會直接回傳 false） */
+export function ask(msg: string, onYes: () => void) {
+  const wrap = h('div', 'ask-wrap'); const box = h('div', 'win ask-box');
+  box.append(h('div', 'win-title', '確認'), h('div', 'win-body ask-msg', msg));
+  const foot = h('div', 'win-foot');
+  foot.append(btn('確定', () => { wrap.remove(); onYes(); }), btn('取消', () => wrap.remove()));
+  box.appendChild(foot); wrap.appendChild(box);
+  (document.getElementById('ui') || document.body).appendChild(wrap);
+}

@@ -1,5 +1,5 @@
 import type { UI } from './UI';
-import { Win, h, btn } from './Window';
+import { Win, h, btn, ask } from './Window';
 
 /** 設定（Esc）：縮放、音量（階段 9）、存檔、重新開始 */
 export class OptionsWindow extends Win {
@@ -21,7 +21,7 @@ export class OptionsWindow extends Win {
     }
     const nm = h('span', 'val', g.player.ch.name); row('角色', nm);
     const bar = h('div', 'opt-btns');
-    bar.append(btn('存檔', () => { g.save?.save(true); }), btn('重新開始', () => { if (confirm('確定要刪除存檔重新開始嗎？')) g.save?.reset(); }));
+    bar.append(btn('存檔', () => { g.save?.save(true); }), btn('重新開始', () => { ask('確定要刪除存檔重新開始嗎？', () => g.save?.reset()); }));
     this.body.appendChild(bar);
     this.body.appendChild(h('div', 'dim hint', '遊戲每 30 秒與換地圖時自動存檔。'));
   }

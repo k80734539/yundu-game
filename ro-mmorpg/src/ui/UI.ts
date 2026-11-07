@@ -1,6 +1,6 @@
 import type { Game } from '../core/Game';
 import type { KeyCombo } from '../core/Input';
-import { Win, h, btn } from './Window';
+import { Win, h, btn, ask } from './Window';
 import { Hud } from './Hud';
 import { Chat, MsgKind } from './Chat';
 import { StatusWindow } from './StatusWindow';
@@ -137,8 +137,8 @@ export class UI {
     const name = h('input') as HTMLInputElement; name.placeholder = '輸入角色名稱'; name.maxLength = 10; name.value = '';
     name.addEventListener('keydown', (e) => { e.stopPropagation(); if (e.key === 'Enter') go(false); });
     const go = (cont: boolean) => {
-      if (!cont && save && !confirm('開始新的冒險會覆蓋現有存檔，確定嗎？')) return;
-      t.remove(); this.audio(); this.g.begin(cont, name.value.trim() || '冒險者');
+      const start = () => { t.remove(); this.audio(); this.g.begin(cont, name.value.trim() || '冒險者'); };
+      if (!cont && save) ask('開始新的冒險會覆蓋現有存檔，確定嗎？', start); else start();
     };
     if (save) {
       const jn = DB.job[save.ch.job]?.name || '';

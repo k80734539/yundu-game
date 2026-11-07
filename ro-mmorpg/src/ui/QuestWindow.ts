@@ -1,5 +1,5 @@
 import type { UI } from './UI';
-import { Win, h, btn } from './Window';
+import { Win, h, btn, ask } from './Window';
 import { DB, QUESTS } from '../data';
 
 /** 任務視窗（Alt+U）＋右側任務追蹤欄 */
@@ -17,7 +17,7 @@ export class QuestWindow extends Win {
       const tgt = q.type === 'kill' ? DB.monster[q.target]?.name : DB.item[q.target]?.name;
       box.innerHTML = `<b>${q.name}</b> ${done ? '<span class="q-ok">可回報</span>' : ''}<br><span class="sk-desc">${q.desc}</span><br>` +
         `<span class="lbl">${q.type === 'kill' ? '擊敗' : '收集'} ${tgt}：</span><span class="val">${qs.progress(q)} / ${q.count}</span>　<span class="dim">回報：${DB.npc[q.npc]?.name}</span>`;
-      const b = btn('放棄', () => { if (confirm(`放棄「${q.name}」？`)) qs.abandon(q.id); }, 'sm'); b.style.float = 'right';
+      const b = btn('放棄', () => { ask(`放棄「${q.name}」？`, () => qs.abandon(q.id)); }, 'sm'); b.style.float = 'right';
       box.prepend(b);
       this.body.appendChild(box);
     }

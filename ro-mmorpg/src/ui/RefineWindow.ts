@@ -1,5 +1,5 @@
 import type { UI } from './UI';
-import { Win, h, btn } from './Window';
+import { Win, h, btn, ask } from './Window';
 import { DB } from '../data';
 import { iconURL } from '../render/IconArt';
 import { refineRate, refineMaterial, refineFee, safeLimit } from '../systems/Refine';
@@ -22,7 +22,7 @@ export class RefineWindow extends Win {
       const mat = refineMaterial(d), fee = refineFee(d);
       const nm = h('div', 'shop-name'); nm.innerHTML = `${inv.displayName(it)}${inv.isEquipped(it.uid) ? ' <span class="dim">(裝備中)</span>' : ''}<br><span class="sk-desc">${max ? '已達 +10' : `+${it.refine + 1}：成功率 <b style="color:${rate === 100 ? '#2a8a3a' : rate >= 50 ? '#b07a10' : '#c0302a'}">${rate}%</b>　${DB.item[mat].name}×1（有 ${inv.count(mat)}）＋${fee}Z`}</span>`;
       const can = !max && inv.count(mat) > 0 && g.player.ch.zeny >= fee;
-      r.append(img, nm, btn('精煉', () => { if (rate < 100 && !confirm(`超過安全值（+${safeLimit(d)}），失敗會損毀裝備！確定精煉嗎？`)) return; g.refine(it.uid); }, can ? '' : 'dis'));
+      r.append(img, nm, btn('精煉', () => { if (rate < 100) ask(`超過安全值（+${safeLimit(d)}），失敗會損毀裝備！確定精煉嗎？`, () => g.refine(it.uid)); else g.refine(it.uid); }, can ? '' : 'dis'));
       this.ui.info.bind(img, () => [d, it]);
       this.body.appendChild(r);
     }
@@ -61,7 +61,7 @@ export class CardWindow extends Win {
     for (const it of targets) {
       const d = DB.item[it.id];
       const r = h('div', 'shop-row'); const img = h('img') as HTMLImageElement; img.src = iconURL(d.icon.k, d.icon.c);
-      r.append(img, h('div', 'shop-name', `${inv.displayName(it)}（空插槽 ${(d.slots || 0) - it.cards.length}）`), btn('插入', () => { if (confirm('卡片插入後無法取出，確定嗎？')) g.insertCard(this.card!, it.uid); }));
+      r.append(img, h('div', 'shop-name', `${inv.displayName(it)}（空插槽 ${(d.slots || 0) - it.cards.length}）`), btn('插入', () => { const cu = this.card!; ask('卡片插入後無法取出，確定嗎？', () => g.insertCard(cu, it.uid)); }));
       this.body.appendChild(r);
     }
   }
