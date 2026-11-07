@@ -63,7 +63,7 @@ export interface SkillDef {
 export interface JobDef {
   id: string; name: string; tier: number; hpK: number; spK: number; hpB: number; spB: number;
   aspd: Record<string, number>; weapons: string[]; skills: string[]; maxJob: number;
-  attack: 'melee' | 'magic' | 'arrow'; range: number; look: Look; bonus: number[][];
+  attack: "melee" | "magic" | "arrow"; range: number; look: Look; bonus: [number, string][];
 }
 export interface QuestDef {
   id: string; name: string; npc: string; type: 'kill' | 'collect' | 'talk';
@@ -79,7 +79,7 @@ export const MAPS = mapsJson as unknown as MapDef[];
 export const MONSTERS = monstersJson as unknown as MonsterDef[];
 export const ITEMS = itemsJson as unknown as ItemDef[];
 export const SKILLS = skillsJson as unknown as SkillDef[];
-export const JOBS = jobsJson as unknown as { jobs: JobDef[]; expBase: number[]; expJob: number[] };
+export const JOBS = jobsJson as unknown as { jobs: JobDef[]; expBase: number[]; expJob: number[]; expJob1: number[] };
 export const QUESTS = questsJson as unknown as QuestDef[];
 export const NPCS = npcsJson as unknown as NpcDef[];
 export const SHOPS = shopsJson as unknown as ShopDef[];

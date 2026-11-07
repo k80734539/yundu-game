@@ -16,6 +16,11 @@ import { Entity } from '../entities/Entity';
 import { whiteOf } from '../render/SpriteFactory';
 import { shadowSprite, makeCanvas } from '../render/pixel';
 import { DB } from '../data';
+import { UI } from '../ui/UI';
+import type { MsgKind } from '../ui/Chat';
+import { gainExp } from '../systems/Exp';
+import { playerVsMonster, monsterVsPlayer } from '../systems/Combat';
+import { StatKey, statCost, MAX_STAT } from '../systems/Stats';
 import { cellDist, mulberry32 } from './math';
 
 const K_PROP = 0, K_STRIP = 1, K_ACTOR = 2;
@@ -36,11 +41,15 @@ export class Game {
   clickMark = { x: 0, y: 0, t: 0 };
   rnd = mulberry32(Date.now() & 0xffff);
   holdT = 0;
+  ui!: UI;
+  audio: any = null;
+  inv: any = null;
 
   constructor(canvas: HTMLCanvasElement, public uiRoot: HTMLElement) {
     this.r = new Renderer(canvas);
     this.input = new Input(canvas, this.r);
-    this.player = new Player(0, 0, { skin: '#f8d8b8', hair: '#8a5a3a', cloth: '#d8b080', cloth2: '#8a5a34', pants: '#6a5a7a', hairStyle: 0, weapon: 'dagger' });
+    this.player = new Player(0, 0);
+    this.ui = new UI(this, uiRoot);
     this.loop = new Loop((dt) => this.update(dt), (a, dt) => this.render(a, dt));
     (window as any).__game = this;
   }
@@ -48,6 +57,34 @@ export class Game {
   start(mapId: string, x?: number, y?: number) {
     this.loadMap(mapId, x, y);
     this.loop.start();
+    this.msg('歡迎來到《晨曦物語》！點擊地面移動，點擊怪物攻擊。', 'sys');
+    this.msg('Alt+A 打開能力值視窗分配點數。', 'sys');
+    this.ev.emit('stats');
+  }
+  msg(text: string, kind: MsgKind = 'sys') { this.ui.msg(text, kind); }
+  raiseStat(k: StatKey) {
+    const ch = this.player.ch, cost = statCost(ch.stats[k]);
+    if (ch.statPts < cost || ch.stats[k] >= MAX_STAT) return;
+    ch.statPts -= cost; ch.stats[k]++;
+    this.player.recalc();
+    this.ui.sfx('click');
+    this.ev.emit('stats');
+  }
+  levelUpFx(kind: 'base' | 'job') {
+    const p = this.player;
+    for (let i = 0; i < 26; i++) this.fx.glow(p.x, p.y, Math.random() * 30, kind === 'base' ? '#ffe070' : '#d8a0ff', 1.2, 2 + (i % 2), 70 + Math.random() * 60);
+    this.fx.ring(p.x, p.y, kind === 'base' ? '#ffe070' : '#d8a0ff', 0.8, 50);
+    this.fx.dmg(p.x, p.y, kind === 'base' ? 'LV UP' : 'JOB UP', 'crit', 150);
+    this.audio?.sfx('levelup');
+  }
+  command(cmd: string, args: string[]) {
+    const p = this.player;
+    switch (cmd) {
+      case 'help': this.msg('指令：/where 目前位置　/exp 經驗資訊', 'sys'); break;
+      case 'where': this.msg(`${this.map.def.name}（${Math.floor(p.x)}, ${Math.floor(p.y)}）`, 'sys'); break;
+      case 'exp': this.msg(`Base ${p.ch.baseExp}　Job ${p.ch.jobExp}`, 'sys'); break;
+      default: this.msg(`未知指令：/${cmd}`, 'warn');
+    }
   }
 
   // ------------------------------------------------------------ 地圖
@@ -114,6 +151,7 @@ export class Game {
     this.fx.update(dt);
     this.cam.updateShake(dt);
     if (this.clickMark.t > 0) this.clickMark.t -= dt;
+    this.ui.update(dt);
   }
 
   handleInput(dt: number) {
@@ -130,7 +168,7 @@ export class Game {
     } else this.holdT = 0;
     this.hover = this.input.over ? this.pick(this.input.mx, this.input.my) : null;
     this.r.canvas.style.cursor = this.hover instanceof Monster ? 'crosshair' : this.hover ? 'pointer' : 'default';
-    this.input.takeKeys();
+    for (const k of this.input.takeKeys()) this.ui.onKey(k);
   }
   onClick(sx: number, sy: number, hold: boolean) {
     const p = this.player;
@@ -153,8 +191,8 @@ export class Game {
     }
   }
 
-  attackRange(a: Actor) { return a instanceof Monster ? a.def.range : 1; }
-  attackDelay(a: Actor) { return a instanceof Monster ? a.def.adelay / 1000 : 0.75; }
+  attackRange(a: Actor) { return a instanceof Monster ? a.def.range : this.player.job.range; }
+  attackDelay(a: Actor) { return a instanceof Monster ? a.def.adelay / 1000 : this.player.d.delay; }
 
   updatePlayer(dt: number) {
     const p = this.player;
@@ -210,16 +248,19 @@ export class Game {
     }
   }
 
-  /** 攻擊命中點（階段 1：簡易傷害；階段 2 換成 RO 公式） */
+  /** 攻擊命中點：RO 式命中／爆擊／防禦公式 */
   resolveAttack(a: Actor, d: Actor) {
     if (d.dead) return;
-    const crit = a === this.player && this.rnd() < 0.1;
-    const miss = this.rnd() < 0.08;
-    const tx = d.x, ty = d.y, h = -d.bbox.y0 + 10;
-    if (miss) { this.fx.dmg(tx, ty, 'MISS', 'miss', h); return; }
-    let dmg = a === this.player ? 8 + Math.floor(this.rnd() * 7) : a instanceof Monster ? a.def.atk[0] + Math.floor(this.rnd() * (a.def.atk[1] - a.def.atk[0] + 1)) : 5;
-    if (crit) dmg = Math.round(dmg * 1.4);
-    this.applyDamage(a, d, dmg, crit ? 'crit' : a === this.player ? 'deal' : 'take');
+    const h = -d.bbox.y0 + 10;
+    if (a === this.player && d instanceof Monster) {
+      const r = playerVsMonster(this.player.d, d.def, this.rnd);
+      if (r.kind === 'miss') { this.fx.dmg(d.x, d.y, 'MISS', 'miss', h); d.aggroOn = a; return; }
+      this.applyDamage(a, d, r.dmg, r.kind);
+    } else if (a instanceof Monster && d === this.player) {
+      const r = monsterVsPlayer(a.def, this.player.d, this.rnd);
+      if (r.kind === 'miss') { this.fx.dmg(d.x, d.y, r.lucky ? 'LUCKY' : 'MISS', 'miss', h); return; }
+      this.applyDamage(a, d, r.dmg, 'take');
+    }
   }
   applyDamage(a: Actor | null, d: Actor, dmg: number, kind: 'deal' | 'take' | 'crit' | 'skill') {
     const h = -d.bbox.y0 + 10;
@@ -235,11 +276,22 @@ export class Game {
   }
   kill(d: Actor, by: Actor | null) {
     d.hp = 0; d.state = 'dead'; d.deadT = 0; d.path = []; d.atkAnimT = -1;
+    if (d === this.player) { this.onPlayerDeath(); return; }
     if (d instanceof Monster) {
       if (this.player.chase === d) this.player.chase = null;
       const id = d.def.id;
       setTimeout(() => this.spawnMonster(id), 5000);
+      if (by === this.player) gainExp(this, d.def.exp, d.def.jexp);
     }
+  }
+
+  /** 玩家死亡（階段 8 會改成回城＋扣經驗） */
+  onPlayerDeath() {
+    const p = this.player;
+    p.chase = null;
+    for (const m of this.monsters) if (m.aggroOn === p) { m.aggroOn = null; m.ai = 'idle'; }
+    this.msg('你倒下了……3 秒後復活。', 'warn');
+    setTimeout(() => { p.state = 'idle'; p.recalc(true); p.deadT = 0; }, 3000);
   }
 
   // ------------------------------------------------------------ 繪製
@@ -309,7 +361,7 @@ export class Game {
     let x = Math.round(isoX(e.ix(a), e.iy(a)) - L - s.ax), y = Math.round(isoY(e.ix(a), e.iy(a)) - T - s.ay);
     if (e.hurtT > 0 && !e.dead) { x += e.dir === 1 ? 2 : e.dir === 2 ? -2 : 0; y += e.dir === 3 ? 1 : e.dir === 0 ? -1 : 0; }
     const sx = f * s.fw, sy = e.dir * s.fh;
-    if (e.dead) c.globalAlpha = Math.max(0, 1 - e.deadT);
+    if (e.dead) c.globalAlpha = e === this.player ? 0.45 : Math.max(0, 1 - e.deadT);
     c.drawImage(s.c, sx, sy, s.fw, s.fh, x, y, s.fw, s.fh);
     if (e.flashT > 0) { // 受擊閃白
       c.globalAlpha = Math.min(1, e.flashT / 0.12) * 0.85 * (e.dead ? Math.max(0, 1 - e.deadT) : 1);

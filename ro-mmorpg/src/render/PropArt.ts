@@ -68,7 +68,7 @@ function pine(v: number): Sprite {
     poly(c, [[ax, top], [ax + hw * 0.25, y0 - 4], [ax - hw, y0]], css(col));
     poly(c, [[ax - 2, top + 6], [ax - hw * 0.25, y0 - 8], [ax - hw * 0.8, y0 - 2]], css(shade(col, 0.2)));
   }
-  if (v === 3) { c.fillStyle = '#f4f8ff'; for (let i = 0; i < 4; i++) { const y0 = ay - 22 - i * 28; c.fillRect(ax - 30 + i * 8, y0 - 3, 40 - i * 10, 3); } }
+  if (v === 4) { c.fillStyle = '#f4f8ff'; for (let i = 0; i < 4; i++) { const y0 = ay - 22 - i * 28; c.fillRect(ax - 30 + i * 8, y0 - 3, 40 - i * 10, 3); } }
   return finish(cv, ax, ay);
 }
 function palm(v: number): Sprite {

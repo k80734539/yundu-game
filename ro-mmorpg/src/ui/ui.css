@@ -1,4 +1,68 @@
 html, body { margin: 0; padding: 0; overflow: hidden; background: #0c0a12; height: 100%; }
 canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp-edges; touch-action: none; }
-#ui { position: fixed; inset: 0; pointer-events: none; font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", sans-serif; font-size: 12px; color: #2a2a3a; user-select: none; }
+#ui { position: fixed; inset: 0; pointer-events: none; font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", sans-serif; font-size: 12px; color: #2a2a3a; user-select: none; -webkit-user-select: none; }
 #ui > * { pointer-events: auto; }
+#ui .pass { pointer-events: none; }
+
+/* ---------- RO 風格視窗 ---------- */
+.win { position: absolute; min-width: 160px; background: linear-gradient(#fbfcff, #eef1f8); border: 1px solid #5d6a8a; border-radius: 4px; box-shadow: 0 2px 0 rgba(0,0,0,.25), 0 6px 18px rgba(0,0,0,.35); overflow: hidden; }
+.win.hidden { display: none; }
+.win-title { height: 18px; line-height: 18px; padding: 0 22px 0 8px; background: linear-gradient(#9ab8e8, #5c82c4 55%, #4c70b0); color: #fff; font-weight: bold; font-size: 12px; text-shadow: 0 1px 0 #2a3a6a; cursor: move; white-space: nowrap; border-bottom: 1px solid #3a5490; }
+.win-x { position: absolute; right: 3px; top: 2px; width: 14px; height: 14px; line-height: 12px; text-align: center; border-radius: 3px; background: linear-gradient(#f4f6fa, #c8d0e0); border: 1px solid #3a5490; color: #3a4a7a; font-size: 11px; cursor: pointer; }
+.win-x:hover { background: linear-gradient(#fff, #e8b0b0); }
+.win-body { padding: 6px 8px; }
+.win-foot { padding: 4px 8px; border-top: 1px solid #d0d6e4; background: #e4e8f2; display: flex; gap: 4px; justify-content: flex-end; align-items: center; }
+.btn { display: inline-block; padding: 1px 8px; min-width: 28px; text-align: center; border: 1px solid #6a7aa0; border-radius: 3px; background: linear-gradient(#ffffff, #d4dcec); color: #2a3a6a; cursor: pointer; font-size: 12px; line-height: 16px; }
+.btn:hover { background: linear-gradient(#ffffff, #e8eefa); border-color: #3a5490; }
+.btn:active { background: linear-gradient(#d4dcec, #fff); }
+.btn.dis { opacity: .45; pointer-events: none; }
+.btn.sm { padding: 0 4px; min-width: 14px; font-size: 11px; line-height: 13px; }
+.row { display: flex; align-items: center; gap: 4px; margin: 2px 0; }
+.lbl { color: #4a5a8a; }
+.val { color: #1a1a2a; font-weight: bold; }
+.dim { color: #8a90a8; }
+.tabs { display: flex; gap: 2px; margin-bottom: 4px; }
+.tab { padding: 1px 8px; border: 1px solid #8a9ac0; border-bottom: none; border-radius: 4px 4px 0 0; background: #dfe5f2; cursor: pointer; }
+.tab.on { background: #fff; font-weight: bold; color: #2a4a8a; }
+
+/* ---------- 基本資訊（左上） ---------- */
+#hud { position: absolute; left: 6px; top: 6px; width: 232px; }
+#hud .win-body { padding: 4px 6px 5px; }
+.bar { position: relative; height: 11px; border: 1px solid #3a4460; background: #2a2a3a; border-radius: 2px; overflow: hidden; }
+.bar > i { position: absolute; left: 0; top: 0; bottom: 0; display: block; }
+.bar > span { position: absolute; inset: 0; text-align: center; font-size: 9px; line-height: 11px; color: #fff; text-shadow: 0 0 2px #000, 0 0 2px #000; font-weight: bold; }
+.bar.hp > i { background: linear-gradient(#7af08a, #2ab04a); }
+.bar.hp.low > i { background: linear-gradient(#ff9a8a, #d03a2a); }
+.bar.sp > i { background: linear-gradient(#8ac0ff, #2a70d0); }
+.bar.exp { height: 6px; } .bar.exp > i { background: linear-gradient(#ffe08a, #e0a020); }
+.bar.jexp { height: 6px; } .bar.jexp > i { background: linear-gradient(#e0a0ff, #9a50d0); }
+.hud-grid { display: grid; grid-template-columns: 40px 1fr; gap: 2px 4px; align-items: center; }
+.menubar { display: flex; flex-wrap: wrap; gap: 2px; margin-top: 4px; }
+.menubar .btn { padding: 0 4px; font-size: 11px; min-width: 0; }
+
+/* ---------- 底部經驗條 ---------- */
+#expline { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: rgba(20,16,30,.75); pointer-events: none; }
+#expline i { display: block; height: 100%; background: linear-gradient(90deg, #f0c040, #ffe890); }
+
+/* ---------- 聊天框 ---------- */
+#chat { position: absolute; left: 6px; bottom: 10px; width: min(460px, 48vw); background: rgba(16,18,32,.62); border: 1px solid rgba(120,140,200,.5); border-radius: 4px; color: #fff; }
+#chat .log { height: 116px; overflow-y: auto; padding: 3px 6px; font-size: 12px; line-height: 16px; text-shadow: 0 1px 1px #000; }
+#chat .log::-webkit-scrollbar { width: 6px; } #chat .log::-webkit-scrollbar-thumb { background: rgba(255,255,255,.3); }
+#chat .log .sys { color: #ffe88a; } #chat .log .exp { color: #b8f0b8; } #chat .log .item { color: #9ad8ff; } #chat .log .warn { color: #ff9a8a; }
+#chat .log .quest { color: #ffb8f0; } #chat .log .ann { color: #ff6a4a; font-weight: bold; } #chat .log .me { color: #ffffff; } #chat .log .npc { color: #a8ffd8; }
+#chat input { width: calc(100% - 12px); margin: 0 6px 5px; box-sizing: border-box; border: 1px solid #6a7aa0; background: rgba(255,255,255,.92); border-radius: 2px; font-size: 12px; padding: 2px 4px; }
+
+/* ---------- 能力值 ---------- */
+.stat-grid { display: grid; grid-template-columns: 34px 30px 26px 18px 14px; gap: 2px 4px; align-items: center; }
+.stat-grid .k { color: #3a4a8a; font-weight: bold; }
+.stat-grid .b { color: #2a8a3a; font-size: 11px; }
+.stat-grid .c { color: #8a90a8; font-size: 11px; text-align: right; }
+.derived { display: grid; grid-template-columns: 52px 1fr 52px 1fr; gap: 2px 4px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed #b8c0d8; }
+.derived .lbl { font-size: 11px; } .derived .val { font-size: 11px; }
+
+/* ---------- 公告橫幅 ---------- */
+#banner { position: absolute; left: 50%; top: 18%; transform: translateX(-50%); pointer-events: none; text-align: center; white-space: nowrap; }
+#banner .b { display: inline-block; padding: 6px 26px; font-size: 18px; font-weight: bold; color: #fff; text-shadow: 0 2px 2px #000, 0 0 8px rgba(0,0,0,.8); background: linear-gradient(90deg, transparent, rgba(20,20,40,.7) 20%, rgba(20,20,40,.7) 80%, transparent); opacity: 0; transition: opacity .4s; }
+#banner .b.show { opacity: 1; }
+#banner .b small { display: block; font-size: 12px; color: #ffe08a; }
+#banner .b.ann { color: #ffd0a0; font-size: 16px; }

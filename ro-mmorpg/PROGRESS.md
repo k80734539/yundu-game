@@ -3,7 +3,7 @@
 ## 目前進度
 - [x] 規劃：ARCHITECTURE.md
 - [x] 階段 1 核心
-- [ ] 階段 2 數值
+- [x] 階段 2 數值
 - [ ] 階段 3 世界
 - [ ] 階段 4 怪物
 - [ ] 階段 5 UI
@@ -24,5 +24,12 @@
 - 依腳底深度排序；角色走到樹或建築後方時物件淡出成半透明。
 - 截圖：`screenshots/階段1.png`
 
+## 階段 2 數值（完成）
+- `systems/Stats.ts`：STR/AGI/VIT/INT/DEX/LUK、職業加成、裝備加成（之後的裝備直接接上）、衍生 ATK/MATK/HIT/FLEE/CRIT/完全迴避/DEF/MDEF/ASPD/HP/SP/負重。
+- `systems/Combat.ts`：RO 式命中、爆擊、防禦公式；怪物攻擊玩家有完全迴避（LUCKY）。
+- `systems/Exp.ts`：Base／Job 經驗、升級得能力點數與技能點數、升級特效（光柱粒子＋LV UP）。
+- UI 框架：RO 風格可拖曳視窗（位置記憶）、左上基本資訊（HP/SP/Lv/Job/經驗條/Zeny/負重/選單）、底部全寬經驗條、左下聊天框（系統訊息、/help 指令）、能力值視窗（Alt+A，可加點、顯示花費與衍生數值）。
+- 截圖：`screenshots/階段2.png`
+
 ## 下一步
-階段 2：Stats.ts（六圍與衍生數值）、Exp.ts（經驗表）、基本資訊視窗與經驗條。
+階段 3：城鎮＋6 張野外／地城地圖、傳送點、小地圖、世界地圖（M）、入口顯示建議等級。
