@@ -1,0 +1,22 @@
+[
+  {
+    "id": "prt_fild", "name": "南方草原", "type": "field", "w": 56, "h": 56, "seed": 11, "base": "grass", "bgm": "field1",
+    "level": [1, 5], "border": "forest", "pos": [2, 3],
+    "areas": [
+      { "t": "deepgrass", "shape": "blob", "x": 14, "y": 40, "r": 7 },
+      { "t": "water", "shape": "blob", "x": 40, "y": 15, "r": 5 },
+      { "t": "sand", "shape": "blob", "x": 40, "y": 15, "r": 7 },
+      { "t": "water", "shape": "blob", "x": 40, "y": 15, "r": 4.5 },
+      { "t": "dirt", "shape": "blob", "x": 36, "y": 40, "r": 4 }
+    ],
+    "roads": [ { "t": "dirt", "width": 2.6, "pts": [[28, 1], [26, 12], [31, 22], [25, 32], [28, 44], [24, 55]] },
+               { "t": "dirt", "width": 2, "pts": [[25, 32], [14, 30], [4, 34], [1, 33]] } ],
+    "scatter": [
+      { "type": "tree", "n": 22 }, { "type": "pine", "n": 6, "v": [0, 1] }, { "type": "bush", "n": 14 }, { "type": "rock", "n": 10 },
+      { "type": "flowers", "n": 30 }, { "type": "tuft", "n": 50 }, { "type": "mushroom", "n": 6 }, { "type": "stump", "n": 3 },
+      { "type": "reeds", "n": 8, "on": ["sand"] }
+    ],
+    "portals": [],
+    "spawns": [ { "m": "jelly", "n": 14 }, { "m": "bunny", "n": 6 }, { "m": "caterpillar", "n": 6 } ]
+  }
+]

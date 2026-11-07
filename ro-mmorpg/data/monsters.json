@@ -1,0 +1,11 @@
+[
+  { "id": "jelly", "name": "啵啵團", "lv": 1, "hp": 50, "atk": [7, 10], "def": 0, "mdef": 5, "str": 1, "agi": 1, "vit": 1, "int": 0, "dex": 6, "luk": 30,
+    "exp": 2, "jexp": 1, "range": 1, "adelay": 1872, "speed": 2.2, "aggro": false, "frame": 96,
+    "look": { "body": "slime", "color": "#f08aa8", "scale": 1 }, "drops": [] },
+  { "id": "bunny", "name": "跳跳兔", "lv": 3, "hp": 60, "atk": [9, 12], "def": 2, "mdef": 0, "str": 1, "agi": 6, "vit": 2, "int": 0, "dex": 10, "luk": 5,
+    "exp": 6, "jexp": 3, "range": 1, "adelay": 1456, "speed": 2.6, "aggro": false, "frame": 96,
+    "look": { "body": "rabbit", "color": "#f4f0e8", "scale": 1 }, "drops": [] },
+  { "id": "caterpillar", "name": "綠毛蟲", "lv": 2, "hp": 63, "atk": [8, 11], "def": 0, "mdef": 0, "str": 1, "agi": 2, "vit": 4, "int": 0, "dex": 7, "luk": 5,
+    "exp": 4, "jexp": 2, "range": 1, "adelay": 1672, "speed": 1.6, "aggro": false, "frame": 96,
+    "look": { "body": "bug", "color": "#8ac04a", "color2": "#e8d070", "scale": 1 }, "drops": [] }
+]
