@@ -160,3 +160,20 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 .buff { position: relative; width: 26px; height: 26px; background: rgba(16,18,32,.6); border: 1px solid #8a9ac0; border-radius: 3px; display: flex; align-items: center; justify-content: center; }
 .buff img { width: 24px; height: 24px; image-rendering: pixelated; }
 .buff span { position: absolute; right: 1px; bottom: -1px; font-size: 9px; color: #fff; font-weight: bold; text-shadow: 0 0 2px #000, 0 0 2px #000; }
+.card-sel { display: flex; flex-wrap: wrap; gap: 3px; margin-bottom: 6px; }
+.card-opt { display: flex; align-items: center; gap: 3px; padding: 1px 5px 1px 1px; border: 1px solid #b8c0d8; border-radius: 3px; cursor: pointer; font-size: 11px; background: #f4f6fb; }
+.card-opt.on { border-color: #c0902a; background: #fff2c8; }
+.card-opt img { width: 24px; height: 24px; image-rendering: pixelated; }
+
+/* ---------- 死亡 / 標題 ---------- */
+#death { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(40,0,0,.35); }
+#death .box { text-align: center; padding: 16px 26px; }
+#death .box b { display: block; font-size: 18px; color: #a02020; margin-bottom: 6px; }
+#title { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: radial-gradient(ellipse at center, rgba(20,24,48,.35), rgba(8,8,20,.85)); z-index: 9000; }
+#title .tbox { text-align: center; color: #fff; text-shadow: 0 2px 4px #000; }
+#title h1 { font-size: 44px; margin: 0 0 4px; letter-spacing: 6px; color: #ffe9a8; text-shadow: 0 3px 0 #a0602a, 0 6px 12px #000; }
+#title .sub { font-size: 14px; color: #c8d8ff; margin-bottom: 22px; }
+#title input { font-size: 15px; padding: 5px 8px; border-radius: 4px; border: 1px solid #8a9ac0; width: 200px; text-align: center; }
+#title .btns { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
+#title .btn { font-size: 15px; padding: 5px 18px; line-height: 20px; }
+#title .note { margin-top: 16px; font-size: 12px; color: #a8b8d8; }

@@ -1,6 +1,6 @@
 import type { Game } from '../core/Game';
 import type { KeyCombo } from '../core/Input';
-import { Win, h } from './Window';
+import { Win, h, btn } from './Window';
 import { Hud } from './Hud';
 import { Chat, MsgKind } from './Chat';
 import { StatusWindow } from './StatusWindow';
@@ -18,6 +18,7 @@ import { Dialog } from './Dialog';
 import { DB } from '../data';
 import { iconURL } from '../render/IconArt';
 import { QuestWindow, QuestTracker } from './QuestWindow';
+import { RefineWindow, CardWindow } from './RefineWindow';
 
 /** UI 管理器：DOM 視窗、快捷鍵、訊息、橫幅 */
 export class UI {
@@ -27,6 +28,7 @@ export class UI {
   banner: HTMLDivElement;
   private bannerT = 0;
   buffEl!: HTMLDivElement;
+  death!: HTMLDivElement;
   private buffKey = '';
   constructor(public g: Game, public root: HTMLElement) {
     try { this.winPos = JSON.parse(localStorage.getItem('rom.ui') || '{}'); } catch { this.winPos = {}; }
@@ -47,6 +49,10 @@ export class UI {
     this.add(new QuestWindow(this));
     this.qtrack = new QuestTracker(this);
     this.dialog = new Dialog(this);
+    this.add(new RefineWindow(this));
+    this.add(new CardWindow(this));
+    this.death = h('div'); this.death.id = 'death';
+    const box = h('div', 'win box'); box.style.position = 'static'; this.death.appendChild(box); root.appendChild(this.death);
     this.buffEl = h('div'); this.buffEl.id = 'buffs'; root.appendChild(this.buffEl);
     g.ev.on('stats', () => this.refresh());
   }
@@ -100,6 +106,7 @@ export class UI {
       if (map[key]) { this.toggle(map[key]); return true; }
     }
     if (k.key === 'Enter') { this.chat.focus(); return true; }
+    if (k.key === 'Insert') { this.g.toggleSit(); return true; }
     const fm = /^F([1-9])$/.exec(k.key);
     if (fm) { this.g.useHot(+fm[1] - 1); return true; }
     if (k.key === 'Escape') {
@@ -111,6 +118,38 @@ export class UI {
     return false;
   }
   /** 和 NPC 說話（階段 6 換成對話框） */
+  showDeath(lb: number, lj: number) {
+    const box = this.death.firstChild as HTMLElement;
+    box.innerHTML = `<b>你倒下了</b><div>${lb || lj ? `損失經驗 ${lb}／職業經驗 ${lj}` : '初心者不會損失經驗。'}</div><br>`;
+    const b = btn('回到儲存點', () => { this.death.style.display = 'none'; this.g.respawn(); });
+    box.appendChild(b);
+    this.death.style.display = 'flex';
+  }
+  /** 標題畫面：新角色／繼續 */
+  showTitle() {
+    const t = h('div'); t.id = 'title';
+    const box = h('div', 'tbox');
+    box.innerHTML = '<h1>晨曦物語</h1><div class="sub">RO 風格單機網頁 MMORPG</div>';
+    const save = this.g.save.read();
+    const btns = h('div', 'btns');
+    const name = h('input') as HTMLInputElement; name.placeholder = '輸入角色名稱'; name.maxLength = 10; name.value = '';
+    name.addEventListener('keydown', (e) => { e.stopPropagation(); if (e.key === 'Enter') go(false); });
+    const go = (cont: boolean) => {
+      if (!cont && save && !confirm('開始新的冒險會覆蓋現有存檔，確定嗎？')) return;
+      t.remove(); this.audio(); this.g.begin(cont, name.value.trim() || '冒險者');
+    };
+    if (save) {
+      const jn = DB.job[save.ch.job]?.name || '';
+      btns.appendChild(btn(`繼續冒險（${save.ch.name}　${jn} Lv${save.ch.baseLv}）`, () => go(true)));
+    }
+    const nb = h('div', 'btns'); nb.append(name, btn('新的冒險', () => go(false)));
+    box.append(btns, nb);
+    box.appendChild(h('div', 'note', '點擊移動／攻擊　Alt+E 背包　Alt+A 能力值　Alt+S 技能　F1~F9 快捷列　M 世界地圖'));
+    t.appendChild(box);
+    this.root.appendChild(t);
+    setTimeout(() => name.focus(), 50);
+  }
+  audio() { this.g.audio?.unlock(); }
   talk(npc: import('../entities/Npc').Npc) { this.dialog.open(npc); }
   command(t: string) {
     if (!t.startsWith('/')) { this.msg(`${this.g.player.ch.name}：${t}`, 'me'); return; }

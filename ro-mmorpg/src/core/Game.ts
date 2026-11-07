@@ -36,6 +36,9 @@ import { SkillSystem } from '../systems/Skills';
 import { Projectile } from '../entities/Projectile';
 import { engage as aiEngage } from '../systems/AI';
 import { magicVsMonster } from '../systems/Combat';
+import { Save } from '../systems/Save';
+import { refineRate, refineMaterial, refineFee } from '../systems/Refine';
+import { expNeed, jobExpNeed } from '../systems/Stats';
 import { cellDist, mulberry32 } from './math';
 
 const K_PROP = 0, K_STRIP = 1, K_ACTOR = 2, K_ITEM = 3, K_PROJ = 4;
@@ -81,6 +84,9 @@ export class Game {
   projectiles: Projectile[] = [];
   timers: { t: number; fn: () => void }[] = [];
   shout: { text: string; t: number } | null = null;
+  combatT = 0;            // 距離上次戰鬥的秒數（脫離戰鬥回血）
+  regenT = 0; spRegenT = 0;
+  inTitle = true;
 
   constructor(canvas: HTMLCanvasElement, public uiRoot: HTMLElement) {
     this.r = new Renderer(canvas);
@@ -91,6 +97,8 @@ export class Game {
     this.spawner = new Spawner(this);
     this.quests = new Quests(this);
     this.skills = new SkillSystem(this);
+    this.save = new Save(this);
+    window.addEventListener('beforeunload', () => { if (!this.inTitle) this.save.save(); });
     this.ev.on('kill', (id: string) => this.quests.onKill(id));
     this.ev.on('pickup', (id: string) => this.quests.onPickup(id));
     this.spawner.init();
@@ -100,14 +108,31 @@ export class Game {
     (window as any).__game = this;
   }
 
-  start(mapId: string, x?: number, y?: number) {
-    this.loadMap(mapId, x, y);
-    this.loop.start();
-    this.msg('歡迎來到《晨曦物語》！點擊地面移動，點擊怪物攻擊。', 'sys');
-    this.msg('Alt+A 打開能力值視窗分配點數。', 'sys');
+  /** 開機：先載入城鎮當標題背景 */
+  boot() { this.loadMap('aurora', 25, 30); this.loop.start(); }
+  /** 標題畫面按下開始：continue=true 讀檔，否則新角色 */
+  begin(cont: boolean, name = '冒險者') {
+    this.inTitle = false;
+    if (cont) {
+      const d = this.save.read();
+      if (d) {
+        const pos = this.save.apply(d);
+        this.loadMap(pos.map, pos.x, pos.y);
+        this.msg(`歡迎回來，${this.player.ch.name}！${this.save.loadedFrom === 'backup' ? '（主存檔損壞，已從備份還原）' : ''}`, 'sys');
+      }
+    } else {
+      this.player.ch.name = name || '冒險者';
+      this.newGameItems();
+      this.spawner.init();
+      this.loadMap('aurora', 25, 30);
+      this.msg(`歡迎來到《晨曦物語》，${this.player.ch.name}！點擊地面移動，點擊怪物攻擊。`, 'sys');
+      this.msg('先去找噴水池旁頭上有「!」的導覽員艾莉談談吧。', 'quest');
+      this.save.save();
+    }
     this.spawner.announceAlive();
-    this.ev.emit('stats');
+    this.ev.emit('stats'); this.ev.emit('inv'); this.ev.emit('quest');
   }
+  start(mapId: string, x?: number, y?: number) { this.inTitle = false; this.loadMap(mapId, x, y); this.loop.start(); this.ev.emit('stats'); }
   msg(text: string, kind: MsgKind = 'sys') { this.ui.msg(text, kind); }
   newGameItems() {
     this.inv.items = []; this.inv.equip = {};
@@ -254,6 +279,55 @@ export class Game {
     this.save?.saveSoon();
   }
   // ------------------------------------------------------------ 狀態
+  toggleSit() {
+    const p = this.player;
+    if (p.dead) return;
+    if (p.state === 'sit') { p.state = 'idle'; return; }
+    if ((p.ch.skills.basic || 0) < 3) { this.msg('需要「基本技能」Lv3 才能坐下。', 'warn'); return; }
+    p.stop(); p.chase = null; this.skills.interrupt(); p.atkAnimT = -1; p.state = 'sit';
+    this.msg('坐下休息中…（HP/SP 恢復加快，再按 Insert 站起來）', 'sys');
+  }
+  /** 自然回復：脫離戰鬥 5 秒後開始；坐下時回復量加倍、間隔縮短（RO） */
+  updateRegen(dt: number) {
+    const p = this.player; if (p.dead || this.inTitle) return;
+    this.combatT += dt;
+    const sit = p.state === 'sit';
+    if (this.combatT < 5 && !sit) return;
+    this.regenT += dt; this.spRegenT += dt;
+    const hpI = sit ? 1.5 : 3, spI = sit ? 2 : 4;
+    if (this.regenT >= hpI) { this.regenT = 0; if (p.hp < p.maxHp) { const v = p.d.hpRegen * (sit ? 2 : 1); p.hp = Math.min(p.maxHp, p.hp + v); if (sit) this.fx.dmg(p.x, p.y, v, 'heal', 110); } }
+    if (this.spRegenT >= spI) { this.spRegenT = 0; if (p.sp < p.maxSp) { const v = p.d.spRegen * (sit ? 2 : 1); p.sp = Math.min(p.maxSp, p.sp + v); } }
+  }
+  // ------------------------------------------------------------ 精煉、卡片
+  refine(uid: number) {
+    const it = this.inv.get(uid); if (!it) return;
+    const d = DB.item[it.id], mat = refineMaterial(d), fee = refineFee(d), ch = this.player.ch;
+    if (it.refine >= 10 || this.inv.count(mat) < 1 || ch.zeny < fee) return;
+    this.inv.removeId(mat, 1); ch.zeny -= fee;
+    const rate = refineRate(d, it.refine);
+    const p = this.player;
+    if (this.rnd() * 100 < rate) {
+      it.refine++;
+      this.msg(`精煉成功！${this.inv.displayName(it)}`, 'item');
+      for (let i = 0; i < 24; i++) this.fx.glow(p.x, p.y, Math.random() * 90, '#fff0a0', 1, 2, 70);
+      this.fx.dmg(p.x, p.y, 'SUCCESS', 'heal', 150); this.audio?.sfx('refine_ok');
+      if (it.refine >= 7) this.announce(`【公告】${ch.name} 把 ${d.name} 精煉到了 +${it.refine}！`);
+    } else {
+      this.msg(`精煉失敗……${d.name} 碎掉了。`, 'warn');
+      this.fx.burst(p.x, p.y, 60, '#a0a0b0', 24, 120, 'dot', 0.6, 3);
+      this.fx.dmg(p.x, p.y, 'FAIL', 'take', 150); this.audio?.sfx('refine_fail');
+      this.inv.remove(uid, 1);
+    }
+    this.player.recalc(); this.ev.emit('inv'); this.ev.emit('stats'); this.save.saveSoon();
+  }
+  insertCard(cardUid: number, eqUid: number) {
+    const c = this.inv.get(cardUid), e = this.inv.get(eqUid); if (!c || !e) return;
+    const cd = DB.item[c.id], ed = DB.item[e.id];
+    if ((ed.slots || 0) <= e.cards.length) return;
+    e.cards.push(c.id); this.inv.remove(cardUid, 1);
+    this.msg(`把 ${cd.name} 插入了 ${ed.name}！`, 'item'); this.audio?.sfx('refine_ok');
+    this.player.recalc(); this.ev.emit('inv'); this.ev.emit('stats'); this.save.saveSoon();
+  }
   updateBuffs(dt: number) {
     const p = this.player; let changed = false;
     for (const k of Object.keys(this.buffT)) {
@@ -367,6 +441,7 @@ export class Game {
     const lv = def.level ? `建議等級 Lv${def.level[0]}~${def.level[1]}` : '';
     this.ui.showBanner(def.name, lv);
     this.ev.emit('map', def.id);
+    if (!this.inTitle) this.save?.saveSoon();
   }
   /** 傳送：淡出 → 換地圖 → 淡入 */
   warpTo(to: string, tx: number, ty: number) {
@@ -445,6 +520,8 @@ export class Game {
     }
     this.updateTelegraphs(dt);
     this.updateBuffs(dt);
+    this.updateRegen(dt);
+    if (!this.inTitle) this.save.update(dt);
     if (this.shout) { this.shout.t -= dt; if (this.shout.t <= 0) this.shout = null; }
     if (this.timers.length) { const due = this.timers.filter((t) => (t.t -= dt) <= 0); if (due.length) { this.timers = this.timers.filter((t) => t.t > 0); for (const t of due) t.fn(); } }
     if (this.projectiles.length) this.projectiles = this.projectiles.filter((pr) => !pr.step(dt));
@@ -458,6 +535,7 @@ export class Game {
   }
 
   handleInput(dt: number) {
+    if (this.inTitle) { this.input.takeClicks(); this.input.takeKeys(); this.input.takeWheel(); return; }
     const w = this.input.takeWheel();
     if (w) this.r.setZoom(this.r.zoomBias - w);
     for (const c of this.input.takeClicks()) {
@@ -483,6 +561,7 @@ export class Game {
       return;
     }
     if (this.skills.cast) { if (hold) return; this.skills.interrupt(); }
+    if (p.state === 'sit') p.state = 'idle';
     this.skills.pending = null;
     if (e instanceof Monster) { p.chase = e; p.repathT = 0; this.pickTarget = null; return; }
     if (e instanceof GroundItem) { p.chase = null; this.pickTarget = e; this.talkTarget = null; this.walkTo(e.x, e.y, false); return; }
@@ -641,6 +720,8 @@ export class Game {
   applyDamage(a: Actor | null, d: Actor, dmg: number, kind: 'deal' | 'take' | 'crit' | 'skill') {
     const h = -d.bbox.y0 + 10;
     d.hp -= dmg;
+    if (a === this.player || d === this.player) this.combatT = 0;
+    if (d === this.player && this.player.state === 'sit') this.player.state = 'idle';
     d.flashT = 0.12; d.hurtT = d === this.player && this.player.buffs.endure ? 0 : 0.15;
     this.fx.dmg(d.x, d.y, dmg, d === this.player ? 'take' : kind, h);
     this.fx.burst(d.x, d.y, -d.bbox.y0 * 0.5, kind === 'crit' ? '#ffe070' : '#ffffff', kind === 'crit' ? 14 : 7, kind === 'crit' ? 110 : 70);
@@ -696,13 +777,29 @@ export class Game {
       this.ev.emit('pickup', it.def.id);
     } else this.msg('負重已滿，無法撿取！', 'warn');
   }
-  /** 玩家死亡（階段 8 會改成回城＋扣經驗） */
+  /** 玩家死亡：怪物脫離；非初心者扣 1% Base/Job 經驗；按鈕回到儲存點 */
   onPlayerDeath() {
-    const p = this.player;
-    p.chase = null;
+    const p = this.player, ch = p.ch;
+    p.chase = null; this.skills.interrupt(); this.skills.targeting = null;
     for (const m of this.monsters) if (m.aggroOn === p) giveUp(m);
-    this.msg('你倒下了……3 秒後復活。', 'warn');
-    setTimeout(() => { p.state = 'idle'; p.recalc(true); p.deadT = 0; }, 3000);
+    let lostB = 0, lostJ = 0;
+    if (ch.job !== 'novice') {
+      lostB = Math.min(ch.baseExp, Math.floor(expNeed(ch.baseLv) * 0.01));
+      lostJ = Math.min(ch.jobExp, Math.floor(jobExpNeed(ch.job, ch.jobLv) * 0.01) || 0);
+      ch.baseExp -= lostB; ch.jobExp -= lostJ;
+    }
+    this.msg(ch.job === 'novice' ? '你倒下了……（初心者不會損失經驗）' : `你倒下了……損失經驗 ${lostB} / 職業經驗 ${lostJ}`, 'warn');
+    this.audio?.sfx('death');
+    this.ui.showDeath(lostB, lostJ);
+    this.ev.emit('stats');
+  }
+  respawn() {
+    const p = this.player;
+    p.state = 'idle'; p.deadT = 0; p.recalc();
+    p.hp = Math.max(1, Math.floor(p.maxHp * 0.5)); p.sp = Math.floor(p.maxSp * 0.5);
+    this.combatT = 0;
+    this.warpTo(this.savePoint.map, this.savePoint.x, this.savePoint.y);
+    this.ev.emit('stats');
   }
 
   // ------------------------------------------------------------ 繪製
@@ -855,6 +952,11 @@ export class Game {
     let x = Math.round(isoX(e.ix(a), e.iy(a)) - L - s.ax), y = Math.round(isoY(e.ix(a), e.iy(a)) - T - s.ay);
     if (e.hurtT > 0 && !e.dead) { x += e.dir === 1 ? 2 : e.dir === 2 ? -2 : 0; y += e.dir === 3 ? 1 : e.dir === 0 ? -1 : 0; }
     const sx = f * s.fw, sy = e.dir * s.fh;
+    if (e.state === 'sit') { // 坐姿：裁掉腿部、身體下移（sheet 規格維持 10 格）
+      const cut = 28;
+      c.drawImage(s.c, sx, sy, s.fw, s.fh - cut, x, y + cut - 6, s.fw, s.fh - cut);
+      return;
+    }
     if (e.dead) c.globalAlpha = e === this.player ? 0.45 : Math.max(0, 1 - e.deadT);
     c.drawImage(s.c, sx, sy, s.fw, s.fh, x, y, s.fw, s.fh);
     if (e instanceof Monster && e.frozenT > 0) { c.globalAlpha = 0.45; c.drawImage(whiteOf(s), sx, sy, s.fw, s.fh, x, y, s.fw, s.fh); c.globalAlpha = 0.25; c.fillStyle = '#60b0ff'; c.fillRect(x + s.ax + e.bbox.x0, y + s.ay + e.bbox.y0, e.bbox.x1 - e.bbox.x0, e.bbox.y1 - e.bbox.y0); c.globalAlpha = 1; }

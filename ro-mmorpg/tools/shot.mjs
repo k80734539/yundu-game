@@ -26,7 +26,7 @@ const page = await browser.newPage({ viewport: { width: W, height: H }, deviceSc
 const errors = [];
 page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); if (process.env.LOG) console.log('[console]', m.type(), m.text()); });
 page.on('pageerror', (e) => errors.push(String(e)));
-await page.goto(`http://localhost:${port}/`);
+await page.goto(`http://localhost:${port}/${process.env.TITLE ? "" : "?autostart=1"}`);
 await page.waitForFunction(() => window.__game && window.__game.loop && window.__game.loop.running, null, { timeout: 15000 });
 await page.waitForTimeout(800);
 if (script) {
