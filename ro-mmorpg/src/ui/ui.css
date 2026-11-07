@@ -76,3 +76,63 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 /* ---------- 世界地圖 ---------- */
 #win-worldmap canvas { display: block; background: #e8dcb8; border: 1px solid #a89870; image-rendering: pixelated; cursor: default; }
 .wm-tip { margin-top: 4px; min-height: 32px; font-size: 12px; color: #3a3a4a; }
+
+/* ---------- 背包 ---------- */
+.inv-grid { display: grid; grid-template-columns: repeat(8, 32px); gap: 2px; }
+.inv-cell { position: relative; width: 32px; height: 32px; background: linear-gradient(#e8ecf6, #d4dbea); border: 1px solid #a8b2cc; border-radius: 3px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.inv-cell.empty { cursor: default; opacity: .6; }
+.inv-cell:not(.empty):hover { border-color: #3a5490; background: #fff; }
+.inv-cell.eq { background: linear-gradient(#fff2c8, #f0d890); border-color: #c0902a; }
+.inv-cell img, .hot img, .eq-icon img, .shop-row img { width: 24px; height: 24px; image-rendering: pixelated; pointer-events: none; }
+.inv-cell .cnt, .hot .cnt { position: absolute; right: 1px; bottom: 0; font-size: 9px; font-weight: bold; color: #fff; text-shadow: 0 0 2px #000, 0 0 2px #000; pointer-events: none; }
+.inv-cell .ref { position: absolute; left: 1px; top: 0; font-size: 9px; font-weight: bold; color: #2a7ad0; text-shadow: 0 0 2px #fff; }
+.hint { font-size: 11px; margin-top: 4px; }
+.drag-ghost { position: fixed; width: 24px; height: 24px; pointer-events: none; z-index: 9999; image-rendering: pixelated; opacity: .85; }
+
+/* ---------- 道具資訊 ---------- */
+#iteminfo { position: fixed; z-index: 9998; max-width: 240px; background: rgba(250,251,255,.97); border: 1px solid #5d6a8a; border-radius: 4px; padding: 6px 8px; box-shadow: 0 4px 12px rgba(0,0,0,.35); pointer-events: none; font-size: 12px; }
+.ii-head { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; color: #2a3a7a; }
+.ii-head img { width: 24px; height: 24px; image-rendering: pixelated; }
+.ii-desc { color: #4a4a5a; margin-bottom: 4px; }
+.ii-st { border-top: 1px dashed #c0c8d8; padding-top: 3px; margin-top: 3px; color: #3a3a4a; line-height: 16px; }
+.ii-st .g { color: #2a8a3a; } .ii-st .card { color: #b07a10; }
+
+/* ---------- 裝備 ---------- */
+.eq-wrap { display: flex; gap: 6px; align-items: flex-start; }
+.eq-col { display: flex; flex-direction: column; gap: 4px; width: 112px; }
+.eq-slot { display: flex; gap: 4px; align-items: center; padding: 2px; border: 1px solid #b8c0d8; border-radius: 3px; background: #f4f6fb; min-height: 30px; cursor: pointer; }
+.eq-slot.empty { cursor: default; }
+.eq-slot:not(.empty):hover { border-color: #3a5490; background: #fff; }
+.eq-icon { width: 26px; height: 26px; flex: none; background: #dfe5f2; border-radius: 2px; display: flex; align-items: center; justify-content: center; }
+.eq-name { font-size: 11px; line-height: 13px; overflow: hidden; }
+.eq-mid { flex: 1; display: flex; justify-content: center; background: radial-gradient(#ffffff, #dde4f2); border: 1px solid #b8c0d8; border-radius: 4px; }
+.eq-mid canvas { image-rendering: pixelated; }
+
+/* ---------- 技能 ---------- */
+.sk-row { display: flex; gap: 6px; align-items: center; padding: 3px 0; border-bottom: 1px solid #dde2ee; }
+.sk-row.unlearned .sk-icon { filter: grayscale(1); opacity: .5; }
+.sk-icon { width: 24px; height: 24px; image-rendering: pixelated; cursor: grab; flex: none; padding: 2px; background: #dfe5f2; border-radius: 3px; }
+.sk-info { flex: 1; font-size: 12px; line-height: 15px; }
+.sk-desc { font-size: 11px; color: #6a7088; }
+.sk-lv { width: 34px; text-align: right; font-weight: bold; color: #3a4a8a; }
+
+/* ---------- 快捷列 ---------- */
+#hotbar { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); display: flex; gap: 3px; padding: 3px; background: rgba(16,18,32,.6); border: 1px solid rgba(120,140,200,.6); border-radius: 4px; }
+.hot { position: relative; width: 34px; height: 34px; border: 1px solid #6a7aa0; border-radius: 3px; background: linear-gradient(#3a4060, #22263a); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; }
+.hot:hover { border-color: #c8d8ff; }
+.hot.none img { opacity: .35; }
+.hot .key { position: absolute; left: 2px; top: 0; font-size: 9px; color: #c8d0e8; text-shadow: 0 0 2px #000; pointer-events: none; }
+.hot .cd { position: absolute; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.6); pointer-events: none; }
+
+/* ---------- 商店 ---------- */
+.shop-list { max-height: 300px; overflow-y: auto; }
+.shop-row { display: flex; align-items: center; gap: 6px; padding: 2px 0; border-bottom: 1px solid #e2e6f0; }
+.shop-name { flex: 1; } .shop-price { width: 70px; text-align: right; color: #8a5a10; font-weight: bold; }
+.shop-qty { width: 40px; font-size: 11px; padding: 1px 2px; }
+
+/* ---------- 設定 ---------- */
+.opt-row { display: flex; justify-content: space-between; align-items: center; margin: 4px 0; }
+.opt-range { width: 140px; }
+.opt-btns { display: flex; gap: 6px; margin-top: 8px; }
+
+/* ---------- NPC 名牌 ---------- */

@@ -1,1 +1,51 @@
-[]
+[
+ {
+  "id": "tool",
+  "name": "晨曦道具店",
+  "items": [
+   "red_potion",
+   "orange_potion",
+   "yellow_potion",
+   "white_potion",
+   "blue_potion",
+   "apple",
+   "carrot",
+   "meat",
+   "fly_wing",
+   "butterfly_wing"
+  ]
+ },
+ {
+  "id": "weapon",
+  "name": "鐵砧武器防具店",
+  "items": [
+   "knife",
+   "cutter",
+   "sword",
+   "falchion",
+   "rod",
+   "wand",
+   "bow",
+   "composite_bow",
+   "cotton_shirt",
+   "adventure_suit",
+   "wooden_mail",
+   "silk_robe",
+   "cap",
+   "ribbon",
+   "guard",
+   "hood",
+   "sandals",
+   "shoes",
+   "clip"
+  ]
+ },
+ {
+  "id": "refine",
+  "name": "精煉材料",
+  "items": [
+   "oridecon",
+   "elunium"
+  ]
+ }
+]

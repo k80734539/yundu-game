@@ -26,6 +26,9 @@ import { Spawner } from '../systems/Spawner';
 import { Inventory } from '../systems/Inventory';
 import { GroundItem } from '../entities/GroundItem';
 import { iconCanvas } from '../render/IconArt';
+import { Npc } from '../entities/Npc';
+import type { HotSlot } from '../ui/Hotbar';
+import type { PropInst } from '../systems/MapLoader';
 import { cellDist, mulberry32 } from './math';
 
 const K_PROP = 0, K_STRIP = 1, K_ACTOR = 2, K_ITEM = 3;
@@ -38,7 +41,7 @@ export class Game {
   player: Player;
   entities: Entity[] = [];
   monsters: Monster[] = [];
-  npcs: Actor[] = [];
+  npcs: Npc[] = [];
   warp: { to: string; tx: number; ty: number; t: number; done: boolean } | null = null;
   fade = 0;
   private darkCv: HTMLCanvasElement | null = null;
@@ -60,6 +63,10 @@ export class Game {
   pickTarget: GroundItem | null = null;
   telegraphs: { x: number; y: number; r: number; t: number; dur: number; owner: Monster; mult: number; color: string }[] = [];
   safeUntil = 0;
+  hotbar: (HotSlot | null)[] = [{ type: 'item', id: 'red_potion' }, null, null, null, null, null, null, null, { type: 'item', id: 'butterfly_wing' }];
+  skillCd: Record<string, number> = {}; skillCdMax: Record<string, number> = {};
+  savePoint = { map: 'aurora', x: 25, y: 30 };
+  talkTarget: Npc | null = null;
 
   constructor(canvas: HTMLCanvasElement, public uiRoot: HTMLElement) {
     this.r = new Renderer(canvas);
@@ -70,6 +77,7 @@ export class Game {
     this.spawner = new Spawner(this);
     this.spawner.init();
     this.ui = new UI(this, uiRoot);
+    this.newGameItems();
     this.loop = new Loop((dt) => this.update(dt), (a, dt) => this.render(a, dt));
     (window as any).__game = this;
   }
@@ -83,6 +91,158 @@ export class Game {
     this.ev.emit('stats');
   }
   msg(text: string, kind: MsgKind = 'sys') { this.ui.msg(text, kind); }
+  newGameItems() {
+    this.inv.items = []; this.inv.equip = {};
+    this.inv.add('knife'); this.inv.add('cotton_shirt'); this.inv.add('red_potion', 5); this.inv.add('butterfly_wing', 1); this.inv.add('apple', 3);
+    for (const it of [...this.inv.items]) if (it.id === 'knife' || it.id === 'cotton_shirt') this.inv.equipItem(it.uid, 'novice', 1);
+    this.player.recalc(true);
+  }
+  // ------------------------------------------------------------ 道具
+  useOrEquip(uid: number) {
+    const it = this.inv.get(uid); if (!it) return;
+    const d = DB.item[it.id];
+    if (d.type === 'use') this.useItem(uid);
+    else if (d.type === 'weapon' || d.type === 'armor') {
+      const slot = this.inv.slotOf(uid);
+      if (slot) { this.inv.unequip(slot); this.ui.sfx('equip'); return; }
+      const err = this.inv.equipItem(uid, this.player.ch.job, this.player.ch.baseLv);
+      if (err) this.msg(err, 'warn'); else { this.msg(`裝備了 ${this.inv.displayName(it)}`, 'item'); this.ui.sfx('equip'); }
+    } else if (d.type === 'card') this.ui.open('cards');
+  }
+  useItem(uid: number): boolean {
+    const it = this.inv.get(uid); if (!it) return false;
+    const d = DB.item[it.id], p = this.player;
+    if (d.type !== 'use' || p.dead) return false;
+    if (d.heal || d.healSp) {
+      if (d.heal) { const v = Math.round(d.heal * (0.9 + this.rnd() * 0.2) * (1 + p.d.total.vit / 100)); p.hp = Math.min(p.maxHp, p.hp + v); this.fx.dmg(p.x, p.y, v, 'heal', 120); }
+      if (d.healSp) { const v = Math.round(d.healSp * (1 + p.d.total.int / 100)); p.sp = Math.min(p.maxSp, p.sp + v); this.fx.dmg(p.x, p.y, v, 'sp', 135); }
+      for (let i = 0; i < 8; i++) this.fx.glow(p.x, p.y, 20 + Math.random() * 60, d.healSp ? '#80b8ff' : '#90ff90', 0.6, 2, 40);
+      this.audio?.sfx('potion');
+    } else if (d.buff === 'flywing') {
+      const pos = this.map.randomWalkable(this.rnd); if (!pos) return false;
+      this.teleport(pos[0], pos[1]);
+    } else if (d.buff === 'butterfly') {
+      this.warpTo(this.savePoint.map, this.savePoint.x, this.savePoint.y);
+    }
+    this.inv.remove(uid, 1);
+    return true;
+  }
+  teleport(x: number, y: number) {
+    const p = this.player;
+    this.fx.ring(p.x, p.y, '#a0e0ff', 0.5, 40);
+    p.x = p.px = x + 0.5; p.y = p.py = y + 0.5; p.stop(); p.chase = null;
+    for (const m of this.monsters) if (m.aggroOn === p) giveUp(m);
+    this.cam.follow(p.x, p.y, 0, true);
+    this.fx.ring(p.x, p.y, '#a0e0ff', 0.5, 40);
+    this.audio?.sfx('warp');
+  }
+  useHot(i: number) {
+    const s = this.hotbar[i]; if (!s) return;
+    if (s.type === 'item') {
+      const it = this.inv.items.find((x) => x.id === s.id);
+      if (!it) { this.msg(`沒有 ${DB.item[s.id].name}了`, 'warn'); return; }
+      this.useOrEquip(it.uid);
+    } else this.useSkill(s.id);
+  }
+  buy(id: string, n: number) {
+    const d = DB.item[id], cost = d.price * n, ch = this.player.ch;
+    if (ch.zeny < cost) { this.msg('Zeny 不足！', 'warn'); return; }
+    if (!this.inv.add(id, n)) { this.msg('負重不足，無法購買！', 'warn'); return; }
+    ch.zeny -= cost; this.msg(`購買了 ${d.name} ×${n}（-${cost} Z）`, 'item'); this.audio?.sfx('coin'); this.ev.emit('stats'); this.ev.emit('inv');
+  }
+  sell(uid: number, n: number) {
+    const it = this.inv.get(uid); if (!it || this.inv.isEquipped(uid)) return;
+    n = Math.min(n, it.n);
+    const d = DB.item[it.id], gain = Math.floor(d.price / 2) * n;
+    this.inv.remove(uid, n); this.player.ch.zeny += gain;
+    this.msg(`出售了 ${d.name} ×${n}（+${gain} Z）`, 'item'); this.audio?.sfx('coin'); this.ev.emit('stats'); this.ev.emit('inv');
+  }
+  dropItem(uid: number) {
+    const it = this.inv.get(uid); if (!it) return;
+    const d = DB.item[it.id], p = this.player;
+    if (this.inv.isEquipped(uid)) { this.msg('請先卸下裝備再丟棄。', 'warn'); return; }
+    const n = it.n;
+    this.inv.remove(uid, n);
+    const g = new GroundItem(d, n, p.x + (this.rnd() - 0.5), p.y + 0.6, p.x, p.y, { refine: it.refine, cards: it.cards });
+    this.items.push(g);
+    this.msg(`丟棄了 ${d.name} ×${n}`, 'item');
+  }
+  // ------------------------------------------------------------ 技能（施放系統在階段 7 完成）
+  skillList(): string[] { const j = this.player.job; return j.tier === 0 ? j.skills : ['basic', 'first_aid', ...j.skills]; }
+  canLearn(id: string): boolean {
+    const ch = this.player.ch, s = DB.skill[id];
+    if (!s || ch.skillPts <= 0 || (ch.skills[id] || 0) >= s.maxLv) return false;
+    if (!this.skillList().includes(id)) return false;
+    if (s.job !== ch.job && s.job !== 'novice') return false;
+    return true;
+  }
+  learnSkill(id: string) {
+    if (!this.canLearn(id)) return;
+    const ch = this.player.ch; ch.skills[id] = (ch.skills[id] || 0) + 1; ch.skillPts--;
+    this.msg(`學會了 ${DB.skill[id].name} Lv${ch.skills[id]}`, 'sys'); this.ui.sfx('click');
+    this.ev.emit('stats');
+  }
+  skillCdRatio(id: string) { const t = this.skillCd[id] || 0; return t > 0 ? t / (this.skillCdMax[id] || 1) : 0; }
+  useSkill(id: string) {
+    const lv = this.player.ch.skills[id] || 0, s = DB.skill[id], p = this.player;
+    if (!s || !lv) { this.msg('還沒有學會這個技能。', 'warn'); return; }
+    if (s.type === 'passive') return;
+    if ((this.skillCd[id] || 0) > 0) return;
+    const sp = s.sp[lv - 1];
+    if (p.sp < sp) { this.msg('SP 不足！', 'warn'); return; }
+    if (id === 'first_aid') {
+      p.sp -= sp; const v = s.value ? s.value[0] : 15; p.hp = Math.min(p.maxHp, p.hp + v); this.fx.dmg(p.x, p.y, v, 'heal', 120);
+      this.skillCd[id] = this.skillCdMax[id] = s.cd[lv - 1] || 1;
+      for (let i = 0; i < 8; i++) this.fx.glow(p.x, p.y, 20 + Math.random() * 60, '#ff9090', 0.6, 2, 40);
+      return;
+    }
+    this.msg(`${s.name}：施放系統將在轉職後開放。`, 'warn');
+  }
+  // ------------------------------------------------------------ NPC
+  spawnNpcs() {
+    this.npcs = [];
+    for (const n of this.map.def.npcs || []) {
+      const def = DB.npc[n.id]; if (!def) continue;
+      const npc = new Npc(def, n.x + 0.5, n.y + 0.5, n.dir ?? 0);
+      this.ensureNpcVisible(npc);
+      this.npcs.push(npc); this.entities.push(npc);
+    }
+  }
+  /** NPC 不能被建築擋住：若在建築後方且重疊，就移到附近不被擋的格子 */
+  npcHiddenBy(npc: Npc): PropInst | null {
+    const b = npc.bbox, nx = isoX(npc.x, npc.y), ny = isoY(npc.x, npc.y);
+    for (const pr of this.props) {
+      if (!pr.def.tall || !pr.strips) continue;
+      const pp = pr.p;
+      const behind = !(npc.x >= pp.x + pp.w || npc.y >= pp.y + pp.h);
+      if (!behind) continue;
+      const w = pr.spr.c.width, h = pr.spr.c.height;
+      if (nx + b.x1 > pr.dx && nx + b.x0 < pr.dx + w && ny + b.y1 > pr.dy && ny + b.y0 < pr.dy + h - 4) return pp;
+    }
+    return null;
+  }
+  ensureNpcVisible(npc: Npc) {
+    if (!this.npcHiddenBy(npc)) return;
+    const ox = Math.floor(npc.x), oy = Math.floor(npc.y);
+    for (let r = 1; r < 8; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+      if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+      const x = ox + dx, y = oy + dy;
+      if (!this.map.canWalk(x, y)) continue;
+      const ppx = npc.x, ppy = npc.y; npc.x = npc.px = x + 0.5; npc.y = npc.py = y + 0.5;
+      if (!this.npcHiddenBy(npc)) {
+        console.warn(`NPC ${npc.def.id} 被建築擋住，已從 (${ox},${oy}) 移到 (${x},${y})`);
+        this.map.walk[oy * this.map.w + ox] = 1; this.map.walk[y * this.map.w + x] = 0;
+        return;
+      }
+      npc.x = npc.px = ppx; npc.y = npc.py = ppy;
+    }
+  }
+  talkTo(npc: Npc) {
+    const p = this.player;
+    npc.face(p.x, p.y); p.face(npc.x, npc.y);
+    npc.talkT = 4;
+    this.ui.talk(npc);
+  }
   raiseStat(k: StatKey) {
     const ch = this.player.ch, cost = statCost(ch.stats[k]);
     if (ch.statPts < cost || ch.stats[k] >= MAX_STAT) return;
@@ -128,7 +288,8 @@ export class Game {
     this.cam.follow(p.x, p.y, 0, true);
     this.ground.warm(this.cam.left(this.r.w) - 64, this.cam.top(this.r.h) - 64, this.r.w + 128, this.r.h + 128);
     this.lights = this.props.filter((r) => r.def.anim === 'flame' || r.p.type === 'lamp' || r.def.anim === 'crystal').map((r) => ({ x: r.fx, y: r.fy - (r.p.type === 'lamp' ? 80 : r.def.anim === 'flame' ? 50 : 20), r: r.def.anim === 'crystal' ? 70 : 130 }));
-    this.npcs = [];
+    this.spawnNpcs();
+    this.talkTarget = null;
     this.ui.onMap();
     const lv = def.level ? `建議等級 Lv${def.level[0]}~${def.level[1]}` : '';
     this.ui.showBanner(def.name, lv);
@@ -202,6 +363,8 @@ export class Game {
     this.updatePlayer(dt);
     if (!this.player.dead) this.checkPortals();
     for (const m of this.monsters) this.updateMonster(m, dt);
+    for (const n of this.npcs) { n.updateAnim(dt); if (n.talkT > 0) { n.talkT -= dt; if (n.talkT <= 0) n.dir = n.baseDir; } }
+    for (const k in this.skillCd) if (this.skillCd[k] > 0) this.skillCd[k] -= dt;
     // 移除淡出完成的實體
     if (this.entities.some((e) => e.remove)) {
       this.entities = this.entities.filter((e) => !e.remove);
@@ -238,8 +401,9 @@ export class Game {
     if (p.dead) return;
     const e = hold ? null : this.pick(sx, sy);
     if (e instanceof Monster) { p.chase = e; p.repathT = 0; this.pickTarget = null; return; }
-    if (e instanceof GroundItem) { p.chase = null; this.pickTarget = e; this.walkTo(e.x, e.y, false); return; }
-    p.chase = null; this.pickTarget = null;
+    if (e instanceof GroundItem) { p.chase = null; this.pickTarget = e; this.talkTarget = null; this.walkTo(e.x, e.y, false); return; }
+    if (e instanceof Npc) { p.chase = null; this.pickTarget = null; this.talkTarget = e; p.setPath(this.pf.find(p.x, p.y, e.x, e.y, 3000, 1)); return; }
+    p.chase = null; this.pickTarget = null; this.talkTarget = null;
     const w = this.screenToWorld(sx, sy);
     this.walkTo(w.x, w.y, !hold);
   }
@@ -274,6 +438,11 @@ export class Game {
         p.repathT -= dt;
         if (p.repathT <= 0 || !p.path.length) { p.repathT = 0.3; p.setPath(this.pf.find(p.x, p.y, tg.x, tg.y, 3000, range)); }
       }
+    }
+    if (this.talkTarget) {
+      const n = this.talkTarget;
+      if (Math.max(Math.abs(n.x - p.x), Math.abs(n.y - p.y)) <= 2.2) { p.path = []; this.talkTarget = null; this.talkTo(n); }
+      else if (!p.path.length) this.talkTarget = null;
     }
     if (this.pickTarget) {
       const it = this.pickTarget;
@@ -600,6 +769,7 @@ export class Game {
       c.fillStyle = k > 0.25 ? '#3ce060' : '#ff5040'; c.fillRect(bx, by, Math.round(w * k), 3);
       if (e === this.player && e.maxSp > 0) { c.fillStyle = '#202040'; c.fillRect(bx, by + 3, w, 3); c.fillStyle = '#4090ff'; c.fillRect(bx, by + 3, Math.round(w * Math.max(0, e.sp / e.maxSp)), 3); }
     }
+    if (e instanceof Npc) { this.label(c, e.name, x, y + 14, '#a8e8ff'); return; }
     if (this.hover === e && !mvp) this.label(c, e instanceof Monster ? `${e.name} Lv${e.def.lv}` : e.name, x, y + 22, e instanceof Monster ? '#ffffff' : '#a0e0ff');
   }
   label(c: CanvasRenderingContext2D, text: string, x: number, y: number, color = '#fff') {

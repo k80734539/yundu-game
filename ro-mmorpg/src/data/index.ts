@@ -56,7 +56,7 @@ export interface SkillDef {
   id: string; name: string; job: string; maxLv: number; type: 'active' | 'passive';
   target: 'enemy' | 'self' | 'ground'; icon: { k: string; c: string };
   sp: number[]; cast: number[]; cd: number[]; range: number;
-  power?: number[]; hits?: number; aoe?: number; element?: string;
+  power?: number[]; hits?: number | string; aoe?: number; element?: string; knock?: number;
   effect: string; fx: string; desc: string; req?: { id: string; lv: number }[];
   value?: number[]; dur?: number[];
 }
@@ -72,7 +72,7 @@ export interface QuestDef {
   repeat?: boolean; consume?: boolean;
 }
 export interface DialogNode { text: string | string[]; opts?: { label: string; go?: string; act?: string; arg?: string; cond?: string }[]; act?: string; arg?: string; go?: string }
-export interface NpcDef { id: string; name: string; look: Look; title?: string; dialog: Record<string, DialogNode>; mark?: string }
+export interface NpcDef { id: string; name: string; look: Look; title?: string; shop?: string; dialog: Record<string, DialogNode>; mark?: string }
 export interface ShopDef { id: string; name: string; items: string[] }
 
 export const MAPS = mapsJson as unknown as MapDef[];

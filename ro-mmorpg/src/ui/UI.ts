@@ -6,12 +6,20 @@ import { Chat, MsgKind } from './Chat';
 import { StatusWindow } from './StatusWindow';
 import { Minimap } from './Minimap';
 import { WorldMap } from './WorldMap';
+import { InventoryWindow } from './InventoryWindow';
+import { EquipWindow } from './EquipWindow';
+import { SkillWindow } from './SkillWindow';
+import { Hotbar } from './Hotbar';
+import { ShopWindow } from './ShopWindow';
+import { OptionsWindow } from './OptionsWindow';
+import { ItemInfo } from './ItemInfo';
+import type { DragData } from './Drag';
 
 /** UI 管理器：DOM 視窗、快捷鍵、訊息、橫幅 */
 export class UI {
   winPos: Record<string, [number, number]> = {};
   wins: Record<string, Win> = {};
-  hud: Hud; chat: Chat; mini: Minimap; world: WorldMap;
+  hud: Hud; chat: Chat; mini: Minimap; world: WorldMap; info: ItemInfo; hot: Hotbar; shop: ShopWindow;
   banner: HTMLDivElement;
   private bannerT = 0;
   constructor(public g: Game, public root: HTMLElement) {
@@ -21,8 +29,15 @@ export class UI {
     this.hud = new Hud(this);
     this.chat = new Chat(this);
     this.add(new StatusWindow(this));
+    this.info = new ItemInfo(this);
     this.mini = new Minimap(this);
     this.world = this.add(new WorldMap(this)) as WorldMap;
+    this.add(new InventoryWindow(this));
+    this.add(new EquipWindow(this));
+    this.add(new SkillWindow(this));
+    this.shop = this.add(new ShopWindow(this)) as ShopWindow;
+    this.add(new OptionsWindow(this));
+    this.hot = new Hotbar(this);
     g.ev.on('stats', () => this.refresh());
   }
   add(w: Win) { this.wins[w.id] = w; return w; }
@@ -42,8 +57,15 @@ export class UI {
     this.bannerT = dur;
   }
   onMap() { this.mini.onMap(); this.world.render(); }
+  /** 拖曳放開：快捷列 → 設定；遊戲畫面 → 丟到地上 */
+  dropOn(t: Element | null, d: DragData) {
+    const hot = (t as HTMLElement | null)?.closest?.('[data-hot]') as HTMLElement | null;
+    if (hot) { this.g.hotbar[+hot.dataset.hot!] = { type: d.type, id: d.id }; this.hot.render(); this.sfx('click'); return; }
+    if (t === this.g.r.canvas && d.type === 'item' && d.uid !== undefined) this.g.dropItem(d.uid);
+  }
   update(dt: number) {
     this.hud.update();
+    this.hot.update();
     this.mini.update(dt);
     this.world.update(dt);
     if (this.bannerT > 0) { this.bannerT -= dt; if (this.bannerT <= 0) this.banner.querySelector('.b')?.classList.remove('show'); }
@@ -56,6 +78,8 @@ export class UI {
       if (map[key]) { this.toggle(map[key]); return true; }
     }
     if (k.key === 'Enter') { this.chat.focus(); return true; }
+    const fm = /^F([1-9])$/.exec(k.key);
+    if (fm) { this.g.useHot(+fm[1] - 1); return true; }
     if (k.key === 'Escape') {
       const open = Object.values(this.wins).filter((w) => w.isOpen).sort((a, b) => +b.el.style.zIndex - +a.el.style.zIndex);
       if (open.length) { open[0].close(); this.sfx('close'); } else this.toggle('options');
@@ -63,6 +87,13 @@ export class UI {
     }
     if (key === 'm' && !k.alt && !k.ctrl) { this.toggle('worldmap'); return true; }
     return false;
+  }
+  /** 和 NPC 說話（階段 6 換成對話框） */
+  talk(npc: import('../entities/Npc').Npc) {
+    const d = npc.def;
+    const first = d.dialog.start?.text; const line = Array.isArray(first) ? first[0] : first;
+    if (line) this.msg(`${d.name}：${line}`, 'npc');
+    if (d.shop) this.shop.openShop(d.shop, 'buy');
   }
   command(t: string) {
     if (!t.startsWith('/')) { this.msg(`${this.g.player.ch.name}：${t}`, 'me'); return; }

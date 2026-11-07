@@ -1,1 +1,404 @@
-[]
+[
+ {
+  "id": "guide",
+  "name": "新手導覽員 艾莉",
+  "title": "新手導覽",
+  "look": {
+   "skin": "#f8e0c8",
+   "hair": "#e8b050",
+   "cloth": "#e86a8a",
+   "cloth2": "#ffffff",
+   "pants": "#c84a6a",
+   "hairStyle": 3,
+   "hat": "ribbon",
+   "body": "robe"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "歡迎來到晨曦鎮！我是導覽員艾莉。",
+     "有什麼想問的嗎？"
+    ],
+    "opts": [
+     {
+      "label": "操作說明",
+      "go": "ctrl"
+     },
+     {
+      "label": "能力值與加點",
+      "go": "stat"
+     },
+     {
+      "label": "怎麼轉職？",
+      "go": "job"
+     },
+     {
+      "label": "新手任務",
+      "act": "quests"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   },
+   "ctrl": {
+    "text": [
+     "點擊地面就會走過去，按住滑鼠會一直朝游標走。",
+     "點擊怪物會自動追過去攻擊，點地上的道具可以撿起來。",
+     "Alt+E 背包、Alt+Q 裝備、Alt+S 技能、Alt+A 能力值、Alt+U 任務、M 世界地圖。",
+     "把道具或技能拖到畫面下方的快捷列，就能用 F1~F9 使用。Insert 可以坐下回血。"
+    ],
+    "go": "start"
+   },
+   "stat": {
+    "text": [
+     "力量提高近戰攻擊與負重，敏捷提高攻速與迴避。",
+     "體力提高 HP 與防禦，智力提高魔法攻擊與 SP。",
+     "靈巧提高命中、遠距攻擊與縮短詠唱，幸運提高爆擊與完全迴避。",
+     "升級得到的點數，記得用 Alt+A 分配喔！"
+    ],
+    "go": "start"
+   },
+   "job": {
+    "text": [
+     "職業等級到 10，而且『基本技能』學到 Lv9，就能找教堂前的轉職官轉職。",
+     "劍士近戰最耐打、法師遠距詠唱魔法、弓箭手遠距射箭。",
+     "技能點數用 Alt+S 分配。"
+    ],
+    "go": "start"
+   }
+  }
+ },
+ {
+  "id": "tool",
+  "name": "道具商人 布朗",
+  "title": "道具店",
+  "shop": "tool",
+  "look": {
+   "skin": "#f0c8a0",
+   "hair": "#6a4a2a",
+   "cloth": "#4a8a5a",
+   "cloth2": "#e8d8a0",
+   "pants": "#5a4a3a",
+   "hairStyle": 0,
+   "hat": "band"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "歡迎光臨！藥水、翅膀，冒險必備品都在這裡。"
+    ],
+    "opts": [
+     {
+      "label": "購買",
+      "act": "shop",
+      "arg": "tool"
+     },
+     {
+      "label": "出售",
+      "act": "sell",
+      "arg": "tool"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "id": "weapon",
+  "name": "武器商人 葛雷",
+  "title": "武器防具店",
+  "shop": "weapon",
+  "look": {
+   "skin": "#e8b890",
+   "hair": "#3a2a2a",
+   "cloth": "#7a5a4a",
+   "cloth2": "#c0c0c8",
+   "pants": "#3a3a4a",
+   "hairStyle": 2,
+   "body": "armor"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "哼，要找好武器就來對地方了。"
+    ],
+    "opts": [
+     {
+      "label": "購買",
+      "act": "shop",
+      "arg": "weapon"
+     },
+     {
+      "label": "出售",
+      "act": "sell",
+      "arg": "weapon"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "id": "inn",
+  "name": "旅館老闆娘 瑪莎",
+  "title": "旅館",
+  "look": {
+   "skin": "#f8d8b8",
+   "hair": "#a05a3a",
+   "cloth": "#c8a070",
+   "cloth2": "#ffffff",
+   "pants": "#8a5a3a",
+   "hairStyle": 1,
+   "body": "robe"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "旅途辛苦了！住一晚只要 50 Zeny，可以完全恢復喔。",
+     "也可以把這裡設為儲存點，倒下時會回到這裡。"
+    ],
+    "opts": [
+     {
+      "label": "休息（50 Zeny）",
+      "act": "heal",
+      "arg": "50"
+     },
+     {
+      "label": "設定儲存點",
+      "act": "save"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "id": "job",
+  "name": "轉職官 雷歐",
+  "title": "轉職官",
+  "look": {
+   "skin": "#f0d0b0",
+   "hair": "#c8c8d0",
+   "cloth": "#e8e8f0",
+   "cloth2": "#c8a040",
+   "pants": "#5a5a7a",
+   "hairStyle": 0,
+   "body": "robe",
+   "hat": "hood"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "我負責為冒險者轉職。初心者職業等級 10、基本技能 Lv9 就能選擇新的道路。"
+    ],
+    "opts": [
+     {
+      "label": "我要轉職",
+      "act": "jobmenu"
+     },
+     {
+      "label": "說明各職業",
+      "go": "info"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   },
+   "info": {
+    "text": [
+     "劍士：HP 高、近戰，技能有重擊、爆裂斬、挑釁、堅忍。",
+     "法師：遠距詠唱魔法，技能有火焰彈、冰凍彈、靈魂衝擊、雷暴。",
+     "弓箭手：遠距射箭，技能有二連矢、箭雨、集中、衝鋒箭。"
+    ],
+    "go": "start"
+   }
+  }
+ },
+ {
+  "id": "kafra",
+  "name": "服務員 莉莉",
+  "title": "傳送服務",
+  "look": {
+   "skin": "#f8e0c8",
+   "hair": "#3a3a6a",
+   "cloth": "#3a5ab0",
+   "cloth2": "#ffffff",
+   "pants": "#2a3a7a",
+   "hairStyle": 1,
+   "hat": "ribbon",
+   "body": "robe"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "您好，這裡是冒險者服務處，提供傳送與儲存點服務。"
+    ],
+    "opts": [
+     {
+      "label": "傳送服務",
+      "act": "warpmenu"
+     },
+     {
+      "label": "設定儲存點",
+      "act": "save"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "id": "captain",
+  "name": "衛兵隊長 巴德",
+  "title": "討伐任務",
+  "look": {
+   "skin": "#e8c0a0",
+   "hair": "#4a3a2a",
+   "cloth": "#8a2a2a",
+   "cloth2": "#c0c8d8",
+   "pants": "#3a3a4a",
+   "hairStyle": 2,
+   "body": "armor",
+   "hat": "helm",
+   "weapon": "sword"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "城外的魔物越來越多了，需要你這樣的冒險者幫忙。"
+    ],
+    "opts": [
+     {
+      "label": "任務",
+      "act": "quests"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "id": "herbalist",
+  "name": "藥草師 菲歐娜",
+  "title": "收集任務",
+  "look": {
+   "skin": "#f8e0c8",
+   "hair": "#5a8a3a",
+   "cloth": "#8ab060",
+   "cloth2": "#f0e8c0",
+   "pants": "#5a6a3a",
+   "hairStyle": 1,
+   "body": "robe"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "我在研究各種材料，可以幫我收集一些東西嗎？"
+    ],
+    "opts": [
+     {
+      "label": "任務",
+      "act": "quests"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "id": "refiner",
+  "name": "精煉師 霍克",
+  "title": "精煉",
+  "shop": "refine",
+  "look": {
+   "skin": "#d8a880",
+   "hair": "#2a2a2a",
+   "cloth": "#5a4a4a",
+   "cloth2": "#e09040",
+   "pants": "#3a2a2a",
+   "hairStyle": 0,
+   "hat": "band"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "把裝備交給我，用礦石就能精煉到 +10！",
+     "不過超過 +4 之後有機率失敗，失敗的話裝備會碎掉喔。"
+    ],
+    "opts": [
+     {
+      "label": "精煉裝備",
+      "act": "refine"
+     },
+     {
+      "label": "購買礦石",
+      "act": "shop",
+      "arg": "refine"
+     },
+     {
+      "label": "插入卡片",
+      "act": "cards"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "id": "girl",
+  "name": "小女孩 米亞",
+  "title": "",
+  "look": {
+   "skin": "#f8e0c8",
+   "hair": "#f0a0c0",
+   "cloth": "#f8f0a0",
+   "cloth2": "#e87a7a",
+   "pants": "#e87a7a",
+   "hairStyle": 3,
+   "body": "robe"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "哥哥／姊姊，你也是冒險者嗎？",
+     "我的兔子玩偶被跳跳兔叼走了……"
+    ],
+    "opts": [
+     {
+      "label": "任務",
+      "act": "quests"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
+ }
+]
