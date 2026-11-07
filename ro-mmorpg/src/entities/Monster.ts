@@ -13,6 +13,9 @@ export class Monster extends Actor {
   aggroOn: Actor | null = null;
   lastHitBy = 0;
   isMvp: boolean;
+  skillCd = 2;
+  summoned = false;
+  announcedFight = false;
   constructor(public def: MonsterDef, x: number, y: number) {
     super(x, y);
     this.homeX = x; this.homeY = y;

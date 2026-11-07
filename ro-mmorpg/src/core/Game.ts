@@ -21,9 +21,14 @@ import type { MsgKind } from '../ui/Chat';
 import { gainExp } from '../systems/Exp';
 import { playerVsMonster, monsterVsPlayer } from '../systems/Combat';
 import { StatKey, statCost, MAX_STAT } from '../systems/Stats';
+import { updateAI, onHurt, giveUp } from '../systems/AI';
+import { Spawner } from '../systems/Spawner';
+import { Inventory } from '../systems/Inventory';
+import { GroundItem } from '../entities/GroundItem';
+import { iconCanvas } from '../render/IconArt';
 import { cellDist, mulberry32 } from './math';
 
-const K_PROP = 0, K_STRIP = 1, K_ACTOR = 2;
+const K_PROP = 0, K_STRIP = 1, K_ACTOR = 2, K_ITEM = 3;
 
 /** 遊戲中樞：持有地圖、實體、系統；固定 60Hz 更新、插值繪製 */
 export class Game {
@@ -48,12 +53,22 @@ export class Game {
   holdT = 0;
   ui!: UI;
   audio: any = null;
-  inv: any = null;
+  save: any = null;
+  inv: Inventory;
+  spawner: Spawner;
+  items: GroundItem[] = [];
+  pickTarget: GroundItem | null = null;
+  telegraphs: { x: number; y: number; r: number; t: number; dur: number; owner: Monster; mult: number; color: string }[] = [];
+  safeUntil = 0;
 
   constructor(canvas: HTMLCanvasElement, public uiRoot: HTMLElement) {
     this.r = new Renderer(canvas);
     this.input = new Input(canvas, this.r);
     this.player = new Player(0, 0);
+    this.inv = new Inventory(() => Math.floor(this.player.d.weight / 10), () => { this.player.recalc(); this.player.refreshLook(); this.ev.emit('inv'); this.ev.emit('stats'); });
+    this.player.equipsFn = () => this.inv.equipInfos();
+    this.spawner = new Spawner(this);
+    this.spawner.init();
     this.ui = new UI(this, uiRoot);
     this.loop = new Loop((dt) => this.update(dt), (a, dt) => this.render(a, dt));
     (window as any).__game = this;
@@ -64,6 +79,7 @@ export class Game {
     this.loop.start();
     this.msg('歡迎來到《晨曦物語》！點擊地面移動，點擊怪物攻擊。', 'sys');
     this.msg('Alt+A 打開能力值視窗分配點數。', 'sys');
+    this.spawner.announceAlive();
     this.ev.emit('stats');
   }
   msg(text: string, kind: MsgKind = 'sys') { this.ui.msg(text, kind); }
@@ -106,7 +122,9 @@ export class Game {
     const start = this.map.nearestWalkable(x ?? def.w / 2, y ?? def.h / 2) || [def.w / 2, def.h / 2];
     p.x = p.px = start[0] + 0.5; p.y = p.py = start[1] + 0.5;
     p.stop(); p.chase = null;
-    for (const s of def.spawns || []) for (let i = 0; i < s.n; i++) this.spawnMonster(s.m);
+    this.items = []; this.pickTarget = null; this.telegraphs = [];
+    this.safeUntil = this.time + 2; // 剛換地圖 2 秒內主動怪不會追
+    this.spawner.onMapLoad();
     this.cam.follow(p.x, p.y, 0, true);
     this.ground.warm(this.cam.left(this.r.w) - 64, this.cam.top(this.r.h) - 64, this.r.w + 128, this.r.h + 128);
     this.lights = this.props.filter((r) => r.def.anim === 'flame' || r.p.type === 'lamp' || r.def.anim === 'crystal').map((r) => ({ x: r.fx, y: r.fy - (r.p.type === 'lamp' ? 80 : r.def.anim === 'flame' ? 50 : 20), r: r.def.anim === 'crystal' ? 70 : 130 }));
@@ -130,7 +148,8 @@ export class Game {
     this.fade = Math.min(1, w.t / 0.25);
     if (w.t >= 0.25 && !w.done) { w.done = true; this.loadMap(w.to, w.tx, w.ty); this.warp = null; this.fade = 1; }
   }
-  mvpStatus(_id: string): string { return '—'; }
+  mvpStatus(id: string): string { return this.spawner.status(id); }
+  announce(text: string) { this.msg(text, 'ann'); this.ui.showBanner(text, '', 'ann', 4); this.audio?.sfx('announce'); }
   checkPortals() {
     const p = this.player;
     for (const po of this.map.def.portals) {
@@ -155,6 +174,11 @@ export class Game {
   pick(sx: number, sy: number): Entity | null {
     const L = this.cam.left(this.r.w), T = this.cam.top(this.r.h);
     let best: Entity | null = null, bd = -1e9;
+    for (const it of this.items) {
+      const fx = isoX(it.x, it.y) - L, fy = isoY(it.x, it.y) - T;
+      if (sx >= fx - 14 && sx <= fx + 14 && sy >= fy - 22 && sy <= fy + 6 && it.depth + 0.5 > bd) { bd = it.depth + 0.5; best = it; }
+    }
+    if (best) return best;
     for (const e of this.entities) {
       if (!(e instanceof Actor) || e === this.player || e.dead) continue;
       const b = e.bbox;
@@ -183,6 +207,10 @@ export class Game {
       this.entities = this.entities.filter((e) => !e.remove);
       this.monsters = this.monsters.filter((m) => !m.remove);
     }
+    this.updateTelegraphs(dt);
+    this.spawner.update(dt);
+    for (const it of this.items) { it.t += dt; if (it.t > it.life) it.remove = true; }
+    if (this.items.some((i) => i.remove)) this.items = this.items.filter((i) => !i.remove);
     this.fx.update(dt);
     this.cam.updateShake(dt);
     if (this.clickMark.t > 0) this.clickMark.t -= dt;
@@ -209,8 +237,9 @@ export class Game {
     const p = this.player;
     if (p.dead) return;
     const e = hold ? null : this.pick(sx, sy);
-    if (e instanceof Monster) { p.chase = e; p.repathT = 0; return; }
-    p.chase = null;
+    if (e instanceof Monster) { p.chase = e; p.repathT = 0; this.pickTarget = null; return; }
+    if (e instanceof GroundItem) { p.chase = null; this.pickTarget = e; this.walkTo(e.x, e.y, false); return; }
+    p.chase = null; this.pickTarget = null;
     const w = this.screenToWorld(sx, sy);
     this.walkTo(w.x, w.y, !hold);
   }
@@ -246,6 +275,11 @@ export class Game {
         if (p.repathT <= 0 || !p.path.length) { p.repathT = 0.3; p.setPath(this.pf.find(p.x, p.y, tg.x, tg.y, 3000, range)); }
       }
     }
+    if (this.pickTarget) {
+      const it = this.pickTarget;
+      if (!this.items.includes(it)) this.pickTarget = null;
+      else if (Math.hypot(it.x - p.x, it.y - p.y) < 1.6) { p.path = []; this.pickUp(it); this.pickTarget = null; }
+    }
     if (p.tickAttack(dt) && p.target) this.resolveAttack(p, p.target);
     if (p.atkAnimT < 0) {
       if (p.stepPath(dt)) p.state = 'walk';
@@ -257,39 +291,58 @@ export class Game {
     m.updateAnim(dt);
     if (m.dead) { m.deadT += dt; if (m.deadT > 1.0) m.remove = true; return; }
     if (m.tickAttack(dt) && m.target) this.resolveAttack(m, m.target);
-    const p = this.player;
-    if (m.aggroOn && (m.aggroOn.dead)) { m.aggroOn = null; m.ai = 'idle'; }
-    if (m.aggroOn) {
-      const range = this.attackRange(m);
-      if (cellDist(m.x, m.y, p.x, p.y) <= range) {
-        m.path = [];
-        if (m.atkCd <= 0 && m.atkAnimT < 0) { m.face(p.x, p.y); m.target = p; m.startAttack(Math.min(0.5, this.attackDelay(m) * 0.6)); m.atkCd = this.attackDelay(m); }
-      } else if (m.atkAnimT < 0) {
-        m.repathT -= dt;
-        if (m.repathT <= 0) { m.repathT = 0.4; m.setPath(this.pf.find(m.x, m.y, p.x, p.y, 1500, range)); }
-      }
-    } else {
-      m.aiT -= dt;
-      if (m.aiT <= 0 && !m.path.length) {
-        m.aiT = 2 + this.rnd() * 4;
-        const tx = Math.floor(m.homeX + (this.rnd() * 2 - 1) * 5), ty = Math.floor(m.homeY + (this.rnd() * 2 - 1) * 5);
-        if (this.map.canWalk(tx, ty)) m.setPath(this.pf.find(m.x, m.y, tx, ty, 400));
-      }
-    }
+    if (m.aggroOn && m.aggroOn.dead) giveUp(m);
+    updateAI(this, m, dt);
     if (m.atkAnimT < 0) {
-      const sp = m.speed; if (!m.aggroOn) m.speed = sp * 0.5;
+      const sp = m.speed;
+      if (m.ai === 'wander') m.speed = sp * 0.5; else if (m.ai === 'return') m.speed = sp * 1.4;
       if (m.stepPath(dt)) m.state = 'walk'; else if (m.state === 'walk') m.state = 'idle';
       m.speed = sp;
+      if (!m.path.length && m.ai === 'wander') m.ai = 'idle';
     }
   }
-
+  /** MVP 技能：召喚手下、範圍重擊（先出現紅色預警圈） */
+  monsterSkill(m: Monster, id: string) {
+    if (id === 'summon') {
+      const minion = m.def.id === 'golem' ? 'rockling' : 'jelly';
+      const alive = this.monsters.filter((x) => x.summoned && !x.dead).length;
+      if (alive >= 4) return;
+      for (let i = 0; i < 2; i++) {
+        const pos = this.map.nearestWalkable(m.x + (this.rnd() * 4 - 2), m.y + (this.rnd() * 4 - 2), 4);
+        if (!pos) continue;
+        const s = this.spawnMonster(minion, pos); if (s) { s.summoned = true; this.fx.ring(s.x, s.y, '#ff80c0', 0.6, 30); }
+      }
+      this.fx.dmg(m.x, m.y, '!', 'take', -m.bbox.y0 + 10);
+      this.msg(`${m.def.name} 召喚了手下！`, 'warn');
+    } else {
+      const r = id === 'stomp' ? 3 : 2.5;
+      this.telegraphs.push({ x: m.x, y: m.y, r, t: 0, dur: 0.9, owner: m, mult: id === 'stomp' ? 1.6 : 1.4, color: '#ff3020' });
+      m.startAttack(0.9);
+    }
+  }
+  updateTelegraphs(dt: number) {
+    for (const t of this.telegraphs) {
+      t.t += dt;
+      if (t.t >= t.dur) {
+        const p = this.player;
+        this.fx.ring(t.x, t.y, '#ffb060', 0.5, t.r * 40);
+        this.fx.burst(t.x, t.y, 0, '#c8a070', 24, 140, 'dot', 0.6, 3);
+        this.cam.shake(7, 0.35);
+        if (!t.owner.dead && !p.dead && Math.hypot(p.x - t.x, p.y - t.y) <= t.r) {
+          const r = monsterVsPlayer(t.owner.def, p.d, this.rnd, t.mult);
+          this.applyDamage(t.owner, p, Math.max(1, r.dmg || Math.round(t.owner.def.atk[1] * 0.8)), 'take');
+        }
+      }
+    }
+    this.telegraphs = this.telegraphs.filter((t) => t.t < t.dur);
+  }
   /** 攻擊命中點：RO 式命中／爆擊／防禦公式 */
   resolveAttack(a: Actor, d: Actor) {
     if (d.dead) return;
     const h = -d.bbox.y0 + 10;
     if (a === this.player && d instanceof Monster) {
       const r = playerVsMonster(this.player.d, d.def, this.rnd);
-      if (r.kind === 'miss') { this.fx.dmg(d.x, d.y, 'MISS', 'miss', h); d.aggroOn = a; return; }
+      if (r.kind === 'miss') { this.fx.dmg(d.x, d.y, 'MISS', 'miss', h); onHurt(this, d); return; }
       this.applyDamage(a, d, r.dmg, r.kind);
     } else if (a instanceof Monster && d === this.player) {
       const r = monsterVsPlayer(a.def, this.player.d, this.rnd);
@@ -306,7 +359,7 @@ export class Game {
     // 打擊停頓與畫面震動
     if (a === this.player || d === this.player) this.hitStop = Math.max(this.hitStop, kind === 'crit' || kind === 'skill' ? 0.09 : 0.045);
     if (kind === 'crit' || kind === 'skill') this.cam.shake(5, 0.25); else if (d === this.player) this.cam.shake(3, 0.18); else this.cam.shake(1.5, 0.1);
-    if (d instanceof Monster && a) { d.aggroOn = a; d.ai = 'chase'; }
+    if (d instanceof Monster && a === this.player) onHurt(this, d);
     if (d.hp <= 0) this.kill(d, a);
   }
   kill(d: Actor, by: Actor | null) {
@@ -314,17 +367,52 @@ export class Game {
     if (d === this.player) { this.onPlayerDeath(); return; }
     if (d instanceof Monster) {
       if (this.player.chase === d) this.player.chase = null;
-      const id = d.def.id;
-      setTimeout(() => this.spawnMonster(id), 5000);
-      if (by === this.player) gainExp(this, d.def.exp, d.def.jexp);
+      this.spawner.onKill(d);
+      if (by === this.player && !d.summoned) {
+        gainExp(this, d.def.exp, d.def.jexp);
+        this.dropLoot(d);
+        if (d.isMvp) this.mvpReward(d);
+        this.ev.emit('kill', d.def.id);
+      }
     }
   }
-
+  /** 依掉落表擲骰，掉在怪物周圍 */
+  dropLoot(m: Monster) {
+    let k = 0;
+    const rateMul = m.isMvp ? 1 : 1;
+    for (const dr of m.def.drops) {
+      if (this.rnd() >= dr.rate * rateMul) continue;
+      const def = DB.item[dr.item]; if (!def) continue;
+      const a = k * 2.1 + this.rnd(), rr = k === 0 ? 0.2 : 0.6 + this.rnd() * 0.5;
+      let tx = m.x + Math.cos(a) * rr, ty = m.y + Math.sin(a) * rr;
+      if (!this.map.canWalk(tx, ty)) { tx = m.x; ty = m.y; }
+      const it = new GroundItem(def, 1, tx, ty, m.x, m.y);
+      this.items.push(it); k++;
+      if (def.type === 'card') this.msg(`★ ${m.def.name} 掉落了 ${def.name}！`, 'quest');
+    }
+  }
+  mvpReward(m: Monster) {
+    const p = this.player;
+    // RO：MVP 經驗＋直接進背包的 MVP 獎勵
+    const bonus = Math.round(m.def.exp * 0.5);
+    gainExp(this, bonus, 0, true);
+    this.fx.dmg(p.x, p.y, 'MVP', 'crit', 170);
+    const prize = m.def.drops[0];
+    if (prize && this.inv.add(prize.item, 1)) this.msg(`MVP 獎勵：獲得 ${DB.item[prize.item].name}！（MVP 經驗 ${bonus}）`, 'quest');
+  }
+  pickUp(it: GroundItem) {
+    if (this.inv.add(it.def.id, it.n, it.extra)) {
+      this.items = this.items.filter((x) => x !== it);
+      this.msg(`獲得 ${it.def.name}${it.n > 1 ? ' ×' + it.n : ''}`, 'item');
+      this.audio?.sfx('pickup');
+      this.ev.emit('pickup', it.def.id);
+    } else this.msg('負重已滿，無法撿取！', 'warn');
+  }
   /** 玩家死亡（階段 8 會改成回城＋扣經驗） */
   onPlayerDeath() {
     const p = this.player;
     p.chase = null;
-    for (const m of this.monsters) if (m.aggroOn === p) { m.aggroOn = null; m.ai = 'idle'; }
+    for (const m of this.monsters) if (m.aggroOn === p) giveUp(m);
     this.msg('你倒下了……3 秒後復活。', 'warn');
     setTimeout(() => { p.state = 'idle'; p.recalc(true); p.deadT = 0; }, 3000);
   }
@@ -348,6 +436,11 @@ export class Game {
       c.beginPath(); c.moveTo(x, y - s * 0.5); c.lineTo(x + s, y); c.lineTo(x, y + s * 0.5); c.lineTo(x - s, y); c.closePath(); c.stroke(); c.globalAlpha = 1;
     }
     this.drawPortals(c, L, T);
+    for (const t of this.telegraphs) { // 預警圈
+      const x = Math.round(isoX(t.x, t.y) - L), y = Math.round(isoY(t.x, t.y) - T), k = t.t / t.dur;
+      c.globalAlpha = 0.25 + k * 0.35; c.fillStyle = t.color; c.beginPath(); c.ellipse(x, y, t.r * 45 * k, t.r * 22.5 * k, 0, 0, Math.PI * 2); c.fill();
+      c.globalAlpha = 0.9; c.strokeStyle = t.color; c.lineWidth = 2; c.beginPath(); c.ellipse(x, y, t.r * 45, t.r * 22.5, 0, 0, Math.PI * 2); c.stroke(); c.globalAlpha = 1;
+    }
     // 可見範圍（等角像素）
     const mx0 = L - 160, mx1 = L + W + 160, my0 = T - 60, my1 = T + H + 240;
     const dl = this.dl; dl.reset();
@@ -367,6 +460,12 @@ export class Game {
       if (pr.strips) for (let i = 0; i < pr.strips.length; i++) dl.add(pr.strips[i].key, K_STRIP, pr, i);
       else dl.add(pr.depth, K_PROP, pr);
     }
+    for (const it of this.items) {
+      const ex = isoX(it.ox, it.oy), ey = isoY(it.ox, it.oy);
+      if (ex < mx0 || ex > mx1 || ey < my0 || ey > my1) continue;
+      const sh = shadowSprite(9, 4); c.drawImage(sh, Math.round(ex - L - sh.width / 2), Math.round(ey - T - sh.height / 2));
+      dl.add(it.oy + it.ox - 0.05, K_ITEM, it);
+    }
     for (const e of this.entities) {
       if (!(e instanceof Actor)) continue;
       const ex = isoX(e.ix(alpha), e.iy(alpha)), ey = isoY(e.ix(alpha), e.iy(alpha));
@@ -383,6 +482,7 @@ export class Game {
     for (let i = 0; i < dl.n; i++) {
       const d = dl.items[i];
       if (d.kind === K_ACTOR) this.drawActor(c, d.ref, L, T);
+      else if (d.kind === K_ITEM) this.drawItem(c, d.ref, L, T);
       else { drawProp(c, d.ref, L, T, d.kind === K_STRIP ? d.aux : -1); if (d.ref.def.anim && d.kind === K_PROP) this.drawPropAnim(c, d.ref, L, T); }
     }
     this.fx.drawParticles(c, L, T);
@@ -476,20 +576,31 @@ export class Game {
       c.globalAlpha = 0.18; c.drawImage(whiteOf(s), sx, sy, s.fw, s.fh, x, y, s.fw, s.fh); c.globalAlpha = 1;
     }
   }
+  drawItem(c: CanvasRenderingContext2D, it: GroundItem, L: number, T: number) {
+    const ic = iconCanvas(it.def.icon.k, it.def.icon.c);
+    const x = Math.round(isoX(it.ox, it.oy) - L - 12), y = Math.round(isoY(it.ox, it.oy) - T - 20 - it.z);
+    if (it.life - it.t < 5 && Math.floor(it.t * 6) % 2) c.globalAlpha = 0.4;
+    c.drawImage(ic, x, y);
+    if (it.def.type === 'card' && Math.floor(this.time * 3) % 2) { c.fillStyle = '#fff8a0'; c.fillRect(x + 20, y, 2, 2); }
+    c.globalAlpha = 1;
+    if (this.hover === it) this.label(c, it.def.name + (it.n > 1 ? ' ×' + it.n : ''), x + 12, y - 16, it.def.type === 'card' ? '#ffe070' : '#ffffff');
+  }
   drawOverhead(c: CanvasRenderingContext2D, e: Actor, L: number, T: number) {
     if (e.dead) return;
     const a = this.alpha;
     const x = Math.round(isoX(e.ix(a), e.iy(a)) - L), y = Math.round(isoY(e.ix(a), e.iy(a)) - T);
-    const showBar = e === this.player || e.hp < e.maxHp;
+    const mvp = e instanceof Monster && e.isMvp;
+    const showBar = e === this.player || e.hp < e.maxHp || mvp;
+    if (mvp) this.label(c, '【MVP】' + e.name, x, y + 22, '#ff7060');
     if (showBar) { // RO 式：血條在腳下
-      const w = e === this.player ? 60 : 44, bx = x - w / 2, by = y + 8;
+      const w = e === this.player ? 60 : mvp ? 90 : 44, bx = x - w / 2, by = y + 8;
       c.fillStyle = '#1a1020'; c.fillRect(bx - 1, by - 1, w + 2, e === this.player ? 8 : 5);
       c.fillStyle = '#402020'; c.fillRect(bx, by, w, 3);
       const k = Math.max(0, e.hp / e.maxHp);
       c.fillStyle = k > 0.25 ? '#3ce060' : '#ff5040'; c.fillRect(bx, by, Math.round(w * k), 3);
       if (e === this.player && e.maxSp > 0) { c.fillStyle = '#202040'; c.fillRect(bx, by + 3, w, 3); c.fillStyle = '#4090ff'; c.fillRect(bx, by + 3, Math.round(w * Math.max(0, e.sp / e.maxSp)), 3); }
     }
-    if (this.hover === e) this.label(c, e.name, x, y + 22, e instanceof Monster ? '#ffffff' : '#a0e0ff');
+    if (this.hover === e && !mvp) this.label(c, e instanceof Monster ? `${e.name} Lv${e.def.lv}` : e.name, x, y + 22, e instanceof Monster ? '#ffffff' : '#a0e0ff');
   }
   label(c: CanvasRenderingContext2D, text: string, x: number, y: number, color = '#fff') {
     c.font = '12px "Noto Sans TC", "Microsoft JhengHei", sans-serif';

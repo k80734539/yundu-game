@@ -1,1 +1,1511 @@
-[]
+[
+ {
+  "id": "red_potion",
+  "name": "紅色藥水",
+  "type": "use",
+  "price": 50,
+  "weight": 7,
+  "desc": "恢復約 45 HP。",
+  "icon": {
+   "k": "potion",
+   "c": "#e03a3a"
+  },
+  "heal": 45
+ },
+ {
+  "id": "orange_potion",
+  "name": "橙色藥水",
+  "type": "use",
+  "price": 200,
+  "weight": 10,
+  "desc": "恢復約 105 HP。",
+  "icon": {
+   "k": "potion",
+   "c": "#f08a2a"
+  },
+  "heal": 105
+ },
+ {
+  "id": "yellow_potion",
+  "name": "黃色藥水",
+  "type": "use",
+  "price": 550,
+  "weight": 13,
+  "desc": "恢復約 175 HP。",
+  "icon": {
+   "k": "potion",
+   "c": "#f0d030"
+  },
+  "heal": 175
+ },
+ {
+  "id": "white_potion",
+  "name": "白色藥水",
+  "type": "use",
+  "price": 1200,
+  "weight": 15,
+  "desc": "恢復約 325 HP。",
+  "icon": {
+   "k": "potion",
+   "c": "#f4f4f4"
+  },
+  "heal": 325
+ },
+ {
+  "id": "blue_potion",
+  "name": "藍色藥水",
+  "type": "use",
+  "price": 500,
+  "weight": 15,
+  "desc": "恢復約 60 SP。",
+  "icon": {
+   "k": "potion",
+   "c": "#3a6ae0"
+  },
+  "healSp": 60
+ },
+ {
+  "id": "apple",
+  "name": "蘋果",
+  "type": "use",
+  "price": 15,
+  "weight": 2,
+  "desc": "脆甜的蘋果，恢復 16 HP。",
+  "icon": {
+   "k": "apple",
+   "c": "#e03a3a"
+  },
+  "heal": 16
+ },
+ {
+  "id": "carrot",
+  "name": "胡蘿蔔",
+  "type": "use",
+  "price": 15,
+  "weight": 2,
+  "desc": "新鮮胡蘿蔔，恢復 18 HP。",
+  "icon": {
+   "k": "carrot",
+   "c": "#f08a2a"
+  },
+  "heal": 18
+ },
+ {
+  "id": "meat",
+  "name": "烤肉",
+  "type": "use",
+  "price": 50,
+  "weight": 15,
+  "desc": "香噴噴的烤肉，恢復 70 HP。",
+  "icon": {
+   "k": "meat",
+   "c": "#a05a3a"
+  },
+  "heal": 70
+ },
+ {
+  "id": "herb",
+  "name": "綠色藥草",
+  "type": "use",
+  "price": 10,
+  "weight": 3,
+  "desc": "苦澀的藥草，恢復 10 HP。",
+  "icon": {
+   "k": "herb",
+   "c": "#4ab040"
+  },
+  "heal": 10
+ },
+ {
+  "id": "fly_wing",
+  "name": "蒼蠅翅膀",
+  "type": "use",
+  "price": 60,
+  "weight": 5,
+  "desc": "隨機傳送到目前地圖的某處。",
+  "icon": {
+   "k": "wing",
+   "c": "#8ad0e0"
+  },
+  "buff": "flywing"
+ },
+ {
+  "id": "butterfly_wing",
+  "name": "蝴蝶翅膀",
+  "type": "use",
+  "price": 300,
+  "weight": 5,
+  "desc": "傳送回儲存點。",
+  "icon": {
+   "k": "wing",
+   "c": "#f0a0e0"
+  },
+  "buff": "butterfly"
+ },
+ {
+  "id": "jelly",
+  "name": "黏液",
+  "type": "etc",
+  "price": 3,
+  "weight": 1,
+  "desc": "有彈性的透明黏液。",
+  "icon": {
+   "k": "blob",
+   "c": "#f08aa8"
+  }
+ },
+ {
+  "id": "fluff",
+  "name": "絨毛",
+  "type": "etc",
+  "price": 4,
+  "weight": 1,
+  "desc": "柔軟的絨毛。",
+  "icon": {
+   "k": "fluff",
+   "c": "#f4f0e8"
+  }
+ },
+ {
+  "id": "feather",
+  "name": "羽毛",
+  "type": "etc",
+  "price": 6,
+  "weight": 1,
+  "desc": "輕飄飄的羽毛。",
+  "icon": {
+   "k": "feather",
+   "c": "#f0e0a0"
+  }
+ },
+ {
+  "id": "spore",
+  "name": "蘑菇孢子",
+  "type": "etc",
+  "price": 8,
+  "weight": 1,
+  "desc": "蘑菇散落的孢子。",
+  "icon": {
+   "k": "spore",
+   "c": "#c08a3a"
+  }
+ },
+ {
+  "id": "petal",
+  "name": "花瓣",
+  "type": "etc",
+  "price": 10,
+  "weight": 1,
+  "desc": "帶著香氣的花瓣。",
+  "icon": {
+   "k": "petal",
+   "c": "#f06a9a"
+  }
+ },
+ {
+  "id": "stinger",
+  "name": "蜂針",
+  "type": "etc",
+  "price": 12,
+  "weight": 1,
+  "desc": "尖銳的蜂針。",
+  "icon": {
+   "k": "stinger",
+   "c": "#f0c030"
+  }
+ },
+ {
+  "id": "shell",
+  "name": "甲殼",
+  "type": "etc",
+  "price": 10,
+  "weight": 1,
+  "desc": "堅硬的甲殼。",
+  "icon": {
+   "k": "shell",
+   "c": "#e0a080"
+  }
+ },
+ {
+  "id": "crab_claw",
+  "name": "蟹鉗",
+  "type": "etc",
+  "price": 16,
+  "weight": 1,
+  "desc": "沉甸甸的蟹鉗。",
+  "icon": {
+   "k": "claw",
+   "c": "#e05a3a"
+  }
+ },
+ {
+  "id": "snake_scale",
+  "name": "蛇鱗",
+  "type": "etc",
+  "price": 18,
+  "weight": 1,
+  "desc": "閃亮的蛇鱗。",
+  "icon": {
+   "k": "scale",
+   "c": "#c8a050"
+  }
+ },
+ {
+  "id": "bat_wing",
+  "name": "蝙蝠翼",
+  "type": "etc",
+  "price": 16,
+  "weight": 1,
+  "desc": "薄薄的翼膜。",
+  "icon": {
+   "k": "batwing",
+   "c": "#6a4a8a"
+  }
+ },
+ {
+  "id": "goblin_fang",
+  "name": "哥布林的牙",
+  "type": "etc",
+  "price": 20,
+  "weight": 1,
+  "desc": "哥布林掉下的牙。",
+  "icon": {
+   "k": "tooth",
+   "c": "#f0ece0"
+  }
+ },
+ {
+  "id": "stone_core",
+  "name": "石之核心",
+  "type": "etc",
+  "price": 30,
+  "weight": 1,
+  "desc": "石怪體內的核心。",
+  "icon": {
+   "k": "core",
+   "c": "#ffb040"
+  }
+ },
+ {
+  "id": "bone",
+  "name": "骨頭",
+  "type": "etc",
+  "price": 22,
+  "weight": 1,
+  "desc": "不知是誰的骨頭。",
+  "icon": {
+   "k": "bone",
+   "c": "#f0ece0"
+  }
+ },
+ {
+  "id": "poison_spore",
+  "name": "毒孢子",
+  "type": "etc",
+  "price": 26,
+  "weight": 1,
+  "desc": "有毒的孢子，小心拿取。",
+  "icon": {
+   "k": "spore",
+   "c": "#8a5ac0"
+  }
+ },
+ {
+  "id": "bandage",
+  "name": "腐爛繃帶",
+  "type": "etc",
+  "price": 30,
+  "weight": 1,
+  "desc": "發出異味的繃帶。",
+  "icon": {
+   "k": "bandage",
+   "c": "#c8c0a0"
+  }
+ },
+ {
+  "id": "ectoplasm",
+  "name": "靈魂碎片",
+  "type": "etc",
+  "price": 36,
+  "weight": 1,
+  "desc": "發著微光的碎片。",
+  "icon": {
+   "k": "soul",
+   "c": "#b8e8ff"
+  }
+ },
+ {
+  "id": "orc_tusk",
+  "name": "獸人獠牙",
+  "type": "etc",
+  "price": 48,
+  "weight": 1,
+  "desc": "粗大的獠牙。",
+  "icon": {
+   "k": "tooth",
+   "c": "#e8d8b0"
+  }
+ },
+ {
+  "id": "iron_ore",
+  "name": "鐵礦石",
+  "type": "etc",
+  "price": 25,
+  "weight": 1,
+  "desc": "可以拿去精煉的礦石。",
+  "icon": {
+   "k": "ore",
+   "c": "#8a8a9a"
+  }
+ },
+ {
+  "id": "crystal",
+  "name": "水晶碎片",
+  "type": "etc",
+  "price": 40,
+  "weight": 1,
+  "desc": "礦坑裡的水晶。",
+  "icon": {
+   "k": "crystal",
+   "c": "#6ad0f0"
+  }
+ },
+ {
+  "id": "king_crown",
+  "name": "啵啵王冠",
+  "type": "etc",
+  "price": 3000,
+  "weight": 1,
+  "desc": "啵啵王頭上的小王冠。",
+  "icon": {
+   "k": "crown",
+   "c": "#f0c040"
+  }
+ },
+ {
+  "id": "ancient_core",
+  "name": "遠古核心",
+  "type": "etc",
+  "price": 6000,
+  "weight": 1,
+  "desc": "遠古巨像的動力來源。",
+  "icon": {
+   "k": "core",
+   "c": "#60e0ff"
+  }
+ },
+ {
+  "id": "elunium",
+  "name": "強化礦石",
+  "type": "etc",
+  "price": 400,
+  "weight": 10,
+  "desc": "精煉防具時使用。",
+  "icon": {
+   "k": "ore",
+   "c": "#d8e8ff"
+  }
+ },
+ {
+  "id": "oridecon",
+  "name": "鍛造礦石",
+  "type": "etc",
+  "price": 400,
+  "weight": 10,
+  "desc": "精煉武器時使用。",
+  "icon": {
+   "k": "ore",
+   "c": "#ffd8a0"
+  }
+ },
+ {
+  "id": "knife",
+  "name": "小刀",
+  "type": "weapon",
+  "price": 50,
+  "weight": 40,
+  "desc": "新手常用的小刀。",
+  "icon": {
+   "k": "dagger",
+   "c": "#c8d0dc"
+  },
+  "slot": "weapon",
+  "wtype": "dagger",
+  "atk": 17,
+  "wlv": 1,
+  "slots": 3,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "mage",
+   "archer"
+  ]
+ },
+ {
+  "id": "cutter",
+  "name": "短劍",
+  "type": "weapon",
+  "price": 1250,
+  "weight": 60,
+  "desc": "鋒利的短劍。",
+  "icon": {
+   "k": "dagger",
+   "c": "#d8e0ec"
+  },
+  "slot": "weapon",
+  "wtype": "dagger",
+  "atk": 30,
+  "wlv": 1,
+  "slots": 3,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "mage",
+   "archer"
+  ]
+ },
+ {
+  "id": "guard_dagger",
+  "name": "護手劍",
+  "type": "weapon",
+  "price": 2400,
+  "weight": 60,
+  "desc": "附有護手的匕首。",
+  "icon": {
+   "k": "dagger",
+   "c": "#e8e0a0"
+  },
+  "slot": "weapon",
+  "wtype": "dagger",
+  "atk": 43,
+  "wlv": 2,
+  "slots": 2,
+  "jobs": [
+   "swordsman",
+   "archer",
+   "novice"
+  ]
+ },
+ {
+  "id": "sword",
+  "name": "長劍",
+  "type": "weapon",
+  "price": 100,
+  "weight": 80,
+  "desc": "劍士的入門長劍。",
+  "icon": {
+   "k": "sword",
+   "c": "#c8d0dc"
+  },
+  "slot": "weapon",
+  "wtype": "sword",
+  "atk": 25,
+  "wlv": 1,
+  "slots": 3,
+  "jobs": [
+   "swordsman"
+  ]
+ },
+ {
+  "id": "falchion",
+  "name": "彎刀",
+  "type": "weapon",
+  "price": 1500,
+  "weight": 60,
+  "desc": "刀身微彎的單手劍。",
+  "icon": {
+   "k": "sword",
+   "c": "#e0e8f0"
+  },
+  "slot": "weapon",
+  "wtype": "sword",
+  "atk": 49,
+  "wlv": 1,
+  "slots": 3,
+  "jobs": [
+   "swordsman"
+  ]
+ },
+ {
+  "id": "blade",
+  "name": "闊刃劍",
+  "type": "weapon",
+  "price": 2900,
+  "weight": 70,
+  "desc": "刃面寬大的劍。",
+  "icon": {
+   "k": "sword",
+   "c": "#f0f0ff"
+  },
+  "slot": "weapon",
+  "wtype": "sword",
+  "atk": 63,
+  "wlv": 2,
+  "slots": 2,
+  "jobs": [
+   "swordsman"
+  ]
+ },
+ {
+  "id": "rod",
+  "name": "木杖",
+  "type": "weapon",
+  "price": 50,
+  "weight": 40,
+  "desc": "樹枝削成的法杖，MATK +15%。",
+  "icon": {
+   "k": "staff",
+   "c": "#8a5a30"
+  },
+  "slot": "weapon",
+  "wtype": "staff",
+  "atk": 15,
+  "wlv": 1,
+  "slots": 3,
+  "jobs": [
+   "mage"
+  ],
+  "matk": 15
+ },
+ {
+  "id": "wand",
+  "name": "魔杖",
+  "type": "weapon",
+  "price": 2000,
+  "weight": 40,
+  "desc": "注入魔力的短杖，MATK +15%、INT +1。",
+  "icon": {
+   "k": "staff",
+   "c": "#a070c0"
+  },
+  "slot": "weapon",
+  "wtype": "staff",
+  "atk": 25,
+  "wlv": 1,
+  "slots": 2,
+  "jobs": [
+   "mage"
+  ],
+  "matk": 15,
+  "bonus": {
+   "int": 1
+  }
+ },
+ {
+  "id": "arc_wand",
+  "name": "弧光杖",
+  "type": "weapon",
+  "price": 6000,
+  "weight": 60,
+  "desc": "頂端鑲著水晶，MATK +25%、INT +3。",
+  "icon": {
+   "k": "staff",
+   "c": "#60e0ff"
+  },
+  "slot": "weapon",
+  "wtype": "staff",
+  "atk": 40,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "mage"
+  ],
+  "matk": 25,
+  "bonus": {
+   "int": 3
+  }
+ },
+ {
+  "id": "bow",
+  "name": "短弓",
+  "type": "weapon",
+  "price": 100,
+  "weight": 50,
+  "desc": "輕巧的短弓。",
+  "icon": {
+   "k": "bow",
+   "c": "#9a6a34"
+  },
+  "slot": "weapon",
+  "wtype": "bow",
+  "atk": 15,
+  "wlv": 1,
+  "slots": 3,
+  "jobs": [
+   "archer"
+  ]
+ },
+ {
+  "id": "composite_bow",
+  "name": "複合弓",
+  "type": "weapon",
+  "price": 2500,
+  "weight": 60,
+  "desc": "以多種材料製成的弓。",
+  "icon": {
+   "k": "bow",
+   "c": "#b08a4a"
+  },
+  "slot": "weapon",
+  "wtype": "bow",
+  "atk": 29,
+  "wlv": 1,
+  "slots": 3,
+  "jobs": [
+   "archer"
+  ]
+ },
+ {
+  "id": "great_bow",
+  "name": "長弓",
+  "type": "weapon",
+  "price": 5500,
+  "weight": 80,
+  "desc": "射程遠、威力大的長弓。",
+  "icon": {
+   "k": "bow",
+   "c": "#d0a050"
+  },
+  "slot": "weapon",
+  "wtype": "bow",
+  "atk": 50,
+  "wlv": 2,
+  "slots": 2,
+  "jobs": [
+   "archer"
+  ]
+ },
+ {
+  "id": "cotton_shirt",
+  "name": "棉衣",
+  "type": "armor",
+  "price": 10,
+  "weight": 10,
+  "desc": "普通的棉衣。",
+  "icon": {
+   "k": "shirt",
+   "c": "#f0e8d8"
+  },
+  "slot": "armor",
+  "def": 1,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "mage",
+   "archer"
+  ]
+ },
+ {
+  "id": "adventure_suit",
+  "name": "冒險者服裝",
+  "type": "armor",
+  "price": 1000,
+  "weight": 14,
+  "desc": "耐穿的旅行服。",
+  "icon": {
+   "k": "shirt",
+   "c": "#8a6a3a"
+  },
+  "slot": "armor",
+  "def": 2,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "mage",
+   "archer"
+  ]
+ },
+ {
+  "id": "wooden_mail",
+  "name": "木甲",
+  "type": "armor",
+  "price": 5500,
+  "weight": 65,
+  "desc": "以木片製成的護甲。",
+  "icon": {
+   "k": "mail",
+   "c": "#a07a4a"
+  },
+  "slot": "armor",
+  "def": 4,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "mage",
+   "archer"
+  ]
+ },
+ {
+  "id": "chain_mail",
+  "name": "鎖子甲",
+  "type": "armor",
+  "price": 16000,
+  "weight": 330,
+  "desc": "劍士專用的鐵環甲。",
+  "icon": {
+   "k": "mail",
+   "c": "#a8b0c0"
+  },
+  "slot": "armor",
+  "def": 7,
+  "slots": 1,
+  "jobs": [
+   "swordsman"
+  ]
+ },
+ {
+  "id": "silk_robe",
+  "name": "絲綢長袍",
+  "type": "armor",
+  "price": 8000,
+  "weight": 40,
+  "desc": "法師喜愛的長袍，MDEF +10。",
+  "icon": {
+   "k": "robe",
+   "c": "#8a5ac0"
+  },
+  "slot": "armor",
+  "def": 3,
+  "slots": 1,
+  "jobs": [
+   "mage"
+  ],
+  "mdef": 10
+ },
+ {
+  "id": "ribbon",
+  "name": "緞帶",
+  "type": "armor",
+  "price": 800,
+  "weight": 10,
+  "desc": "可愛的緞帶，MDEF +3。",
+  "icon": {
+   "k": "ribbon",
+   "c": "#e85a8a"
+  },
+  "slot": "head",
+  "def": 1,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "mage",
+   "archer"
+  ],
+  "mdef": 3
+ },
+ {
+  "id": "cap",
+  "name": "帽子",
+  "type": "armor",
+  "price": 1200,
+  "weight": 20,
+  "desc": "普通的帽子。",
+  "icon": {
+   "k": "cap",
+   "c": "#8a6a4a"
+  },
+  "slot": "head",
+  "def": 2,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "mage",
+   "archer"
+  ]
+ },
+ {
+  "id": "helm",
+  "name": "頭盔",
+  "type": "armor",
+  "price": 4400,
+  "weight": 60,
+  "desc": "堅固的頭盔。",
+  "icon": {
+   "k": "helm",
+   "c": "#b8c0d0"
+  },
+  "slot": "head",
+  "def": 4,
+  "slots": 1,
+  "jobs": [
+   "swordsman"
+  ]
+ },
+ {
+  "id": "guard",
+  "name": "小盾",
+  "type": "armor",
+  "price": 500,
+  "weight": 30,
+  "desc": "木製的小圓盾。",
+  "icon": {
+   "k": "shield",
+   "c": "#a07a4a"
+  },
+  "slot": "shield",
+  "def": 2,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "mage",
+   "archer"
+  ]
+ },
+ {
+  "id": "buckler",
+  "name": "圓盾",
+  "type": "armor",
+  "price": 14000,
+  "weight": 60,
+  "desc": "鐵製的圓盾。",
+  "icon": {
+   "k": "shield",
+   "c": "#a8b0c0"
+  },
+  "slot": "shield",
+  "def": 4,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "archer",
+   "novice"
+  ]
+ },
+ {
+  "id": "hood",
+  "name": "頭巾斗篷",
+  "type": "armor",
+  "price": 1000,
+  "weight": 20,
+  "desc": "可以遮風的斗篷。",
+  "icon": {
+   "k": "cape",
+   "c": "#6a8a5a"
+  },
+  "slot": "garment",
+  "def": 1,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "mage",
+   "archer"
+  ]
+ },
+ {
+  "id": "muffler",
+  "name": "披肩",
+  "type": "armor",
+  "price": 5000,
+  "weight": 40,
+  "desc": "溫暖的披肩，FLEE +2。",
+  "icon": {
+   "k": "cape",
+   "c": "#c0503a"
+  },
+  "slot": "garment",
+  "def": 2,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "mage",
+   "archer"
+  ],
+  "bonus": {
+   "flee": 2
+  }
+ },
+ {
+  "id": "sandals",
+  "name": "涼鞋",
+  "type": "armor",
+  "price": 400,
+  "weight": 20,
+  "desc": "輕便的涼鞋。",
+  "icon": {
+   "k": "shoes",
+   "c": "#a07a4a"
+  },
+  "slot": "shoes",
+  "def": 1,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "mage",
+   "archer"
+  ]
+ },
+ {
+  "id": "shoes",
+  "name": "皮靴",
+  "type": "armor",
+  "price": 3500,
+  "weight": 40,
+  "desc": "結實的皮靴，HP +5%。",
+  "icon": {
+   "k": "shoes",
+   "c": "#6a4a2a"
+  },
+  "slot": "shoes",
+  "def": 2,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "mage",
+   "archer"
+  ],
+  "bonus": {
+   "hp": 20
+  }
+ },
+ {
+  "id": "clip",
+  "name": "髮夾",
+  "type": "armor",
+  "price": 500,
+  "weight": 10,
+  "desc": "SP +10。",
+  "icon": {
+   "k": "clip",
+   "c": "#e8c050"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "mage",
+   "archer"
+  ],
+  "bonus": {
+   "sp": 10
+  }
+ },
+ {
+  "id": "ring",
+  "name": "力量戒指",
+  "type": "armor",
+  "price": 3000,
+  "weight": 10,
+  "desc": "STR +2。",
+  "icon": {
+   "k": "ring",
+   "c": "#e8c050"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "mage",
+   "archer"
+  ],
+  "bonus": {
+   "str": 2
+  }
+ },
+ {
+  "id": "glove",
+  "name": "靈巧手套",
+  "type": "armor",
+  "price": 3000,
+  "weight": 10,
+  "desc": "DEX +2。",
+  "icon": {
+   "k": "glove",
+   "c": "#d0a070"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "mage",
+   "archer"
+  ],
+  "bonus": {
+   "dex": 2
+  }
+ },
+ {
+  "id": "earring",
+  "name": "智慧耳環",
+  "type": "armor",
+  "price": 3000,
+  "weight": 10,
+  "desc": "INT +2。",
+  "icon": {
+   "k": "earring",
+   "c": "#80c0ff"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "mage",
+   "archer"
+  ],
+  "bonus": {
+   "int": 2
+  }
+ },
+ {
+  "id": "brooch",
+  "name": "疾風胸針",
+  "type": "armor",
+  "price": 3000,
+  "weight": 10,
+  "desc": "AGI +2。",
+  "icon": {
+   "k": "brooch",
+   "c": "#80e080"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "mage",
+   "archer"
+  ],
+  "bonus": {
+   "agi": 2
+  }
+ },
+ {
+  "id": "jelly_card",
+  "name": "啵啵團卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入鎧甲的卡片。LUK +2、FLEE +2。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "armor",
+  "bonus": {
+   "luk": 2,
+   "flee": 2
+  }
+ },
+ {
+  "id": "caterpillar_card",
+  "name": "綠毛蟲卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入鎧甲的卡片。VIT +1、HP +30。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "armor",
+  "bonus": {
+   "vit": 1,
+   "hp": 30
+  }
+ },
+ {
+  "id": "bunny_card",
+  "name": "跳跳兔卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入鞋子的卡片。AGI +2。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "shoes",
+  "bonus": {
+   "agi": 2
+  }
+ },
+ {
+  "id": "chick_card",
+  "name": "小毛雞卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入頭飾的卡片。DEX +1、HIT +3。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "head",
+  "bonus": {
+   "dex": 1,
+   "hit": 3
+  }
+ },
+ {
+  "id": "mushkin_card",
+  "name": "蘑菇仔卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入武器的卡片。ATK +8。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "weapon",
+  "bonus": {
+   "atk": 8
+  }
+ },
+ {
+  "id": "jellyg_card",
+  "name": "綠啵啵卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入鎧甲的卡片。HP +80。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "armor",
+  "bonus": {
+   "hp": 80
+  }
+ },
+ {
+  "id": "petal_card",
+  "name": "花瓣妖卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入披風的卡片。INT +2、SP +20。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "garment",
+  "bonus": {
+   "int": 2,
+   "sp": 20
+  }
+ },
+ {
+  "id": "buzz_card",
+  "name": "嗡嗡蜂卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入武器的卡片。CRIT +5、ATK +3。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "weapon",
+  "bonus": {
+   "crit": 5,
+   "atk": 3
+  }
+ },
+ {
+  "id": "jellyb_card",
+  "name": "水啵啵卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入盾牌的卡片。DEF +3。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "shield",
+  "bonus": {
+   "def": 3,
+   "mdef": 0
+  }
+ },
+ {
+  "id": "crab_card",
+  "name": "鉗鉗蟹卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入武器的卡片。ATK +12。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "weapon",
+  "bonus": {
+   "atk": 12
+  }
+ },
+ {
+  "id": "gull_card",
+  "name": "海鷗仔卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入披風的卡片。FLEE +8。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "garment",
+  "bonus": {
+   "flee": 8
+  }
+ },
+ {
+  "id": "shellsnake_card",
+  "name": "沙蛇卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入飾品的卡片。AGI +3。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "acc",
+  "bonus": {
+   "agi": 3
+  }
+ },
+ {
+  "id": "bat_card",
+  "name": "洞窟蝙蝠卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入鞋子的卡片。FLEE +5、AGI +1。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "shoes",
+  "bonus": {
+   "flee": 5,
+   "agi": 1
+  }
+ },
+ {
+  "id": "goblin_card",
+  "name": "哥布林卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入武器的卡片。ATK +10、HIT +5。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "weapon",
+  "bonus": {
+   "atk": 10,
+   "hit": 5
+  }
+ },
+ {
+  "id": "rockling_card",
+  "name": "小石怪卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入盾牌的卡片。DEF +5、VIT +1。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "shield",
+  "bonus": {
+   "def": 5,
+   "vit": 1
+  }
+ },
+ {
+  "id": "skeleton_card",
+  "name": "骷髏礦工卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入武器的卡片。ATK +15、CRIT +2。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "weapon",
+  "bonus": {
+   "atk": 15,
+   "crit": 2
+  }
+ },
+ {
+  "id": "toadstool_card",
+  "name": "毒傘菇卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入頭飾的卡片。VIT +2、INT +1。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "head",
+  "bonus": {
+   "vit": 2,
+   "int": 1
+  }
+ },
+ {
+  "id": "zombie_card",
+  "name": "沼澤殭屍卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入鎧甲的卡片。VIT +3、HP +100。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "armor",
+  "bonus": {
+   "vit": 3,
+   "hp": 100
+  }
+ },
+ {
+  "id": "wisp_card",
+  "name": "鬼火卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入飾品的卡片。INT +3、SP +30。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "acc",
+  "bonus": {
+   "int": 3,
+   "sp": 30
+  }
+ },
+ {
+  "id": "viper_card",
+  "name": "沼蝮卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入武器的卡片。ATK +20。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "weapon",
+  "bonus": {
+   "atk": 20
+  }
+ },
+ {
+  "id": "skeleton2_card",
+  "name": "骷髏戰士卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入武器的卡片。ATK +25、HIT +8。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "weapon",
+  "bonus": {
+   "atk": 25,
+   "hit": 8
+  }
+ },
+ {
+  "id": "orc_card",
+  "name": "獸人戰士卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入鎧甲的卡片。STR +3、DEF +3。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "armor",
+  "bonus": {
+   "str": 3,
+   "def": 3
+  }
+ },
+ {
+  "id": "wraith_card",
+  "name": "怨靈卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入披風的卡片。INT +4、MATK +15。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "garment",
+  "bonus": {
+   "int": 4,
+   "matk": 15
+  }
+ },
+ {
+  "id": "kingjelly_card",
+  "name": "啵啵王卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入飾品的卡片。全能力提升：STR+2、DEX+2、LUK+5、HP+200。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "acc",
+  "bonus": {
+   "luk": 5,
+   "str": 2,
+   "dex": 2,
+   "hp": 200
+  }
+ },
+ {
+  "id": "golem_card",
+  "name": "遠古巨像卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入鎧甲的卡片。VIT +8、DEF +8、HP +500。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "armor",
+  "bonus": {
+   "vit": 8,
+   "def": 8,
+   "hp": 500
+  }
+ }
+]

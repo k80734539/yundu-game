@@ -1,11 +1,1272 @@
 [
-  { "id": "jelly", "name": "啵啵團", "lv": 1, "hp": 50, "atk": [7, 10], "def": 0, "mdef": 5, "str": 1, "agi": 1, "vit": 1, "int": 0, "dex": 6, "luk": 30,
-    "exp": 2, "jexp": 1, "range": 1, "adelay": 1872, "speed": 2.2, "aggro": false, "frame": 96,
-    "look": { "body": "slime", "color": "#f08aa8", "scale": 1 }, "drops": [] },
-  { "id": "bunny", "name": "跳跳兔", "lv": 3, "hp": 60, "atk": [9, 12], "def": 2, "mdef": 0, "str": 1, "agi": 6, "vit": 2, "int": 0, "dex": 10, "luk": 5,
-    "exp": 6, "jexp": 3, "range": 1, "adelay": 1456, "speed": 2.6, "aggro": false, "frame": 96,
-    "look": { "body": "rabbit", "color": "#f4f0e8", "scale": 1 }, "drops": [] },
-  { "id": "caterpillar", "name": "綠毛蟲", "lv": 2, "hp": 63, "atk": [8, 11], "def": 0, "mdef": 0, "str": 1, "agi": 2, "vit": 4, "int": 0, "dex": 7, "luk": 5,
-    "exp": 4, "jexp": 2, "range": 1, "adelay": 1672, "speed": 1.6, "aggro": false, "frame": 96,
-    "look": { "body": "bug", "color": "#8ac04a", "color2": "#e8d070", "scale": 1 }, "drops": [] }
+ {
+  "id": "jelly",
+  "name": "啵啵團",
+  "lv": 1,
+  "hp": 50,
+  "atk": [
+   7,
+   10
+  ],
+  "def": 0,
+  "mdef": 5,
+  "str": 1,
+  "agi": 1,
+  "vit": 1,
+  "int": 0,
+  "dex": 6,
+  "luk": 30,
+  "exp": 3,
+  "jexp": 2,
+  "range": 1,
+  "adelay": 1872,
+  "speed": 2.2,
+  "aggro": false,
+  "frame": 96,
+  "look": {
+   "body": "slime",
+   "color": "#f08aa8"
+  },
+  "drops": [
+   {
+    "item": "jelly",
+    "rate": 0.7
+   },
+   {
+    "item": "apple",
+    "rate": 0.15
+   },
+   {
+    "item": "red_potion",
+    "rate": 0.04
+   },
+   {
+    "item": "knife",
+    "rate": 0.01
+   },
+   {
+    "item": "jelly_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "caterpillar",
+  "name": "綠毛蟲",
+  "lv": 2,
+  "hp": 60,
+  "atk": [
+   8,
+   11
+  ],
+  "def": 0,
+  "mdef": 0,
+  "str": 1,
+  "agi": 2,
+  "vit": 4,
+  "int": 0,
+  "dex": 7,
+  "luk": 5,
+  "exp": 4,
+  "jexp": 2,
+  "range": 1,
+  "adelay": 1672,
+  "speed": 1.6,
+  "aggro": false,
+  "frame": 96,
+  "look": {
+   "body": "bug",
+   "color": "#8ac04a",
+   "color2": "#e8d070"
+  },
+  "drops": [
+   {
+    "item": "fluff",
+    "rate": 0.6
+   },
+   {
+    "item": "herb",
+    "rate": 0.25
+   },
+   {
+    "item": "cotton_shirt",
+    "rate": 0.02
+   },
+   {
+    "item": "caterpillar_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "bunny",
+  "name": "跳跳兔",
+  "lv": 3,
+  "hp": 70,
+  "atk": [
+   9,
+   13
+  ],
+  "def": 2,
+  "mdef": 0,
+  "str": 2,
+  "agi": 6,
+  "vit": 2,
+  "int": 0,
+  "dex": 10,
+  "luk": 5,
+  "exp": 6,
+  "jexp": 3,
+  "range": 1,
+  "adelay": 1456,
+  "speed": 2.8,
+  "aggro": false,
+  "frame": 96,
+  "look": {
+   "body": "rabbit",
+   "color": "#f4f0e8"
+  },
+  "drops": [
+   {
+    "item": "fluff",
+    "rate": 0.6
+   },
+   {
+    "item": "carrot",
+    "rate": 0.3
+   },
+   {
+    "item": "ribbon",
+    "rate": 0.01
+   },
+   {
+    "item": "bunny_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "chick",
+  "name": "小毛雞",
+  "lv": 4,
+  "hp": 85,
+  "atk": [
+   10,
+   14
+  ],
+  "def": 2,
+  "mdef": 0,
+  "str": 3,
+  "agi": 6,
+  "vit": 3,
+  "int": 0,
+  "dex": 12,
+  "luk": 10,
+  "exp": 8,
+  "jexp": 4,
+  "range": 1,
+  "adelay": 1500,
+  "speed": 2.6,
+  "aggro": false,
+  "frame": 96,
+  "look": {
+   "body": "bird",
+   "color": "#f0d050",
+   "color2": "#e04a3a",
+   "scale": 0.9
+  },
+  "drops": [
+   {
+    "item": "feather",
+    "rate": 0.6
+   },
+   {
+    "item": "red_potion",
+    "rate": 0.06
+   },
+   {
+    "item": "sandals",
+    "rate": 0.015
+   },
+   {
+    "item": "chick_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "mushkin",
+  "name": "蘑菇仔",
+  "lv": 6,
+  "hp": 120,
+  "atk": [
+   13,
+   18
+  ],
+  "def": 3,
+  "mdef": 2,
+  "str": 5,
+  "agi": 4,
+  "vit": 6,
+  "int": 0,
+  "dex": 14,
+  "luk": 5,
+  "exp": 13,
+  "jexp": 7,
+  "range": 1,
+  "adelay": 1600,
+  "speed": 1.9,
+  "aggro": false,
+  "frame": 96,
+  "look": {
+   "body": "mushroom",
+   "color": "#c08a3a"
+  },
+  "drops": [
+   {
+    "item": "spore",
+    "rate": 0.6
+   },
+   {
+    "item": "red_potion",
+    "rate": 0.08
+   },
+   {
+    "item": "cap",
+    "rate": 0.01
+   },
+   {
+    "item": "mushkin_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "jellyg",
+  "name": "綠啵啵",
+  "lv": 7,
+  "hp": 150,
+  "atk": [
+   14,
+   19
+  ],
+  "def": 2,
+  "mdef": 5,
+  "str": 4,
+  "agi": 4,
+  "vit": 5,
+  "int": 0,
+  "dex": 15,
+  "luk": 20,
+  "exp": 15,
+  "jexp": 8,
+  "range": 1,
+  "adelay": 1700,
+  "speed": 2.2,
+  "aggro": false,
+  "frame": 96,
+  "look": {
+   "body": "slime",
+   "color": "#8ad05a",
+   "hat": "leaf"
+  },
+  "drops": [
+   {
+    "item": "jelly",
+    "rate": 0.8
+   },
+   {
+    "item": "herb",
+    "rate": 0.3
+   },
+   {
+    "item": "orange_potion",
+    "rate": 0.03
+   },
+   {
+    "item": "jellyg_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "petal",
+  "name": "花瓣妖",
+  "lv": 8,
+  "hp": 170,
+  "atk": [
+   16,
+   22
+  ],
+  "def": 2,
+  "mdef": 10,
+  "str": 5,
+  "agi": 6,
+  "vit": 5,
+  "int": 10,
+  "dex": 18,
+  "luk": 8,
+  "exp": 18,
+  "jexp": 10,
+  "range": 1,
+  "adelay": 1500,
+  "speed": 1.4,
+  "aggro": false,
+  "frame": 96,
+  "look": {
+   "body": "flower",
+   "color": "#f06a9a"
+  },
+  "drops": [
+   {
+    "item": "petal",
+    "rate": 0.6
+   },
+   {
+    "item": "blue_potion",
+    "rate": 0.04
+   },
+   {
+    "item": "rod",
+    "rate": 0.012
+   },
+   {
+    "item": "petal_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "buzz",
+  "name": "嗡嗡蜂",
+  "lv": 9,
+  "hp": 180,
+  "atk": [
+   18,
+   25
+  ],
+  "def": 4,
+  "mdef": 4,
+  "str": 8,
+  "agi": 14,
+  "vit": 6,
+  "int": 0,
+  "dex": 22,
+  "luk": 10,
+  "exp": 21,
+  "jexp": 12,
+  "range": 1,
+  "adelay": 1300,
+  "speed": 3.2,
+  "aggro": true,
+  "frame": 96,
+  "look": {
+   "body": "bee",
+   "color": "#f0c030"
+  },
+  "drops": [
+   {
+    "item": "stinger",
+    "rate": 0.55
+   },
+   {
+    "item": "orange_potion",
+    "rate": 0.04
+   },
+   {
+    "item": "bow",
+    "rate": 0.01
+   },
+   {
+    "item": "buzz_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "jellyb",
+  "name": "水啵啵",
+  "lv": 10,
+  "hp": 240,
+  "atk": [
+   22,
+   28
+  ],
+  "def": 4,
+  "mdef": 8,
+  "str": 8,
+  "agi": 8,
+  "vit": 8,
+  "int": 0,
+  "dex": 24,
+  "luk": 20,
+  "exp": 26,
+  "jexp": 14,
+  "range": 1,
+  "adelay": 1700,
+  "speed": 2.2,
+  "aggro": false,
+  "frame": 96,
+  "look": {
+   "body": "slime",
+   "color": "#5ab0f0"
+  },
+  "drops": [
+   {
+    "item": "jelly",
+    "rate": 0.8
+   },
+   {
+    "item": "blue_potion",
+    "rate": 0.05
+   },
+   {
+    "item": "muffler",
+    "rate": 0.008
+   },
+   {
+    "item": "jellyb_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "crab",
+  "name": "鉗鉗蟹",
+  "lv": 11,
+  "hp": 280,
+  "atk": [
+   25,
+   32
+  ],
+  "def": 10,
+  "mdef": 0,
+  "str": 12,
+  "agi": 6,
+  "vit": 14,
+  "int": 0,
+  "dex": 22,
+  "luk": 5,
+  "exp": 30,
+  "jexp": 16,
+  "range": 1,
+  "adelay": 1700,
+  "speed": 1.8,
+  "aggro": false,
+  "frame": 96,
+  "look": {
+   "body": "crab",
+   "color": "#e05a3a"
+  },
+  "drops": [
+   {
+    "item": "crab_claw",
+    "rate": 0.55
+   },
+   {
+    "item": "shell",
+    "rate": 0.4
+   },
+   {
+    "item": "guard",
+    "rate": 0.01
+   },
+   {
+    "item": "crab_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "gull",
+  "name": "海鷗仔",
+  "lv": 12,
+  "hp": 260,
+  "atk": [
+   26,
+   34
+  ],
+  "def": 4,
+  "mdef": 4,
+  "str": 10,
+  "agi": 18,
+  "vit": 8,
+  "int": 0,
+  "dex": 28,
+  "luk": 12,
+  "exp": 33,
+  "jexp": 18,
+  "range": 1,
+  "adelay": 1400,
+  "speed": 3.0,
+  "aggro": false,
+  "frame": 96,
+  "look": {
+   "body": "bird",
+   "color": "#f4f4f8",
+   "color2": "#5a8ad0"
+  },
+  "drops": [
+   {
+    "item": "feather",
+    "rate": 0.7
+   },
+   {
+    "item": "yellow_potion",
+    "rate": 0.02
+   },
+   {
+    "item": "hood",
+    "rate": 0.01
+   },
+   {
+    "item": "gull_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "shellsnake",
+  "name": "沙蛇",
+  "lv": 14,
+  "hp": 330,
+  "atk": [
+   30,
+   40
+  ],
+  "def": 6,
+  "mdef": 4,
+  "str": 14,
+  "agi": 16,
+  "vit": 10,
+  "int": 0,
+  "dex": 30,
+  "luk": 10,
+  "exp": 40,
+  "jexp": 22,
+  "range": 1,
+  "adelay": 1500,
+  "speed": 2.6,
+  "aggro": true,
+  "frame": 96,
+  "look": {
+   "body": "snake",
+   "color": "#d8b060",
+   "color2": "#f0e0a0"
+  },
+  "drops": [
+   {
+    "item": "snake_scale",
+    "rate": 0.55
+   },
+   {
+    "item": "orange_potion",
+    "rate": 0.06
+   },
+   {
+    "item": "composite_bow",
+    "rate": 0.006
+   },
+   {
+    "item": "shellsnake_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "bat",
+  "name": "洞窟蝙蝠",
+  "lv": 13,
+  "hp": 300,
+  "atk": [
+   28,
+   36
+  ],
+  "def": 4,
+  "mdef": 4,
+  "str": 10,
+  "agi": 22,
+  "vit": 8,
+  "int": 0,
+  "dex": 30,
+  "luk": 5,
+  "exp": 38,
+  "jexp": 20,
+  "range": 1,
+  "adelay": 1300,
+  "speed": 3.4,
+  "aggro": true,
+  "frame": 96,
+  "look": {
+   "body": "bat",
+   "color": "#6a4a8a"
+  },
+  "drops": [
+   {
+    "item": "bat_wing",
+    "rate": 0.6
+   },
+   {
+    "item": "red_potion",
+    "rate": 0.1
+   },
+   {
+    "item": "clip",
+    "rate": 0.006
+   },
+   {
+    "item": "bat_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "goblin",
+  "name": "哥布林",
+  "lv": 15,
+  "hp": 380,
+  "atk": [
+   32,
+   42
+  ],
+  "def": 10,
+  "mdef": 2,
+  "str": 18,
+  "agi": 14,
+  "vit": 14,
+  "int": 0,
+  "dex": 26,
+  "luk": 8,
+  "exp": 46,
+  "jexp": 26,
+  "range": 1,
+  "adelay": 1500,
+  "speed": 2.6,
+  "aggro": true,
+  "frame": 160,
+  "look": {
+   "body": "humanoid",
+   "skin": "#7ab050",
+   "hair": "#3a2a1a",
+   "cloth": "#8a6a3a",
+   "cloth2": "#5a3a1a",
+   "pants": "#4a3a2a",
+   "eye": "#e03030",
+   "weapon": "club",
+   "hat": "band",
+   "scale": 0.8
+  },
+  "drops": [
+   {
+    "item": "goblin_fang",
+    "rate": 0.55
+   },
+   {
+    "item": "iron_ore",
+    "rate": 0.2
+   },
+   {
+    "item": "cutter",
+    "rate": 0.01
+   },
+   {
+    "item": "goblin_card",
+    "rate": 0.008
+   }
+  ],
+  "assist": true
+ },
+ {
+  "id": "rockling",
+  "name": "小石怪",
+  "lv": 16,
+  "hp": 460,
+  "atk": [
+   34,
+   44
+  ],
+  "def": 18,
+  "mdef": 4,
+  "str": 20,
+  "agi": 6,
+  "vit": 24,
+  "int": 0,
+  "dex": 24,
+  "luk": 5,
+  "exp": 52,
+  "jexp": 28,
+  "range": 1,
+  "adelay": 1800,
+  "speed": 1.6,
+  "aggro": false,
+  "frame": 128,
+  "look": {
+   "body": "golem",
+   "color": "#8a8072",
+   "color2": "#ffb040",
+   "scale": 0.55
+  },
+  "drops": [
+   {
+    "item": "stone_core",
+    "rate": 0.45
+   },
+   {
+    "item": "iron_ore",
+    "rate": 0.35
+   },
+   {
+    "item": "buckler",
+    "rate": 0.008
+   },
+   {
+    "item": "rockling_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "skeleton",
+  "name": "骷髏礦工",
+  "lv": 17,
+  "hp": 420,
+  "atk": [
+   36,
+   48
+  ],
+  "def": 8,
+  "mdef": 10,
+  "str": 20,
+  "agi": 16,
+  "vit": 12,
+  "int": 0,
+  "dex": 30,
+  "luk": 5,
+  "exp": 55,
+  "jexp": 30,
+  "range": 1,
+  "adelay": 1500,
+  "speed": 2.4,
+  "aggro": true,
+  "frame": 192,
+  "look": {
+   "body": "humanoid",
+   "skin": "#e8e4d8",
+   "hair": "#e8e4d8",
+   "cloth": "#6a6a72",
+   "cloth2": "#4a4a52",
+   "pants": "#3a3a42",
+   "eye": "#202020",
+   "weapon": "axe",
+   "hairStyle": 0,
+   "hat": "helm",
+   "scale": 0.95
+  },
+  "drops": [
+   {
+    "item": "bone",
+    "rate": 0.6
+   },
+   {
+    "item": "iron_ore",
+    "rate": 0.25
+   },
+   {
+    "item": "wooden_mail",
+    "rate": 0.01
+   },
+   {
+    "item": "skeleton_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "toadstool",
+  "name": "毒傘菇",
+  "lv": 18,
+  "hp": 520,
+  "atk": [
+   40,
+   52
+  ],
+  "def": 8,
+  "mdef": 10,
+  "str": 18,
+  "agi": 10,
+  "vit": 20,
+  "int": 0,
+  "dex": 32,
+  "luk": 5,
+  "exp": 62,
+  "jexp": 34,
+  "range": 1,
+  "adelay": 1600,
+  "speed": 2.0,
+  "aggro": false,
+  "frame": 96,
+  "look": {
+   "body": "mushroom",
+   "color": "#8a5ac0",
+   "color2": "#d8d0e8"
+  },
+  "drops": [
+   {
+    "item": "poison_spore",
+    "rate": 0.55
+   },
+   {
+    "item": "yellow_potion",
+    "rate": 0.04
+   },
+   {
+    "item": "toadstool_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "zombie",
+  "name": "沼澤殭屍",
+  "lv": 20,
+  "hp": 700,
+  "atk": [
+   45,
+   60
+  ],
+  "def": 6,
+  "mdef": 4,
+  "str": 26,
+  "agi": 6,
+  "vit": 24,
+  "int": 0,
+  "dex": 30,
+  "luk": 5,
+  "exp": 76,
+  "jexp": 42,
+  "range": 1,
+  "adelay": 1800,
+  "speed": 1.5,
+  "aggro": true,
+  "frame": 192,
+  "look": {
+   "body": "humanoid",
+   "skin": "#8aa07a",
+   "hair": "#3a4a2a",
+   "cloth": "#5a5a40",
+   "cloth2": "#3a3a2a",
+   "pants": "#4a4a3a",
+   "eye": "#e8e040",
+   "hairStyle": 2
+  },
+  "drops": [
+   {
+    "item": "bandage",
+    "rate": 0.6
+   },
+   {
+    "item": "yellow_potion",
+    "rate": 0.05
+   },
+   {
+    "item": "shoes",
+    "rate": 0.008
+   },
+   {
+    "item": "zombie_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "wisp",
+  "name": "鬼火",
+  "lv": 21,
+  "hp": 560,
+  "atk": [
+   42,
+   56
+  ],
+  "def": 2,
+  "mdef": 40,
+  "str": 16,
+  "agi": 26,
+  "vit": 10,
+  "int": 30,
+  "dex": 36,
+  "luk": 20,
+  "exp": 80,
+  "jexp": 44,
+  "range": 1,
+  "adelay": 1400,
+  "speed": 2.8,
+  "aggro": true,
+  "frame": 96,
+  "look": {
+   "body": "ghost",
+   "color": "#b8e8ff"
+  },
+  "drops": [
+   {
+    "item": "ectoplasm",
+    "rate": 0.55
+   },
+   {
+    "item": "blue_potion",
+    "rate": 0.08
+   },
+   {
+    "item": "earring",
+    "rate": 0.006
+   },
+   {
+    "item": "wisp_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "viper",
+  "name": "沼蝮",
+  "lv": 23,
+  "hp": 760,
+  "atk": [
+   50,
+   66
+  ],
+  "def": 10,
+  "mdef": 6,
+  "str": 26,
+  "agi": 24,
+  "vit": 18,
+  "int": 0,
+  "dex": 40,
+  "luk": 10,
+  "exp": 92,
+  "jexp": 50,
+  "range": 1,
+  "adelay": 1400,
+  "speed": 2.8,
+  "aggro": true,
+  "frame": 96,
+  "look": {
+   "body": "snake",
+   "color": "#4a7a3a",
+   "color2": "#c8d070",
+   "scale": 1.15
+  },
+  "drops": [
+   {
+    "item": "snake_scale",
+    "rate": 0.6
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.02
+   },
+   {
+    "item": "brooch",
+    "rate": 0.005
+   },
+   {
+    "item": "viper_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "skeleton2",
+  "name": "骷髏戰士",
+  "lv": 28,
+  "hp": 1150,
+  "atk": [
+   70,
+   90
+  ],
+  "def": 18,
+  "mdef": 15,
+  "str": 36,
+  "agi": 24,
+  "vit": 26,
+  "int": 0,
+  "dex": 45,
+  "luk": 10,
+  "exp": 140,
+  "jexp": 78,
+  "range": 1,
+  "adelay": 1300,
+  "speed": 2.6,
+  "aggro": true,
+  "frame": 192,
+  "look": {
+   "body": "humanoid",
+   "skin": "#f0ece0",
+   "hair": "#f0ece0",
+   "cloth": "#8a2a2a",
+   "cloth2": "#c8c0b0",
+   "pants": "#3a3a42",
+   "eye": "#ff3020",
+   "weapon": "sword",
+   "hat": "helm",
+   "body2": "armor"
+  },
+  "drops": [
+   {
+    "item": "bone",
+    "rate": 0.7
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.04
+   },
+   {
+    "item": "blade",
+    "rate": 0.006
+   },
+   {
+    "item": "skeleton2_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "orc",
+  "name": "獸人戰士",
+  "lv": 30,
+  "hp": 1400,
+  "atk": [
+   80,
+   100
+  ],
+  "def": 20,
+  "mdef": 5,
+  "str": 44,
+  "agi": 20,
+  "vit": 34,
+  "int": 0,
+  "dex": 42,
+  "luk": 8,
+  "exp": 165,
+  "jexp": 90,
+  "range": 1,
+  "adelay": 1500,
+  "speed": 2.4,
+  "aggro": true,
+  "frame": 224,
+  "look": {
+   "body": "humanoid",
+   "skin": "#5a8a4a",
+   "hair": "#2a2a2a",
+   "cloth": "#7a5a3a",
+   "cloth2": "#c0a060",
+   "pants": "#4a3a2a",
+   "eye": "#ffd040",
+   "weapon": "axe",
+   "hat": "band",
+   "scale": 1.15,
+   "hairStyle": 2
+  },
+  "drops": [
+   {
+    "item": "orc_tusk",
+    "rate": 0.6
+   },
+   {
+    "item": "iron_ore",
+    "rate": 0.4
+   },
+   {
+    "item": "chain_mail",
+    "rate": 0.006
+   },
+   {
+    "item": "orc_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "wraith",
+  "name": "怨靈",
+  "lv": 32,
+  "hp": 1250,
+  "atk": [
+   76,
+   98
+  ],
+  "def": 10,
+  "mdef": 50,
+  "str": 30,
+  "agi": 36,
+  "vit": 20,
+  "int": 50,
+  "dex": 50,
+  "luk": 20,
+  "exp": 175,
+  "jexp": 96,
+  "range": 2,
+  "adelay": 1300,
+  "speed": 3.0,
+  "aggro": true,
+  "frame": 128,
+  "look": {
+   "body": "ghost",
+   "color": "#c8a8f0",
+   "scale": 1.25
+  },
+  "drops": [
+   {
+    "item": "ectoplasm",
+    "rate": 0.7
+   },
+   {
+    "item": "blue_potion",
+    "rate": 0.12
+   },
+   {
+    "item": "silk_robe",
+    "rate": 0.008
+   },
+   {
+    "item": "wraith_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "kingjelly",
+  "name": "啵啵王",
+  "lv": 20,
+  "hp": 9000,
+  "atk": [
+   60,
+   90
+  ],
+  "def": 10,
+  "mdef": 20,
+  "str": 40,
+  "agi": 20,
+  "vit": 40,
+  "int": 20,
+  "dex": 50,
+  "luk": 40,
+  "exp": 1200,
+  "jexp": 600,
+  "range": 1,
+  "adelay": 1500,
+  "speed": 2.0,
+  "aggro": true,
+  "frame": 160,
+  "look": {
+   "body": "slime",
+   "color": "#f070a0",
+   "hat": "crown",
+   "scale": 2.6
+  },
+  "drops": [
+   {
+    "item": "king_crown",
+    "rate": 0.6
+   },
+   {
+    "item": "jelly",
+    "rate": 1.0
+   },
+   {
+    "item": "yellow_potion",
+    "rate": 0.6
+   },
+   {
+    "item": "wand",
+    "rate": 0.3
+   },
+   {
+    "item": "brooch",
+    "rate": 0.2
+   },
+   {
+    "item": "kingjelly_card",
+    "rate": 0.05
+   }
+  ],
+  "mvp": true,
+  "skills": [
+   {
+    "id": "summon",
+    "chance": 0.3
+   },
+   {
+    "id": "slam",
+    "chance": 0.25
+   }
+  ]
+ },
+ {
+  "id": "golem",
+  "name": "遠古巨像",
+  "lv": 38,
+  "hp": 32000,
+  "atk": [
+   140,
+   200
+  ],
+  "def": 40,
+  "mdef": 30,
+  "str": 70,
+  "agi": 20,
+  "vit": 70,
+  "int": 20,
+  "dex": 60,
+  "luk": 20,
+  "exp": 5200,
+  "jexp": 2600,
+  "range": 1,
+  "adelay": 1800,
+  "speed": 1.8,
+  "aggro": true,
+  "frame": 224,
+  "look": {
+   "body": "golem",
+   "color": "#7a7268",
+   "color2": "#60e0ff",
+   "scale": 1.5
+  },
+  "drops": [
+   {
+    "item": "ancient_core",
+    "rate": 0.6
+   },
+   {
+    "item": "stone_core",
+    "rate": 1.0
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.8
+   },
+   {
+    "item": "arc_wand",
+    "rate": 0.25
+   },
+   {
+    "item": "great_bow",
+    "rate": 0.25
+   },
+   {
+    "item": "golem_card",
+    "rate": 0.05
+   }
+  ],
+  "mvp": true,
+  "skills": [
+   {
+    "id": "stomp",
+    "chance": 0.3
+   },
+   {
+    "id": "summon",
+    "chance": 0.2
+   }
+  ]
+ }
 ]
