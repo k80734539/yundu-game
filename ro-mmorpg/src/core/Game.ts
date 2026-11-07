@@ -33,6 +33,11 @@ export class Game {
   player: Player;
   entities: Entity[] = [];
   monsters: Monster[] = [];
+  npcs: Actor[] = [];
+  warp: { to: string; tx: number; ty: number; t: number; done: boolean } | null = null;
+  fade = 0;
+  private darkCv: HTMLCanvasElement | null = null;
+  lights: { x: number; y: number; r: number }[] = [];
   hitStop = 0;
   time = 0;
   alpha = 1;
@@ -104,6 +109,33 @@ export class Game {
     for (const s of def.spawns || []) for (let i = 0; i < s.n; i++) this.spawnMonster(s.m);
     this.cam.follow(p.x, p.y, 0, true);
     this.ground.warm(this.cam.left(this.r.w) - 64, this.cam.top(this.r.h) - 64, this.r.w + 128, this.r.h + 128);
+    this.lights = this.props.filter((r) => r.def.anim === 'flame' || r.p.type === 'lamp' || r.def.anim === 'crystal').map((r) => ({ x: r.fx, y: r.fy - (r.p.type === 'lamp' ? 80 : r.def.anim === 'flame' ? 50 : 20), r: r.def.anim === 'crystal' ? 70 : 130 }));
+    this.npcs = [];
+    this.ui.onMap();
+    const lv = def.level ? `建議等級 Lv${def.level[0]}~${def.level[1]}` : '';
+    this.ui.showBanner(def.name, lv);
+    this.ev.emit('map', def.id);
+  }
+  /** 傳送：淡出 → 換地圖 → 淡入 */
+  warpTo(to: string, tx: number, ty: number) {
+    if (this.warp) return;
+    this.warp = { to, tx, ty, t: 0, done: false };
+    this.player.stop(); this.player.chase = null;
+    this.audio?.sfx('warp');
+  }
+  updateWarp(dt: number) {
+    const w = this.warp;
+    if (!w) { if (this.fade > 0) this.fade = Math.max(0, this.fade - dt * 3); return; }
+    w.t += dt;
+    this.fade = Math.min(1, w.t / 0.25);
+    if (w.t >= 0.25 && !w.done) { w.done = true; this.loadMap(w.to, w.tx, w.ty); this.warp = null; this.fade = 1; }
+  }
+  mvpStatus(_id: string): string { return '—'; }
+  checkPortals() {
+    const p = this.player;
+    for (const po of this.map.def.portals) {
+      if (Math.abs(p.x - (po.x + 0.5)) < 0.75 && Math.abs(p.y - (po.y + 0.5)) < 0.75) { this.warpTo(po.to, po.tx, po.ty); return; }
+    }
   }
   spawnMonster(id: string, at?: [number, number]): Monster | null {
     const def = DB.monster[id]; if (!def) return null;
@@ -137,11 +169,14 @@ export class Game {
 
   // ------------------------------------------------------------ 更新
   update(dt: number) {
+    this.updateWarp(dt);
+    if (this.warp) return;
     this.handleInput(dt);
     if (this.hitStop > 0) { this.hitStop -= dt; this.cam.updateShake(dt); return; } // 打擊停頓：邏輯暫停
     this.time += dt;
     for (const e of this.entities) e.savePrev();
     this.updatePlayer(dt);
+    if (!this.player.dead) this.checkPortals();
     for (const m of this.monsters) this.updateMonster(m, dt);
     // 移除淡出完成的實體
     if (this.entities.some((e) => e.remove)) {
@@ -312,6 +347,7 @@ export class Game {
       const s = 10 + (1 - k) * 8;
       c.beginPath(); c.moveTo(x, y - s * 0.5); c.lineTo(x + s, y); c.lineTo(x, y + s * 0.5); c.lineTo(x - s, y); c.closePath(); c.stroke(); c.globalAlpha = 1;
     }
+    this.drawPortals(c, L, T);
     // 可見範圍（等角像素）
     const mx0 = L - 160, mx1 = L + W + 160, my0 = T - 60, my1 = T + H + 240;
     const dl = this.dl; dl.reset();
@@ -347,12 +383,80 @@ export class Game {
     for (let i = 0; i < dl.n; i++) {
       const d = dl.items[i];
       if (d.kind === K_ACTOR) this.drawActor(c, d.ref, L, T);
-      else drawProp(c, d.ref, L, T, d.kind === K_STRIP ? d.aux : -1);
+      else { drawProp(c, d.ref, L, T, d.kind === K_STRIP ? d.aux : -1); if (d.ref.def.anim && d.kind === K_PROP) this.drawPropAnim(c, d.ref, L, T); }
     }
     this.fx.drawParticles(c, L, T);
     // 頭上資訊（血條、名稱）
     for (const e of this.entities) if (e instanceof Actor) this.drawOverhead(c, e, L, T);
     this.fx.drawTexts(c, L, T);
+    this.drawPortalLabels(c, L, T);
+    this.drawDarkness(c, L, T, W, H);
+    if (this.map.def.tint) { c.fillStyle = this.map.def.tint; c.fillRect(0, 0, W, H); }
+    if (this.fade > 0) { c.fillStyle = `rgba(0,0,0,${this.fade})`; c.fillRect(0, 0, W, H); }
+  }
+  drawPortals(c: CanvasRenderingContext2D, L: number, T: number) {
+    const t = this.time;
+    for (const po of this.map.def.portals) {
+      const x = Math.round(isoX(po.x + 0.5, po.y + 0.5) - L), y = Math.round(isoY(po.x + 0.5, po.y + 0.5) - T);
+      if (x < -80 || y < -80 || x > this.r.w + 80 || y > this.r.h + 80) continue;
+      for (let i = 0; i < 3; i++) {
+        const k = ((t * 0.8 + i / 3) % 1);
+        c.globalAlpha = 1 - k; c.strokeStyle = i === 1 ? '#a0e8ff' : '#60a8ff'; c.lineWidth = 2;
+        c.beginPath(); c.ellipse(x, y, 8 + k * 26, (8 + k * 26) * 0.5, 0, 0, Math.PI * 2); c.stroke();
+      }
+      c.globalAlpha = 0.35; c.fillStyle = '#80c8ff'; c.beginPath(); c.ellipse(x, y, 18, 9, 0, 0, Math.PI * 2); c.fill();
+      c.globalAlpha = 0.18; c.fillRect(x - 10, y - 70, 20, 70);
+      c.globalAlpha = 1;
+      if (Math.random() < 0.3) this.fx.glow(po.x + 0.5, po.y + 0.5, 0, Math.random() < 0.5 ? '#c8f0ff' : '#70b8ff', 1.0, 1 + (Math.random() < 0.3 ? 1 : 0), 50 + Math.random() * 40);
+    }
+  }
+  drawPortalLabels(c: CanvasRenderingContext2D, L: number, T: number) {
+    const plv = this.player.ch.baseLv;
+    for (const po of this.map.def.portals) {
+      const x = Math.round(isoX(po.x + 0.5, po.y + 0.5) - L), y = Math.round(isoY(po.x + 0.5, po.y + 0.5) - T);
+      if (x < -120 || y < -80 || x > this.r.w + 120 || y > this.r.h + 80) continue;
+      const d = DB.map[po.to]; if (!d) continue;
+      this.label(c, '→ ' + d.name, x, y - 92, '#ffffff');
+      if (d.level) this.label(c, `建議 Lv${d.level[0]}~${d.level[1]}`, x, y - 78, plv < d.level[0] - 2 ? '#ff7a6a' : plv > d.level[1] + 3 ? '#c0c0c0' : '#8aff8a');
+    }
+  }
+  drawPropAnim(c: CanvasRenderingContext2D, r: PropR, L: number, T: number) {
+    const x = Math.round(r.fx - L), y = Math.round(r.fy - T), t = this.time;
+    if (r.def.anim === 'flame') {
+      const f = Math.floor(t * 10 + r.fx) % 3;
+      c.fillStyle = '#ff7a20'; c.fillRect(x - 4, y - 54 - f, 8, 9 + f);
+      c.fillStyle = '#ffd040'; c.fillRect(x - 2, y - 50 - f, 4, 6 + f);
+      c.fillStyle = '#fff8c0'; c.fillRect(x - 1, y - 47, 2, 3);
+      if (Math.random() < 0.08) this.fx.glow(r.p.x + 0.5, r.p.y + 0.5, 56, '#ffb040', 0.8, 1, 30);
+    } else if (r.def.anim === 'crystal') {
+      if (Math.floor(t * 2 + r.fx) % 7 === 0) { c.fillStyle = '#ffffff'; c.fillRect(x - 1, y - 40, 2, 2); c.fillRect(x - 3, y - 39, 6, 1); }
+    } else if (r.def.anim === 'water') {
+      const f = Math.floor(t * 8) % 4;
+      c.fillStyle = '#d8f0ff'; c.fillRect(x - 2, y - 100 + f * 2, 4, 3); c.fillRect(x - 10 - f, y - 82 + f * 3, 2, 2); c.fillRect(x + 8 + f, y - 82 + f * 3, 2, 2);
+      c.fillRect(x - 30 + f * 6, y - 26, 3, 1); c.fillRect(x + 20 - f * 5, y - 22, 3, 1);
+    }
+  }
+  /** 地城黑暗：1/4 解析度的遮罩挖出光圈，放大後呈像素階梯感 */
+  drawDarkness(c: CanvasRenderingContext2D, L: number, T: number, W: number, H: number) {
+    const dark = this.map.def.dark; if (!dark) return;
+    const q = 4, w = Math.ceil(W / q), h = Math.ceil(H / q);
+    if (!this.darkCv || this.darkCv.width !== w || this.darkCv.height !== h) this.darkCv = makeCanvas(w, h);
+    const d = this.darkCv.getContext('2d')!;
+    d.globalCompositeOperation = 'source-over'; d.clearRect(0, 0, w, h);
+    d.fillStyle = `rgba(6,4,14,${dark})`; d.fillRect(0, 0, w, h);
+    d.globalCompositeOperation = 'destination-out';
+    const hole = (x: number, y: number, r: number, a = 1) => {
+      const g = d.createRadialGradient(x / q, y / q, 0, x / q, y / q, r / q);
+      g.addColorStop(0, `rgba(0,0,0,${a})`); g.addColorStop(0.55, `rgba(0,0,0,${a * 0.7})`); g.addColorStop(1, 'rgba(0,0,0,0)');
+      d.fillStyle = g; d.fillRect((x - r) / q, (y - r) / q, (r * 2) / q, (r * 2) / q);
+    };
+    const p = this.player, a = this.alpha;
+    hole(isoX(p.ix(a), p.iy(a)) - L, isoY(p.ix(a), p.iy(a)) - T - 50, 260);
+    const fl = Math.sin(this.time * 9) * 6;
+    for (const l of this.lights) { const x = l.x - L, y = l.y - T; if (x > -200 && y > -200 && x < W + 200 && y < H + 200) hole(x, y, l.r + fl, 0.9); }
+    for (const po of this.map.def.portals) hole(isoX(po.x + 0.5, po.y + 0.5) - L, isoY(po.x + 0.5, po.y + 0.5) - T, 120, 0.9);
+    c.imageSmoothingEnabled = false;
+    c.drawImage(this.darkCv, 0, 0, w * q, h * q);
   }
 
   drawActor(c: CanvasRenderingContext2D, e: Actor, L: number, T: number) {

@@ -4,12 +4,14 @@ import { Win, h } from './Window';
 import { Hud } from './Hud';
 import { Chat, MsgKind } from './Chat';
 import { StatusWindow } from './StatusWindow';
+import { Minimap } from './Minimap';
+import { WorldMap } from './WorldMap';
 
 /** UI 管理器：DOM 視窗、快捷鍵、訊息、橫幅 */
 export class UI {
   winPos: Record<string, [number, number]> = {};
   wins: Record<string, Win> = {};
-  hud: Hud; chat: Chat;
+  hud: Hud; chat: Chat; mini: Minimap; world: WorldMap;
   banner: HTMLDivElement;
   private bannerT = 0;
   constructor(public g: Game, public root: HTMLElement) {
@@ -19,6 +21,8 @@ export class UI {
     this.hud = new Hud(this);
     this.chat = new Chat(this);
     this.add(new StatusWindow(this));
+    this.mini = new Minimap(this);
+    this.world = this.add(new WorldMap(this)) as WorldMap;
     g.ev.on('stats', () => this.refresh());
   }
   add(w: Win) { this.wins[w.id] = w; return w; }
@@ -37,8 +41,11 @@ export class UI {
     requestAnimationFrame(() => b.classList.add('show'));
     this.bannerT = dur;
   }
+  onMap() { this.mini.onMap(); this.world.render(); }
   update(dt: number) {
     this.hud.update();
+    this.mini.update(dt);
+    this.world.update(dt);
     if (this.bannerT > 0) { this.bannerT -= dt; if (this.bannerT <= 0) this.banner.querySelector('.b')?.classList.remove('show'); }
   }
   /** 回傳 true 表示按鍵已被 UI 處理 */
