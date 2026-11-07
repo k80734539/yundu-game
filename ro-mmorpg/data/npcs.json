@@ -37,6 +37,10 @@
       "act": "quests"
      },
      {
+      "label": "新手教學提示（開／關）",
+      "act": "tutorial"
+     },
+     {
       "label": "再見",
       "act": "close"
      }

@@ -177,3 +177,6 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 #title .btns { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
 #title .btn { font-size: 15px; padding: 5px 18px; line-height: 20px; }
 #title .note { margin-top: 16px; font-size: 12px; color: #a8b8d8; }
+#tuthint { position: absolute; left: 50%; top: 8px; transform: translateX(-50%); max-width: min(560px, 60vw); display: none; padding: 5px 26px 5px 8px; background: linear-gradient(rgba(255,250,220,.95), rgba(250,236,180,.95)); border: 1px solid #c0902a; border-radius: 4px; color: #4a3a10; font-size: 12px; line-height: 17px; box-shadow: 0 3px 10px rgba(0,0,0,.3); }
+.tut-icon { display: inline-block; width: 16px; height: 16px; line-height: 16px; text-align: center; border-radius: 50%; background: #e0a020; color: #fff; font-weight: bold; margin-right: 6px; }
+.tut-x { position: absolute; right: 6px; top: 4px; cursor: pointer; color: #8a6a20; font-weight: bold; }

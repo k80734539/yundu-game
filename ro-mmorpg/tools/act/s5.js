@@ -4,6 +4,9 @@ await sleep(800);
 // 點道具商人
 const pos = await page.evaluate(() => { const G = window.__game; const n = G.npcs.find((n) => n.def.id === 'tool'); const L = G.cam.left(G.r.w), T = G.cam.top(G.r.h); return [((n.x - n.y) * 32 - L) * G.r.scale / G.r.dpr, ((n.x + n.y) * 16 - T - 40) * G.r.scale / G.r.dpr]; });
 await page.mouse.click(pos[0], pos[1]);
+await page.waitForFunction(() => window.__game.ui.dialog.isOpen, null, { timeout: 8000 });
+for (let i = 0; i < 6 && !(await page.evaluate(() => document.querySelectorAll('.dlg-opt').length)); i++) { await page.keyboard.press('Enter'); await sleep(120); }
+await page.keyboard.press('1'); await sleep(200);
 await page.waitForFunction(() => document.getElementById('win-shop') && !document.getElementById('win-shop').classList.contains('hidden'), null, { timeout: 8000 });
 await page.evaluate(() => { const G = window.__game; G.buy('red_potion', 10); G.buy('blue_potion', 2); });
 await page.keyboard.down('Alt'); await page.keyboard.press('e'); await page.keyboard.press('q'); await page.keyboard.press('s'); await page.keyboard.up('Alt');

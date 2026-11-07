@@ -38,6 +38,7 @@ import { engage as aiEngage } from '../systems/AI';
 import { magicVsMonster } from '../systems/Combat';
 import { Save } from '../systems/Save';
 import { Audio } from '../systems/Audio';
+import { Tutorial } from '../systems/Tutorial';
 import { refineRate, refineMaterial, refineFee } from '../systems/Refine';
 import { expNeed, jobExpNeed } from '../systems/Stats';
 import { cellDist, mulberry32 } from './math';
@@ -76,7 +77,7 @@ export class Game {
   safeUntil = 0;
   hotbar: (HotSlot | null)[] = [{ type: 'item', id: 'red_potion' }, null, null, null, null, null, null, null, { type: 'item', id: 'butterfly_wing' }];
   skillCd: Record<string, number> = {}; skillCdMax: Record<string, number> = {};
-  savePoint = { map: 'aurora', x: 25, y: 30 };
+  savePoint = { map: 'aurora', x: 29, y: 27 };
   talkTarget: Npc | null = null;
   quests: Quests;
   flags: Record<string, any> = { visited: {} };
@@ -88,6 +89,11 @@ export class Game {
   combatT = 0;            // 距離上次戰鬥的秒數（脫離戰鬥回血）
   regenT = 0; spRegenT = 0;
   inTitle = true;
+  tutorial: Tutorial;
+  showFps = false;
+  private propGrid = new Map<number, PropR[]>();
+  private frameId = 0;
+  private seen = new WeakMap<PropR, number>();
 
   constructor(canvas: HTMLCanvasElement, public uiRoot: HTMLElement) {
     this.r = new Renderer(canvas);
@@ -99,6 +105,7 @@ export class Game {
     this.quests = new Quests(this);
     this.skills = new SkillSystem(this);
     this.save = new Save(this);
+    this.tutorial = new Tutorial(this);
     window.addEventListener('beforeunload', () => { if (!this.inTitle) this.save.save(); });
     this.ev.on('kill', (id: string) => this.quests.onKill(id));
     this.ev.on('pickup', (id: string) => this.quests.onPickup(id));
@@ -110,7 +117,7 @@ export class Game {
   }
 
   /** 開機：先載入城鎮當標題背景 */
-  boot() { this.loadMap('aurora', 25, 30); this.loop.start(); }
+  boot() { this.loadMap('aurora', 29, 27); this.loop.start(); }
   /** 標題畫面按下開始：continue=true 讀檔，否則新角色 */
   begin(cont: boolean, name = '冒險者') {
     this.inTitle = false;
@@ -125,13 +132,14 @@ export class Game {
       this.player.ch.name = name || '冒險者';
       this.newGameItems();
       this.spawner.init();
-      this.loadMap('aurora', 25, 30);
+      this.loadMap('aurora', 29, 27);
       this.msg(`歡迎來到《晨曦物語》，${this.player.ch.name}！點擊地面移動，點擊怪物攻擊。`, 'sys');
       this.msg('先去找噴水池旁頭上有「!」的導覽員艾莉談談吧。', 'quest');
       this.save.save();
     }
     this.spawner.announceAlive();
     this.ev.emit('stats'); this.ev.emit('inv'); this.ev.emit('quest');
+    this.ui.tutorialHint();
   }
   start(mapId: string, x?: number, y?: number) { this.inTitle = false; this.loadMap(mapId, x, y); this.loop.start(); this.ev.emit('stats'); }
   msg(text: string, kind: MsgKind = 'sys') { this.ui.msg(text, kind); }
@@ -285,7 +293,7 @@ export class Game {
     if (p.dead) return;
     if (p.state === 'sit') { p.state = 'idle'; return; }
     if ((p.ch.skills.basic || 0) < 3) { this.msg('需要「基本技能」Lv3 才能坐下。', 'warn'); return; }
-    p.stop(); p.chase = null; this.skills.interrupt(); p.atkAnimT = -1; p.state = 'sit';
+    p.stop(); p.chase = null; this.skills.interrupt(); p.atkAnimT = -1; p.state = 'sit'; this.flags.sat = true;
     this.msg('坐下休息中…（HP/SP 恢復加快，再按 Insert 站起來）', 'sys');
   }
   /** 自然回復：脫離戰鬥 5 秒後開始；坐下時回復量加倍、間隔縮短（RO） */
@@ -387,6 +395,7 @@ export class Game {
     const p = this.player;
     npc.face(p.x, p.y); p.face(npc.x, npc.y);
     npc.talkT = 4;
+    if (npc.def.id === 'guide') this.flags.talkedGuide = true;
     this.ui.talk(npc);
   }
   raiseStat(k: StatKey) {
@@ -407,9 +416,12 @@ export class Game {
   command(cmd: string, args: string[]) {
     const p = this.player;
     switch (cmd) {
-      case 'help': this.msg('指令：/where 目前位置　/exp 經驗資訊', 'sys'); break;
+      case 'help': this.msg('指令：/where 位置　/exp 經驗　/sit 坐下　/save 存檔　/fps 效能資訊', 'sys'); break;
       case 'where': this.msg(`${this.map.def.name}（${Math.floor(p.x)}, ${Math.floor(p.y)}）`, 'sys'); break;
       case 'exp': this.msg(`Base ${p.ch.baseExp}　Job ${p.ch.jobExp}`, 'sys'); break;
+      case 'fps': this.showFps = !this.showFps; break;
+      case 'save': this.save.save(true); break;
+      case 'sit': this.toggleSit(); break;
       default: this.msg(`未知指令：/${cmd}`, 'warn');
     }
   }
@@ -421,6 +433,12 @@ export class Game {
     this.ground = new Ground(this.map);
     this.pf = new Pathfinder(this.map);
     this.props = buildPropRenders(this.map);
+    // 物件空間格子：繪製時只看畫面附近的格子
+    this.propGrid.clear();
+    for (const pr of this.props) {
+      const x0 = Math.floor(pr.dx / 512), x1 = Math.floor((pr.dx + pr.spr.c.width) / 512), y0 = Math.floor(pr.dy / 512), y1 = Math.floor((pr.dy + pr.spr.c.height) / 512);
+      for (let gy = y0; gy <= y1; gy++) for (let gx = x0; gx <= x1; gx++) { const k = (gx + 1000) * 4096 + gy + 1000; let a = this.propGrid.get(k); if (!a) { a = []; this.propGrid.set(k, a); } a.push(pr); }
+    }
     this.entities = [this.player];
     this.monsters = [];
     this.fx.clear();
@@ -523,6 +541,7 @@ export class Game {
     this.updateTelegraphs(dt);
     this.updateBuffs(dt);
     this.updateRegen(dt);
+    if (!this.inTitle) this.tutorial.update(dt);
     if (!this.inTitle) this.save.update(dt);
     if (this.shout) { this.shout.t -= dt; if (this.shout.t <= 0) this.shout = null; }
     if (this.timers.length) { const due = this.timers.filter((t) => (t.t -= dt) <= 0); if (due.length) { this.timers = this.timers.filter((t) => t.t > 0); for (const t of due) t.fn(); } }
@@ -835,7 +854,15 @@ export class Game {
     const dl = this.dl; dl.reset();
     // 物件淡出：玩家在後方且重疊
     const pxs = isoX(p.x, p.y), pys = isoY(p.x, p.y);
-    for (const pr of this.props) {
+    this.frameId++;
+    const gx0 = Math.floor(mx0 / 512), gx1 = Math.floor(mx1 / 512), gy0 = Math.floor(my0 / 512), gy1 = Math.floor(my1 / 512);
+    const vis: PropR[] = [];
+    for (let gy = gy0; gy <= gy1; gy++) for (let gx = gx0; gx <= gx1; gx++) {
+      const a = this.propGrid.get((gx + 1000) * 4096 + gy + 1000); if (!a) continue;
+      for (const pr of a) if (this.seen.get(pr) !== this.frameId) { this.seen.set(pr, this.frameId); vis.push(pr); }
+    }
+    let drawnProps = 0;
+    for (const pr of vis) {
       const w = pr.spr.c.width, h = pr.spr.c.height;
       if (pr.dx + w < mx0 || pr.dx > mx1 || pr.dy + h < my0 || pr.dy > my1) continue;
       if (pr.def.tall) {
@@ -845,7 +872,7 @@ export class Game {
         const target = behind && overlap ? 0.42 : 1;
         pr.alpha += (target - pr.alpha) * Math.min(1, dt * 10);
       }
-      drawPropShadow(c, pr, L, T);
+      drawPropShadow(c, pr, L, T); drawnProps++;
       if (pr.strips) for (let i = 0; i < pr.strips.length; i++) dl.add(pr.strips[i].key, K_STRIP, pr, i);
       else dl.add(pr.depth, K_PROP, pr);
     }
@@ -884,6 +911,13 @@ export class Game {
     this.drawDarkness(c, L, T, W, H);
     if (this.map.def.tint) { c.fillStyle = this.map.def.tint; c.fillRect(0, 0, W, H); }
     if (this.fade > 0) { c.fillStyle = `rgba(0,0,0,${this.fade})`; c.fillRect(0, 0, W, H); }
+    if (this.showFps) {
+      c.font = '11px monospace'; c.textAlign = 'left'; c.textBaseline = 'top'; c.fillStyle = 'rgba(0,0,0,.6)'; c.fillRect(W - 230, H - 70, 224, 56);
+      c.fillStyle = '#8f8'; c.fillText(`FPS ${this.loop.fps}  scale ${this.r.scale}x  ${W}x${H}`, W - 224, H - 66);
+      c.fillText(`物件 ${drawnProps}/${this.props.length}  實體 ${this.entities.length}  地板塊 ${this.ground.chunkCount}`, W - 224, H - 52);
+      c.fillText(`粒子 ${this.fx.parts.activeCount}/${this.fx.parts.items.length}  飄字 ${this.fx.texts.activeCount}/${this.fx.texts.items.length}`, W - 224, H - 38);
+      c.fillText(`繪製清單 ${dl.n}  投射物 ${this.projectiles.length}`, W - 224, H - 24);
+    }
   }
   drawPortals(c: CanvasRenderingContext2D, L: number, T: number) {
     const t = this.time;

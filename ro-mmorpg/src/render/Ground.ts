@@ -73,7 +73,9 @@ export class Ground {
       if (!cv) {
         if (this.generatedThisFrame >= maxGen) continue;
         cv = this.gen(cx, cy); this.cache.set(k, cv); this.generatedThisFrame++;
-      }
+        // LRU：超過上限時丟掉最久沒用的 chunk（Map 依插入順序）
+        if (this.cache.size > 96) { const first = this.cache.keys().next().value!; this.cache.delete(first); }
+      } else { this.cache.delete(k); this.cache.set(k, cv); }
       ctx.drawImage(cv, px - left, py - top);
     }
   }

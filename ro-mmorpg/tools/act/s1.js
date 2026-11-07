@@ -1,4 +1,6 @@
 // 階段 1：點怪物 → 自動走過去攻擊，截圖時保留傷害數字
+await page.evaluate(() => window.__game.loadMap('prt_fild', 28, 20));
+await sleep(600);
 await page.evaluate(() => {
   const G = window.__game; const p = G.player;
   window.__t = G.monsters.slice().sort((a, b) => Math.hypot(a.x - p.x, a.y - p.y) - Math.hypot(b.x - p.x, b.y - p.y))[0];

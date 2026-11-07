@@ -98,6 +98,7 @@ export class Dialog {
       case 'jobmenu': g.jobMenu(this); break;
       case 'refine': this.close(); this.ui.open('refine'); break;
       case 'cards': this.close(); this.ui.open('cards'); break;
+      case 'tutorial': g.flags.tutOff = !g.flags.tutOff; this.ui.tutorialHint(); this.say(g.flags.tutOff ? '好的，先把提示收起來。想看的時候再來找我吧！' : '畫面上方會一步一步提示你該做什麼喔！'); break;
       default: this.close();
     }
   }

@@ -29,6 +29,7 @@ export class UI {
   private bannerT = 0;
   buffEl!: HTMLDivElement;
   death!: HTMLDivElement;
+  tut!: HTMLDivElement;
   private buffKey = '';
   constructor(public g: Game, public root: HTMLElement) {
     try { this.winPos = JSON.parse(localStorage.getItem('rom.ui') || '{}'); } catch { this.winPos = {}; }
@@ -54,6 +55,7 @@ export class UI {
     this.death = h('div'); this.death.id = 'death';
     const box = h('div', 'win box'); box.style.position = 'static'; this.death.appendChild(box); root.appendChild(this.death);
     this.buffEl = h('div'); this.buffEl.id = 'buffs'; root.appendChild(this.buffEl);
+    this.tut = h('div'); this.tut.id = 'tuthint'; root.appendChild(this.tut);
     g.ev.on('stats', () => this.refresh());
   }
   add(w: Win) { this.wins[w.id] = w; return w; }
@@ -150,6 +152,15 @@ export class UI {
     setTimeout(() => name.focus(), 50);
   }
   audio() { this.g.audio?.unlock(); }
+  tutorialHint() {
+    const t = this.g.inTitle ? null : this.g.tutorial.text();
+    this.tut.style.display = t ? 'block' : 'none';
+    if (!t) return;
+    this.tut.innerHTML = '';
+    const x = h('span', 'tut-x', '×'); x.title = '關閉教學提示（可以找導覽員重新打開）';
+    x.addEventListener('click', () => { this.g.flags.tutOff = true; this.tutorialHint(); });
+    this.tut.append(h('span', 'tut-icon', '?'), h('span', '', t), x);
+  }
   talk(npc: import('../entities/Npc').Npc) { this.dialog.open(npc); }
   command(t: string) {
     if (!t.startsWith('/')) { this.msg(`${this.g.player.ch.name}：${t}`, 'me'); return; }

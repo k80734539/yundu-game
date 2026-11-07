@@ -10,6 +10,7 @@ export class InventoryWindow extends Win {
   render() {
     if (!this.isOpen) return;
     const g = this.ui.g, inv = g.inv;
+    g.flags.openedInv = true;
     this.body.innerHTML = '';
     const tabs = h('div', 'tabs');
     for (const [k, l] of [['use', '道具'], ['equip', '裝備'], ['etc', '其他']] as const) {
