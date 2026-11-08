@@ -22,6 +22,9 @@ export class Renderer {
     // 讓邏輯畫面寬約 640~1400 遊戲像素；只用整數倍
     const target = Math.max(640, Math.min(1400, cw));
     let s = Math.max(1, Math.floor(bw / target));
+    // 手機：依短邊決定整數倍率，讓邏輯畫面至少約 520×400，角色不會大到擋住畫面
+    const phone = window.matchMedia?.('(pointer: coarse)').matches || cw < 820 || ch < 500;
+    if (phone) s = Math.max(1, Math.floor(Math.min(bw / 520, bh / 400)));
     s = Math.max(1, s + this.zoomBias);
     this.scale = s;
     this.w = Math.ceil(bw / s); this.h = Math.ceil(bh / s);

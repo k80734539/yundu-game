@@ -37,7 +37,13 @@ export class Win {
   setTitle(t: string) { this.titleEl.textContent = t; }
   open() {
     if (!this.isOpen) { this.el.classList.remove('hidden'); this.ui.sfx('open'); }
-    this.front(); this.render(); this.keepInside();
+    this.front(); this.render();
+    if (this.ui.mobile && this.id !== 'hud') { // 手機：視窗靠上置中、高度受限，收起基本資訊，讓角色附近保持可見
+      this.ui.setFold('hud', true);
+      this.el.style.left = Math.max(4, (window.innerWidth - this.el.offsetWidth) / 2) + 'px';
+      this.el.style.top = '32px';
+    }
+    this.keepInside();
   }
   close() { this.el.classList.add('hidden'); this.onClose(); }
   toggle() { this.isOpen ? (this.close(), this.ui.sfx('close')) : this.open(); }
