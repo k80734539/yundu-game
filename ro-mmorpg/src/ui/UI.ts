@@ -166,24 +166,30 @@ export class UI {
     const list = h('div', 'slots');
     const go = (cont: boolean, slot: number, name = '') => { t.remove(); this.audio(); this.g.begin(cont, name || '冒險者', slot); };
     const mapName = (id: string) => DB.map[id]?.name || '';
+    const trash = this.g.save.trashList();
     this.g.save.list().forEach((info, i) => {
       const slot = i + 1;
       const card = h('div', 'slot' + (info ? '' : ' empty'));
       card.appendChild(h('div', 'slot-n', `欄位 ${slot}`));
-      if (info) {
+      if (pending) { // 還在連線雲端：先不顯示按鈕，等讀完再一次畫出正確的畫面（避免按鈕在你手指下突然換位置）
+        card.classList.add('loading'); card.appendChild(h('div', 'slot-info dim', '讀取存檔中…'));
+      } else if (info) {
         const face = h('canvas', 'slot-face') as HTMLCanvasElement; face.width = 72; face.height = 72;
         const look = { ...DB.job[info.job]?.look };
         import('../render/SpriteFactory').then(({ humanSheet }) => { const sh = humanSheet(look); const c = face.getContext('2d')!; c.imageSmoothingEnabled = false; c.drawImage(sh.c, 60, 66, 72, 72, 0, 0, 72, 72); });
         const tx = h('div', 'slot-info');
         tx.innerHTML = `<b>${info.name}</b><br>${DB.job[info.job]?.name || ''}　Lv ${info.baseLv}／Job ${info.jobLv}<br><span class="dim">${mapName(info.map)}${info.t ? '　' + new Date(info.t).toLocaleDateString() : ''}</span>`;
         const bs = h('div', 'slot-btns');
-        bs.append(btn(pending ? '連線中…' : '開始', () => { if (!pending) go(true, slot); }, pending ? 'dis' : ''), btn('刪除', () => ask(`確定要刪除「${info.name}」嗎？刪除後無法復原。`, () => { this.g.save.deleteSlot(slot); t.remove(); this.showTitle(); }), 'warn'));
-        card.append(face, tx, bs);
+        bs.append(btn('開始', () => go(true, slot)));
+        const del = btn('刪除角色', () => ask(`要刪除「${info.name}」（${DB.job[info.job]?.name || ''} Lv ${info.baseLv}）嗎？刪除後可以在這個欄位「復原」，直到你在這個欄位建立新角色。`, () => { this.g.save.deleteSlot(slot); t.remove(); this.showTitle(); }, { danger: true, yes: '刪除' }), 'slot-del');
+        card.append(face, tx, bs, del);
       } else {
         const name = h('input') as HTMLInputElement; name.placeholder = '角色名稱'; name.maxLength = 10; name.id = 'slot-name-' + slot;
         name.addEventListener('keydown', (e) => { e.stopPropagation(); if (e.key === 'Enter') go(false, slot, name.value.trim()); });
-        const bs = h('div', 'slot-btns'); bs.append(btn('建立角色', () => { if (!pending) go(false, slot, name.value.trim()); }, pending ? 'dis' : ''));
+        const bs = h('div', 'slot-btns'); bs.append(btn('建立角色', () => go(false, slot, name.value.trim())));
         card.append(h('div', 'slot-info dim', '空欄位'), name, bs);
+        const tr = trash[i];
+        if (tr) { const rb = h('div', 'slot-trash'); rb.append(h('span', 'dim', `已刪除：${tr.name}（${DB.job[tr.job]?.name || ''} Lv ${tr.baseLv}）`), btn('復原', () => { if (this.g.save.restoreSlot(slot)) { t.remove(); this.showTitle(); } }, 'sm')); card.appendChild(rb); }
       }
       list.appendChild(card);
     });

@@ -3,7 +3,7 @@ import { DB } from '../data';
 
 /** 舊版只有一個存檔（rom.save），現在分成 3 個角色欄位 rom.save.s1~s3（各自有 .bak 備份） */
 export const LEGACY_KEY = 'rom.save', LEGACY_BAK = 'rom.save.bak', SLOTS = 3;
-const keyOf = (n: number) => `rom.save.s${n}`, bakOf = (n: number) => `rom.save.s${n}.bak`;
+const keyOf = (n: number) => `rom.save.s${n}`, bakOf = (n: number) => `rom.save.s${n}.bak`, trashOf = (n: number) => `rom.trash.s${n}`;
 export interface SlotInfo { slot: number; name: string; job: string; baseLv: number; jobLv: number; map: string; t: number }
 /** 目前存檔版本；改存檔格式時 +1 並在 migrations 補一個升級函式 */
 export const SAVE_V = 3;
@@ -60,7 +60,7 @@ export class Save {
   loadedFrom: 'main' | 'backup' | 'new' = 'new';
   slot = 1;
   cloud: { state: CloudState; uid: string; db: any; err: string; syncedAt: number } = { state: 'pending', uid: '', db: null, err: '', syncedAt: 0 };
-  private pushQ = new Map<number, string | null>(); private pushT = -1; private pushing = false;
+  private pushQ = new Map<number, string | { trashed: string | null }>(); private pushT = -1; private pushing = false;
   onCloudChange: (() => void) | null = null;
   get localOk() { return lsOk; }
   constructor(private g: Game) {
@@ -100,7 +100,11 @@ export class Save {
       if (snap.exists) {
         const c = snap.data() as { raw?: string; t?: number; deleted?: boolean } | undefined;
         const ct = c?.t || 0;
-        if (c?.deleted) { if (lt <= ct) { store.del(keyOf(n)); store.del(bakOf(n)); } else this.queuePush(n, local); continue; }
+        if (c?.deleted) { // 已刪除：雲端保留原內容，可以在標題畫面「復原」
+          if (lt <= ct) { store.del(keyOf(n)); store.del(bakOf(n)); if (c.raw && unpack(c.raw)) store.set(trashOf(n), c.raw); }
+          else { if (local) this.queuePush(n, local); }
+          continue;
+        }
         if (c?.raw && unpack(c.raw) && ct > lt) { if (local && unpack(local)) store.set(bakOf(n), local); store.set(keyOf(n), c.raw); }
         else if (lt > ct && local && unpack(local)) this.queuePush(n, local);
       } else if (local && unpack(local)) this.queuePush(n, local);
@@ -108,7 +112,7 @@ export class Save {
     this.cloud.syncedAt = Date.now();
     await this.flush();
   }
-  private queuePush(n: number, raw: string | null, now = false) { this.pushQ.set(n, raw); this.pushT = now ? 0.01 : Math.min(this.pushT > 0 ? this.pushT : 99, 4); }
+  private queuePush(n: number, raw: string | { trashed: string | null }, now = false) { this.pushQ.set(n, raw); this.pushT = now ? 0.01 : Math.min(this.pushT > 0 ? this.pushT : 99, 4); }
   /** 立刻把排隊中的存檔寫到雲端（一次一個，等上一個寫完） */
   async flush() {
     if (this.cloud.state === 'off' || !this.cloud.db || this.pushing) return;
@@ -116,7 +120,7 @@ export class Save {
     try {
       for (const [n, raw] of [...this.pushQ]) {
         this.pushQ.delete(n);
-        if (raw === null) await this.ref(n).set({ deleted: true, t: Date.now() });
+        if (typeof raw !== 'string') { const d = raw.trashed ? unpack(raw.trashed) : null; await this.ref(n).set({ deleted: true, t: Date.now(), ...(raw.trashed ? { raw: raw.trashed, name: d?.ch?.name || '', job: d?.ch?.job || '', lv: d?.ch?.baseLv || 0 } : {}) }); }
         else { const d = unpack(raw); await this.ref(n).set({ raw, t: rawTime(raw) || Date.now(), name: d?.ch?.name || '', job: d?.ch?.job || '', lv: d?.ch?.baseLv || 0 }); }
       }
       this.cloud.syncedAt = Date.now(); if (this.cloud.state !== 'on') this.setCloud('on', '');
@@ -139,7 +143,30 @@ export class Save {
     }
     return out;
   }
-  deleteSlot(n: number) { store.del(keyOf(n)); store.del(bakOf(n)); if (this.cloud.state !== 'off') { this.queuePush(n, null, true); void this.flush(); } }
+  /** 刪除＝移到「垃圾桶」：本機與雲端都保留原內容，標題畫面可以復原；該欄位建立新角色時才會真正蓋掉 */
+  deleteSlot(n: number) {
+    const raw = store.get(keyOf(n)), old = raw && unpack(raw) ? raw : (() => { const b = store.get(bakOf(n)); return b && unpack(b) ? b : null; })();
+    if (old) store.set(trashOf(n), old);
+    store.del(keyOf(n)); store.del(bakOf(n));
+    if (this.cloud.state !== 'off') { this.queuePush(n, { trashed: old }, true); void this.flush(); }
+  }
+  /** 每個欄位被刪除、可以復原的角色 */
+  trashList(): (SlotInfo | null)[] {
+    const out: (SlotInfo | null)[] = [];
+    for (let n = 1; n <= SLOTS; n++) {
+      const raw = store.get(trashOf(n)); const d = raw && !store.get(keyOf(n)) ? unpack(raw) : null;
+      out.push(d ? { slot: n, name: d.ch.name, job: d.ch.job, baseLv: d.ch.baseLv, jobLv: d.ch.jobLv, map: d.map, t: rawTime(raw) } : null);
+    }
+    return out;
+  }
+  restoreSlot(n: number): boolean {
+    const raw = store.get(trashOf(n)); if (!raw || !unpack(raw) || store.get(keyOf(n))) return false;
+    store.set(keyOf(n), raw); store.del(trashOf(n));
+    if (this.cloud.state !== 'off') { this.queuePush(n, raw, true); void this.flush(); }
+    return true;
+  }
+  /** 在欄位建立新角色：清掉這個欄位的垃圾桶 */
+  clearTrash(n: number) { store.del(trashOf(n)); }
   /** 匯出／匯入：把存檔變成一串文字，可以貼到別的裝置 */
   exportCode(n: number): string | null { const raw = store.get(keyOf(n)); return raw && unpack(raw) ? 'ROM1:' + btoa(unescape(encodeURIComponent(raw))) : null; }
   importCode(n: number, code: string): string | null {

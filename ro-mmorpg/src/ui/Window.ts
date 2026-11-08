@@ -65,11 +65,16 @@ export function btn(label: string, fn: () => void, cls = ''): HTMLSpanElement {
   const b = h('span', 'btn ' + cls, label); b.addEventListener('click', (e) => { e.stopPropagation(); fn(); }); return b;
 }
 /** 頁內確認框（不用瀏覽器的 confirm()，有些嵌入環境會直接回傳 false） */
-export function ask(msg: string, onYes: () => void) {
+export function ask(msg: string, onYes: () => void, opt: { yes?: string; danger?: boolean } = {}) {
   const wrap = h('div', 'ask-wrap'); const box = h('div', 'win ask-box');
-  box.append(h('div', 'win-title', '確認'), h('div', 'win-body ask-msg', msg));
+  box.append(h('div', 'win-title', opt.danger ? '請再確認一次' : '確認'), h('div', 'win-body ask-msg', msg));
   const foot = h('div', 'win-foot');
-  foot.append(btn('確定', () => { wrap.remove(); onYes(); }), btn('取消', () => wrap.remove()));
+  const born = performance.now();
+  // 危險操作：取消在前、「確定」要等 1.2 秒才有效（避免連點、點錯位置時直接通過）
+  const yes = btn(opt.yes || '確定', () => { if (opt.danger && performance.now() - born < 1200) return; wrap.remove(); onYes(); }, opt.danger ? 'warn' : '');
+  if (opt.danger) { yes.classList.add('dis'); setTimeout(() => yes.classList.remove('dis'), 1200); }
+  const no = btn('取消', () => wrap.remove());
+  if (opt.danger) foot.append(no, yes); else foot.append(yes, no);
   box.appendChild(foot); wrap.appendChild(box);
   (document.getElementById('ui') || document.body).appendChild(wrap);
 }

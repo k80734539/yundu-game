@@ -146,6 +146,7 @@ export class Game {
         this.msg(`歡迎回來，${this.player.ch.name}！${this.save.loadedFrom === 'backup' ? '（主存檔損壞，已從備份還原）' : ''}`, 'sys');
       }
     } else {
+      this.save.clearTrash(slot);
       this.player.ch.name = name || '冒險者';
       this.newGameItems();
       this.spawner.init();

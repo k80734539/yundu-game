@@ -395,3 +395,8 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 .code-msg { min-height: 16px; font-size: 12px; color: #2a7a3a; }
 #title .btns .btn.dis { opacity: .5; }
 .seg { display: inline-flex; gap: 2px; } .seg .btn.on { background: linear-gradient(#8ab4f0, #4c70b0); color: #fff; border-color: #2c4a8a; }
+.slot-del { margin-top: 8px; font-size: 11px; color: #8a6a6a; cursor: pointer; text-decoration: underline; padding: 6px 10px; }
+.slot-trash { margin-top: 4px; padding: 5px 6px; font-size: 11px; display: flex; gap: 6px; align-items: center; justify-content: center; flex-wrap: wrap; border-top: 1px dashed #b8c0d8; width: 100%; }
+.slot.loading { opacity: .7; }
+.ask-box .win-foot .btn.warn { color: #a02a20; font-weight: bold; }
+.ask-box .win-foot .btn.dis { opacity: .35; }

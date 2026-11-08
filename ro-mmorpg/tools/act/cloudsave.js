@@ -24,12 +24,25 @@ await page.evaluate(() => { localStorage.setItem('rom.save.s1', sessionStorage.g
 await page.reload(); await ready();
 await page.click('.slot:nth-child(1) .btn'); await page.waitForFunction(() => !window.__game.inTitle);
 console.log('5 newer wins (expect 22222)', await page.evaluate(() => window.__game.player.ch.zeny));
-// 刪除會同步到雲端（在標題畫面刪除，和實際操作一致）
+// 刪除＝移到垃圾桶：雲端保留內容、可以復原；連點「刪除」不會直接通過
 await page.reload(); await ready();
-await page.evaluate(async () => { const G = window.__game; G.save.deleteSlot(1); await G.save.flush(); });
-console.log('6 after delete', await page.evaluate(() => JSON.stringify(JSON.parse(sessionStorage.getItem('cloud:data/users/u1/save_s1') || 'null'))));
+await page.evaluate(() => { const G = window.__game; });
+await page.click('.slot:nth-child(1) .slot-del');
+await page.evaluate(() => document.querySelector('.ask-box .btn.warn').click());   // 立刻點「刪除」（1.2 秒內）應該無效
+console.log('6a 立刻點確定是否被擋', await page.evaluate(() => !!document.querySelector('.ask-wrap') && window.__game.save.list()[0] !== null));
+await sleep(1400); await page.click('.ask-box .btn.warn'); await sleep(300);
+console.log('6b after delete', await page.evaluate(() => JSON.stringify({ list: window.__game.save.list().map((s) => s && s.name), trash: window.__game.save.trashList().map((s) => s && s.name), cloud: (() => { const v = JSON.parse(sessionStorage.getItem('cloud:data/users/u1/save_s1') || 'null'); return v && { deleted: v.deleted, keepsRaw: !!v.raw, name: v.name }; })() })));
 await page.reload(); await ready();
-console.log('7 list after delete', await page.evaluate(() => JSON.stringify(window.__game.save.list())));
+console.log('7 after reload: trash still there', await page.evaluate(() => JSON.stringify({ list: window.__game.save.list().map((s) => s && s.name), trash: window.__game.save.trashList().map((s) => s && s.name) })));
+await page.click('.slot:nth-child(1) .slot-trash .btn'); await sleep(300);
+console.log('7b restored', await page.evaluate(() => JSON.stringify({ list: window.__game.save.list().map((s) => s && s.name + s.baseLv), cloud: JSON.parse(sessionStorage.getItem('cloud:data/users/u1/save_s1')).deleted })));
+// 換一台裝置（本機清空）：雲端的已刪除記錄也要能復原
+await page.click('.slot:nth-child(1) .slot-del'); await sleep(1400); await page.click('.ask-box .btn.warn'); await sleep(300);
+await page.evaluate(() => localStorage.clear()); await page.reload(); await ready();
+console.log('7c other device sees trash', await page.evaluate(() => JSON.stringify(window.__game.save.trashList().map((s) => s && s.name))));
+await page.click('.slot:nth-child(1) .slot-trash .btn'); await sleep(300);
+console.log('7d restored on other device', await page.evaluate(() => JSON.stringify(window.__game.save.list().map((s) => s && s.name))));
+await page.screenshot({ path: 'screenshots/存檔_復原.png' });
 // 匯出匯入
 await page.fill('#slot-name-2', '匯出測試'); await page.click('.slot:nth-child(2) .btn'); await page.waitForFunction(() => !window.__game.inTitle);
 const code = await page.evaluate(async () => { const G = window.__game; G.player.ch.zeny = 4242; G.save.save(true); return G.save.exportCode(2); });
