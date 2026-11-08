@@ -36,7 +36,7 @@ export class Player extends Actor {
     this.name = this.ch.name;
     this.d = derive(this.ch, this.equipsFn(), this.buffs);
     this.maxHp = this.d.maxHp; this.maxSp = this.d.maxSp;
-    this.speed = 5 * (1 + 0.03 * (this.ch.skills.riding || 0)); // 騎乘
+    this.speed = 5 * (1 + 0.03 * (this.ch.skills.riding || 0) + this.d.move / 100); // 騎乘＋移動速度詞條
     if (full) { this.hp = this.maxHp; this.sp = this.maxSp; }
     this.hp = Math.min(this.hp, this.maxHp); this.sp = Math.min(this.sp, this.maxSp);
   }

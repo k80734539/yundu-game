@@ -2,6 +2,7 @@ import type { UI } from './UI';
 import { Win, h } from './Window';
 import { EQUIP_SLOTS, SLOT_NAMES, EquipSlot } from '../systems/Inventory';
 import { iconURL } from '../render/IconArt';
+import { colorOf } from '../systems/Loot';
 
 /** 裝備（Alt+Q）：左右兩排欄位，中間角色預覽；雙擊卸下 */
 export class EquipWindow extends Win {
@@ -18,7 +19,7 @@ export class EquipWindow extends Win {
         const uid = inv.equip[s]; const it = uid !== undefined ? inv.get(uid) : undefined; const d = it ? inv.def(it.id) : null;
         const row = h('div', 'eq-slot' + (d ? '' : ' empty'));
         const ic = h('div', 'eq-icon'); if (d) { const img = h('img') as HTMLImageElement; img.src = iconURL(d.icon.k, d.icon.c); ic.appendChild(img); }
-        const tx = h('div', 'eq-name'); tx.innerHTML = `<span class="dim">${SLOT_NAMES[s]}</span><br>${d && it ? inv.displayName(it) : '—'}`;
+        const tx = h('div', 'eq-name'); tx.innerHTML = `<span class="dim">${SLOT_NAMES[s]}</span><br>${d && it ? `<span style="color:${colorOf(it)};text-shadow:0 0 1px #000">${inv.displayName(it)}</span>` : '—'}`;
         row.append(ic, tx);
         if (d && it && this.ui.m) { const m = this.ui.m; row.addEventListener('click', () => m.item(it)); }
         else if (d && it) { this.ui.info.bind(row, () => [d, it]); row.addEventListener('dblclick', () => { inv.unequip(s); this.ui.sfx('equip'); }); row.addEventListener('contextmenu', (e) => { e.preventDefault(); inv.unequip(s); }); row.title = '雙擊卸下'; }

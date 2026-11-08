@@ -4,7 +4,10 @@ import type { EquipInfo } from './Stats';
 export type EquipSlot = 'weapon' | 'head' | 'armor' | 'shield' | 'garment' | 'shoes' | 'acc1' | 'acc2';
 export const EQUIP_SLOTS: EquipSlot[] = ['head', 'armor', 'weapon', 'shield', 'garment', 'shoes', 'acc1', 'acc2'];
 export const SLOT_NAMES: Record<EquipSlot, string> = { head: '頭飾', armor: '鎧甲', weapon: '武器', shield: '盾牌', garment: '披風', shoes: '鞋子', acc1: '飾品', acc2: '飾品' };
-export interface InvItem { uid: number; id: string; n: number; refine: number; cards: string[] }
+import type { Rarity } from '../data';
+/** 裝備實例：稀有度、撿到時擲出的主數值與附加詞條（存進存檔） */
+export interface Affix { k: string; v: number; el?: string }
+export interface InvItem { uid: number; id: string; n: number; refine: number; cards: string[]; rar?: Rarity; roll?: { atk?: number; def?: number }; aff?: Affix[]; src?: string }
 let UID = 1;
 export const stackable = (it: ItemDef) => it.type === 'use' || it.type === 'etc' || it.type === 'card';
 
@@ -24,7 +27,7 @@ export class Inventory {
     if (stackable(d)) {
       const ex = this.items.find((i) => i.id === id);
       if (ex) ex.n += n; else this.items.push({ uid: UID++, id, n, refine: 0, cards: [] });
-    } else for (let k = 0; k < n; k++) this.items.push({ uid: UID++, id, n: 1, refine: extra?.refine || 0, cards: extra?.cards ? [...extra.cards] : [] });
+    } else for (let k = 0; k < n; k++) this.items.push({ uid: UID++, id, n: 1, refine: extra?.refine || 0, cards: extra?.cards ? [...extra.cards] : [], ...(extra?.rar ? { rar: extra.rar } : {}), ...(extra?.roll ? { roll: { ...extra.roll } } : {}), ...(extra?.aff ? { aff: extra.aff.map((a) => ({ ...a })) } : {}), ...(extra?.src ? { src: extra.src } : {}) });
     this.onChange();
     return true;
   }
@@ -60,7 +63,7 @@ export class Inventory {
     for (const s of EQUIP_SLOTS) {
       const uid = this.equip[s]; if (uid === undefined) continue;
       const it = this.get(uid); if (!it) continue;
-      out.push({ item: this.def(it.id), refine: it.refine, cards: it.cards.map((c) => this.def(c)).filter(Boolean) });
+      out.push({ item: this.def(it.id), refine: it.refine, cards: it.cards.map((c) => this.def(c)).filter(Boolean), inst: it });
     }
     return out;
   }

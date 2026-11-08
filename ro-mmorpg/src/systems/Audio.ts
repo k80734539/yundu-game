@@ -143,6 +143,8 @@ export class Audio {
       case 'cast': T(400, 0, 0.3, 'sine', 0.05, 800); N(0, 0.3, 0.05, 6000, 'highpass'); break;
       case 'refine_ok': [0, 7, 12, 19].forEach((k, i) => T(freq(76 + k), i * 0.07, 0.25, 'triangle', 0.1)); N(0, 0.08, 0.2, 6000, 'highpass'); break;
       case 'refine_fail': N(0, 0.4, 0.5, 2500, 'bandpass', 300); T(300, 0, 0.4, 'sawtooth', 0.08, 60); break;
+      case 'loot_rare': [0, 7, 12].forEach((k, i) => T(freq(79 + k), i * 0.07, 0.35, 'sine', 0.1)); N(0, 0.25, 0.08, 7000, 'highpass'); break;
+      case 'loot_legend': [0, 4, 7, 12, 16, 19].forEach((k, i) => T(freq(72 + k), i * 0.06, 0.5, 'triangle', 0.12)); T(freq(96), 0.4, 0.8, 'sine', 0.1); N(0, 0.5, 0.1, 6000, 'highpass'); break;
       case 'thunder': N(0, 0.35, 0.7, 2000, 'lowpass', 200); T(80, 0, 0.3, 'sawtooth', 0.12, 40); break;
       case 'skill_slash': N(0, 0.15, 0.4, 2000, 'bandpass', 600); T(300, 0, 0.12, 'square', 0.12, 100); break;
       case 'skill_fire_burst': N(0, 0.5, 0.7, 800, 'lowpass', 150); T(120, 0, 0.4, 'sawtooth', 0.12, 40); break;

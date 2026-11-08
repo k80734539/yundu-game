@@ -32,7 +32,9 @@ import type { PropInst } from '../systems/MapLoader';
 import { Quests } from '../systems/Quests';
 import type { Dialog } from '../ui/Dialog';
 import { textImage } from '../render/Font';
-import { SkillSystem } from '../systems/Skills';
+import { SkillSystem, ELEM } from '../systems/Skills';
+import { Loot, RAR, RANK, rarityOf, rollGear, isGear } from '../systems/Loot';
+import { LOOT } from '../data';
 import { Projectile } from '../entities/Projectile';
 import { engage as aiEngage } from '../systems/AI';
 import { magicVsMonster } from '../systems/Combat';
@@ -82,6 +84,7 @@ export class Game {
   quests: Quests;
   flags: Record<string, any> = { visited: {} };
   skills: SkillSystem;
+  loot: Loot;
   buffT: Record<string, number> = {}; buffMax: Record<string, number> = {};
   projectiles: Projectile[] = [];
   timers: { t: number; fn: () => void }[] = [];
@@ -104,6 +107,7 @@ export class Game {
     this.spawner = new Spawner(this);
     this.quests = new Quests(this);
     this.skills = new SkillSystem(this);
+    this.loot = new Loot(this);
     this.save = new Save(this);
     this.tutorial = new Tutorial(this);
     window.addEventListener('beforeunload', () => { if (!this.inTitle) this.save.save(); });
@@ -113,7 +117,7 @@ export class Game {
     this.ui = new UI(this, uiRoot);
     this.newGameItems();
     this.loop = new Loop((dt) => this.update(dt), (a, dt) => this.render(a, dt));
-    (window as any).__game = this; (window as any).__DB = DB;
+    (window as any).__game = this; (window as any).__DB = DB; (window as any).__LOOT = LOOT; (window as any).__GI = GroundItem;
   }
 
   /** 開機：先載入城鎮當標題背景 */
@@ -216,7 +220,7 @@ export class Game {
     if (this.inv.isEquipped(uid)) { this.msg('請先卸下裝備再丟棄。', 'warn'); return; }
     const n = it.n;
     this.inv.remove(uid, n);
-    const g = new GroundItem(d, n, p.x + (this.rnd() - 0.5), p.y + 0.6, p.x, p.y, { refine: it.refine, cards: it.cards });
+    const g = new GroundItem(d, n, p.x + (this.rnd() - 0.5), p.y + 0.6, p.x, p.y, { refine: it.refine, cards: it.cards, rar: it.rar, roll: it.roll, aff: it.aff, src: it.src });
     this.items.push(g);
     this.msg(`丟棄了 ${d.name} ×${n}`, 'item');
   }
@@ -816,6 +820,14 @@ export class Game {
   }
   applyDamage(a: Actor | null, d: Actor, dmg: number, kind: 'deal' | 'take' | 'crit' | 'skill') {
     const h = -d.bbox.y0 + 10;
+    if (a === this.player && d instanceof Monster) {
+      // 屬性傷害詞條：對該屬性弱點的怪物加成
+      const pd = this.player.d; let bonus = 0;
+      for (const [el, v] of Object.entries(pd.elem)) if (ELEM[el]?.includes(d.def.look.body || '')) bonus += v;
+      if (bonus) dmg = Math.round(dmg * (1 + bonus / 100));
+      // 吸血詞條
+      if (pd.lifesteal > 0 && !this.player.dead) { const heal = Math.floor(Math.min(dmg, d.hp) * pd.lifesteal / 100); if (heal > 0) this.player.hp = Math.min(this.player.maxHp, this.player.hp + heal); }
+    }
     d.hp -= dmg;
     if (a === this.player || d === this.player) this.combatT = 0;
     if (d === this.player && this.player.state === 'sit') this.player.state = 'idle';
@@ -845,21 +857,37 @@ export class Game {
     }
   }
   /** 依掉落表擲骰，掉在怪物周圍 */
+  /** 依掉落表擲骰，掉在怪物周圍；裝備在掉落時決定稀有度、撿到時才擲數值 */
   dropLoot(m: Monster) {
     let k = 0;
-    const rateMul = m.isMvp ? 1 : 1;
-    for (const dr of m.def.drops) {
-      if (this.rnd() >= dr.rate * rateMul) continue;
-      const def = DB.item[dr.item]; if (!def) continue;
-      const a = k * 2.1 + this.rnd(), rr = k === 0 ? 0.2 : 0.6 + this.rnd() * 0.5;
+    const list: { id: string; n: number; rar?: import('../data').Rarity }[] = [];
+    if (m.isMvp && LOOT.boss[m.def.id]) list.push(...this.loot.bossDrops(m.def.id));
+    else for (const dr of m.def.drops) if (this.rnd() < dr.rate && DB.item[dr.item]) list.push({ id: dr.item, n: 1, rar: this.loot.monsterRarity(DB.item[dr.item]) });
+    for (const e of list) {
+      const def = DB.item[e.id]; if (!def) continue;
+      const a = k * 2.1 + this.rnd(), rr = k === 0 ? 0.2 : 0.6 + this.rnd() * 0.6;
       let tx = m.x + Math.cos(a) * rr, ty = m.y + Math.sin(a) * rr;
       if (!this.map.canWalk(tx, ty)) { tx = m.x; ty = m.y; }
-      const it = new GroundItem(def, 1, tx, ty, m.x, m.y);
+      const it = new GroundItem(def, e.n, tx, ty, m.x, m.y, isGear(def) ? { rar: e.rar || 'common', src: m.isMvp ? m.def.id : undefined } : {});
       this.items.push(it); k++;
-      if (def.type === 'card') this.msg(`★ ${m.def.name} 掉落了 ${def.name}！`, 'quest');
+      this.dropFx(it, m);
     }
   }
-  mvpReward(m: Monster) {
+  /** 稀有掉落特效：紫色以上光柱＋音效；橘、紅色停頓＋震動＋全螢幕提示 */
+  dropFx(it: GroundItem, m: Monster) {
+    const rar = rarityOf({ id: it.def.id, rar: it.extra.rar });
+    const rk = RANK[rar], name = RAR[rar].name;
+    if (rk >= RANK[LOOT.fx.pillarFrom]) {
+      this.msg(`★ ${m.def.name} 掉落了【${name}】${it.def.name}！`, rk >= RANK.legend ? 'ann' : 'quest');
+      this.after(0.45, () => { this.audio.sfx(rk >= RANK[LOOT.fx.bigFrom] ? 'loot_legend' : 'loot_rare'); this.fx.ring(it.x, it.y, RAR[rar].color, 0.7, 40); });
+    }
+    if (rk >= RANK[LOOT.fx.bigFrom]) {
+      this.after(0.45, () => {
+        this.hitStop = Math.max(this.hitStop, LOOT.fx.hitStop); this.cam.shake(LOOT.fx.shake, 0.3);
+        this.ui.bigLoot(rar === 'boss' ? '獲得 Boss 專屬寶物！' : '獲得傳說寶物！', it.def.name, RAR[rar].color);
+      });
+    }
+  }  mvpReward(m: Monster) {
     const p = this.player;
     // RO：MVP 經驗＋直接進背包的 MVP 獎勵
     const bonus = Math.round(m.def.exp * 0.5);
@@ -869,11 +897,19 @@ export class Game {
     if (prize && this.inv.add(prize.item, 1)) this.msg(`MVP 獎勵：獲得 ${DB.item[prize.item].name}！（MVP 經驗 ${bonus}）`, 'quest');
   }
   pickUp(it: GroundItem) {
-    if (this.inv.add(it.def.id, it.n, it.extra)) {
+    if (it.def.id === 'zeny') { // 金幣直接加錢
+      this.player.ch.zeny += it.n; this.items = this.items.filter((x) => x !== it);
+      this.msg(`獲得 ${it.n.toLocaleString()} Zeny`, 'item'); this.audio.sfx('coin'); this.ev.emit('stats'); return;
+    }
+    let extra = it.extra;
+    if (isGear(it.def) && !extra.roll && !extra.aff) extra = { ...extra, ...rollGear(it.def, extra.rar || 'common', this.rnd) }; // 撿到才擲數值
+    if (this.inv.add(it.def.id, it.n, extra)) {
       this.items = this.items.filter((x) => x !== it);
-      this.msg(`獲得 ${it.def.name}${it.n > 1 ? ' ×' + it.n : ''}`, 'item');
+      const rar = rarityOf({ id: it.def.id, rar: extra.rar });
+      this.msg(`獲得 ${RANK[rar] ? '【' + RAR[rar].name + '】' : ''}${it.def.name}${it.n > 1 ? ' ×' + it.n : ''}`, RANK[rar] >= 2 ? 'quest' : 'item');
       this.audio.sfx('pickup');
       this.ev.emit('pickup', it.def.id);
+      this.save.saveSoon();
     } else this.msg('負重已滿，無法撿取！', 'warn');
   }
   /** 玩家死亡：怪物脫離；非初心者扣 1% Base/Job 經驗；按鈕回到儲存點 */
@@ -1114,11 +1150,20 @@ export class Game {
   drawItem(c: CanvasRenderingContext2D, it: GroundItem, L: number, T: number) {
     const ic = iconCanvas(it.def.icon.k, it.def.icon.c);
     const x = Math.round(isoX(it.ox, it.oy) - L - 12), y = Math.round(isoY(it.ox, it.oy) - T - 20 - it.z);
+    const rar = rarityOf({ id: it.def.id, rar: it.extra.rar }), rk = RANK[rar], col = RAR[rar].color;
+    if (rk >= RANK[LOOT.fx.pillarFrom] && it.t > 0.4) { // 同色光柱
+      const gx = Math.round(isoX(it.ox, it.oy) - L), gy = Math.round(isoY(it.ox, it.oy) - T), hgt = rk >= RANK.legend ? 150 : 100;
+      const pul = 0.25 + Math.sin(this.time * 4) * 0.08;
+      c.globalAlpha = pul; c.fillStyle = col; c.fillRect(gx - 7, gy - hgt, 14, hgt); c.globalAlpha = pul + 0.25; c.fillRect(gx - 3, gy - hgt, 6, hgt);
+      c.globalAlpha = 0.6; c.beginPath(); c.ellipse(gx, gy, 18, 8, 0, 0, Math.PI * 2); c.fill(); c.globalAlpha = 1;
+      if (Math.random() < 0.25) this.fx.glow(it.x, it.y, Math.random() * hgt * 0.7, col, 0.8, 1, 50);
+    }
     if (it.life - it.t < 5 && Math.floor(it.t * 6) % 2) c.globalAlpha = 0.4;
+    if (rk >= 1) { c.fillStyle = '#10101a'; c.fillRect(x - 3, y - 3, 30, 30); c.fillStyle = col; c.fillRect(x - 2, y - 2, 28, 28); c.fillStyle = 'rgba(16,16,26,.75)'; c.fillRect(x - 1, y - 1, 26, 26); }
     c.drawImage(ic, x, y);
-    if (it.def.type === 'card' && Math.floor(this.time * 3) % 2) { c.fillStyle = '#fff8a0'; c.fillRect(x + 20, y, 2, 2); }
     c.globalAlpha = 1;
-    if (this.hover === it) this.label(c, it.def.name + (it.n > 1 ? ' ×' + it.n : ''), x + 12, y - 16, it.def.type === 'card' ? '#ffe070' : '#ffffff');
+    // 名稱：精良以上一直顯示且用稀有度色；普通只在滑鼠移上時顯示（低調）
+    if (rk >= 1 || this.hover === it) this.label(c, (rk >= 1 ? `【${RAR[rar].name}】` : '') + it.def.name + (it.n > 1 ? ' ×' + it.n : ''), x + 12, y - 18, col);
   }
   drawOverhead(c: CanvasRenderingContext2D, e: Actor, L: number, T: number) {
     if (e.dead) return;

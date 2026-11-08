@@ -6,7 +6,7 @@ import { cellDist } from '../core/math';
 import { playerVsMonster, magicVsMonster } from './Combat';
 
 const GHOSTLY = new Set(['zombie', 'skeleton', 'skeleton2', 'wisp', 'wraith']);
-const ELEM: Record<string, string[]> = { fire: ['plant', 'bug', 'mushroom', 'flower', 'bee'], water: ['crab', 'golem'], wind: ['bird', 'bat', 'bee'], ghost: ['ghost'] };
+export const ELEM: Record<string, string[]> = { fire: ['plant', 'bug', 'mushroom', 'flower', 'bee'], water: ['crab', 'golem'], wind: ['bird', 'bat', 'bee'], ghost: ['ghost'] };
 export interface CastState { id: string; lv: number; t: number; dur: number; target: Monster | null }
 /** 技能施放：選目標、走進射程、詠唱條、冷卻、效果 */
 export class SkillSystem {

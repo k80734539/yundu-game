@@ -367,6 +367,16 @@
       "arg": "refine"
      },
      {
+      "label": "分解裝備",
+      "act": "forge",
+      "arg": "dismantle"
+     },
+     {
+      "label": "用 Boss 素材兌換裝備",
+      "act": "forge",
+      "arg": "exchange"
+     },
+     {
       "label": "插入卡片",
       "act": "cards"
      },

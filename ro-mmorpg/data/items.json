@@ -1798,5 +1798,305 @@
    "int": 4,
    "crit": 5
   }
+ },
+ {
+  "id": "zeny",
+  "name": "金幣",
+  "type": "etc",
+  "price": 0,
+  "weight": 0,
+  "desc": "撿起來就會加到身上的 Zeny。",
+  "icon": {
+   "k": "coin",
+   "c": "#f0c040"
+  }
+ },
+ {
+  "id": "jelly_blade",
+  "name": "啵啵王之劍",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "啵啵王體內凝固的劍，劍身微微晃動。",
+  "icon": {
+   "k": "sword",
+   "c": "#ff8ab8"
+  },
+  "slot": "weapon",
+  "wtype": "sword",
+  "atk": 72,
+  "wlv": 2,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin"
+  ],
+  "bossEx": "kingjelly"
+ },
+ {
+  "id": "jelly_wand",
+  "name": "啵啵王權杖",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "頂端是一顆會跳的果凍寶石，MATK +20%。",
+  "icon": {
+   "k": "staff",
+   "c": "#ff8ab8"
+  },
+  "slot": "weapon",
+  "wtype": "staff",
+  "atk": 40,
+  "wlv": 2,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist"
+  ],
+  "bossEx": "kingjelly",
+  "matk": 20
+ },
+ {
+  "id": "jelly_bow",
+  "name": "啵啵王彈弓",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "用啵啵王的彈性做成的弓。",
+  "icon": {
+   "k": "bow",
+   "c": "#ff8ab8"
+  },
+  "slot": "weapon",
+  "wtype": "bow",
+  "atk": 62,
+  "wlv": 2,
+  "slots": 1,
+  "jobs": [
+   "archer",
+   "ranger"
+  ],
+  "bossEx": "kingjelly"
+ },
+ {
+  "id": "jelly_lance",
+  "name": "啵啵王長槍",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "槍頭包著一層硬化黏液。",
+  "icon": {
+   "k": "sword",
+   "c": "#ff8ab8"
+  },
+  "slot": "weapon",
+  "wtype": "spear",
+  "atk": 88,
+  "wlv": 2,
+  "slots": 1,
+  "jobs": [
+   "paladin"
+  ],
+  "bossEx": "kingjelly"
+ },
+ {
+  "id": "golem_sword",
+  "name": "巨像斷劍",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "遠古巨像手臂化成的石劍。",
+  "icon": {
+   "k": "sword",
+   "c": "#60e0ff"
+  },
+  "slot": "weapon",
+  "wtype": "sword",
+  "atk": 105,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin"
+  ],
+  "bossEx": "golem",
+  "bonus": {
+   "vit": 2
+  }
+ },
+ {
+  "id": "golem_staff",
+  "name": "巨像核心杖",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "嵌著巨像核心的法杖，MATK +30%。",
+  "icon": {
+   "k": "staff",
+   "c": "#60e0ff"
+  },
+  "slot": "weapon",
+  "wtype": "staff",
+  "atk": 58,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist"
+  ],
+  "bossEx": "golem",
+  "matk": 30,
+  "bonus": {
+   "int": 2
+  }
+ },
+ {
+  "id": "golem_bow",
+  "name": "巨像石弓",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "沉重但穩定的石弓。",
+  "icon": {
+   "k": "bow",
+   "c": "#60e0ff"
+  },
+  "slot": "weapon",
+  "wtype": "bow",
+  "atk": 92,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "archer",
+   "ranger"
+  ],
+  "bossEx": "golem",
+  "bonus": {
+   "dex": 2
+  }
+ },
+ {
+  "id": "golem_lance",
+  "name": "巨像長槍",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "槍身刻著古代符文。",
+  "icon": {
+   "k": "sword",
+   "c": "#60e0ff"
+  },
+  "slot": "weapon",
+  "wtype": "spear",
+  "atk": 125,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "paladin"
+  ],
+  "bossEx": "golem",
+  "bonus": {
+   "str": 2
+  }
+ },
+ {
+  "id": "serpent_fang",
+  "name": "巨蛇毒牙劍",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "巨蛇的毒牙打磨成的劍。",
+  "icon": {
+   "k": "sword",
+   "c": "#e0c040"
+  },
+  "slot": "weapon",
+  "wtype": "sword",
+  "atk": 135,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin"
+  ],
+  "bossEx": "serpent",
+  "bonus": {
+   "str": 3
+  }
+ },
+ {
+  "id": "serpent_staff",
+  "name": "巨蛇之瞳",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "封著巨蛇眼睛的法杖，MATK +40%。",
+  "icon": {
+   "k": "staff",
+   "c": "#e0c040"
+  },
+  "slot": "weapon",
+  "wtype": "staff",
+  "atk": 72,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist"
+  ],
+  "bossEx": "serpent",
+  "matk": 40,
+  "bonus": {
+   "int": 3
+  }
+ },
+ {
+  "id": "serpent_bow",
+  "name": "巨蛇脊弓",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "用巨蛇脊骨做成的長弓。",
+  "icon": {
+   "k": "bow",
+   "c": "#e0c040"
+  },
+  "slot": "weapon",
+  "wtype": "bow",
+  "atk": 120,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "archer",
+   "ranger"
+  ],
+  "bossEx": "serpent",
+  "bonus": {
+   "dex": 3
+  }
+ },
+ {
+  "id": "serpent_lance",
+  "name": "巨蛇鱗槍",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "覆滿金鱗的長槍。",
+  "icon": {
+   "k": "sword",
+   "c": "#e0c040"
+  },
+  "slot": "weapon",
+  "wtype": "spear",
+  "atk": 160,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "paladin"
+  ],
+  "bossEx": "serpent",
+  "bonus": {
+   "str": 3
+  }
  }
 ]

@@ -20,6 +20,7 @@ import { DB } from '../data';
 import { iconURL } from '../render/IconArt';
 import { QuestWindow, QuestTracker } from './QuestWindow';
 import { RefineWindow, CardWindow } from './RefineWindow';
+import { ForgeWindow } from './ForgeWindow';
 
 /** UI 管理器：DOM 視窗、快捷鍵、訊息、橫幅 */
 export class UI {
@@ -34,6 +35,7 @@ export class UI {
   private bannerT = 0;
   buffEl!: HTMLDivElement;
   death!: HTMLDivElement;
+  forge!: ForgeWindow;
   tut!: HTMLDivElement;
   private buffKey = '';
   constructor(public g: Game, public root: HTMLElement) {
@@ -63,6 +65,7 @@ export class UI {
     this.dialog = new Dialog(this);
     this.add(new RefineWindow(this));
     this.add(new CardWindow(this));
+    this.forge = this.add(new ForgeWindow(this)) as ForgeWindow;
     this.death = h('div'); this.death.id = 'death';
     const box = h('div', 'win box'); box.style.position = 'static'; this.death.appendChild(box); root.appendChild(this.death);
     this.buffEl = h('div'); this.buffEl.id = 'buffs'; root.appendChild(this.buffEl);
@@ -184,6 +187,14 @@ export class UI {
     this.root.appendChild(t);
   }
   audio() { this.g.audio?.unlock(); }
+  /** 全螢幕寶物提示（傳說／Boss 專屬） */
+  bigLoot(title: string, name: string, color: string) {
+    const el = h('div'); el.id = 'bigloot'; el.style.setProperty('--rc', color);
+    el.innerHTML = `<div class="bl-t">${title}</div><div class="bl-n">${name}</div>`;
+    this.root.querySelector('#bigloot')?.remove();
+    this.root.appendChild(el);
+    setTimeout(() => el.classList.add('out'), 1700); setTimeout(() => el.remove(), 2300);
+  }
   tutorialHint() {
     const t = this.g.inTitle ? null : this.g.tutorial.text();
     this.tut.style.display = t ? 'block' : 'none';

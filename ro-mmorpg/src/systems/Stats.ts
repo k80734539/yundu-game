@@ -22,6 +22,7 @@ export interface Derived {
   aspd: number; delay: number;
   total: Stats6; bonus: Stats6;
   hpRegen: number; spRegen: number; weight: number;
+  lifesteal: number; move: number; elem: Record<string, number>;
 }
 /** 角色成長資料（存檔的主體） */
 export interface CharData {
@@ -29,7 +30,7 @@ export interface CharData {
   stats: Stats6; statPts: number; skillPts: number; skills: Record<string, number>;
   zeny: number;
 }
-export interface EquipInfo { item: ItemDef; refine: number; cards: ItemDef[] }
+export interface EquipInfo { item: ItemDef; refine: number; cards: ItemDef[]; inst?: { roll?: { atk?: number; def?: number }; aff?: { k: string; v: number; el?: string }[] } }
 
 const zero = (): Stats6 => ({ str: 0, agi: 0, vit: 0, int: 0, dex: 0, luk: 0 });
 /** 依職業、等級、六圍、裝備計算衍生數值（RO 前期公式的簡化版） */
@@ -40,6 +41,7 @@ export function derive(ch: CharData, equips: EquipInfo[], buffs: Record<string, 
   for (const [lv, k] of job.bonus) if (ch.jobLv >= lv) bonus[k as StatKey]++;
   let atkB = 0, matkB = 0, defB = 0, mdefB = 0, hitB = 0, fleeB = 0, critB = 0, hpB = 0, spB = 0, aspdB = 0;
   let weaponAtk = 0, wlv = 1, wtype = 'none', matkPct = 0;
+  let lifesteal = 0, move = 0; const elem: Record<string, number> = {};
   for (const e of equips) {
     const it = e.item;
     const add = (src: ItemDef['bonus']) => {
@@ -49,12 +51,16 @@ export function derive(ch: CharData, equips: EquipInfo[], buffs: Record<string, 
       critB += src.crit || 0; hpB += src.hp || 0; spB += src.sp || 0; aspdB += src.aspd || 0;
     };
     add(it.bonus);
+    for (const a of e.inst?.aff || []) { // 隨機附加詞條
+      if (a.k === 'crit') critB += a.v; else if (a.k === 'aspd') aspdB += a.v; else if (a.k === 'hp') hpB += a.v;
+      else if (a.k === 'lifesteal') lifesteal += a.v; else if (a.k === 'move') move += a.v; else if (a.k === 'elem' && a.el) elem[a.el] = (elem[a.el] || 0) + a.v;
+    }
     for (const c of e.cards) add(c.bonus);
     if (it.slot === 'weapon') {
-      weaponAtk = (it.atk || 0) + e.refine * [2, 3, 5, 7][Math.min(3, (it.wlv || 1) - 1)];
+      weaponAtk = (e.inst?.roll?.atk ?? it.atk ?? 0) + e.refine * [2, 3, 5, 7][Math.min(3, (it.wlv || 1) - 1)];
       wlv = it.wlv || 1; wtype = it.wtype || 'none'; matkPct = it.matk || 0;
     } else {
-      defB += (it.def || 0) + Math.floor(e.refine * 0.7 + (e.refine > 0 ? 0.3 : 0)); mdefB += it.mdef || 0;
+      defB += (e.inst?.roll?.def ?? it.def ?? 0) + Math.floor(e.refine * 0.7 + (e.refine > 0 ? 0.3 : 0)); mdefB += it.mdef || 0;
     }
   }
   // 增益
@@ -106,5 +112,6 @@ export function derive(ch: CharData, equips: EquipInfo[], buffs: Record<string, 
     hpRegen: Math.max(1, Math.floor(maxHp / 200)) + Math.floor(t.vit / 5) + 5 * sl('hp_recovery'),
     spRegen: 1 + Math.floor(maxSp / 100) + Math.floor(t.int / 6) + 3 * sl('sp_recovery') + 2 * sl('mana_cycle'),
     weight: 2000 + t.str * 30,
+    lifesteal, move, elem,
   };
 }

@@ -2,6 +2,7 @@ import type { UI } from './UI';
 import { Win, h } from './Window';
 import { iconURL } from '../render/IconArt';
 import { makeDraggable, justDragged } from './Drag';
+import { rarityOf } from '../systems/Loot';
 
 /** 背包（Alt+E）：道具／裝備／其他分頁，雙擊使用或裝備，拖到快捷列，拖到地上丟棄 */
 export class InventoryWindow extends Win {
@@ -24,7 +25,7 @@ export class InventoryWindow extends Win {
     });
     for (const it of list) {
       const d = inv.def(it.id);
-      const cell = h('div', 'inv-cell' + (inv.isEquipped(it.uid) ? ' eq' : ''));
+      const cell = h('div', 'inv-cell r-' + rarityOf(it) + (inv.isEquipped(it.uid) ? ' eq' : ''));
       const img = h('img') as HTMLImageElement; img.src = iconURL(d.icon.k, d.icon.c); img.draggable = false;
       cell.appendChild(img);
       if (it.n > 1) cell.appendChild(h('span', 'cnt', String(it.n)));

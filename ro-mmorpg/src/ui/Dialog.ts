@@ -98,6 +98,7 @@ export class Dialog {
       case 'jobmenu': g.jobMenu(this); break;
       case 'refine': this.close(); this.ui.open('refine'); break;
       case 'cards': this.close(); this.ui.open('cards'); break;
+      case 'forge': this.close(); this.ui.forge.openTab(arg === 'exchange' ? 'exchange' : 'dismantle'); break;
       case 'reset': {
         const cost = g.resetCost();
         this.say([`可以把技能點或能力點全部收回來重新分配。`, cost ? `你已經超過 Lv20，每次收費 ${cost} Zeny。` : 'Lv20 以下免費喔！'], () => this.choose([

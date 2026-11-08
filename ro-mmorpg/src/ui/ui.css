@@ -344,3 +344,21 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 /* 手機：展開的教學提示移到下方（快捷列／按鈕上方），不再壓到左上的狀態列 */
 #ui.mobile #tuthint:not(.folded) { top: auto; left: 50%; transform: translateX(-50%); bottom: calc(62px + var(--sb)); max-width: min(520px, 56vw); z-index: 30; }
 @media (orientation: portrait) { #ui.mobile #tuthint:not(.folded) { left: 8px; right: 8px; transform: none; max-width: none; bottom: calc(118px + var(--sb)); } }
+/* ---------- 打寶：稀有度 ---------- */
+.inv-cell.r-magic { border: 2px solid #4a9cff; box-shadow: inset 0 0 6px rgba(74,156,255,.55); }
+.inv-cell.r-rare { border: 2px solid #b866ff; box-shadow: inset 0 0 7px rgba(184,102,255,.6); }
+.inv-cell.r-legend { border: 2px solid #ff9a2a; box-shadow: inset 0 0 8px rgba(255,154,42,.7); }
+.inv-cell.r-boss { border: 2px solid #ff4545; box-shadow: inset 0 0 9px rgba(255,69,69,.75); animation: bossglow 1.2s ease-in-out infinite alternate; }
+@keyframes bossglow { to { box-shadow: inset 0 0 14px rgba(255,69,69,.95); } }
+#iteminfo { border: 2px solid var(--rc, #5d6a8a); }
+.ii-rar { font-size: 11px; font-weight: bold; margin: -2px 0 3px; }
+.qbar { display: inline-block; width: 44px; height: 5px; margin-left: 4px; background: #d8dce8; border-radius: 2px; vertical-align: middle; overflow: hidden; }
+.qbar i { display: block; height: 100%; background: linear-gradient(90deg, #8ab4f0, #f0c040); }
+.perfect { margin-left: 4px; padding: 0 4px; border-radius: 3px; background: linear-gradient(#ffe070, #f0a020); color: #5a3000; font-size: 10px; font-weight: bold; }
+.ii-aff { color: #3a5aa0; }
+.tag { font-size: 10px; padding: 0 4px; border-radius: 3px; background: #e8d0d0; color: #a02a20; } .tag.ok { background: #d0ecd6; color: #1a7a3a; }
+#bigloot { position: fixed; inset: 0; z-index: 8000; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; background: radial-gradient(ellipse at center, color-mix(in srgb, var(--rc) 35%, transparent), transparent 60%); animation: blin .35s ease-out; transition: opacity .6s; }
+#bigloot.out { opacity: 0; }
+#bigloot .bl-t { font-size: 34px; font-weight: 900; color: #fff; letter-spacing: 4px; text-shadow: 0 0 12px var(--rc), 0 0 24px var(--rc), 0 3px 0 #000; }
+#bigloot .bl-n { margin-top: 6px; font-size: 20px; font-weight: bold; color: var(--rc); text-shadow: 0 2px 3px #000, 0 0 10px #000; }
+@keyframes blin { from { transform: scale(1.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }

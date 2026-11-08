@@ -1,0 +1,258 @@
+{
+ "_說明": "打寶設定：機率都是 0~1；數值範圍是 [最小, 最大]。改這個檔就能調整平衡。",
+ "rarities": [
+  {
+   "id": "common",
+   "name": "普通",
+   "color": "#e8e8e8",
+   "affixes": 0
+  },
+  {
+   "id": "magic",
+   "name": "精良",
+   "color": "#4a9cff",
+   "affixes": 1
+  },
+  {
+   "id": "rare",
+   "name": "稀有",
+   "color": "#b866ff",
+   "affixes": 2
+  },
+  {
+   "id": "legend",
+   "name": "傳說",
+   "color": "#ff9a2a",
+   "affixes": 3
+  },
+  {
+   "id": "boss",
+   "name": "Boss 專屬",
+   "color": "#ff4545",
+   "affixes": 3
+  }
+ ],
+ "monsterRarityWeights": {
+  "common": 78,
+  "magic": 16,
+  "rare": 5,
+  "legend": 1
+ },
+ "bossRarityWeights": {
+  "magic": 45,
+  "rare": 38,
+  "legend": 17
+ },
+ "cardRarity": "rare",
+ "mainStatRange": {
+  "common": [
+   0.85,
+   1.05
+  ],
+  "magic": [
+   0.9,
+   1.1
+  ],
+  "rare": [
+   0.95,
+   1.15
+  ],
+  "legend": [
+   1.0,
+   1.2
+  ],
+  "boss": [
+   1.0,
+   1.25
+  ]
+ },
+ "itemRanges": {
+  "long_spear": [
+   60,
+   75
+  ],
+  "knight_lance": [
+   100,
+   125
+  ]
+ },
+ "perfect": 0.9,
+ "affixes": {
+  "crit": {
+   "name": "爆擊率",
+   "fmt": "+{v}%",
+   "range": [
+    2,
+    8
+   ]
+  },
+  "aspd": {
+   "name": "攻擊速度",
+   "fmt": "+{v}",
+   "range": [
+    2,
+    7
+   ]
+  },
+  "lifesteal": {
+   "name": "吸血",
+   "fmt": "{v}%",
+   "range": [
+    1,
+    5
+   ]
+  },
+  "move": {
+   "name": "移動速度",
+   "fmt": "+{v}%",
+   "range": [
+    3,
+    10
+   ]
+  },
+  "hp": {
+   "name": "HP 上限",
+   "fmt": "+{v}",
+   "range": [
+    40,
+    300
+   ]
+  },
+  "elem": {
+   "name": "屬性傷害",
+   "fmt": "+{v}%",
+   "range": [
+    8,
+    25
+   ],
+   "elements": {
+    "fire": "火",
+    "water": "水",
+    "wind": "風",
+    "ghost": "念"
+   }
+  }
+ },
+ "affixBossBonus": 1.2,
+ "boss": {
+  "kingjelly": {
+   "zeny": [
+    3000,
+    6000
+   ],
+   "material": "king_crown",
+   "materialCount": [
+    2,
+    4
+   ],
+   "equipChance": 0.3,
+   "exclusiveChance": 0.08,
+   "cardChance": 0.01,
+   "card": "kingjelly_card",
+   "exclusives": [
+    "jelly_blade",
+    "jelly_wand",
+    "jelly_bow",
+    "jelly_lance"
+   ]
+  },
+  "golem": {
+   "zeny": [
+    10000,
+    18000
+   ],
+   "material": "ancient_core",
+   "materialCount": [
+    2,
+    4
+   ],
+   "equipChance": 0.3,
+   "exclusiveChance": 0.08,
+   "cardChance": 0.01,
+   "card": "golem_card",
+   "exclusives": [
+    "golem_sword",
+    "golem_staff",
+    "golem_bow",
+    "golem_lance"
+   ]
+  },
+  "serpent": {
+   "zeny": [
+    25000,
+    40000
+   ],
+   "material": "ancient_scale",
+   "materialCount": [
+    2,
+    4
+   ],
+   "equipChance": 0.3,
+   "exclusiveChance": 0.08,
+   "cardChance": 0.01,
+   "card": "serpent_card",
+   "exclusives": [
+    "serpent_fang",
+    "serpent_staff",
+    "serpent_bow",
+    "serpent_lance"
+   ]
+  }
+ },
+ "ownJobChance": 0.7,
+ "pity": 10,
+ "dismantle": {
+  "common": 1,
+  "magic": 2,
+  "rare": 4,
+  "legend": 8,
+  "boss": 15,
+  "defaultMaterial": "king_crown",
+  "materialByWeaponLevel": {
+   "1": "king_crown",
+   "2": "king_crown",
+   "3": "ancient_core"
+  }
+ },
+ "exchange": [
+  {
+   "cost": {
+    "king_crown": 20
+   },
+   "items": [
+    "jelly_blade",
+    "jelly_wand",
+    "jelly_bow",
+    "jelly_lance"
+   ]
+  },
+  {
+   "cost": {
+    "ancient_core": 25
+   },
+   "items": [
+    "golem_sword",
+    "golem_staff",
+    "golem_bow",
+    "golem_lance"
+   ]
+  },
+  {
+   "cost": {
+    "ancient_scale": 30
+   },
+   "items": [
+    "serpent_fang",
+    "serpent_staff",
+    "serpent_bow",
+    "serpent_lance"
+   ]
+  }
+ ],
+ "fx": {
+  "pillarFrom": "rare",
+  "bigFrom": "legend",
+  "hitStop": 0.1,
+  "shake": 4
+ }
+}

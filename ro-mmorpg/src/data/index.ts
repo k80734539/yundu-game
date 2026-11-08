@@ -7,6 +7,7 @@ import jobsJson from '../../data/jobs.json';
 import questsJson from '../../data/quests.json';
 import npcsJson from '../../data/npcs.json';
 import shopsJson from '../../data/shops.json';
+import lootJson from '../../data/loot.json';
 
 export type XY = [number, number];
 export interface MapDef {
@@ -51,7 +52,7 @@ export interface ItemDef {
   atk?: number; matk?: number; def?: number; mdef?: number; slots?: number; wlv?: number;
   jobs?: string[]; reqLv?: number;
   bonus?: Partial<Record<'str' | 'agi' | 'vit' | 'int' | 'dex' | 'luk' | 'hp' | 'sp' | 'atk' | 'matk' | 'def' | 'flee' | 'hit' | 'crit' | 'aspd', number>>;
-  cardFor?: string;
+  cardFor?: string; bossEx?: string;
 }
 export interface SkillDef {
   id: string; name: string; job: string; maxLv: number; type: 'active' | 'passive';
@@ -85,6 +86,19 @@ export const JOBS = jobsJson as unknown as { jobs: JobDef[]; expBase: number[]; 
 export const QUESTS = questsJson as unknown as QuestDef[];
 export const NPCS = npcsJson as unknown as NpcDef[];
 export const SHOPS = shopsJson as unknown as ShopDef[];
+export const LOOT = lootJson as unknown as LootConfig;
+export type Rarity = 'common' | 'magic' | 'rare' | 'legend' | 'boss';
+export interface LootConfig {
+  rarities: { id: Rarity; name: string; color: string; affixes: number }[];
+  monsterRarityWeights: Record<string, number>; bossRarityWeights: Record<string, number>; cardRarity: Rarity;
+  mainStatRange: Record<Rarity, [number, number]>; itemRanges: Record<string, [number, number]>; perfect: number;
+  affixes: Record<string, { name: string; fmt: string; range: [number, number]; elements?: Record<string, string> }>; affixBossBonus: number;
+  boss: Record<string, { zeny: [number, number]; material: string; materialCount: [number, number]; equipChance: number; exclusiveChance: number; cardChance: number; card: string; exclusives: string[] }>;
+  ownJobChance: number; pity: number;
+  dismantle: Record<string, any> & { materialByWeaponLevel: Record<string, string>; defaultMaterial: string };
+  exchange: { cost: Record<string, number>; items: string[] }[];
+  fx: { pillarFrom: Rarity; bigFrom: Rarity; hitStop: number; shake: number };
+}
 
 const idx = <T extends { id: string }>(a: T[]) => { const m: Record<string, T> = {}; for (const x of a) m[x.id] = x; return m; };
 export const DB = {
