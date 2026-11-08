@@ -11,7 +11,7 @@ export const statCost = (x: number) => Math.floor((x - 1) / 10) + 2;
 /** 升級獲得的能力點數 */
 export const statPointsForLevel = (lv: number) => Math.floor(lv / 5) + 3;
 export function expNeed(lv: number) { return JOBS.expBase[lv - 1] ?? Infinity; }
-export function jobExpNeed(job: string, jlv: number) { const t = DB.job[job].tier === 0 ? JOBS.expJob : JOBS.expJob1; return t[jlv - 1] ?? Infinity; }
+export function jobExpNeed(job: string, jlv: number) { const tier = DB.job[job].tier; const t = tier === 0 ? JOBS.expJob : tier === 1 ? JOBS.expJob1 : JOBS.expJob2; return t[jlv - 1] ?? Infinity; }
 
 export interface Derived {
   maxHp: number; maxSp: number;
@@ -68,6 +68,11 @@ export function derive(ch: CharData, equips: EquipInfo[], buffs: Record<string, 
   if (sl('sword_mastery') && (wtype === 'sword' || wtype === 'dagger')) atkB += 4 * sl('sword_mastery');
   if (sl('vulture_eye') && wtype === 'bow') hitB += sl('vulture_eye');
   matkPct += 3 * sl('arcane');
+  if (sl('spear_mastery') && wtype === 'spear') atkB += 5 * sl('spear_mastery');
+  if (sl('hunter_instinct') && wtype === 'bow') { critB += sl('hunter_instinct'); atkB += 3 * sl('hunter_instinct'); }
+  if (buffs.guard) defB += buffs.guard;
+  if (buffs.barrier) { defB += buffs.barrier; mdefB += buffs.barrier; }
+  if (buffs.wind_step) fleeB += buffs.wind_step;
   const t = zero();
   for (const k of STAT_KEYS) t[k] = ch.stats[k] + bonus[k];
   const lv = ch.baseLv;
@@ -99,7 +104,7 @@ export function derive(ch: CharData, equips: EquipInfo[], buffs: Record<string, 
     aspd, delay: (200 - aspd) / 50,
     total: t, bonus,
     hpRegen: Math.max(1, Math.floor(maxHp / 200)) + Math.floor(t.vit / 5) + 5 * sl('hp_recovery'),
-    spRegen: 1 + Math.floor(maxSp / 100) + Math.floor(t.int / 6) + 3 * sl('sp_recovery'),
+    spRegen: 1 + Math.floor(maxSp / 100) + Math.floor(t.int / 6) + 3 * sl('sp_recovery') + 2 * sl('mana_cycle'),
     weight: 2000 + t.str * 30,
   };
 }

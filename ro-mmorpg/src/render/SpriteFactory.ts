@@ -67,6 +67,12 @@ function weapon(c: CanvasRenderingContext2D, type: string, hx: number, hy: numbe
     line(c, hx + dx * 4 - dy * 7, hy + dy * 4 + dx * 7, hx + dx * 4 + dy * 7, hy + dy * 4 - dx * 7, 5, OUTC);
     line(c, hx + dx * 4 - dy * 6, hy + dy * 4 + dx * 6, hx + dx * 4 + dy * 6, hy + dy * 4 - dx * 6, 3, '#e0b040');
     if (type === 'axe') { oEllipse(c, bx + dx * (L - 6) - dy * 6, by + dy * (L - 6) + dx * 6, 8, 8, hex('#a8a8b8')); }
+  } else if (type === 'spear') {
+    const L = 64, tx = hx + dx * 44, ty = hy + dy * 44, bx = hx - dx * (L - 44), by = hy - dy * (L - 44);
+    line(c, bx, by, tx, ty, 6, OUTC); line(c, bx, by, tx, ty, 4, '#8a6038'); line(c, bx - 1, by, tx - 1, ty, 1.5, '#b88a58');
+    oPoly(c, [[tx - dy * 4, ty + dx * 4], [tx + dx * 14, ty + dy * 14], [tx + dy * 4, ty - dx * 4]], hex('#d8e0ec'));
+    line(c, tx - dy * 6, ty + dx * 6, tx + dy * 6, ty - dx * 6, 3, '#e0b040');
+    c.fillStyle = '#c03a3a'; c.fillRect(Math.round(tx - dx * 4) - 2, Math.round(ty - dy * 4) - 2, 4, 6);
   } else if (type === 'staff') {
     const L = 58;
     const tx = hx + dx * 30, ty = hy + dy * 30, bx = hx - dx * (L - 30), by = hy - dy * (L - 30);

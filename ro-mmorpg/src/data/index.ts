@@ -47,7 +47,7 @@ export interface ItemDef {
   icon: { k: string; c?: string; c2?: string };
   heal?: number; healSp?: number; healPct?: number; buff?: string;
   slot?: 'weapon' | 'head' | 'armor' | 'shield' | 'garment' | 'shoes' | 'acc';
-  wtype?: 'dagger' | 'sword' | 'staff' | 'bow';
+  wtype?: 'dagger' | 'sword' | 'staff' | 'bow' | 'spear';
   atk?: number; matk?: number; def?: number; mdef?: number; slots?: number; wlv?: number;
   jobs?: string[]; reqLv?: number;
   bonus?: Partial<Record<'str' | 'agi' | 'vit' | 'int' | 'dex' | 'luk' | 'hp' | 'sp' | 'atk' | 'matk' | 'def' | 'flee' | 'hit' | 'crit' | 'aspd', number>>;
@@ -57,13 +57,14 @@ export interface SkillDef {
   id: string; name: string; job: string; maxLv: number; type: 'active' | 'passive';
   target: 'enemy' | 'self' | 'ground'; icon: { k: string; c: string };
   sp: number[]; cast: number[]; cd: number[]; range: number;
-  power?: number[]; hits?: number | string; aoe?: number; element?: string; knock?: number;
+  power?: number[]; hits?: number | string; aoe?: number; element?: string; knock?: number; dmg?: 'magic' | 'phys';
   effect: string; fx: string; desc: string; req?: { id: string; lv: number }[];
   value?: number[]; dur?: number[];
 }
 export interface JobDef {
   id: string; name: string; tier: number; hpK: number; spK: number; hpB: number; spB: number;
   aspd: Record<string, number>; weapons: string[]; skills: string[]; maxJob: number;
+  prev?: string;
   attack: "melee" | "magic" | "arrow"; range: number; look: Look; bonus: [number, string][];
 }
 export interface QuestDef {
@@ -80,7 +81,7 @@ export const MAPS = mapsJson as unknown as MapDef[];
 export const MONSTERS = monstersJson as unknown as MonsterDef[];
 export const ITEMS = itemsJson as unknown as ItemDef[];
 export const SKILLS = skillsJson as unknown as SkillDef[];
-export const JOBS = jobsJson as unknown as { jobs: JobDef[]; expBase: number[]; expJob: number[]; expJob1: number[] };
+export const JOBS = jobsJson as unknown as { jobs: JobDef[]; expBase: number[]; expJob: number[]; expJob1: number[]; expJob2: number[] };
 export const QUESTS = questsJson as unknown as QuestDef[];
 export const NPCS = npcsJson as unknown as NpcDef[];
 export const SHOPS = shopsJson as unknown as ShopDef[];

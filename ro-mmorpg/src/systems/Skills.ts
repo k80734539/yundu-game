@@ -45,7 +45,7 @@ export class SkillSystem {
       p.face(target.x, target.y);
     }
     p.path = []; p.chase = target && s.effect !== 'debuff' ? target : p.chase;
-    const castT = (s.cast[lv - 1] || 0) * Math.max(0, 1 - p.d.total.dex / 150);
+    const castT = (s.cast[lv - 1] || 0) * Math.max(0, 1 - p.d.total.dex / 150) * (1 - 0.03 * (p.ch.skills.mana_cycle || 0));
     if (castT > 0.05) {
       this.cast = { id, lv, t: 0, dur: castT, target };
       p.state = 'cast'; p.animT = 0;
@@ -106,10 +106,10 @@ export class SkillSystem {
         break;
       }
       case 'buff': {
-        const key = id === 'endure' ? 'endure' : 'concentration';
+        const key = id;
         p.buffs[key] = s.value?.[lv - 1] ?? 1; g.buffT[key] = s.dur?.[lv - 1] ?? 30; g.buffMax[key] = g.buffT[key];
         p.recalc();
-        const col = id === 'endure' ? '#ffd860' : '#80ff90';
+        const col = id === 'endure' || id === 'guard' ? '#ffd860' : id === 'barrier' ? '#b0a0ff' : '#80ff90';
         for (let i = 0; i < 26; i++) g.fx.glow(p.x, p.y, Math.random() * 40, col, 1.0, 2, 60 + Math.random() * 50);
         g.fx.ring(p.x, p.y, col, 0.6, 44);
         g.ev.emit('stats');
@@ -134,7 +134,22 @@ export class SkillSystem {
       case 'aoe_target': {
         if (!target) break;
         const cx = target.x, cy = target.y, r = s.aoe || 2;
-        if (id === 'thunderstorm') {
+        if (s.fx === 'meteor') {
+          p.startAttack(0.4);
+          for (let i = 0; i < hits; i++) g.after(i * 0.35, () => {
+            const sx = cx + (g.rnd() - 0.5) * r, sy = cy + (g.rnd() - 0.5) * r;
+            g.fx.meteor(sx, sy);
+            g.after(0.3, () => { g.fx.ring(sx, sy, '#ff8030', 0.5, r * 45); g.fx.burst(sx, sy, 0, '#ff7020', 30, 160, 'spark', 0.6, 3); g.cam.shake(7, 0.3); g.audio.sfx('skill_fire_burst'); for (const m of g.monstersNear(sx, sy, r + 0.5)) this.magic(m, pw, s); });
+          });
+        } else if (s.fx === 'frost') {
+          p.startAttack(0.4);
+          g.fx.ring(cx, cy, '#a0e8ff', 0.6, r * 48); g.fx.ring(cx, cy, '#ffffff', 0.4, r * 30); g.fx.burst(cx, cy, 0, '#c8f0ff', 30, 130, 'spark', 0.6, 2); g.audio.sfx('skill_cold_bolt');
+          for (const m of g.monstersNear(cx, cy, r + 0.5)) { const res = this.magic(m, pw, s); if (res && g.rnd() * 100 < (s.value?.[lv - 1] ?? 30)) { m.frozenT = 3; g.fx.dmg(m.x, m.y, 'FREEZE', 'sp', -m.bbox.y0 + 30); } }
+        } else if (s.fx === 'trap') {
+          p.startAttack(0.35);
+          g.fx.ring(cx, cy, '#c8a060', 0.5, r * 40); g.fx.burst(cx, cy, 4, '#a08060', 18, 90, 'dot', 0.5, 3);
+          for (const m of g.monstersNear(cx, cy, r + 0.5)) { const res = this.phys(m, pw, s, true); if (res) { m.frozenT = Math.max(m.frozenT, s.value?.[lv - 1] ?? 2); g.fx.dmg(m.x, m.y, 'TRAP', 'skill', -m.bbox.y0 + 30); } }
+        } else if (id === 'thunderstorm') {
           p.startAttack(0.4);
           for (let i = 0; i < hits; i++) g.after(i * 0.2, () => {
             const sx = cx + (g.rnd() - 0.5) * r * 1.2, sy = cy + (g.rnd() - 0.5) * r * 1.2;
@@ -145,6 +160,18 @@ export class SkillSystem {
           p.startAttack(0.35);
           for (let i = 0; i < 14; i++) g.after(i * 0.02, () => g.fx.arrowRain(cx + (g.rnd() - 0.5) * r * 2, cy + (g.rnd() - 0.5) * r * 2));
           g.after(0.3, () => { for (const m of g.monstersNear(cx, cy, r + 0.5)) { this.phys(m, pw, s, true); g.knockback(m, p.x, p.y, s.knock || 2); } });
+        }
+        break;
+      }
+      case 'chain': {
+        if (!target) break;
+        p.startAttack(0.4);
+        const n = s.value?.[lv - 1] ?? 3, hitList: Monster[] = [];
+        let cur: Monster | undefined = target;
+        for (let i = 0; i < n && cur; i++) {
+          const m: Monster = cur; hitList.push(m);
+          g.after(i * 0.15, () => { if (m.dead) return; g.fx.lightning(m.x, m.y); g.audio.sfx('thunder'); this.magic(m, pw, s); });
+          cur = g.monstersNear(m.x, m.y, 4).filter((o) => !hitList.includes(o)).sort((a, b) => Math.hypot(a.x - m.x, a.y - m.y) - Math.hypot(b.x - m.x, b.y - m.y))[0];
         }
         break;
       }
@@ -188,6 +215,7 @@ export class SkillSystem {
     const g = this.g;
     g.fx.burst(h.target.x, h.target.y, -h.target.bbox.y0 * 0.5, '#ffb040', 16, 120, 'spark', 0.4, 3);
     g.fx.ring(h.target.x, h.target.y, '#ffe080', 0.3, 30, -h.target.bbox.y0 * 0.5);
-    this.phys(h.target, pw, s, true);
+    const n = typeof s.hits === 'number' ? s.hits : 1;
+    for (let i = 0; i < n; i++) { if (i === 0) this.phys(h.target, pw, s, true); else g.after(i * 0.12, () => { if (!h.target.dead) { g.fx.burst(h.target.x, h.target.y, -h.target.bbox.y0 * 0.5, '#ffe080', 8, 90, 'spark', 0.3, 2); this.phys(h.target, pw, s, true); } }); }
   }
 }

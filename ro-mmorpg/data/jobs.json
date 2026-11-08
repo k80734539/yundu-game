@@ -302,7 +302,8 @@
      50,
      "str"
     ]
-   ]
+   ],
+   "prev": "novice"
   },
   {
    "id": "mage",
@@ -403,7 +404,8 @@
      50,
      "int"
     ]
-   ]
+   ],
+   "prev": "novice"
   },
   {
    "id": "archer",
@@ -508,7 +510,374 @@
      50,
      "dex"
     ]
+   ],
+   "prev": "novice"
+  },
+  {
+   "id": "paladin",
+   "name": "聖騎士",
+   "tier": 2,
+   "prev": "swordsman",
+   "hpK": 1.1,
+   "hpB": 6,
+   "spK": 3,
+   "spB": 0,
+   "maxJob": 50,
+   "aspd": {
+    "none": 158,
+    "dagger": 154,
+    "sword": 153,
+    "spear": 150
+   },
+   "weapons": [
+    "dagger",
+    "sword",
+    "spear"
+   ],
+   "skills": [
+    "spear_mastery",
+    "riding",
+    "pierce",
+    "whirlwind",
+    "guard"
+   ],
+   "attack": "melee",
+   "range": 1,
+   "look": {
+    "skin": "#f8d8b8",
+    "hair": "#5a3a2a",
+    "cloth": "#dfe4ee",
+    "cloth2": "#d0a030",
+    "pants": "#3a3a5a",
+    "hairStyle": 2,
+    "body": "armor",
+    "hat": "helm",
+    "cape": "#f2f2f8"
+   },
+   "bonus": [
+    [
+     2,
+     "str"
+    ],
+    [
+     4,
+     "vit"
+    ],
+    [
+     6,
+     "str"
+    ],
+    [
+     8,
+     "dex"
+    ],
+    [
+     10,
+     "vit"
+    ],
+    [
+     13,
+     "str"
+    ],
+    [
+     16,
+     "agi"
+    ],
+    [
+     19,
+     "vit"
+    ],
+    [
+     22,
+     "str"
+    ],
+    [
+     26,
+     "dex"
+    ],
+    [
+     30,
+     "vit"
+    ],
+    [
+     34,
+     "str"
+    ],
+    [
+     38,
+     "luk"
+    ],
+    [
+     42,
+     "str"
+    ],
+    [
+     46,
+     "vit"
+    ],
+    [
+     50,
+     "str"
+    ]
+   ]
+  },
+  {
+   "id": "elementalist",
+   "name": "元素師",
+   "tier": 2,
+   "prev": "mage",
+   "hpK": 0.45,
+   "hpB": 5,
+   "spK": 8,
+   "spB": 0,
+   "maxJob": 50,
+   "aspd": {
+    "none": 144,
+    "dagger": 142,
+    "staff": 141
+   },
+   "weapons": [
+    "dagger",
+    "staff"
+   ],
+   "skills": [
+    "mana_cycle",
+    "meteor",
+    "frost_nova",
+    "chain_lightning",
+    "barrier"
+   ],
+   "attack": "magic",
+   "range": 7,
+   "look": {
+    "skin": "#f8e0c8",
+    "hair": "#c87ad0",
+    "cloth": "#2a5a9a",
+    "cloth2": "#f0d060",
+    "pants": "#1a2a5a",
+    "hairStyle": 1,
+    "body": "robe",
+    "hat": "wizard",
+    "cape": "#b8343a"
+   },
+   "bonus": [
+    [
+     2,
+     "int"
+    ],
+    [
+     4,
+     "dex"
+    ],
+    [
+     6,
+     "int"
+    ],
+    [
+     9,
+     "int"
+    ],
+    [
+     12,
+     "agi"
+    ],
+    [
+     15,
+     "int"
+    ],
+    [
+     18,
+     "dex"
+    ],
+    [
+     21,
+     "int"
+    ],
+    [
+     25,
+     "luk"
+    ],
+    [
+     29,
+     "int"
+    ],
+    [
+     33,
+     "dex"
+    ],
+    [
+     37,
+     "int"
+    ],
+    [
+     41,
+     "agi"
+    ],
+    [
+     45,
+     "int"
+    ],
+    [
+     50,
+     "int"
+    ]
+   ]
+  },
+  {
+   "id": "ranger",
+   "name": "遊俠",
+   "tier": 2,
+   "prev": "archer",
+   "hpK": 0.7,
+   "hpB": 5,
+   "spK": 3,
+   "spB": 0,
+   "maxJob": 50,
+   "aspd": {
+    "none": 150,
+    "dagger": 147,
+    "bow": 145
+   },
+   "weapons": [
+    "dagger",
+    "bow"
+   ],
+   "skills": [
+    "hunter_instinct",
+    "falcon",
+    "multi_shot",
+    "trap",
+    "wind_step"
+   ],
+   "attack": "arrow",
+   "range": 9,
+   "look": {
+    "skin": "#f8d8b8",
+    "hair": "#e0b050",
+    "cloth": "#5a6a3a",
+    "cloth2": "#7a9a4a",
+    "pants": "#4a3a2a",
+    "hairStyle": 3,
+    "hat": "band",
+    "cape": "#3a4a2a"
+   },
+   "bonus": [
+    [
+     2,
+     "dex"
+    ],
+    [
+     4,
+     "agi"
+    ],
+    [
+     6,
+     "dex"
+    ],
+    [
+     8,
+     "luk"
+    ],
+    [
+     10,
+     "dex"
+    ],
+    [
+     13,
+     "agi"
+    ],
+    [
+     16,
+     "dex"
+    ],
+    [
+     19,
+     "str"
+    ],
+    [
+     22,
+     "dex"
+    ],
+    [
+     26,
+     "agi"
+    ],
+    [
+     30,
+     "dex"
+    ],
+    [
+     34,
+     "luk"
+    ],
+    [
+     38,
+     "dex"
+    ],
+    [
+     42,
+     "agi"
+    ],
+    [
+     46,
+     "dex"
+    ],
+    [
+     50,
+     "dex"
+    ]
    ]
   }
+ ],
+ "expJob2": [
+  60,
+  67,
+  75,
+  84,
+  94,
+  106,
+  118,
+  133,
+  149,
+  166,
+  186,
+  209,
+  234,
+  262,
+  293,
+  328,
+  368,
+  412,
+  461,
+  517,
+  579,
+  648,
+  726,
+  813,
+  911,
+  1020,
+  1142,
+  1279,
+  1433,
+  1605,
+  1798,
+  2013,
+  2255,
+  2525,
+  2829,
+  3168,
+  3548,
+  3974,
+  4451,
+  4985,
+  5583,
+  6253,
+  7003,
+  7844,
+  8785,
+  9839,
+  11020,
+  12342,
+  13823
  ]
 }

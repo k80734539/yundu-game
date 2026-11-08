@@ -15,7 +15,7 @@ import { Actor } from '../entities/Actor';
 import { Entity } from '../entities/Entity';
 import { whiteOf } from '../render/SpriteFactory';
 import { shadowSprite, makeCanvas } from '../render/pixel';
-import { DB } from '../data';
+import { DB, QUESTS, JOBS } from '../data';
 import { UI } from '../ui/UI';
 import type { MsgKind } from '../ui/Chat';
 import { gainExp } from '../systems/Exp';
@@ -220,12 +220,12 @@ export class Game {
     this.msg(`丟棄了 ${d.name} ×${n}`, 'item');
   }
   // ------------------------------------------------------------ 技能（施放系統在階段 7 完成）
-  skillList(): string[] { const j = this.player.job; return j.tier === 0 ? j.skills : ['basic', 'first_aid', ...j.skills]; }
+  /** 這個職業可以學的技能（含前一階職業的技能） */
+  skillList(): string[] { let j = this.player.job; const out: string[] = []; for (;;) { out.unshift(...j.skills); if (!j.prev) break; j = DB.job[j.prev]; } return out; }
   canLearn(id: string): boolean {
     const ch = this.player.ch, s = DB.skill[id];
     if (!s || ch.skillPts <= 0 || (ch.skills[id] || 0) >= s.maxLv) return false;
     if (!this.skillList().includes(id)) return false;
-    if (s.job !== ch.job && s.job !== 'novice') return false;
     if (this.missingReq(id).length) return false;
     return true;
   }
@@ -258,37 +258,46 @@ export class Game {
   }
   // ------------------------------------------------------------ 轉職
   jobMenu(d: Dialog) {
-    const ch = this.player.ch;
-    if (ch.job !== 'novice') { d.say(`你已經是${this.player.job.name}了。繼續在這條路上精進吧！`); return; }
-    const basic = ch.skills.basic || 0;
-    if (ch.jobLv < 10 || basic < 9) {
-      d.say([`轉職需要：職業等級 10（目前 ${ch.jobLv}）、基本技能 Lv9（目前 Lv${basic}）。`, '技能點數可以在技能視窗分配到「基本技能」。等你準備好再來吧！']);
-      return;
-    }
+    const ch = this.player.ch, cur = this.player.job;
+    if (cur.tier >= 2) { d.say(`你已經是${cur.name}了，這是目前最高的職業。繼續在這條路上精進吧！`); return; }
     // 已在進行的試煉
-    const active = ['swordsman', 'mage', 'archer'].map((j) => DB.quest['trial_' + j]).find((q) => q && this.quests.isActive(q.id));
+    const active = QUESTS.find((q) => q.trial && this.quests.isActive(q.id));
     if (active) {
       const jd = DB.job[active.trial!];
       if (this.quests.complete(active)) {
         d.say([active.done, `那麼，從今天起你就是${jd.name}了！`], () => {
           this.quests.turnIn(active.id); this.changeJob(active.trial!);
-          d.say(['我送你一把入門武器，好好使用新的技能吧。', '新職業的技能有前置條件，先學基礎的技能，才能學更強的。']);
+          d.say([`我送你一件${jd.tier === 2 ? '專屬武器' : '入門武器'}，好好使用新的技能吧。`, '新職業的技能有前置條件，先學基礎的技能，才能學更強的。']);
         });
       } else {
         d.say([`你正在進行「${active.name}」：${active.desc}`, `目前進度：${this.quests.progress(active)} / ${active.count}`], () => d.choose([
           { label: '我會繼續努力', fn: () => d.close() },
-          { label: '我想改選別的職業', fn: () => { this.quests.abandon(active.id); this.jobMenu(d); } },
+          ...(cur.tier === 0 ? [{ label: '我想改選別的職業', fn: () => { this.quests.abandon(active.id); this.jobMenu(d); } }] : []),
         ]));
       }
       return;
     }
     const offer = (job: string) => {
-      const jd = DB.job[job], q = DB.quest['trial_' + job];
+      const jd = DB.job[job], q = QUESTS.find((x) => x.trial === job)!;
       d.say([`想成為${jd.name}，就要先通過試煉。`, q.desc, '轉職之後就不能回頭了，確定要接受試煉嗎？'], () => d.choose([
         { label: `接受「${q.name}」`, fn: () => { this.quests.accept(q.id); d.say('完成後再來找我。祝你好運！'); } },
         { label: '再想想', fn: () => d.close() },
       ]));
     };
+    if (cur.tier === 1) { // 二轉
+      const next = JOBS.jobs.find((j) => j.prev === ch.job)!;
+      if (ch.jobLv < 40) { d.say([`${cur.name}的下一步是「${next.name}」。`, `二轉需要職業等級 40（目前 ${ch.jobLv}）。繼續修練吧！`]); return; }
+      d.say([`你的${cur.name}之路已經很扎實了。`, `下一步是「${next.name}」。`], () => d.choose([
+        { label: `我想成為${next.name}`, fn: () => offer(next.id) },
+        { label: '再想想', fn: () => d.close() },
+      ]));
+      return;
+    }
+    const basic = ch.skills.basic || 0;
+    if (ch.jobLv < 10 || basic < 9) {
+      d.say([`轉職需要：職業等級 10（目前 ${ch.jobLv}）、基本技能 Lv9（目前 Lv${basic}）。`, '技能點數可以在技能視窗分配到「基本技能」。等你準備好再來吧！']);
+      return;
+    }
     d.say('你已經有資格選擇自己的道路了。想成為哪一種冒險者？', () => d.choose([
       { label: '劍士（近戰、耐打）', fn: () => offer('swordsman') },
       { label: '法師（遠距魔法、詠唱）', fn: () => offer('mage') },
@@ -299,7 +308,7 @@ export class Game {
   changeJob(job: string) {
     const ch = this.player.ch, p = this.player;
     ch.job = job; ch.jobLv = 1; ch.jobExp = 0;
-    const gift = job === 'swordsman' ? 'sword' : job === 'mage' ? 'rod' : 'bow';
+    const gift = ({ swordsman: 'sword', mage: 'rod', archer: 'bow', paladin: 'long_spear', elementalist: 'elem_staff', ranger: 'ranger_bow' } as Record<string, string>)[job];
     // 卸下不能用的裝備
     for (const it of [...this.inv.items]) { const s = this.inv.slotOf(it.uid); const d = DB.item[it.id]; if (s && d.jobs && !d.jobs.includes(job)) this.inv.unequip(s); }
     if (this.inv.add(gift)) { const it = this.inv.items.filter((i) => i.id === gift).pop()!; this.inv.equipItem(it.uid, job, ch.baseLv); }
@@ -364,7 +373,7 @@ export class Game {
     const p = this.player; let changed = false;
     for (const k of Object.keys(this.buffT)) {
       this.buffT[k] -= dt;
-      if (this.buffT[k] <= 0) { delete this.buffT[k]; delete p.buffs[k]; changed = true; this.msg(`${k === 'endure' ? '堅忍' : '集中'} 效果結束了。`, 'sys'); }
+      if (this.buffT[k] <= 0) { delete this.buffT[k]; delete p.buffs[k]; changed = true; this.msg(`${DB.skill[k]?.name || k} 效果結束了。`, 'sys'); }
     }
     if (changed) { p.recalc(); this.ev.emit('stats'); }
   }
@@ -629,7 +638,7 @@ export class Game {
   attackRange(a: Actor) {
     if (a instanceof Monster) return a.def.range;
     const j = this.player.job;
-    if (j.attack === 'arrow') return this.player.weaponType() === 'bow' ? j.range + Math.floor((this.player.ch.skills.vulture_eye || 0) / 2) : 1;
+    if (j.attack === 'arrow') return this.player.weaponType() === 'bow' ? j.range + Math.min(3, Math.floor((this.player.ch.skills.vulture_eye || 0) / 3)) : 1;
     return j.range;
   }
   attackMode(): 'melee' | 'magic' | 'arrow' { const j = this.player.job; if (j.attack === 'arrow' && this.player.weaponType() !== 'bow') return 'melee'; return j.attack; }
@@ -736,7 +745,20 @@ export class Game {
   playerAttackHit(t: Actor) {
     const mode = this.attackMode(), p = this.player;
     if (mode === 'melee' || !(t instanceof Monster)) { this.resolveAttack(p, t); return; }
-    if (mode === 'arrow') { this.addProjectile(new Projectile('arrow', p.x, p.y, 70, t, () => this.resolveAttack(p, t), 18)); this.audio.sfx('bow'); }
+    if (mode === 'arrow') {
+      this.addProjectile(new Projectile('arrow', p.x, p.y, 70, t, () => {
+        this.resolveAttack(p, t);
+        const fl = p.ch.skills.falcon || 0; // 獵鷹追加攻擊
+        if (fl && !t.dead && this.rnd() * 100 < 3 * fl) this.after(0.18, () => {
+          if (t.dead) return;
+          this.fx.burst(t.x, t.y, -t.bbox.y0 * 0.7, '#c8a070', 12, 100, 'spark', 0.4, 2);
+          this.fx.dmg(t.x, t.y, 'FALCON', 'skill', -t.bbox.y0 + 34);
+          const r = playerVsMonster(p.d, t.def, this.rnd, 1 + 0.1 * fl, true, true);
+          this.applyDamage(p, t, r.dmg, 'skill');
+        });
+      }, 18));
+      this.audio.sfx('bow');
+    }
     else {
       this.addProjectile(new Projectile('orb', p.x, p.y, 80, t, () => {
         if (t.dead) return;
@@ -766,7 +788,7 @@ export class Game {
     d.hp -= dmg;
     if (a === this.player || d === this.player) this.combatT = 0;
     if (d === this.player && this.player.state === 'sit') this.player.state = 'idle';
-    d.flashT = 0.12; d.hurtT = d === this.player && this.player.buffs.endure ? 0 : 0.15;
+    d.flashT = 0.12; d.hurtT = d === this.player && (this.player.buffs.endure || this.player.buffs.guard) ? 0 : 0.15;
     this.fx.dmg(d.x, d.y, dmg, d === this.player ? 'take' : kind, h);
     this.audio.sfx(d === this.player ? 'hurt' : kind === 'crit' ? 'crit' : 'hit');
     this.fx.burst(d.x, d.y, -d.bbox.y0 * 0.5, kind === 'crit' ? '#ffe070' : '#ffffff', kind === 'crit' ? 14 : 7, kind === 'crit' ? 110 : 70);

@@ -1285,5 +1285,275 @@
     "chance": 0.2
    }
   ]
+ },
+ {
+  "id": "ruin_guard",
+  "name": "遺跡守衛",
+  "lv": 38,
+  "hp": 2600,
+  "atk": [
+   120,
+   150
+  ],
+  "def": 28,
+  "mdef": 15,
+  "str": 55,
+  "agi": 30,
+  "vit": 40,
+  "int": 0,
+  "dex": 55,
+  "luk": 10,
+  "exp": 420,
+  "jexp": 240,
+  "range": 1,
+  "adelay": 1300,
+  "speed": 2.6,
+  "aggro": true,
+  "frame": 224,
+  "look": {
+   "body": "humanoid",
+   "skin": "#c8b8a0",
+   "hair": "#5a4a3a",
+   "cloth": "#8a7a5a",
+   "cloth2": "#d0a030",
+   "pants": "#4a3a2a",
+   "eye": "#40f0ff",
+   "weapon": "sword",
+   "hat": "helm",
+   "body2": "armor",
+   "scale": 1.15
+  },
+  "drops": [
+   {
+    "item": "ruin_stone",
+    "rate": 0.6
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.08
+   },
+   {
+    "item": "knight_lance",
+    "rate": 0.005
+   },
+   {
+    "item": "ruin_guard_card",
+    "rate": 0.008
+   }
+  ],
+  "assist": true
+ },
+ {
+  "id": "gargoyle",
+  "name": "石像鬼",
+  "lv": 40,
+  "hp": 2300,
+  "atk": [
+   110,
+   140
+  ],
+  "def": 35,
+  "mdef": 20,
+  "str": 50,
+  "agi": 45,
+  "vit": 35,
+  "int": 10,
+  "dex": 60,
+  "luk": 15,
+  "exp": 440,
+  "jexp": 250,
+  "range": 1,
+  "adelay": 1200,
+  "speed": 3.2,
+  "aggro": true,
+  "frame": 160,
+  "look": {
+   "body": "bat",
+   "color": "#7a7a88",
+   "scale": 2.0
+  },
+  "drops": [
+   {
+    "item": "gargoyle_horn",
+    "rate": 0.6
+   },
+   {
+    "item": "elunium",
+    "rate": 0.03
+   },
+   {
+    "item": "ranger_cloak",
+    "rate": 0.006
+   },
+   {
+    "item": "gargoyle_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "sand_wraith",
+  "name": "流沙幽魂",
+  "lv": 42,
+  "hp": 2100,
+  "atk": [
+   115,
+   145
+  ],
+  "def": 15,
+  "mdef": 60,
+  "str": 40,
+  "agi": 55,
+  "vit": 25,
+  "int": 60,
+  "dex": 65,
+  "luk": 25,
+  "exp": 470,
+  "jexp": 270,
+  "range": 2,
+  "adelay": 1200,
+  "speed": 3.0,
+  "aggro": true,
+  "frame": 160,
+  "look": {
+   "body": "ghost",
+   "color": "#e8d090",
+   "scale": 1.8
+  },
+  "drops": [
+   {
+    "item": "sand_crystal",
+    "rate": 0.6
+   },
+   {
+    "item": "blue_potion",
+    "rate": 0.12
+   },
+   {
+    "item": "elem_robe",
+    "rate": 0.006
+   },
+   {
+    "item": "sand_wraith_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "crystal_golem",
+  "name": "水晶巨像",
+  "lv": 45,
+  "hp": 4200,
+  "atk": [
+   140,
+   180
+  ],
+  "def": 45,
+  "mdef": 30,
+  "str": 70,
+  "agi": 20,
+  "vit": 60,
+  "int": 20,
+  "dex": 60,
+  "luk": 10,
+  "exp": 560,
+  "jexp": 320,
+  "range": 1,
+  "adelay": 1700,
+  "speed": 1.8,
+  "aggro": true,
+  "frame": 192,
+  "look": {
+   "body": "golem",
+   "color": "#6ac0e0",
+   "color2": "#ffffff",
+   "scale": 1.05
+  },
+  "drops": [
+   {
+    "item": "crystal",
+    "rate": 0.7
+   },
+   {
+    "item": "oridecon",
+    "rate": 0.04
+   },
+   {
+    "item": "elem_staff",
+    "rate": 0.005
+   },
+   {
+    "item": "crystal_golem_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "serpent",
+  "name": "遺跡巨蛇",
+  "lv": 55,
+  "hp": 80000,
+  "atk": [
+   260,
+   340
+  ],
+  "def": 50,
+  "mdef": 40,
+  "str": 90,
+  "agi": 50,
+  "vit": 80,
+  "int": 40,
+  "dex": 90,
+  "luk": 40,
+  "exp": 16000,
+  "jexp": 8000,
+  "range": 1,
+  "adelay": 1600,
+  "speed": 2.2,
+  "aggro": true,
+  "frame": 224,
+  "look": {
+   "body": "snake",
+   "color": "#c8a030",
+   "color2": "#f8e8a0",
+   "scale": 3.4
+  },
+  "drops": [
+   {
+    "item": "ancient_scale",
+    "rate": 0.6
+   },
+   {
+    "item": "ancient_scale",
+    "rate": 1.0
+   },
+   {
+    "item": "ranger_bow",
+    "rate": 0.3
+   },
+   {
+    "item": "knight_lance",
+    "rate": 0.3
+   },
+   {
+    "item": "paladin_armor",
+    "rate": 0.25
+   },
+   {
+    "item": "serpent_card",
+    "rate": 0.05
+   }
+  ],
+  "mvp": true,
+  "skills": [
+   {
+    "id": "slam",
+    "chance": 0.3
+   },
+   {
+    "id": "summon",
+    "chance": 0.15
+   }
+  ]
  }
 ]

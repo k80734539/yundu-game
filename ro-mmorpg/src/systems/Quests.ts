@@ -16,9 +16,11 @@ export class Quests {
     if (q.prev && !this.isDone(q.prev)) return false;
     if (q.reqLv && ch.baseLv < q.reqLv) return false;
     if (q.job && ch.job !== q.job) return false;
-    if (q.trial) { // 轉職試煉：初心者 Job10＋基本技能 9，且一次只能進行一個
-      if (ch.job !== 'novice' || ch.jobLv < 10 || (ch.skills.basic || 0) < 9) return false;
-      if (Object.keys(this.s).some((k) => k.startsWith('trial_') && this.s[k].st === 'active')) return false;
+    if (q.trial) { // 轉職試煉：一轉要初心者 Job10＋基本技能 9；二轉要前一職業 Job40；一次只能進行一個
+      const tj = DB.job[q.trial];
+      if (tj.tier === 1 && (ch.job !== 'novice' || ch.jobLv < 10 || (ch.skills.basic || 0) < 9)) return false;
+      if (tj.tier === 2 && (ch.job !== tj.prev || ch.jobLv < 40)) return false;
+      if (Object.keys(this.s).some((k) => this.def(k)?.trial && this.s[k].st === 'active')) return false;
     }
     return true;
   }

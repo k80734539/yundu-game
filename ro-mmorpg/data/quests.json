@@ -296,5 +296,71 @@
   "reward": {
    "jexp": 0
   }
+ },
+ {
+  "id": "trial2_paladin",
+  "name": "聖騎士試煉",
+  "npc": "job",
+  "type": "kill",
+  "target": "skeleton2",
+  "count": 15,
+  "trial": "paladin",
+  "desc": "聖騎士要守護他人。到古老礦坑 B2 擊敗 15 隻骷髏戰士。",
+  "done": "你的盾牌已經擋下了黑暗。",
+  "reward": {
+   "jexp": 0
+  }
+ },
+ {
+  "id": "trial2_elementalist",
+  "name": "元素師試煉",
+  "npc": "job",
+  "type": "collect",
+  "target": "ectoplasm",
+  "count": 10,
+  "trial": "elementalist",
+  "consume": true,
+  "desc": "元素師要駕馭靈魂裡的魔力。收集 10 個靈魂碎片（鬼火、怨靈）。",
+  "done": "這些碎片在你手上很安靜，你已經能駕馭它們了。",
+  "reward": {
+   "jexp": 0
+  }
+ },
+ {
+  "id": "trial2_ranger",
+  "name": "遊俠試煉",
+  "npc": "job",
+  "type": "kill",
+  "target": "viper",
+  "count": 12,
+  "trial": "ranger",
+  "desc": "遊俠要在險地生存。到迷霧沼澤獵殺 12 條沼蝮。",
+  "done": "沼澤也困不住你了。",
+  "reward": {
+   "jexp": 0
+  }
+ },
+ {
+  "id": "q_cap5",
+  "name": "失落遺跡",
+  "npc": "captain",
+  "type": "kill",
+  "target": "ruin_guard",
+  "count": 15,
+  "desc": "礦坑最深處發現了古代遺跡，守衛還在活動。擊敗 15 名遺跡守衛。",
+  "done": "遺跡的秘密，就交給你了。",
+  "reward": {
+   "exp": 20000,
+   "jexp": 10000,
+   "zeny": 20000,
+   "items": [
+    [
+     "white_potion",
+     10
+    ]
+   ]
+  },
+  "reqLv": 35,
+  "prev": "q_cap4"
  }
 ]

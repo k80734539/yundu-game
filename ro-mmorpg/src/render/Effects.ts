@@ -45,6 +45,13 @@ export class Effects {
     this.burst(wx, wy, 0, '#fff8a0', 10, 120, 'spark', 0.4, 2);
     this.ring(wx, wy, '#f0e060', 0.35, 40);
   }
+  /** 隕石：從天而降的火球 */
+  meteor(wx: number, wy: number) {
+    for (let i = 0; i < 10; i++) {
+      const p = this.parts.get();
+      p.x = isoX(wx, wy) - 60 + i * 2; p.y = isoY(wx, wy); p.z = 300 + i * 6; p.vx = 200; p.vy = 0; p.vz = -900; p.g = 0; p.life = p.max = 0.32; p.kind = 'glow'; p.color = i < 3 ? '#fff0a0' : i < 6 ? '#ff9030' : '#c03010'; p.size = 6 - Math.floor(i / 3); p.r = 0;
+    }
+  }
   /** 箭雨：一支從天而降的箭 */
   arrowRain(wx: number, wy: number) {
     const p = this.parts.get();

@@ -1507,5 +1507,296 @@
    "def": 8,
    "hp": 500
   }
+ },
+ {
+  "id": "long_spear",
+  "name": "長槍",
+  "type": "weapon",
+  "price": 6000,
+  "weight": 120,
+  "desc": "聖騎士的入門長槍。",
+  "icon": {
+   "k": "sword",
+   "c": "#d0d8e8"
+  },
+  "slot": "weapon",
+  "wtype": "spear",
+  "atk": 70,
+  "wlv": 2,
+  "slots": 2,
+  "jobs": [
+   "paladin"
+  ]
+ },
+ {
+  "id": "knight_lance",
+  "name": "騎士長槍",
+  "type": "weapon",
+  "price": 25000,
+  "weight": 180,
+  "desc": "遺跡守衛留下的長槍，STR +2。",
+  "icon": {
+   "k": "sword",
+   "c": "#f0d060"
+  },
+  "slot": "weapon",
+  "wtype": "spear",
+  "atk": 110,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "paladin"
+  ],
+  "bonus": {
+   "str": 2
+  }
+ },
+ {
+  "id": "elem_staff",
+  "name": "元素法杖",
+  "type": "weapon",
+  "price": 22000,
+  "weight": 70,
+  "desc": "四色寶石鑲嵌的法杖，MATK +30%、INT +3。",
+  "icon": {
+   "k": "staff",
+   "c": "#60e0a0"
+  },
+  "slot": "weapon",
+  "wtype": "staff",
+  "atk": 55,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "elementalist"
+  ],
+  "matk": 30,
+  "bonus": {
+   "int": 3
+  }
+ },
+ {
+  "id": "ranger_bow",
+  "name": "遊俠長弓",
+  "type": "weapon",
+  "price": 24000,
+  "weight": 90,
+  "desc": "獵鷹羽毛裝飾的長弓，DEX +2。",
+  "icon": {
+   "k": "bow",
+   "c": "#a0c060"
+  },
+  "slot": "weapon",
+  "wtype": "bow",
+  "atk": 95,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "ranger"
+  ],
+  "bonus": {
+   "dex": 2
+  }
+ },
+ {
+  "id": "paladin_armor",
+  "name": "聖騎士鎧",
+  "type": "armor",
+  "price": 30000,
+  "weight": 350,
+  "desc": "白銀打造的全身鎧，VIT +2。",
+  "icon": {
+   "k": "mail",
+   "c": "#e8eef8"
+  },
+  "slot": "armor",
+  "def": 10,
+  "slots": 1,
+  "jobs": [
+   "paladin"
+  ],
+  "bonus": {
+   "vit": 2
+  }
+ },
+ {
+  "id": "elem_robe",
+  "name": "元素法袍",
+  "type": "armor",
+  "price": 26000,
+  "weight": 60,
+  "desc": "織入元素紋的長袍，MDEF +15、SP +50。",
+  "icon": {
+   "k": "robe",
+   "c": "#2a5a9a"
+  },
+  "slot": "armor",
+  "def": 5,
+  "slots": 1,
+  "jobs": [
+   "elementalist"
+  ],
+  "mdef": 15,
+  "bonus": {
+   "sp": 50
+  }
+ },
+ {
+  "id": "ranger_cloak",
+  "name": "遊俠斗篷",
+  "type": "armor",
+  "price": 18000,
+  "weight": 40,
+  "desc": "便於行動的斗篷，FLEE +6。",
+  "icon": {
+   "k": "cape",
+   "c": "#3a4a2a"
+  },
+  "slot": "garment",
+  "def": 3,
+  "slots": 1,
+  "jobs": [
+   "ranger",
+   "archer"
+  ],
+  "bonus": {
+   "flee": 6
+  }
+ },
+ {
+  "id": "ruin_stone",
+  "name": "遺跡石板",
+  "type": "etc",
+  "price": 60,
+  "weight": 1,
+  "desc": "刻著古文字的石片。",
+  "icon": {
+   "k": "ore",
+   "c": "#c8b890"
+  }
+ },
+ {
+  "id": "gargoyle_horn",
+  "name": "石像鬼之角",
+  "type": "etc",
+  "price": 70,
+  "weight": 1,
+  "desc": "堅硬的石角。",
+  "icon": {
+   "k": "tooth",
+   "c": "#8a8a9a"
+  }
+ },
+ {
+  "id": "sand_crystal",
+  "name": "流沙結晶",
+  "type": "etc",
+  "price": 90,
+  "weight": 1,
+  "desc": "在掌心慢慢流動的結晶。",
+  "icon": {
+   "k": "crystal",
+   "c": "#e0c070"
+  }
+ },
+ {
+  "id": "ancient_scale",
+  "name": "遠古鱗片",
+  "type": "etc",
+  "price": 8000,
+  "weight": 1,
+  "desc": "巨蛇身上剝落的鱗片，閃著金光。",
+  "icon": {
+   "k": "scale",
+   "c": "#e0b040"
+  }
+ },
+ {
+  "id": "ruin_guard_card",
+  "name": "遺跡守衛卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入武器的卡片。ATK +30、STR +2。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "weapon",
+  "bonus": {
+   "atk": 30,
+   "str": 2
+  }
+ },
+ {
+  "id": "gargoyle_card",
+  "name": "石像鬼卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入盾牌的卡片。DEF +6、VIT +2。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "shield",
+  "bonus": {
+   "def": 6,
+   "vit": 2
+  }
+ },
+ {
+  "id": "sand_wraith_card",
+  "name": "流沙幽魂卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入披風的卡片。FLEE +10、INT +3。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "garment",
+  "bonus": {
+   "flee": 10,
+   "int": 3
+  }
+ },
+ {
+  "id": "crystal_golem_card",
+  "name": "水晶巨像卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入鎧甲的卡片。VIT +5、HP +300。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "armor",
+  "bonus": {
+   "vit": 5,
+   "hp": 300
+  }
+ },
+ {
+  "id": "serpent_card",
+  "name": "遺跡巨蛇卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入飾品的卡片。全能力 +4（STR/AGI/DEX/INT）、CRIT +5。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "acc",
+  "bonus": {
+   "str": 4,
+   "agi": 4,
+   "dex": 4,
+   "int": 4,
+   "crit": 5
+  }
  }
 ]
