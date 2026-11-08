@@ -46,7 +46,7 @@
   "range": 0,
   "effect": "passive",
   "fx": "none",
-  "desc": "冒險的基本功。Lv3 可以坐下（Insert）休息，Lv9 才能轉職。"
+  "desc": "冒險的基本功。Lv3 可以坐下休息（Insert 或手機的坐下鈕），Lv9 才能轉職。"
  },
  {
   "id": "first_aid",

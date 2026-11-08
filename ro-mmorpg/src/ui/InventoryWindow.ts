@@ -31,15 +31,15 @@ export class InventoryWindow extends Win {
       if (it.refine) cell.appendChild(h('span', 'ref', '+' + it.refine));
       cell.dataset.uid = String(it.uid);
       cell.addEventListener('dblclick', () => g.useOrEquip(it.uid));
-      cell.addEventListener('click', () => { if (justDragged(cell)) return; if (window.matchMedia('(pointer: coarse)').matches) g.useOrEquip(it.uid); });
+      cell.addEventListener('click', () => { if (justDragged(cell)) return; if (this.ui.m) this.ui.m.item(it); });
       cell.addEventListener('contextmenu', (e) => { e.preventDefault(); g.useOrEquip(it.uid); });
-      this.ui.info.bind(cell, () => [d, it]);
+      if (!this.ui.m) this.ui.info.bind(cell, () => [d, it]);
       makeDraggable(cell, () => ({ type: 'item', id: it.id, uid: it.uid, icon: iconURL(d.icon.k, d.icon.c) }), (t, dd) => this.ui.dropOn(t, dd));
       grid.appendChild(cell);
     }
     for (let i = list.length; i < Math.max(24, Math.ceil(list.length / 8) * 8); i++) grid.appendChild(h('div', 'inv-cell empty'));
     this.body.appendChild(grid);
-    this.body.appendChild(h('div', 'dim hint', '雙擊／右鍵：使用或裝備　拖曳：放到快捷列或丟在地上'));
+    this.body.appendChild(h('div', 'dim hint', this.ui.m ? '點道具：查看說明、使用、裝備或放到快捷列' : '雙擊／右鍵：使用或裝備　拖曳：放到快捷列或丟在地上'));
     this.foot!.innerHTML = '';
     this.foot!.append(h('span', 'lbl', `負重 ${inv.weight()} / ${Math.floor(g.player.d.weight / 10)}`), h('span', '', '　'), h('span', 'val', `${g.player.ch.zeny.toLocaleString()} Zeny`));
   }

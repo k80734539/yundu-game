@@ -26,7 +26,7 @@ export class Hotbar {
     const g = this.ui.g;
     for (let i = 0; i < 9; i++) {
       const c = this.cells[i]; const s = g.hotbar[i];
-      c.innerHTML = ''; c.appendChild(h('span', 'key', 'F' + (i + 1)));
+      c.innerHTML = ''; c.appendChild(h('span', 'key', this.ui.mobile ? String(i + 1) : 'F' + (i + 1)));
       if (!s) continue;
       const def = s.type === 'item' ? DB.item[s.id] : DB.skill[s.id]; if (!def) continue;
       const img = h('img') as HTMLImageElement; img.src = iconURL(def.icon.k, def.icon.c); img.draggable = false; c.appendChild(img);

@@ -20,7 +20,8 @@ export class EquipWindow extends Win {
         const ic = h('div', 'eq-icon'); if (d) { const img = h('img') as HTMLImageElement; img.src = iconURL(d.icon.k, d.icon.c); ic.appendChild(img); }
         const tx = h('div', 'eq-name'); tx.innerHTML = `<span class="dim">${SLOT_NAMES[s]}</span><br>${d && it ? inv.displayName(it) : '—'}`;
         row.append(ic, tx);
-        if (d && it) { this.ui.info.bind(row, () => [d, it]); row.addEventListener('dblclick', () => { inv.unequip(s); this.ui.sfx('equip'); }); row.addEventListener('contextmenu', (e) => { e.preventDefault(); inv.unequip(s); }); row.title = '雙擊卸下'; }
+        if (d && it && this.ui.m) { const m = this.ui.m; row.addEventListener('click', () => m.item(it)); }
+        else if (d && it) { this.ui.info.bind(row, () => [d, it]); row.addEventListener('dblclick', () => { inv.unequip(s); this.ui.sfx('equip'); }); row.addEventListener('contextmenu', (e) => { e.preventDefault(); inv.unequip(s); }); row.title = '雙擊卸下'; }
         c.appendChild(row);
       }
       return c;

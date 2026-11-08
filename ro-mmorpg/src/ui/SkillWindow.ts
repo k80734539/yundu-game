@@ -25,6 +25,7 @@ export class SkillWindow extends Win {
       const info = h('div', 'sk-info');
       info.innerHTML = `<b>${s.name}</b> <span class="dim">${s.type === 'passive' ? '被動' : 'SP ' + s.sp[Math.max(0, lv - 1)]}</span><br><span class="sk-desc">${s.desc}</span>`;
       const lvEl = h('div', 'sk-lv', `${lv}/${s.maxLv}`);
+      if (this.ui.m) { row.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('.btn')) return; this.ui.m!.skill(id); }); row.classList.add('tap'); }
       const can = g.canLearn(id);
       const b = btn('+', () => g.learnSkill(id), 'sm' + (can ? '' : ' dis')); b.dataset.skill = id;
       row.append(ic, info, lvEl, b);

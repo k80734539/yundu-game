@@ -9,7 +9,7 @@ export class Win {
     if (opt.w) el.style.width = opt.w + 'px';
     const saved = ui.winPos[id];
     el.style.left = (saved ? saved[0] : opt.x) + 'px'; el.style.top = (saved ? saved[1] : opt.y) + 'px';
-    const t = document.createElement('div'); t.className = 'win-title'; t.textContent = title; el.appendChild(t);
+    const t = document.createElement('div'); t.className = 'win-title'; t.textContent = ui.mobile ? title.replace(/（[^）]*(Alt|Esc|M)[^）]*）/, '') : title; el.appendChild(t); // 手機不顯示鍵盤快捷鍵
     if (opt.closable !== false) {
       const x = document.createElement('div'); x.className = 'win-x'; x.textContent = '×'; x.title = '關閉';
       x.addEventListener('pointerdown', (e) => e.stopPropagation());
@@ -40,8 +40,10 @@ export class Win {
     this.front(); this.render();
     if (this.ui.mobile && this.id !== 'hud') { // 手機：視窗靠上置中、高度受限，收起基本資訊，讓角色附近保持可見
       this.ui.setFold('hud', true);
-      this.el.style.left = Math.max(4, (window.innerWidth - this.el.offsetWidth) / 2) + 'px';
-      this.el.style.top = '32px';
+      this.ui.m?.close(); this.ui.m?.toggleMenu(false);
+      const land = window.innerWidth > window.innerHeight;
+      this.el.style.left = (land ? Math.max(6, 6) : Math.max(4, (window.innerWidth - this.el.offsetWidth) / 2)) + 'px';
+      this.el.style.top = land ? '44px' : '44px';
     }
     this.keepInside();
   }

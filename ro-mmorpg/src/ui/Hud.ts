@@ -9,7 +9,7 @@ export class Hud extends Win {
   constructor(ui: UI) {
     super(ui, 'hud', '基本資訊', { x: 6, y: 6, w: 196, closable: false });
     this.el.id = 'hud';
-    this.el.style.left = ''; this.el.style.top = ''; // 固定在左上角（CSS），不記拖曳位置
+    this.el.style.left = ''; this.el.style.top = ''; this.el.style.width = ''; // 位置與寬度交給 CSS（固定左上角）
     const fb = h('div', 'win-x hud-fold', '－'); fb.title = '縮成一列';
     fb.addEventListener('pointerdown', (e) => e.stopPropagation());
     fb.addEventListener('click', () => ui.setFold('hud', true, this.el));
@@ -18,7 +18,7 @@ export class Hud extends Win {
     const mini = h('div', 'hud-mini');
     const ex = h('span', 'hud-expand', '≡'); ex.title = '展開基本資訊與選單'; ex.addEventListener('click', () => ui.setFold('hud', false, this.el));
     this.els.mname = h('span', 'hud-mname');
-    const mb2 = (cls: string, key: string) => { const d = h('div', 'bar mini ' + cls); d.appendChild(h('i')); this.els[key] = d; return d; };
+    const mb2 = (cls: string, key: string) => { const d = h('div', 'bar mini ' + cls); d.append(h('i'), h('span')); this.els[key] = d; return d; };
     mini.append(ex, this.els.mname, mb2('hp', 'mhp'), mb2('sp', 'msp'));
     this.el.insertBefore(mini, this.body);
     const b = this.body;
@@ -47,6 +47,7 @@ export class Hud extends Win {
     e.mname.textContent = `Lv${ch.baseLv} ${ch.name}`;
     (e.mhp.firstChild as HTMLElement).style.width = Math.max(0, Math.min(100, (p.hp / p.maxHp) * 100)) + '%'; e.mhp.classList.toggle('low', p.hp < p.maxHp * 0.25);
     (e.msp.firstChild as HTMLElement).style.width = Math.max(0, Math.min(100, (p.sp / Math.max(1, p.maxSp)) * 100)) + '%';
+    (e.mhp.lastChild as HTMLElement).textContent = `${Math.ceil(p.hp)}`; (e.msp.lastChild as HTMLElement).textContent = `${Math.ceil(p.sp)}`;
     e.mhp.title = `HP ${Math.ceil(p.hp)}/${p.maxHp}`; e.msp.title = `SP ${Math.ceil(p.sp)}/${p.maxSp}`;
     const set = (el: HTMLElement, v: number, max: number, text: string) => { (el.firstChild as HTMLElement).style.width = Math.max(0, Math.min(100, (v / max) * 100)) + '%'; (el.lastChild as HTMLElement).textContent = text; };
     set(e.hp, p.hp, p.maxHp, `${Math.ceil(p.hp)} / ${p.maxHp}`); e.hp.classList.toggle('low', p.hp < p.maxHp * 0.25);

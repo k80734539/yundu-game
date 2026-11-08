@@ -15,6 +15,7 @@ import { OptionsWindow } from './OptionsWindow';
 import { ItemInfo } from './ItemInfo';
 import type { DragData } from './Drag';
 import { Dialog } from './Dialog';
+import { MobileUI } from './MobileUI';
 import { DB } from '../data';
 import { iconURL } from '../render/IconArt';
 import { QuestWindow, QuestTracker } from './QuestWindow';
@@ -26,6 +27,7 @@ export class UI {
   /** 收合狀態（hud/mini/qtrack/chat/tut）；手機預設全部收合 */
   fold: Record<string, boolean> = {};
   mobile = false;
+  m: MobileUI | null = null;
   wins: Record<string, Win> = {};
   hud: Hud; chat: Chat; mini: Minimap; world: WorldMap; info: ItemInfo; hot: Hotbar; shop: ShopWindow; dialog: Dialog; qtrack: QuestTracker;
   banner: HTMLDivElement;
@@ -65,6 +67,7 @@ export class UI {
     const box = h('div', 'win box'); box.style.position = 'static'; this.death.appendChild(box); root.appendChild(this.death);
     this.buffEl = h('div'); this.buffEl.id = 'buffs'; root.appendChild(this.buffEl);
     this.tut = h('div'); this.tut.id = 'tuthint'; root.appendChild(this.tut);
+    if (this.mobile) this.m = new MobileUI(this);
     this.applyFolds();
     g.ev.on('stats', () => this.refresh());
   }

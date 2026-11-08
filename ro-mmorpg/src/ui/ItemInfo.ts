@@ -41,7 +41,12 @@ export class ItemInfo {
     this.el.style.top = Math.min(window.innerHeight - hh - 4, y + 10) + 'px';
   }
   hide() { this.el.style.display = 'none'; }
+  private hideT = 0;
   bind(el: HTMLElement, get: () => [ItemDef, InvItem | undefined] | null) {
+    if (this.ui.mobile) { // 觸控：點圖示顯示說明，3 秒後或再點一次收起
+      el.addEventListener('click', (e) => { const r = get(); if (!r) return; e.stopPropagation(); if (this.el.style.display === 'block') { this.hide(); return; } this.show(r[0], e.clientX, e.clientY, r[1]); clearTimeout(this.hideT); this.hideT = window.setTimeout(() => this.hide(), 3000); });
+      return;
+    }
     el.addEventListener('pointerenter', (e) => { const r = get(); if (r) this.show(r[0], e.clientX, e.clientY, r[1]); });
     el.addEventListener('pointermove', (e) => { if (this.el.style.display === 'block') { this.el.style.left = Math.min(window.innerWidth - this.el.offsetWidth - 4, e.clientX + 14) + 'px'; this.el.style.top = Math.min(window.innerHeight - this.el.offsetHeight - 4, e.clientY + 10) + 'px'; } });
     el.addEventListener('pointerleave', () => this.hide());
