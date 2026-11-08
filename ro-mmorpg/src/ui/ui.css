@@ -26,8 +26,22 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 .tab.on { background: #fff; font-weight: bold; color: #2a4a8a; }
 
 /* ---------- 基本資訊（左上） ---------- */
-#hud { position: absolute; left: 6px; top: 6px; width: 232px; }
-#hud .win-body { padding: 4px 6px 5px; }
+#hud { position: absolute; left: 6px; top: 6px; width: 196px; font-size: 11px; opacity: .94; }
+#hud .win-title { height: 15px; line-height: 15px; font-size: 11px; }
+#hud .win-body { padding: 3px 5px 4px; }
+#hud .bar { height: 9px; } #hud .bar > span { font-size: 8px; line-height: 9px; }
+#hud .bar.exp, #hud .bar.jexp { height: 4px; }
+#hud .hud-grid { grid-template-columns: 34px 1fr; gap: 1px 4px; }
+#hud .row { margin: 1px 0; }
+#hud .menubar .btn { font-size: 10px; line-height: 13px; padding: 0 3px; }
+.hud-fold { top: 1px; height: 11px; line-height: 10px; width: 12px; font-size: 10px; }
+.hud-mini { display: none; align-items: center; gap: 5px; padding: 3px 5px; }
+.hud-expand { cursor: pointer; font-weight: bold; color: #3a5490; padding: 0 3px; border: 1px solid #8a9ac0; border-radius: 3px; background: linear-gradient(#fff, #d4dcec); line-height: 14px; }
+.hud-mname { font-weight: bold; color: #1a1a2a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 84px; }
+.bar.mini { flex: 1; height: 6px; } .bar.mini.sp { flex: .6; }
+#hud.folded { width: auto; min-width: 0; }
+#hud.folded .win-title, #hud.folded .win-body, #hud.folded .hud-fold { display: none; }
+#hud.folded .hud-mini { display: flex; width: 196px; box-sizing: border-box; }
 .bar { position: relative; height: 11px; border: 1px solid #3a4460; background: #2a2a3a; border-radius: 2px; overflow: hidden; }
 .bar > i { position: absolute; left: 0; top: 0; bottom: 0; display: block; }
 .bar > span { position: absolute; inset: 0; text-align: center; font-size: 9px; line-height: 11px; color: #fff; text-shadow: 0 0 2px #000, 0 0 2px #000; font-weight: bold; }
@@ -68,7 +82,7 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 #banner .b.ann { color: #ffd0a0; font-size: 16px; }
 
 /* ---------- 小地圖 ---------- */
-#minimap { position: absolute; right: 6px; top: 6px; background: rgba(16,18,32,.72); border: 1px solid #5d6a8a; border-radius: 4px; padding: 2px 4px 4px; box-shadow: 0 4px 12px rgba(0,0,0,.4); }
+#minimap { position: absolute; right: 6px; top: 6px; opacity: .82; background: rgba(16,18,32,.45); border: 1px solid #5d6a8a; border-radius: 4px; padding: 2px 4px 4px; box-shadow: 0 4px 12px rgba(0,0,0,.4); }
 #minimap canvas { display: block; image-rendering: pixelated; }
 .mm-head { display: flex; justify-content: space-between; gap: 8px; color: #fff; font-size: 11px; line-height: 16px; text-shadow: 0 1px 1px #000; }
 .mm-xy { color: #b8c8e8; }
@@ -152,11 +166,12 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 /* ---------- 任務 ---------- */
 .q-box { border: 1px solid #c8d0e4; border-radius: 4px; padding: 5px 6px; margin-bottom: 5px; background: #f8faff; line-height: 17px; }
 .q-ok { color: #fff; background: #2aa04a; border-radius: 3px; padding: 0 4px; font-size: 11px; }
-#qtrack { position: absolute; right: 6px; top: 150px; width: 210px; background: rgba(16,18,32,.55); border: 1px solid rgba(120,140,200,.5); border-radius: 4px; color: #fff; padding: 3px 6px 5px; cursor: pointer; text-shadow: 0 1px 1px #000; }
+#qtrack { position: absolute; right: 6px; top: 150px; width: 200px; background: rgba(16,18,32,.42); border: 1px solid rgba(120,140,200,.45); border-radius: 4px; color: #fff; padding: 3px 6px 5px; text-shadow: 0 1px 1px #000; opacity: .9; }
+.qt-item { cursor: pointer; }
 .qt-head { font-size: 11px; color: #ffe08a; font-weight: bold; margin-bottom: 2px; }
 .qt-item { margin-top: 3px; } .qt-name { font-size: 12px; font-weight: bold; } .qt-prog { font-size: 11px; color: #c8d8f0; }
 .qt-item.done .qt-name { color: #8aff9a; }
-#buffs { position: absolute; left: 244px; top: 8px; display: flex; gap: 3px; pointer-events: none; }
+#buffs { position: absolute; left: 208px; top: 6px; display: flex; gap: 3px; pointer-events: none; }
 .buff { position: relative; width: 26px; height: 26px; background: rgba(16,18,32,.6); border: 1px solid #8a9ac0; border-radius: 3px; display: flex; align-items: center; justify-content: center; }
 .buff img { width: 24px; height: 24px; image-rendering: pixelated; }
 .buff span { position: absolute; right: 1px; bottom: -1px; font-size: 9px; color: #fff; font-weight: bold; text-shadow: 0 0 2px #000, 0 0 2px #000; }
@@ -177,9 +192,28 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 #title .btns { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
 #title .btn { font-size: 15px; padding: 5px 18px; line-height: 20px; }
 #title .note { margin-top: 16px; font-size: 12px; color: #a8b8d8; }
-#tuthint { position: absolute; left: 50%; top: 8px; transform: translateX(-50%); max-width: min(560px, 60vw); display: none; padding: 5px 26px 5px 8px; background: linear-gradient(rgba(255,250,220,.95), rgba(250,236,180,.95)); border: 1px solid #c0902a; border-radius: 4px; color: #4a3a10; font-size: 12px; line-height: 17px; box-shadow: 0 3px 10px rgba(0,0,0,.3); }
+#tuthint { position: absolute; left: 50%; top: 8px; transform: translateX(-50%); max-width: min(560px, 60vw); display: none; padding: 5px 42px 5px 8px; background: linear-gradient(rgba(255,250,220,.95), rgba(250,236,180,.95)); border: 1px solid #c0902a; border-radius: 4px; color: #4a3a10; font-size: 12px; line-height: 17px; box-shadow: 0 3px 10px rgba(0,0,0,.3); }
 .tut-icon { display: inline-block; width: 16px; height: 16px; line-height: 16px; text-align: center; border-radius: 50%; background: #e0a020; color: #fff; font-weight: bold; margin-right: 6px; }
 .tut-x { position: absolute; right: 6px; top: 4px; cursor: pointer; color: #8a6a20; font-weight: bold; }
 .ask-wrap { position: fixed; inset: 0; z-index: 9500; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.35); pointer-events: auto; }
 .ask-box { position: static; width: min(320px, 90vw); }
 .ask-msg { font-size: 13px; line-height: 19px; padding: 10px 12px; }
+
+/* ---------- 收合 ---------- */
+.fold-ic::before { content: '▾'; display: inline-block; width: 10px; font-size: 10px; color: #c8d8ff; }
+.folded .fold-ic::before { content: '▸'; }
+.mm-head, .qt-head, .chat-head { cursor: pointer; }
+#minimap.folded canvas { display: none; }
+#minimap.folded { padding-bottom: 2px; }
+#qtrack.folded .qt-item { display: none; }
+#qtrack.folded { width: auto; }
+.chat-head { display: flex; gap: 6px; align-items: center; padding: 1px 6px; font-size: 11px; color: #c8d8ff; border-bottom: 1px solid rgba(120,140,200,.3); }
+.chat-last { display: none; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #fff; }
+#chat.folded { width: min(300px, 40vw); }
+#chat.folded .log, #chat.folded input { display: none; }
+#chat.folded .chat-last { display: block; }
+#chat.folded .chat-head { border-bottom: none; padding: 2px 6px; }
+#chat .chat-last.ann { color: #ff8a6a; } #chat .chat-last.sys { color: #ffe88a; } #chat .chat-last.quest { color: #ffb8f0; }
+#tuthint.folded { padding: 3px; cursor: pointer; max-width: none; }
+#tuthint.folded .tut-icon { margin: 0; }
+.tut-min { right: 22px; }

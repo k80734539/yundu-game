@@ -7,8 +7,20 @@ export class Hud extends Win {
   private cache = '';
   private els: Record<string, HTMLElement> = {};
   constructor(ui: UI) {
-    super(ui, 'hud', '基本資訊', { x: 6, y: 6, w: 232, closable: false });
+    super(ui, 'hud', '基本資訊', { x: 6, y: 6, w: 196, closable: false });
     this.el.id = 'hud';
+    this.el.style.left = ''; this.el.style.top = ''; // 固定在左上角（CSS），不記拖曳位置
+    const fb = h('div', 'win-x hud-fold', '－'); fb.title = '縮成一列';
+    fb.addEventListener('pointerdown', (e) => e.stopPropagation());
+    fb.addEventListener('click', () => ui.setFold('hud', true, this.el));
+    this.el.appendChild(fb);
+    // 收合後的一列：展開鈕＋等級名稱＋迷你 HP/SP 條
+    const mini = h('div', 'hud-mini');
+    const ex = h('span', 'hud-expand', '≡'); ex.title = '展開基本資訊與選單'; ex.addEventListener('click', () => ui.setFold('hud', false, this.el));
+    this.els.mname = h('span', 'hud-mname');
+    const mb2 = (cls: string, key: string) => { const d = h('div', 'bar mini ' + cls); d.appendChild(h('i')); this.els[key] = d; return d; };
+    mini.append(ex, this.els.mname, mb2('hp', 'mhp'), mb2('sp', 'msp'));
+    this.el.insertBefore(mini, this.body);
     const b = this.body;
     const top = h('div', 'row'); this.els.name = h('span', 'val'); this.els.job = h('span', 'dim'); top.append(this.els.name, this.els.job); b.appendChild(top);
     const g = h('div', 'hud-grid');
@@ -32,6 +44,10 @@ export class Hud extends Win {
     this.cache = key;
     const e = this.els;
     e.name.textContent = ch.name; e.job.textContent = p.job.name;
+    e.mname.textContent = `Lv${ch.baseLv} ${ch.name}`;
+    (e.mhp.firstChild as HTMLElement).style.width = Math.max(0, Math.min(100, (p.hp / p.maxHp) * 100)) + '%'; e.mhp.classList.toggle('low', p.hp < p.maxHp * 0.25);
+    (e.msp.firstChild as HTMLElement).style.width = Math.max(0, Math.min(100, (p.sp / Math.max(1, p.maxSp)) * 100)) + '%';
+    e.mhp.title = `HP ${Math.ceil(p.hp)}/${p.maxHp}`; e.msp.title = `SP ${Math.ceil(p.sp)}/${p.maxSp}`;
     const set = (el: HTMLElement, v: number, max: number, text: string) => { (el.firstChild as HTMLElement).style.width = Math.max(0, Math.min(100, (v / max) * 100)) + '%'; (el.lastChild as HTMLElement).textContent = text; };
     set(e.hp, p.hp, p.maxHp, `${Math.ceil(p.hp)} / ${p.maxHp}`); e.hp.classList.toggle('low', p.hp < p.maxHp * 0.25);
     set(e.sp, p.sp, p.maxSp, `${Math.ceil(p.sp)} / ${p.maxSp}`);

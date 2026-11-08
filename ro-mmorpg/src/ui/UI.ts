@@ -23,6 +23,9 @@ import { RefineWindow, CardWindow } from './RefineWindow';
 /** UI 管理器：DOM 視窗、快捷鍵、訊息、橫幅 */
 export class UI {
   winPos: Record<string, [number, number]> = {};
+  /** 收合狀態（hud/mini/qtrack/chat/tut）；手機預設全部收合 */
+  fold: Record<string, boolean> = {};
+  mobile = false;
   wins: Record<string, Win> = {};
   hud: Hud; chat: Chat; mini: Minimap; world: WorldMap; info: ItemInfo; hot: Hotbar; shop: ShopWindow; dialog: Dialog; qtrack: QuestTracker;
   banner: HTMLDivElement;
@@ -33,6 +36,12 @@ export class UI {
   private buffKey = '';
   constructor(public g: Game, public root: HTMLElement) {
     try { this.winPos = JSON.parse(localStorage.getItem('rom.ui') || '{}'); } catch { this.winPos = {}; }
+    this.mobile = isMobile();
+    root.classList.toggle('mobile', this.mobile);
+    const def = this.mobile ? { hud: true, mini: true, qtrack: true, chat: true, tut: true } : { hud: false, mini: false, qtrack: false, chat: false, tut: false };
+    let saved: Record<string, boolean> = {};
+    try { saved = JSON.parse(localStorage.getItem(this.mobile ? 'rom.fold.m' : 'rom.fold') || '{}'); } catch { /* */ }
+    this.fold = { ...def, ...saved };
     const exp = h('div'); exp.id = 'expline'; exp.appendChild(h('i')); root.appendChild(exp);
     this.banner = h('div'); this.banner.id = 'banner'; root.appendChild(this.banner);
     this.hud = new Hud(this);
@@ -56,12 +65,21 @@ export class UI {
     const box = h('div', 'win box'); box.style.position = 'static'; this.death.appendChild(box); root.appendChild(this.death);
     this.buffEl = h('div'); this.buffEl.id = 'buffs'; root.appendChild(this.buffEl);
     this.tut = h('div'); this.tut.id = 'tuthint'; root.appendChild(this.tut);
+    this.applyFolds();
     g.ev.on('stats', () => this.refresh());
   }
   add(w: Win) { this.wins[w.id] = w; return w; }
   toggle(id: string) { const w = this.wins[id]; if (w) w.toggle(); }
   open(id: string) { this.wins[id]?.open(); }
   refresh() { for (const w of Object.values(this.wins)) if (w.isOpen) w.render(); this.hud.update(); }
+  /** 切換收合；el 為要加 folded class 的元素 */
+  setFold(id: string, v: boolean, el?: HTMLElement | null) {
+    this.fold[id] = v;
+    (el || document.getElementById(id === 'mini' ? 'minimap' : id))?.classList.toggle('folded', v);
+    try { localStorage.setItem(this.mobile ? 'rom.fold.m' : 'rom.fold', JSON.stringify(this.fold)); } catch { /* */ }
+    if (id === 'tut') this.tutorialHint();
+  }
+  applyFolds() { for (const [k, v] of Object.entries(this.fold)) this.setFold(k, v); }
   savePrefs() { try { localStorage.setItem('rom.ui', JSON.stringify(this.winPos)); } catch { /* 私密模式 */ } }
   sfx(_name: string) { this.g.audio?.ui(_name); }
   weightNow(): number { return this.g.inv ? this.g.inv.weight() : 0; }
@@ -107,7 +125,7 @@ export class UI {
       const map: Record<string, string> = { a: 'status', e: 'inventory', q: 'equip', s: 'skills', u: 'quests' };
       if (map[key]) { this.toggle(map[key]); return true; }
     }
-    if (k.key === 'Enter') { this.chat.focus(); return true; }
+    if (k.key === 'Enter') { if (this.fold.chat) this.setFold('chat', false); this.chat.focus(); return true; }
     if (k.key === 'Insert') { this.g.toggleSit(); return true; }
     const fm = /^F([1-9])$/.exec(k.key);
     if (fm) { this.g.useHot(+fm[1] - 1); return true; }
@@ -157,6 +175,11 @@ export class UI {
     this.tut.style.display = t ? 'block' : 'none';
     if (!t) return;
     this.tut.innerHTML = '';
+    this.tut.classList.toggle('folded', !!this.fold.tut);
+    if (this.fold.tut) { const ic = h('span', 'tut-icon', '?'); this.tut.title = t; this.tut.onclick = () => this.setFold('tut', false); this.tut.append(ic); return; }
+    this.tut.onclick = null;
+    const mn = h('span', 'tut-x tut-min', '－'); mn.title = '縮成圖示'; mn.addEventListener('click', (e) => { e.stopPropagation(); this.setFold('tut', true); });
+    this.tut.appendChild(mn);
     const x = h('span', 'tut-x', '×'); x.title = '關閉教學提示（可以找導覽員重新打開）';
     x.addEventListener('click', () => { this.g.flags.tutOff = true; this.tutorialHint(); });
     this.tut.append(h('span', 'tut-icon', '?'), h('span', '', t), x);
@@ -167,4 +190,8 @@ export class UI {
     const [cmd, ...args] = t.slice(1).split(/\s+/);
     this.g.command(cmd, args);
   }
+}
+
+export function isMobile() {
+  return window.matchMedia?.('(pointer: coarse)').matches || window.innerWidth < 820 || window.innerHeight < 500;
 }

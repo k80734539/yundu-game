@@ -29,18 +29,23 @@ export class QuestTracker {
   el: HTMLDivElement;
   constructor(private ui: UI) {
     this.el = h('div'); this.el.id = 'qtrack';
-    this.el.addEventListener('click', () => ui.toggle('quests'));
+
     ui.root.appendChild(this.el);
     ui.g.ev.on('quest', () => this.render()); ui.g.ev.on('inv', () => this.render());
   }
   render() {
     const qs = this.ui.g.quests, list = qs.activeList();
     this.el.style.display = list.length ? 'block' : 'none';
-    this.el.innerHTML = '<div class="qt-head">任務追蹤</div>';
+    this.el.innerHTML = '';
+    const head = h('div', 'qt-head'); head.append(h('span', 'fold-ic'), h('span', '', `任務追蹤（${list.length}）`)); head.title = '點擊收合／展開';
+    head.addEventListener('click', () => this.ui.setFold('qtrack', !this.ui.fold.qtrack, this.el));
+    this.el.appendChild(head);
+    this.el.classList.toggle('folded', !!this.ui.fold.qtrack);
     for (const q of list) {
       const done = qs.complete(q);
       const tgt = q.type === 'kill' ? DB.monster[q.target]?.name : DB.item[q.target]?.name;
       const d = h('div', 'qt-item' + (done ? ' done' : ''));
+      d.addEventListener('click', () => this.ui.toggle('quests'));
       d.innerHTML = `<div class="qt-name">${done ? '✔ ' : ''}${q.name}</div><div class="qt-prog">${tgt} ${qs.progress(q)}/${q.count}${done ? '　→ ' + DB.npc[q.npc]?.name : ''}</div>`;
       this.el.appendChild(d);
     }

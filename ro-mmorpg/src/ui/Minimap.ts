@@ -8,8 +8,10 @@ export class Minimap {
   private t = 0;
   constructor(private ui: UI) {
     this.el = h('div'); this.el.id = 'minimap';
-    const head = h('div', 'mm-head'); this.title = h('div', 'mm-name'); this.coord = h('span', 'mm-xy'); head.append(this.title, this.coord);
+    const head = h('div', 'mm-head'); head.appendChild(h('span', 'fold-ic')); this.title = h('div', 'mm-name'); this.coord = h('span', 'mm-xy'); head.append(this.title, this.coord);
     this.cv = h('canvas'); this.el.append(head, this.cv);
+    head.title = '點擊收合／展開小地圖';
+    head.addEventListener('click', () => ui.setFold('mini', !ui.fold.mini, this.el));
     ui.root.appendChild(this.el);
   }
   onMap() {
@@ -20,7 +22,7 @@ export class Minimap {
     this.title.textContent = m.def.name + lv;
     this.draw();
   }
-  update(dt: number) { this.t += dt; if (this.t >= 0.1) { this.t = 0; this.draw(); } }
+  update(dt: number) { this.t += dt; if (this.t >= 0.1) { this.t = 0; if (!this.ui.fold.mini) this.draw(); else this.coord.textContent = `${Math.floor(this.ui.g.player.x)}, ${Math.floor(this.ui.g.player.y)}`; } }
   draw() {
     const g = this.ui.g, m = g.map, c = this.cv.getContext('2d')!;
     c.clearRect(0, 0, this.cv.width, this.cv.height);
