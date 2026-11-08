@@ -113,7 +113,7 @@ export class Game {
     this.ui = new UI(this, uiRoot);
     this.newGameItems();
     this.loop = new Loop((dt) => this.update(dt), (a, dt) => this.render(a, dt));
-    (window as any).__game = this;
+    (window as any).__game = this; (window as any).__DB = DB;
   }
 
   /** 開機：先載入城鎮當標題背景 */

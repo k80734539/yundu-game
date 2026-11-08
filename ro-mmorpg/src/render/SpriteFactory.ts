@@ -322,10 +322,18 @@ function face(c: CanvasRenderingContext2D, cx: number, cy: number, dir: number, 
     c.fillStyle = '#fff'; c.fillRect(Math.round(x - 2 * s), Math.round(cy - 3 * s), Math.max(1, Math.round(1.6 * s)), Math.max(1, Math.round(1.6 * s)));
     if (angry) { c.fillStyle = eye; c.fillRect(Math.round(x - 3 * s), Math.round(cy - 6 * s), Math.round(6 * s), Math.max(1, Math.round(1.5 * s))); }
   }
+  // 腮紅與小嘴
+  const bx = dir === 1 ? [cx - gap * 1.2 * s] : [cx - gap * s, cx + gap * s];
+  c.fillStyle = 'rgba(240,110,130,0.55)';
+  for (const x of bx) c.fillRect(Math.round(x - 2.5 * s), Math.round(cy + 3.5 * s), Math.max(2, Math.round(4 * s)), Math.max(1, Math.round(1.6 * s)));
+  const mx = dir === 1 ? cx - gap * 1.6 * s : cx;
+  c.fillStyle = eye;
+  if (angry) c.fillRect(Math.round(mx - 2 * s), Math.round(cy + 5 * s), Math.max(2, Math.round(4 * s)), Math.max(1, Math.round(s)));
+  else { c.fillRect(Math.round(mx - 1.5 * s), Math.round(cy + 5 * s), Math.max(1, Math.round(s)), Math.max(1, Math.round(s))); c.fillRect(Math.round(mx + 0.5 * s), Math.round(cy + 5 * s), Math.max(1, Math.round(s)), Math.max(1, Math.round(s))); c.fillRect(Math.round(mx - 0.5 * s), Math.round(cy + 6 * s), Math.max(1, Math.round(s)), Math.max(1, Math.round(s))); }
 }
 function anim(f: number, dir: number) {
   // 回傳：跳躍高度、前衝量（朝面向）、拍動相位
-  if (f < 2) return { hop: 0, lunge: 0, ph: f * 0.5 };
+  if (f < 2) return { hop: f === 1 ? 3 : 0, lunge: 0, ph: f * 0.5 }; // 待機：上下彈跳
   if (f < 6) { const t = (f - 2) / 4; return { hop: Math.round(Math.sin(t * Math.PI * 2) ** 2 * 6), lunge: 0, ph: t }; }
   const a = f - 6; return { hop: [2, 4, 0, 0][a], lunge: [-2, -3, 8, 3][a], ph: a / 4 };
 }
@@ -339,7 +347,8 @@ const MON: Record<string, MonsterDraw> = {
     oEllipse(c, cx, cy, 20 * s, 15 * s, col);
     c.fillStyle = 'rgba(255,255,255,0.85)'; c.fillRect(Math.round(cx - 12 * s), Math.round(cy - 9 * s), Math.round(5 * s), Math.round(3 * s));
     face(c, cx + (dir === 1 ? -2 * s : 0), cy, dir, s, 7);
-    if (dir !== 3) { c.fillStyle = css(shade(col, -0.5)); c.fillRect(Math.round(cx - 2 * s + (dir === 1 ? -9 * s : 0)), Math.round(cy + 5 * s), Math.round(4 * s), Math.max(1, Math.round(1.5 * s))); }
+    // 史萊姆內部的氣泡與亮面
+    c.fillStyle = css(shade(col, 0.35)); c.fillRect(Math.round(cx + 8 * s), Math.round(cy + 2 * s), Math.round(2 * s), Math.round(2 * s)); c.fillRect(Math.round(cx - 14 * s), Math.round(cy + 4 * s), Math.round(1.5 * s), Math.round(1.5 * s));
     if (L.hat === 'crown') { oPoly(c, [[cx - 9 * s, cy - 12 * s], [cx - 9 * s, cy - 22 * s], [cx - 4 * s, cy - 16 * s], [cx, cy - 24 * s], [cx + 4 * s, cy - 16 * s], [cx + 9 * s, cy - 22 * s], [cx + 9 * s, cy - 12 * s]], hex('#f0c040')); c.fillStyle = '#e04a4a'; c.fillRect(Math.round(cx - 1.5 * s), Math.round(cy - 17 * s), Math.round(3 * s), Math.round(3 * s)); }
     if (L.hat === 'leaf') { oEllipse(c, cx + 3 * s, cy - 15 * s, 4 * s, 2.5 * s, hex('#5aa040')); }
   },
@@ -513,10 +522,10 @@ function drawMonster(c: CanvasRenderingContext2D, dir: number, f: number, L: Loo
   const ax = fw / 2, ay = fw - 6;
   const s = L.scale || 1;
   if (L.body === 'humanoid') {
-    // 人形怪物用人物繪製，再依 scale 縮放（只在生成時縮放一次，取整數倍以外的縮放後會二值化）
-    const tmp = makeCanvas(192, 192); const t = ctx2d(tmp);
-    drawHuman(t, dir, f, L);
-    c.drawImage(tmp, 0, 0, 192, 192, Math.round(ax - 96 * s), Math.round(ay - 186 * s), Math.round(192 * s), Math.round(192 * s));
+    // 人形怪物：直接用縮放後的座標系繪製（向量形狀，不是點陣縮圖），之後一樣做二值化與打光
+    c.save(); c.setTransform(s, 0, 0, s, ax - 96 * s, ay - 186 * s);
+    drawHuman(c, dir, f, L);
+    c.restore();
     return;
   }
   (MON[L.body || 'slime'] || MON.slime)(c, dir, f, L, s, ax, ay);

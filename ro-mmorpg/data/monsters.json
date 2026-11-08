@@ -25,7 +25,8 @@
   "frame": 96,
   "look": {
    "body": "slime",
-   "color": "#f08aa8"
+   "color": "#f08aa8",
+   "scale": 1.4
   },
   "drops": [
    {
@@ -77,7 +78,8 @@
   "look": {
    "body": "bug",
    "color": "#8ac04a",
-   "color2": "#e8d070"
+   "color2": "#e8d070",
+   "scale": 1.35
   },
   "drops": [
    {
@@ -121,10 +123,11 @@
   "adelay": 1456,
   "speed": 2.8,
   "aggro": false,
-  "frame": 96,
+  "frame": 128,
   "look": {
    "body": "rabbit",
-   "color": "#f4f0e8"
+   "color": "#f4f0e8",
+   "scale": 1.4
   },
   "drops": [
    {
@@ -173,7 +176,7 @@
    "body": "bird",
    "color": "#f0d050",
    "color2": "#e04a3a",
-   "scale": 0.9
+   "scale": 1.3
   },
   "drops": [
    {
@@ -217,10 +220,11 @@
   "adelay": 1600,
   "speed": 1.9,
   "aggro": false,
-  "frame": 96,
+  "frame": 128,
   "look": {
    "body": "mushroom",
-   "color": "#c08a3a"
+   "color": "#c08a3a",
+   "scale": 1.5
   },
   "drops": [
    {
@@ -264,11 +268,12 @@
   "adelay": 1700,
   "speed": 2.2,
   "aggro": false,
-  "frame": 96,
+  "frame": 128,
   "look": {
    "body": "slime",
    "color": "#8ad05a",
-   "hat": "leaf"
+   "hat": "leaf",
+   "scale": 1.5
   },
   "drops": [
    {
@@ -312,10 +317,11 @@
   "adelay": 1500,
   "speed": 1.4,
   "aggro": false,
-  "frame": 96,
+  "frame": 128,
   "look": {
    "body": "flower",
-   "color": "#f06a9a"
+   "color": "#f06a9a",
+   "scale": 1.4
   },
   "drops": [
    {
@@ -359,10 +365,11 @@
   "adelay": 1300,
   "speed": 3.2,
   "aggro": false,
-  "frame": 96,
+  "frame": 128,
   "look": {
    "body": "bee",
-   "color": "#f0c030"
+   "color": "#f0c030",
+   "scale": 1.3
   },
   "drops": [
    {
@@ -407,10 +414,11 @@
   "adelay": 1700,
   "speed": 2.2,
   "aggro": false,
-  "frame": 96,
+  "frame": 128,
   "look": {
    "body": "slime",
-   "color": "#5ab0f0"
+   "color": "#5ab0f0",
+   "scale": 1.6
   },
   "drops": [
    {
@@ -454,10 +462,11 @@
   "adelay": 1700,
   "speed": 1.8,
   "aggro": false,
-  "frame": 96,
+  "frame": 128,
   "look": {
    "body": "crab",
-   "color": "#e05a3a"
+   "color": "#e05a3a",
+   "scale": 1.6
   },
   "drops": [
    {
@@ -501,11 +510,12 @@
   "adelay": 1400,
   "speed": 3.0,
   "aggro": false,
-  "frame": 96,
+  "frame": 128,
   "look": {
    "body": "bird",
    "color": "#f4f4f8",
-   "color2": "#5a8ad0"
+   "color2": "#5a8ad0",
+   "scale": 1.5
   },
   "drops": [
    {
@@ -549,11 +559,12 @@
   "adelay": 1500,
   "speed": 2.6,
   "aggro": true,
-  "frame": 96,
+  "frame": 128,
   "look": {
    "body": "snake",
    "color": "#d8b060",
-   "color2": "#f0e0a0"
+   "color2": "#f0e0a0",
+   "scale": 1.5
   },
   "drops": [
    {
@@ -597,10 +608,11 @@
   "adelay": 1300,
   "speed": 3.4,
   "aggro": true,
-  "frame": 96,
+  "frame": 128,
   "look": {
    "body": "bat",
-   "color": "#6a4a8a"
+   "color": "#6a4a8a",
+   "scale": 1.4
   },
   "drops": [
    {
@@ -644,7 +656,7 @@
   "adelay": 1500,
   "speed": 2.6,
   "aggro": true,
-  "frame": 160,
+  "frame": 176,
   "look": {
    "body": "humanoid",
    "skin": "#7ab050",
@@ -655,7 +667,7 @@
    "eye": "#e03030",
    "weapon": "club",
    "hat": "band",
-   "scale": 0.8
+   "scale": 0.85
   },
   "drops": [
    {
@@ -700,12 +712,12 @@
   "adelay": 1800,
   "speed": 1.6,
   "aggro": false,
-  "frame": 128,
+  "frame": 160,
   "look": {
    "body": "golem",
    "color": "#8a8072",
    "color2": "#ffb040",
-   "scale": 0.55
+   "scale": 0.85
   },
   "drops": [
    {
@@ -805,11 +817,12 @@
   "adelay": 1600,
   "speed": 2.0,
   "aggro": false,
-  "frame": 96,
+  "frame": 128,
   "look": {
    "body": "mushroom",
    "color": "#8a5ac0",
-   "color2": "#d8d0e8"
+   "color2": "#d8d0e8",
+   "scale": 1.7
   },
   "drops": [
    {
@@ -858,7 +871,8 @@
    "cloth2": "#3a3a2a",
    "pants": "#4a4a3a",
    "eye": "#e8e040",
-   "hairStyle": 2
+   "hairStyle": 2,
+   "scale": 1.0
   },
   "drops": [
    {
@@ -902,10 +916,11 @@
   "adelay": 1400,
   "speed": 2.8,
   "aggro": true,
-  "frame": 96,
+  "frame": 128,
   "look": {
    "body": "ghost",
-   "color": "#b8e8ff"
+   "color": "#b8e8ff",
+   "scale": 1.5
   },
   "drops": [
    {
@@ -949,12 +964,12 @@
   "adelay": 1400,
   "speed": 2.8,
   "aggro": true,
-  "frame": 96,
+  "frame": 128,
   "look": {
    "body": "snake",
    "color": "#4a7a3a",
    "color2": "#c8d070",
-   "scale": 1.15
+   "scale": 1.7
   },
   "drops": [
    {
@@ -998,7 +1013,7 @@
   "adelay": 1300,
   "speed": 2.6,
   "aggro": true,
-  "frame": 192,
+  "frame": 224,
   "look": {
    "body": "humanoid",
    "skin": "#f0ece0",
@@ -1009,7 +1024,8 @@
    "eye": "#ff3020",
    "weapon": "sword",
    "hat": "helm",
-   "body2": "armor"
+   "body2": "armor",
+   "scale": 1.05
   },
   "drops": [
    {
@@ -1053,7 +1069,7 @@
   "adelay": 1500,
   "speed": 2.4,
   "aggro": true,
-  "frame": 224,
+  "frame": 240,
   "look": {
    "body": "humanoid",
    "skin": "#5a8a4a",
@@ -1064,7 +1080,7 @@
    "eye": "#ffd040",
    "weapon": "axe",
    "hat": "band",
-   "scale": 1.15,
+   "scale": 1.2,
    "hairStyle": 2
   },
   "drops": [
@@ -1109,11 +1125,11 @@
   "adelay": 1300,
   "speed": 3.0,
   "aggro": true,
-  "frame": 128,
+  "frame": 160,
   "look": {
    "body": "ghost",
    "color": "#c8a8f0",
-   "scale": 1.25
+   "scale": 1.9
   },
   "drops": [
    {
@@ -1157,12 +1173,12 @@
   "adelay": 1500,
   "speed": 2.0,
   "aggro": true,
-  "frame": 160,
+  "frame": 192,
   "look": {
    "body": "slime",
    "color": "#f070a0",
    "hat": "crown",
-   "scale": 2.6
+   "scale": 2.8
   },
   "drops": [
    {
@@ -1225,12 +1241,12 @@
   "adelay": 1800,
   "speed": 1.8,
   "aggro": true,
-  "frame": 224,
+  "frame": 256,
   "look": {
    "body": "golem",
    "color": "#7a7268",
    "color2": "#60e0ff",
-   "scale": 1.5
+   "scale": 1.6
   },
   "drops": [
    {
