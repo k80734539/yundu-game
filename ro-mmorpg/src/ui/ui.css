@@ -362,3 +362,28 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 #bigloot .bl-t { font-size: 34px; font-weight: 900; color: #fff; letter-spacing: 4px; text-shadow: 0 0 12px var(--rc), 0 0 24px var(--rc), 0 3px 0 #000; }
 #bigloot .bl-n { margin-top: 6px; font-size: 20px; font-weight: bold; color: var(--rc); text-shadow: 0 2px 3px #000, 0 0 10px #000; }
 @keyframes blin { from { transform: scale(1.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+/* ---------- Boss 戰介面 ---------- */
+#bossbar { position: absolute; left: 50%; top: 8px; transform: translateX(-50%); width: min(520px, 46vw); pointer-events: none; z-index: 25; text-shadow: 0 1px 2px #000; }
+.bb-top { display: flex; align-items: baseline; gap: 8px; color: #fff; font-size: 14px; font-weight: bold; margin-bottom: 2px; }
+.bb-name { flex: 1; } .bb-tag { color: #ff6a4a; font-size: 13px; animation: bbpulse .5s steps(2) infinite; } .bb-time { font-variant-numeric: tabular-nums; color: #ffe08a; font-size: 13px; }
+@keyframes bbpulse { 50% { opacity: .4; } }
+.bb-bar { position: relative; height: 18px; background: #1a1020; border: 2px solid #e8d8a8; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.6); }
+.bb-bar > i { display: block; height: 100%; background: linear-gradient(#ff8a7a, #d03a2a 55%, #a02018); transition: width .15s; }
+#bossbar.enraged .bb-bar { border-color: #ff4a30; box-shadow: 0 0 10px #ff2a1a, 0 2px 8px rgba(0,0,0,.6); }
+#bossbar.enraged .bb-bar > i { background: linear-gradient(#ff3a20, #c01008 55%, #800800); }
+#bossbar.frenzy .bb-bar { animation: bbpulse .35s steps(2) infinite; border-color: #ff1030; }
+.bb-mark { position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(255,255,255,.7); }
+.bb-mark.m50 { left: 50%; } .bb-mark.m20 { left: 20%; }
+.bb-pct { position: absolute; inset: 0; text-align: center; font-size: 11px; line-height: 14px; color: #fff; font-weight: bold; }
+#ui.bossfight #tuthint:not(.folded) { top: 62px; }
+#ui.mobile #bossbar { top: 46px; width: calc(100vw - 16px); }
+#ui.mobile.bossfight #qtrack { top: 104px; } #ui.mobile.bossfight #minimap:not(.folded) ~ #qtrack { top: 220px; }
+.mm-boss { font-size: 11px; color: #ffb090; text-align: center; line-height: 16px; font-variant-numeric: tabular-nums; }
+/* 擊敗 Boss */
+#bossdown { position: fixed; inset: 0; z-index: 8100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; pointer-events: none; background: radial-gradient(ellipse at center, rgba(255,210,90,.28), transparent 62%); animation: blin .4s ease-out; transition: opacity .7s; }
+#bossdown.out { opacity: 0; }
+.bd-t { font-size: 56px; font-weight: 900; letter-spacing: 10px; color: #fff4c0; text-shadow: 0 0 14px #ffb020, 0 0 30px #ff8a10, 0 4px 0 #6a3a00; }
+.bd-n { font-size: 20px; font-weight: bold; color: #ffe8b0; text-shadow: 0 2px 3px #000; }
+.bd-time { font-size: 24px; font-weight: bold; color: #fff; text-shadow: 0 2px 3px #000; font-variant-numeric: tabular-nums; }
+.bd-tag { margin-top: 4px; padding: 2px 14px; border-radius: 12px; background: linear-gradient(#ffe070, #f0a020); color: #5a3000; font-weight: bold; font-size: 15px; } .bd-tag.rec { background: linear-gradient(#a0f0b0, #30b050); color: #08301a; }
+.bd-best { font-size: 14px; color: #d8e0f0; text-shadow: 0 1px 2px #000; }

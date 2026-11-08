@@ -1,6 +1,6 @@
 import type { Game } from '../core/Game';
 import type { Monster } from '../entities/Monster';
-import { DB, MAPS } from '../data';
+import { DB, MAPS, BOSSFIGHT } from '../data';
 import { dist } from '../core/math';
 
 export interface MvpState { alive: boolean; nextAt: number }
@@ -46,7 +46,8 @@ export class Spawner {
     const g = this.g;
     if (m.isMvp) {
       const d = g.map.def;
-      this.mvp[d.id] = { alive: false, nextAt: Date.now() + (d.mvp?.respawn || 600) * 1000 };
+      const resp = BOSSFIGHT.global.respawn;   // 重生時間集中在 data/bossfights.json
+      this.mvp[d.id] = { alive: false, nextAt: Date.now() + resp * 1000 };
       g.announce(`【公告】${g.player.ch.name} 擊敗了 MVP「${m.def.name}」！`);
       g.save?.saveSoon();
       return;
@@ -69,6 +70,11 @@ export class Spawner {
       if (this.g.map.def.id === d.id) this.spawnMvp();
       this.g.save?.saveSoon();
     }
+  }
+  /** 重生倒數（秒）；存活或沒有 Boss 回傳 null */
+  countdown(id: string): number | null {
+    const st = this.mvp[id]; if (!st || st.alive) return null;
+    return Math.max(0, Math.ceil((st.nextAt - Date.now()) / 1000));
   }
   status(id: string) {
     const st = this.mvp[id]; if (!st) return '—';

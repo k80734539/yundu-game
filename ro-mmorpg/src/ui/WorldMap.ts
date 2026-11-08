@@ -23,7 +23,8 @@ export class WorldMap extends Win {
     const d = DB.map[id];
     const lv = d.level ? `建議等級 Lv${d.level[0]}~${d.level[1]}` : '安全區域';
     const mons = (d.spawns || []).map((s) => DB.monster[s.m]?.name).filter(Boolean).join('、');
-    const mvp = d.mvp ? `　<b style="color:#c0302a">MVP：${DB.monster[d.mvp.m]?.name}</b>（${this.ui.g.mvpStatus(id)}）` : '';
+    const bt = (this.ui.g.flags.bossBest || {})[d.mvp?.m || ''];
+    const mvp = d.mvp ? `　<b style="color:#c0302a">MVP：${DB.monster[d.mvp.m]?.name}</b>（${this.ui.g.mvpStatus(id)}${bt !== undefined ? '，最快擊殺 ' + Math.floor(bt / 60) + ':' + (bt % 60).toFixed(1).padStart(4, '0') : ''}）` : '';
     return `<b>${d.name}</b>　${lv}${mvp}<br><span class="dim">${mons ? '出沒：' + mons : d.type === 'town' ? '有商店、旅館、轉職官' : ''}</span>`;
   }
   render() {
@@ -67,7 +68,11 @@ export class WorldMap extends Win {
         c.fillStyle = plv < d.level[0] - 2 ? '#c0302a' : plv > d.level[1] + 3 ? '#8a8a8a' : '#2a7a2a';
         c.fillText(`Lv${d.level[0]}~${d.level[1]}`, tx, ty + 14);
       }
-      if (d.mvp) { c.fillStyle = '#c0302a'; c.font = 'bold 11px sans-serif'; c.fillText('★MVP', n.x + n.w - 14, n.y - 12); }
+      if (d.mvp) {
+        const cd = this.ui.g.spawner.countdown(d.id), bn = DB.monster[d.mvp.m]?.name || 'MVP';
+        c.fillStyle = cd === null ? '#c0302a' : '#6a6a7a'; c.font = 'bold 11px sans-serif';
+        c.fillText(cd === null ? `★${bn}` : `☆${bn} ${Math.floor(cd / 60)}:${String(cd % 60).padStart(2, '0')}`, tx, ty + (d.level ? 28 : 14));
+      }
       if (n.id === cur) { c.fillStyle = '#c0302a'; c.font = 'bold 11px sans-serif'; c.fillText('你在這裡', tx, n.y - 14); }
     }
   }

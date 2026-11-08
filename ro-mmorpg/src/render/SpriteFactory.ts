@@ -606,4 +606,12 @@ export function whiteOf(s: Sheet): HTMLCanvasElement {
   c.drawImage(s.c, 0, 0); c.globalCompositeOperation = 'source-in'; c.fillStyle = '#ffffff'; c.fillRect(0, 0, cv.width, cv.height);
   s.white = cv; return cv;
 }
+const tintCache = new WeakMap<Sheet, Map<string, HTMLCanvasElement>>();
+/** 單色剪影（狂暴時蓋在 Boss 身上變紅），依 sheet 與顏色快取 */
+export function tintOf(s: Sheet, color: string): HTMLCanvasElement {
+  let m = tintCache.get(s); if (!m) { m = new Map(); tintCache.set(s, m); }
+  let cv = m.get(color);
+  if (!cv) { cv = makeCanvas(s.c.width, s.c.height); const c = ctx2d(cv); c.drawImage(s.c, 0, 0); c.globalCompositeOperation = 'source-in'; c.fillStyle = color; c.fillRect(0, 0, cv.width, cv.height); m.set(color, cv); }
+  return cv;
+}
 export function clearSheetCache(keep: (k: string) => boolean) { for (const k of [...sheetCache.keys()]) if (!keep(k)) sheetCache.delete(k); }

@@ -21,6 +21,7 @@ import { iconURL } from '../render/IconArt';
 import { QuestWindow, QuestTracker } from './QuestWindow';
 import { RefineWindow, CardWindow } from './RefineWindow';
 import { ForgeWindow } from './ForgeWindow';
+import { BossBar } from './BossBar';
 
 /** UI 管理器：DOM 視窗、快捷鍵、訊息、橫幅 */
 export class UI {
@@ -36,6 +37,7 @@ export class UI {
   buffEl!: HTMLDivElement;
   death!: HTMLDivElement;
   forge!: ForgeWindow;
+  bossbar!: BossBar;
   tut!: HTMLDivElement;
   private buffKey = '';
   constructor(public g: Game, public root: HTMLElement) {
@@ -65,6 +67,7 @@ export class UI {
     this.dialog = new Dialog(this);
     this.add(new RefineWindow(this));
     this.add(new CardWindow(this));
+    this.bossbar = new BossBar(this);
     this.forge = this.add(new ForgeWindow(this)) as ForgeWindow;
     this.death = h('div'); this.death.id = 'death';
     const box = h('div', 'win box'); box.style.position = 'static'; this.death.appendChild(box); root.appendChild(this.death);
@@ -108,6 +111,7 @@ export class UI {
   update(dt: number) {
     this.hud.update();
     this.hot.update();
+    this.bossbar.update();
     this.dialog.update(dt);
     const bt = this.g.buffT, keys = Object.keys(bt);
     const bk = keys.map((k) => k + Math.ceil(bt[k])).join(',');
@@ -187,6 +191,15 @@ export class UI {
     this.root.appendChild(t);
   }
   audio() { this.g.audio?.unlock(); }
+  /** 擊敗 Boss：「擊敗！」＋戰鬥時間（首殺、新紀錄會標出） */
+  bossDown(name: string, time: string, first: boolean, record: boolean, best: string) {
+    this.root.querySelector('#bossdown')?.remove();
+    const el = h('div'); el.id = 'bossdown';
+    el.innerHTML = `<div class="bd-t">擊敗！</div><div class="bd-n">${name}</div><div class="bd-time">戰鬥時間　${time}</div>` +
+      (first ? '<div class="bd-tag">首殺獎勵</div>' : '') + (record ? '<div class="bd-tag rec">新的最快紀錄</div>' : best ? `<div class="bd-best">最快紀錄　${best}</div>` : '');
+    this.root.appendChild(el);
+    setTimeout(() => el.classList.add('out'), 3200); setTimeout(() => el.remove(), 3900);
+  }
   /** 全螢幕寶物提示（傳說／Boss 專屬） */
   bigLoot(title: string, name: string, color: string) {
     const el = h('div'); el.id = 'bigloot'; el.style.setProperty('--rc', color);

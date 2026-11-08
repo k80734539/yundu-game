@@ -13,7 +13,7 @@ import { Player } from '../entities/Player';
 import { Monster } from '../entities/Monster';
 import { Actor } from '../entities/Actor';
 import { Entity } from '../entities/Entity';
-import { whiteOf } from '../render/SpriteFactory';
+import { whiteOf, tintOf } from '../render/SpriteFactory';
 import { shadowSprite, makeCanvas } from '../render/pixel';
 import { DB, QUESTS, JOBS } from '../data';
 import { UI } from '../ui/UI';
@@ -22,6 +22,8 @@ import { gainExp } from '../systems/Exp';
 import { playerVsMonster, monsterVsPlayer } from '../systems/Combat';
 import { StatKey, statCost, MAX_STAT } from '../systems/Stats';
 import { updateAI, onHurt, giveUp } from '../systems/AI';
+import { Telegraph, bossDamage, hasBossFight, fightTime, fmtTime } from '../systems/BossFight';
+import { BOSSFIGHT } from '../data';
 import { Spawner } from '../systems/Spawner';
 import { Inventory } from '../systems/Inventory';
 import { GroundItem } from '../entities/GroundItem';
@@ -75,7 +77,8 @@ export class Game {
   spawner: Spawner;
   items: GroundItem[] = [];
   pickTarget: GroundItem | null = null;
-  telegraphs: { x: number; y: number; r: number; t: number; dur: number; owner: Monster; mult: number; color: string }[] = [];
+  telegraphs: Telegraph[] = [];
+  slowT = 0; slowScale = 1;   // 擊敗 Boss 的慢動作
   safeUntil = 0;
   hotbar: (HotSlot | null)[] = [{ type: 'item', id: 'red_potion' }, null, null, null, null, null, null, null, { type: 'item', id: 'butterfly_wing' }];
   skillCd: Record<string, number> = {}; skillCdMax: Record<string, number> = {};
@@ -117,7 +120,7 @@ export class Game {
     this.ui = new UI(this, uiRoot);
     this.newGameItems();
     this.loop = new Loop((dt) => this.update(dt), (a, dt) => this.render(a, dt));
-    (window as any).__game = this; (window as any).__DB = DB; (window as any).__LOOT = LOOT; (window as any).__GI = GroundItem;
+    (window as any).__game = this; (window as any).__DB = DB; (window as any).__LOOT = LOOT; (window as any).__GI = GroundItem; (window as any).__BOSSCFG = BOSSFIGHT;
   }
 
   /** 開機：先載入城鎮當標題背景 */
@@ -188,7 +191,7 @@ export class Game {
     const p = this.player;
     this.fx.ring(p.x, p.y, '#a0e0ff', 0.5, 40);
     p.x = p.px = x + 0.5; p.y = p.py = y + 0.5; p.stop(); p.chase = null;
-    for (const m of this.monsters) if (m.aggroOn === p) giveUp(m);
+    for (const m of this.monsters) if (m.aggroOn === p) giveUp(m, this);
     this.cam.follow(p.x, p.y, 0, true);
     this.fx.ring(p.x, p.y, '#a0e0ff', 0.5, 40);
     this.audio.sfx('warp');
@@ -593,6 +596,7 @@ export class Game {
     if (this.warp) return;
     this.handleInput(dt);
     if (this.hitStop > 0) { this.hitStop -= dt; this.cam.updateShake(dt); return; } // 打擊停頓：邏輯暫停
+    if (this.slowT > 0) { this.slowT -= dt; dt *= this.slowScale; if (this.slowT <= 0) this.slowScale = 1; } // 慢動作（只在擊敗 Boss 時）
     this.time += dt;
     for (const e of this.entities) e.savePrev();
     this.updatePlayer(dt);
@@ -729,9 +733,10 @@ export class Game {
       if (k >= 1) m.slide = null;
       return;
     }
+    if (m.isMvp) m.frozenT = 0; // Boss 不會被冰凍（否則招式計時會停住）
     if (m.frozenT > 0) { m.frozenT -= dt; m.atkAnimT = -1; return; }
     if (m.tickAttack(dt) && m.target) this.resolveAttack(m, m.target);
-    if (m.aggroOn && m.aggroOn.dead) giveUp(m);
+    if (m.aggroOn && m.aggroOn.dead) giveUp(m, this);
     updateAI(this, m, dt);
     if (m.atkAnimT < 0) {
       const sp = m.speed;
@@ -756,25 +761,61 @@ export class Game {
       this.msg(`${m.def.name} 召喚了手下！`, 'warn');
     } else {
       const r = id === 'stomp' ? 3 : 2.5;
-      this.telegraphs.push({ x: m.x, y: m.y, r, t: 0, dur: 0.9, owner: m, mult: id === 'stomp' ? 1.6 : 1.4, color: '#ff3020' });
+      this.telegraphs.push({ kind: 'circle', x: m.x, y: m.y, r, x2: 0, y2: 0, width: 0, t: 0, dur: 0.9, owner: m, mult: id === 'stomp' ? 1.6 : 1.4, color: '#ff3020' });
       m.startAttack(0.9);
     }
   }
+  /** 預警區倒數；時間到才結算，玩家那一刻在範圍外就完全不受傷 */
   updateTelegraphs(dt: number) {
+    const p = this.player;
     for (const t of this.telegraphs) {
       t.t += dt;
-      if (t.t >= t.dur) {
-        const p = this.player;
+      if (t.t < t.dur || t.done) continue;
+      t.done = true;
+      if (t.owner.dead) continue;
+      let hit = false;
+      if (t.kind === 'circle') {
         this.fx.ring(t.x, t.y, '#ffb060', 0.5, t.r * 40);
         this.fx.burst(t.x, t.y, 0, '#c8a070', 24, 140, 'dot', 0.6, 3);
-        this.cam.shake(7, 0.35);
-        if (!t.owner.dead && !p.dead && Math.hypot(p.x - t.x, p.y - t.y) <= t.r) {
-          const r = monsterVsPlayer(t.owner.def, p.d, this.rnd, t.mult);
-          this.applyDamage(t.owner, p, Math.max(1, r.dmg || Math.round(t.owner.def.atk[1] * 0.8)), 'take');
-        }
+        this.cam.shake(7, 0.35); this.audio.sfx('skill_fire_burst');
+        hit = !p.dead && Math.hypot(p.x - t.x, p.y - t.y) <= t.r;
+      } else {
+        const dx = t.x2 - t.x, dy = t.y2 - t.y, len2 = dx * dx + dy * dy || 1;
+        for (let i = 0; i <= 8; i++) this.fx.burst(t.x + (dx * i) / 8, t.y + (dy * i) / 8, 4, '#d8c8a0', 4, 90, 'dot', 0.4, 3);
+        this.cam.shake(5, 0.25);
+        const k = Math.max(0, Math.min(1, ((p.x - t.x) * dx + (p.y - t.y) * dy) / len2));
+        hit = !p.dead && Math.hypot(p.x - (t.x + dx * k), p.y - (t.y + dy * k)) <= t.width / 2;
       }
+      if (hit) this.applyDamage(t.owner, p, bossDamage(t.owner, t.mult, this), 'take');
     }
-    this.telegraphs = this.telegraphs.filter((t) => t.t < t.dur);
+    this.telegraphs = this.telegraphs.filter((t) => !t.done);
+  }
+  /** 擊敗 Boss：停頓 0.2 秒＋慢動作、「擊敗！」與戰鬥時間、首殺獎勵、最快紀錄 */
+  bossVictory(m: Monster) {
+    if (!hasBossFight(m)) return;
+    const id = m.def.id, cfg = BOSSFIGHT.bosses[id], V = BOSSFIGHT.global.victory;
+    const secs = fightTime(m, this);
+    const best = (this.flags.bossBest ||= {}) as Record<string, number>, kills = (this.flags.bossKills ||= {}) as Record<string, number>;
+    const first = !kills[id]; kills[id] = (kills[id] || 0) + 1;
+    const record = secs > 0 && (best[id] === undefined || secs < best[id]);
+    if (record) best[id] = secs;
+    if (first) {
+      const r = cfg.firstKill, p = this.player;
+      p.ch.zeny += r.zeny; gainExp(this, r.exp, r.jexp, true);
+      const names: string[] = [`${r.zeny.toLocaleString()} Zeny`, `經驗 ${r.exp}`];
+      for (const [it, n] of r.items) {
+        if (!this.inv.add(it, n)) this.items.push(new GroundItem(DB.item[it], n, p.x + (this.rnd() - 0.5), p.y + 0.6, p.x, p.y));
+        names.push(`${DB.item[it].name} ×${n}`);
+      }
+      this.msg(`★ 首殺獎勵：${names.join('、')}`, 'quest');
+    }
+    this.msg(`擊敗 ${m.def.name}！戰鬥時間 ${fmtTime(secs)}${record ? '（新的最快紀錄！）' : best[id] !== undefined ? `（最快 ${fmtTime(best[id])}）` : ''}`, 'quest');
+    this.hitStop = Math.max(this.hitStop, V.hitStop); this.slowT = V.slowTime; this.slowScale = V.slowScale;
+    this.cam.shake(6, 0.5); this.audio.sfx('boss_down');
+    this.telegraphs = this.telegraphs.filter((t) => t.owner !== m);
+    this.ui.bossDown(m.def.name, fmtTime(secs), first, record, best[id] !== undefined ? fmtTime(best[id]) : '');
+    this.ev.emit('bossdown', { id, secs, first, record });
+    this.save.saveSoon();
   }
   /** 玩家普通攻擊：近戰直接結算；法師發出魔力彈；弓箭手射箭 */
   playerAttackHit(t: Actor) {
@@ -851,7 +892,7 @@ export class Game {
       if (by === this.player && !d.summoned) {
         gainExp(this, d.def.exp, d.def.jexp);
         this.dropLoot(d);
-        if (d.isMvp) this.mvpReward(d);
+        if (d.isMvp) { this.mvpReward(d); this.bossVictory(d); }
         this.ev.emit('kill', d.def.id);
       }
     }
@@ -916,7 +957,7 @@ export class Game {
   onPlayerDeath() {
     const p = this.player, ch = p.ch;
     p.chase = null; this.skills.interrupt(); this.skills.targeting = null;
-    for (const m of this.monsters) if (m.aggroOn === p) giveUp(m);
+    for (const m of this.monsters) if (m.aggroOn === p) giveUp(m, this);
     let lostB = 0, lostJ = 0;
     if (ch.job !== 'novice') {
       lostB = Math.min(ch.baseExp, Math.floor(expNeed(ch.baseLv) * 0.01));
@@ -956,10 +997,23 @@ export class Game {
       c.beginPath(); c.moveTo(x, y - s * 0.5); c.lineTo(x + s, y); c.lineTo(x, y + s * 0.5); c.lineTo(x - s, y); c.closePath(); c.stroke(); c.globalAlpha = 1;
     }
     this.drawPortals(c, L, T);
-    for (const t of this.telegraphs) { // 預警圈
-      const x = Math.round(isoX(t.x, t.y) - L), y = Math.round(isoY(t.x, t.y) - T), k = t.t / t.dur;
-      c.globalAlpha = 0.25 + k * 0.35; c.fillStyle = t.color; c.beginPath(); c.ellipse(x, y, t.r * 45 * k, t.r * 22.5 * k, 0, 0, Math.PI * 2); c.fill();
-      c.globalAlpha = 0.9; c.strokeStyle = t.color; c.lineWidth = 2; c.beginPath(); c.ellipse(x, y, t.r * 45, t.r * 22.5, 0, 0, Math.PI * 2); c.stroke(); c.globalAlpha = 1;
+    for (const t of this.telegraphs) { // 預警區：紅色，越接近出招越亮
+      if (t.t < 0) continue;
+      const k = Math.min(1, t.t / t.dur), flash = k > 0.75 && Math.floor(this.time * 14) % 2 === 0;
+      if (t.kind === 'circle') {
+        const x = Math.round(isoX(t.x, t.y) - L), y = Math.round(isoY(t.x, t.y) - T);
+        c.globalAlpha = 0.18 + k * 0.32; c.fillStyle = t.color; c.beginPath(); c.ellipse(x, y, t.r * 45.25, t.r * 22.6, 0, 0, Math.PI * 2); c.fill();
+        c.globalAlpha = 0.45 + k * 0.4; c.fillStyle = flash ? '#ffd0c0' : '#ff5a40'; c.beginPath(); c.ellipse(x, y, t.r * 45.25 * k, t.r * 22.6 * k, 0, 0, Math.PI * 2); c.fill();
+        c.globalAlpha = 1; c.strokeStyle = flash ? '#ffffff' : '#ff2a1a'; c.lineWidth = 3; c.beginPath(); c.ellipse(x, y, t.r * 45.25, t.r * 22.6, 0, 0, Math.PI * 2); c.stroke();
+      } else {
+        const dx = t.x2 - t.x, dy = t.y2 - t.y, len = Math.hypot(dx, dy) || 1, nx = (-dy / len) * (t.width / 2), ny = (dx / len) * (t.width / 2);
+        const P = (wx: number, wy: number): [number, number] => [Math.round(isoX(wx, wy) - L), Math.round(isoY(wx, wy) - T)];
+        const poly = (f: number) => { const a = P(t.x + nx, t.y + ny), b = P(t.x - nx, t.y - ny), cc = P(t.x + dx * f - nx, t.y + dy * f - ny), d = P(t.x + dx * f + nx, t.y + dy * f + ny); c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(d[0], d[1]); c.lineTo(cc[0], cc[1]); c.lineTo(b[0], b[1]); c.closePath(); };
+        c.globalAlpha = 0.18 + k * 0.2; c.fillStyle = t.color; poly(1); c.fill();
+        c.globalAlpha = 0.5 + k * 0.4; c.fillStyle = flash ? '#ffd0c0' : '#ff5a40'; poly(k); c.fill();
+        c.globalAlpha = 1; c.strokeStyle = flash ? '#ffffff' : '#ff2a1a'; c.lineWidth = 3; poly(1); c.stroke();
+      }
+      c.globalAlpha = 1;
     }
     // 可見範圍（等角像素）
     const mx0 = L - 160, mx1 = L + W + 160, my0 = T - 60, my1 = T + H + 240;
@@ -1110,6 +1164,11 @@ export class Game {
     if (e.dead) c.globalAlpha = e === this.player ? 0.45 : Math.max(0, 1 - e.deadT);
     c.drawImage(s.c, sx, sy, s.fw, s.fh, x, y, s.fw, s.fh);
     if (e instanceof Monster && e.frozenT > 0) { c.globalAlpha = 0.45; c.drawImage(whiteOf(s), sx, sy, s.fw, s.fh, x, y, s.fw, s.fh); c.globalAlpha = 0.25; c.fillStyle = '#60b0ff'; c.fillRect(x + s.ax + e.bbox.x0, y + s.ay + e.bbox.y0, e.bbox.x1 - e.bbox.x0, e.bbox.y1 - e.bbox.y0); c.globalAlpha = 1; }
+    if (e instanceof Monster && e.boss && !e.dead) { // Boss：狂暴時身體變紅；蓄力時閃白並微微顫動
+      const b = e.boss;
+      if (b.phase > 0) { c.globalAlpha = (b.phase === 1 ? 0.32 : 0.48) * (0.85 + 0.15 * Math.sin(this.time * 7)); c.drawImage(tintOf(s, '#ff1a10'), sx, sy, s.fw, s.fh, x, y, s.fw, s.fh); c.globalAlpha = 1; }
+      if (b.state === 'windup' && Math.floor(this.time * 16) % 2 === 0) { c.globalAlpha = 0.55; c.drawImage(whiteOf(s), sx, sy, s.fw, s.fh, x, y, s.fw, s.fh); c.globalAlpha = 1; }
+    }
     if (e.flashT > 0) { // 受擊閃白
       c.globalAlpha = Math.min(1, e.flashT / 0.12) * 0.85 * (e.dead ? Math.max(0, 1 - e.deadT) : 1);
       c.drawImage(whiteOf(s), sx, sy, s.fw, s.fh, x, y, s.fw, s.fh);
@@ -1171,7 +1230,8 @@ export class Game {
     const x = Math.round(isoX(e.ix(a), e.iy(a)) - L), y = Math.round(isoY(e.ix(a), e.iy(a)) - T);
     const mvp = e instanceof Monster && e.isMvp;
     const showBar = e === this.player || e.hp < e.maxHp || mvp;
-    if (mvp) this.label(c, '【MVP】' + e.name, x, y + 22, '#ff7060');
+    if (mvp) this.label(c, '【MVP】' + e.name + (e instanceof Monster && e.boss && e.boss.phase > 0 ? '（狂暴）' : ''), x, y + 22, '#ff7060');
+    if (e instanceof Monster && e.boss && e.boss.state === 'windup' && e.boss.move) this.label(c, e.boss.move.name + '！', x, y + e.bbox.y0 - 16, '#ff6a4a');
     if (showBar) { // RO 式：血條在腳下
       const w = e === this.player ? 60 : mvp ? 90 : 44, bx = x - w / 2, by = y + 8;
       c.fillStyle = '#1a1020'; c.fillRect(bx - 1, by - 1, w + 2, e === this.player ? 8 : 5);

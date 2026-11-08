@@ -1,6 +1,7 @@
 import { Actor } from './Actor';
 import type { MonsterDef } from '../data';
 import { monsterSheet } from '../render/SpriteFactory';
+import type { BossState } from '../systems/BossFight';
 
 export type AIState = 'idle' | 'wander' | 'chase' | 'attack' | 'return';
 export class Monster extends Actor {
@@ -18,6 +19,7 @@ export class Monster extends Actor {
   announcedFight = false;
   provokeT = 0; provokeDef = 0;
   frozenT = 0;
+  boss: BossState | null = null;   // Boss 戰鬥狀態（只有 data/bossfights.json 有設定的 Boss 才會用到）
   slide: { fx: number; fy: number; tx: number; ty: number; t: number; dur: number } | null = null;
   constructor(public def: MonsterDef, x: number, y: number) {
     super(x, y);

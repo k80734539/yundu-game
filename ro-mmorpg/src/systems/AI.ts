@@ -1,12 +1,13 @@
 import type { Game } from '../core/Game';
 import type { Monster } from '../entities/Monster';
 import { cellDist, dist } from '../core/math';
+import { bossUpdate, hasBossFight, resetBoss } from './BossFight';
 
 export const MAX_CHASERS = 3;
 const SIGHT = 7, LEASH_HOME = 16, LEASH_TARGET = 13;
 
 export function chasers(g: Game): Monster[] { return g.monsters.filter((m) => m.aggroOn === g.player && !m.dead); }
-export function giveUp(m: Monster) { m.aggroOn = null; m.ai = 'return'; m.path = []; m.repathT = 0; }
+export function giveUp(m: Monster, g?: Game) { m.aggroOn = null; m.ai = 'return'; m.path = []; m.repathT = 0; if (m.boss && g) resetBoss(g, m); }
 /** 讓怪物開始追擊玩家；超過上限時讓最遠的追擊者放棄（同時追擊最多 3 隻） */
 export function engage(g: Game, m: Monster, force: boolean) {
   if (m.aggroOn === g.player || m.dead || g.player.dead) return;
@@ -14,7 +15,7 @@ export function engage(g: Game, m: Monster, force: boolean) {
   if (cs.length >= MAX_CHASERS) {
     if (!force) return;
     cs.sort((a, b) => dist(b.x, b.y, g.player.x, g.player.y) - dist(a.x, a.y, g.player.x, g.player.y));
-    giveUp(cs[0]);
+    giveUp(cs[0], g);
   }
   m.aggroOn = g.player; m.ai = 'chase'; m.repathT = 0;
   if (m.isMvp && !m.announcedFight) { m.announcedFight = true; }
@@ -27,6 +28,10 @@ export function onHurt(g: Game, m: Monster) {
 
 export function updateAI(g: Game, m: Monster, dt: number) {
   const p = g.player;
+  if (hasBossFight(m) && m.aggroOn) { // Boss 戰：離太遠或玩家倒下就重置，否則交給 Boss 狀態機
+    if (p.dead || dist(m.x, m.y, m.homeX, m.homeY) > LEASH_HOME + 8 || dist(m.x, m.y, p.x, p.y) > LEASH_TARGET) { giveUp(m, g); return; }
+    if (bossUpdate(g, m, dt)) return;
+  }
   if (m.atkAnimT >= 0) return;
   // 返回出生點
   if (m.ai === 'return') {

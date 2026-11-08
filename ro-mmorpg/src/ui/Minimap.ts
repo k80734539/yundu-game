@@ -4,12 +4,13 @@ import { miniBase, miniPos, MK } from '../render/Minimap';
 
 /** 右上小地圖（DOM + canvas，像素放大） */
 export class Minimap {
-  el: HTMLDivElement; cv: HTMLCanvasElement; title: HTMLDivElement; coord: HTMLSpanElement;
+  el: HTMLDivElement; boss: HTMLDivElement; cv: HTMLCanvasElement; title: HTMLDivElement; coord: HTMLSpanElement;
   private t = 0;
   constructor(private ui: UI) {
     this.el = h('div'); this.el.id = 'minimap';
     const head = h('div', 'mm-head'); head.appendChild(h('span', 'fold-ic')); this.title = h('div', 'mm-name'); this.coord = h('span', 'mm-xy'); head.append(this.title, this.coord);
-    this.cv = h('canvas'); this.el.append(head, this.cv);
+    this.boss = h('div', 'mm-boss'); this.boss.style.display = 'none';
+    this.cv = h('canvas'); this.el.append(head, this.boss, this.cv);
     head.title = '點擊收合／展開小地圖';
     head.addEventListener('click', () => ui.setFold('mini', !ui.fold.mini, this.el));
     ui.root.appendChild(this.el);
@@ -22,7 +23,14 @@ export class Minimap {
     this.title.textContent = m.def.name + lv;
     this.draw();
   }
-  update(dt: number) { this.t += dt; if (this.t >= 0.1) { this.t = 0; if (!this.ui.fold.mini) this.draw(); else this.coord.textContent = `${Math.floor(this.ui.g.player.x)}, ${Math.floor(this.ui.g.player.y)}`; } }
+  /** 這張地圖的 Boss 重生倒數 */
+  private bossText() {
+    const g = this.ui.g, d = g.map.def; if (!d.mvp) return '';
+    const s = g.spawner.countdown(d.id); if (s === null) return '';
+    return `Boss 重生 ${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+  }
+  update(dt: number) { this.t += dt; if (this.t >= 0.1) {
+    const bt = this.bossText(); this.boss.style.display = bt ? 'block' : 'none'; if (bt) this.boss.textContent = bt; this.t = 0; if (!this.ui.fold.mini) this.draw(); else this.coord.textContent = `${Math.floor(this.ui.g.player.x)}, ${Math.floor(this.ui.g.player.y)}`; } }
   draw() {
     const g = this.ui.g, m = g.map, c = this.cv.getContext('2d')!;
     c.clearRect(0, 0, this.cv.width, this.cv.height);

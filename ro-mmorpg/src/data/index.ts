@@ -8,6 +8,7 @@ import questsJson from '../../data/quests.json';
 import npcsJson from '../../data/npcs.json';
 import shopsJson from '../../data/shops.json';
 import lootJson from '../../data/loot.json';
+import bossJson from '../../data/bossfights.json';
 
 export type XY = [number, number];
 export interface MapDef {
@@ -105,3 +106,20 @@ export const DB = {
   map: idx(MAPS), monster: idx(MONSTERS), item: idx(ITEMS), skill: idx(SKILLS),
   job: idx(JOBS.jobs), quest: idx(QUESTS), npc: idx(NPCS), shop: idx(SHOPS),
 };
+
+export type BossMoveType = 'melee' | 'aoe' | 'charge' | 'barrage' | 'summon';
+export interface BossMove {
+  id: string; name: string; type: BossMoveType; weight: number; mult?: number; windup: number; recover: number;
+  center?: 'self' | 'target'; radius?: number; length?: number; width?: number; dashTime?: number;
+  count?: number; interval?: number; spread?: number; minDist?: number; maxDist?: number;
+}
+export interface BossFightConfig {
+  global: {
+    maxRepeat: number; enrageAt: number; frenzyAt: number;
+    phases: { name: string; gap: number; aspd: number; moveMul: number; windupMul: number }[];
+    minWindup: Record<BossMoveType, number>; roar: { enrage: number; frenzy: number }; respawn: number;
+    victory: { hitStop: number; slowScale: number; slowTime: number };
+  };
+  bosses: Record<string, { moves: BossMove[]; enrageMoves: BossMove[]; firstKill: { exp: number; jexp: number; zeny: number; items: [string, number][] } }>;
+}
+export const BOSSFIGHT = bossJson as unknown as BossFightConfig;
