@@ -387,3 +387,10 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 .bd-time { font-size: 24px; font-weight: bold; color: #fff; text-shadow: 0 2px 3px #000; font-variant-numeric: tabular-nums; }
 .bd-tag { margin-top: 4px; padding: 2px 14px; border-radius: 12px; background: linear-gradient(#ffe070, #f0a020); color: #5a3000; font-weight: bold; font-size: 15px; } .bd-tag.rec { background: linear-gradient(#a0f0b0, #30b050); color: #08301a; }
 .bd-best { font-size: 14px; color: #d8e0f0; text-shadow: 0 1px 2px #000; }
+.save-status { margin: 6px auto 0; max-width: 560px; font-size: 12px; line-height: 17px; padding: 3px 8px; border-radius: 4px; text-align: center; background: rgba(16,18,32,.55); }
+.save-status.ok { color: #a8f0b8; } .save-status.warn { color: #ffe08a; } .save-status.bad { color: #ff9a8a; }
+.win .save-status { background: #eef1f8; color: #4a5a7a; max-width: none; text-align: left; margin: 6px 0 0; }
+.win .save-status.ok { color: #1a7a3a; } .win .save-status.warn { color: #8a5a10; } .win .save-status.bad { color: #c0302a; }
+.code-ta { width: 100%; box-sizing: border-box; margin: 6px 0; font: 11px/14px monospace; word-break: break-all; }
+.code-msg { min-height: 16px; font-size: 12px; color: #2a7a3a; }
+#title .btns .btn.dis { opacity: .5; }

@@ -1,5 +1,5 @@
 import type { UI } from './UI';
-import { Win, h, btn, ask } from './Window';
+import { Win, h, btn, ask, codeBox } from './Window';
 
 /** 設定（Esc）：縮放、音量（階段 9）、存檔、重新開始 */
 export class OptionsWindow extends Win {
@@ -20,9 +20,13 @@ export class OptionsWindow extends Win {
       }
     }
     const nm = h('span', 'val', g.player.ch.name); row('角色', nm);
+    const st = g.save.statusText(); const sd = h('div', 'save-status ' + st.level, st.text); this.body.appendChild(sd);
     const bar = h('div', 'opt-btns');
     bar.append(btn('存檔', () => { g.save?.save(true); }), btn('回到角色選擇', () => { ask('存檔並回到角色選擇畫面？', () => g.save.toTitle()); }));
     this.body.appendChild(bar);
+    const bar2 = h('div', 'opt-btns');
+    bar2.append(btn('匯出存檔代碼', () => { g.save.save(); const c = g.save.exportCode(g.save.slot); codeBox({ title: '匯出存檔代碼', text: c || '', hint: '把這串文字複製起來，貼到別的瀏覽器或手機的「匯入存檔代碼」就能接著玩。' }); }));
+    this.body.appendChild(bar2);
     this.body.appendChild(h('div', 'dim hint', '遊戲每 30 秒與換地圖時自動存檔。'));
   }
 }

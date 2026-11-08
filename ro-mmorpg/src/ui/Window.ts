@@ -73,3 +73,23 @@ export function ask(msg: string, onYes: () => void) {
   box.appendChild(foot); wrap.appendChild(box);
   (document.getElementById('ui') || document.body).appendChild(wrap);
 }
+
+/** 存檔代碼視窗：匯出（顯示可複製的文字）或匯入（貼上文字、選欄位） */
+export function codeBox(opt: { title: string; text?: string; hint: string; slots?: { n: number; label: string }[]; onImport?: (slot: number, code: string) => string | null }) {
+  const wrap = h('div', 'ask-wrap'); const box = h('div', 'win ask-box'); box.style.width = 'min(420px, 92vw)';
+  box.append(h('div', 'win-title', opt.title));
+  const body = h('div', 'win-body ask-msg'); body.appendChild(h('div', 'dim', opt.hint));
+  const ta = h('textarea', 'code-ta') as HTMLTextAreaElement; ta.id = 'code-text'; ta.value = opt.text || ''; ta.readOnly = !!opt.text; ta.rows = 5; ta.spellcheck = false;
+  ta.addEventListener('keydown', (e) => e.stopPropagation()); body.appendChild(ta);
+  let sel: HTMLSelectElement | null = null;
+  if (opt.slots) { sel = h('select') as HTMLSelectElement; sel.id = 'code-slot'; for (const s of opt.slots) { const o = h('option', '', s.label) as HTMLOptionElement; o.value = String(s.n); sel.appendChild(o); } body.appendChild(sel); }
+  const msg = h('div', 'code-msg'); body.appendChild(msg);
+  box.appendChild(body);
+  const foot = h('div', 'win-foot');
+  if (opt.text) foot.appendChild(btn('複製', () => { ta.select(); let ok = false; try { navigator.clipboard.writeText(ta.value).then(() => { msg.textContent = '已複製。'; }, () => { msg.textContent = '請長按選取文字後複製。'; }); ok = true; } catch { /* */ } if (!ok) msg.textContent = '請長按選取文字後複製。'; }));
+  if (opt.onImport) foot.appendChild(btn('匯入', () => { const e = opt.onImport!(+(sel?.value || 1), ta.value); if (e) { msg.textContent = e; msg.style.color = '#c0302a'; } else { wrap.remove(); } }));
+  foot.appendChild(btn('關閉', () => wrap.remove()));
+  box.appendChild(foot); wrap.appendChild(box);
+  (document.getElementById('ui') || document.body).appendChild(wrap);
+  if (!opt.text) setTimeout(() => ta.focus(), 50);
+}

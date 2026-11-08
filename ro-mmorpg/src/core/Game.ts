@@ -124,7 +124,12 @@ export class Game {
   }
 
   /** 開機：先載入城鎮當標題背景 */
-  boot() { this.loadMap('aurora', 29, 27); this.loop.start(); }
+  boot() {
+    this.loadMap('aurora', 29, 27); this.loop.start();
+    this.save.onCloudChange = () => { this.ui.refreshTitle(); this.ui.wins.options?.render(); };
+    void this.save.initCloud();
+    setTimeout(() => { if (this.save.cloud.state === 'pending') { this.save.cloud.state = 'off'; this.save.cloud.err = '連線逾時'; this.ui.refreshTitle(); } }, 8000);
+  }
   /** 標題畫面按下開始：continue=true 讀檔，否則新角色 */
   begin(cont: boolean, name = '冒險者', slot = 1) {
     this.inTitle = false;

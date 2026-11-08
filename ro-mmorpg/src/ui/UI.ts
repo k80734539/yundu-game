@@ -1,6 +1,6 @@
 import type { Game } from '../core/Game';
 import type { KeyCombo } from '../core/Input';
-import { Win, h, btn, ask } from './Window';
+import { Win, h, btn, ask, codeBox } from './Window';
 import { Hud } from './Hud';
 import { Chat, MsgKind } from './Chat';
 import { StatusWindow } from './StatusWindow';
@@ -157,8 +157,10 @@ export class UI {
   }
   /** 標題畫面：新角色／繼續 */
   /** 標題畫面：3 個角色欄位（開始／刪除／建立） */
+  refreshTitle() { if (this.root.querySelector('#title')) { this.root.querySelector('#title')!.remove(); this.showTitle(); } }
   showTitle() {
     const t = h('div'); t.id = 'title';
+    const pending = this.g.save.cloud.state === 'pending';
     const box = h('div', 'tbox');
     box.innerHTML = '<h1>晨曦物語</h1><div class="sub">選擇角色</div>';
     const list = h('div', 'slots');
@@ -175,17 +177,19 @@ export class UI {
         const tx = h('div', 'slot-info');
         tx.innerHTML = `<b>${info.name}</b><br>${DB.job[info.job]?.name || ''}　Lv ${info.baseLv}／Job ${info.jobLv}<br><span class="dim">${mapName(info.map)}${info.t ? '　' + new Date(info.t).toLocaleDateString() : ''}</span>`;
         const bs = h('div', 'slot-btns');
-        bs.append(btn('開始', () => go(true, slot)), btn('刪除', () => ask(`確定要刪除「${info.name}」嗎？刪除後無法復原。`, () => { this.g.save.deleteSlot(slot); t.remove(); this.showTitle(); }), 'warn'));
+        bs.append(btn(pending ? '連線中…' : '開始', () => { if (!pending) go(true, slot); }, pending ? 'dis' : ''), btn('刪除', () => ask(`確定要刪除「${info.name}」嗎？刪除後無法復原。`, () => { this.g.save.deleteSlot(slot); t.remove(); this.showTitle(); }), 'warn'));
         card.append(face, tx, bs);
       } else {
         const name = h('input') as HTMLInputElement; name.placeholder = '角色名稱'; name.maxLength = 10; name.id = 'slot-name-' + slot;
         name.addEventListener('keydown', (e) => { e.stopPropagation(); if (e.key === 'Enter') go(false, slot, name.value.trim()); });
-        const bs = h('div', 'slot-btns'); bs.append(btn('建立角色', () => go(false, slot, name.value.trim())));
+        const bs = h('div', 'slot-btns'); bs.append(btn('建立角色', () => { if (!pending) go(false, slot, name.value.trim()); }, pending ? 'dis' : ''));
         card.append(h('div', 'slot-info dim', '空欄位'), name, bs);
       }
       list.appendChild(card);
     });
     box.appendChild(list);
+    const stt = this.g.save.statusText(); box.appendChild(h('div', 'save-status ' + stt.level, stt.text));
+    const imp = h('div', 'btns'); imp.appendChild(btn('匯入存檔代碼', () => codeBox({ title: '匯入存檔代碼', hint: '貼上從別的瀏覽器或手機「匯出存檔代碼」得到的文字，選一個欄位匯入（會覆蓋該欄位）。', slots: [1, 2, 3].map((n) => ({ n, label: `存到欄位 ${n}` })), onImport: (n, code) => { const e = this.g.save.importCode(n, code); if (!e) { this.refreshTitle(); } return e; } }))); box.appendChild(imp);
     box.appendChild(h('div', 'note', this.mobile ? '點地面移動、點怪物攻擊；右下角按鈕開背包、技能、選單' : '點擊移動／攻擊　Alt+E 背包　Alt+A 能力值　Alt+S 技能　F1~F9 快捷列　M 世界地圖'));
     t.appendChild(box);
     this.root.appendChild(t);
