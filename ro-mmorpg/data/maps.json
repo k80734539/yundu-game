@@ -1,190 +1,1763 @@
 [
-  {
-    "id": "aurora", "name": "晨曦鎮", "type": "town", "w": 50, "h": 50, "seed": 3, "base": "grass", "bgm": "town",
-    "border": "forest", "pos": [2, 2],
-    "areas": [
-      { "t": "road", "shape": "circle", "x": 25.5, "y": 25.5, "r": 7.5 },
-      { "t": "deepgrass", "shape": "blob", "x": 9, "y": 41, "r": 5 },
-      { "t": "water", "shape": "blob", "x": 41, "y": 41, "r": 3.5 },
-      { "t": "sand", "shape": "blob", "x": 41, "y": 41, "r": 5 },
-      { "t": "water", "shape": "blob", "x": 41, "y": 41, "r": 3.2 }
-    ],
-    "roads": [
-      { "t": "road", "width": 3.2, "pts": [[25.5, 25.5], [25.5, 35], [24.5, 42], [25.5, 49]] },
-      { "t": "road", "width": 3.2, "pts": [[25.5, 25.5], [34, 25.5], [42, 26.5], [49, 25.5]] },
-      { "t": "road", "width": 3, "pts": [[25.5, 25.5], [25.5, 16], [25.5, 11]] },
-      { "t": "road", "width": 2.6, "pts": [[25.5, 25.5], [17, 25], [11.5, 23], [11.5, 21]] },
-      { "t": "road", "width": 2.2, "pts": [[25.5, 19], [33, 19.5]] },
-      { "t": "road", "width": 2.2, "pts": [[30, 25.5], [36, 30], [36, 34]] },
-      { "t": "road", "width": 2, "pts": [[20, 25], [12, 30], [11, 34]] },
-      { "t": "road", "width": 2, "pts": [[25.5, 33], [33, 40], [33, 42]] }
-    ],
-    "props": [
-      { "type": "fountain", "x": 24, "y": 24 },
-      { "type": "church", "x": 23, "y": 5, "v": 0 },
-      { "type": "inn", "x": 9, "y": 15, "v": 0 },
-      { "type": "shop", "x": 31, "y": 15, "v": 1 },
-      { "type": "smith", "x": 34, "y": 30, "v": 3 },
-      { "type": "house", "x": 9, "y": 30, "v": 2 },
-      { "type": "house2", "x": 15, "y": 36, "v": 1 },
-      { "type": "house", "x": 31, "y": 38, "v": 0 },
-      { "type": "house2", "x": 40, "y": 14, "v": 2 },
-      { "type": "stall", "x": 18, "y": 20, "v": 0 },
-      { "type": "stall", "x": 31, "y": 29, "v": 2 },
-      { "type": "stall", "x": 31, "y": 21, "v": 1 },
-      { "type": "lamp", "x": 21, "y": 21 }, { "type": "lamp", "x": 29, "y": 21 }, { "type": "lamp", "x": 21, "y": 30 }, { "type": "lamp", "x": 29, "y": 30 },
-      { "type": "lamp", "x": 23, "y": 38 }, { "type": "lamp", "x": 27, "y": 38 }, { "type": "lamp", "x": 38, "y": 24 }, { "type": "lamp", "x": 38, "y": 28 },
-      { "type": "statue", "x": 23, "y": 12 }, { "type": "statue", "x": 27, "y": 12 },
-      { "type": "well", "x": 15, "y": 21 },
-      { "type": "sign", "x": 27, "y": 44 }, { "type": "sign", "x": 44, "y": 23 },
-      { "type": "barrel", "x": 14, "y": 19 }, { "type": "barrel", "x": 35, "y": 18 }, { "type": "crate", "x": 36, "y": 18 }, { "type": "crate", "x": 38, "y": 32 }, { "type": "barrel", "x": 39, "y": 33 },
-      { "type": "fence", "x": 8, "y": 34, "v": 0 }, { "type": "fence", "x": 9, "y": 34, "v": 0 }, { "type": "fence", "x": 14, "y": 34, "v": 0 },
-      { "type": "tent", "x": 41, "y": 34, "v": 0 }
-    ],
-    "scatter": [
-      { "type": "tree", "n": 16, "v": [0, 1, 2] }, { "type": "flowers", "n": 50 }, { "type": "tuft", "n": 30 }, { "type": "bush", "n": 12 },
-      { "type": "reeds", "n": 6, "on": ["sand"] }
-    ],
-    "portals": [
-      { "x": 25, "y": 47, "to": "prt_fild", "tx": 28, "ty": 6 },
-      { "x": 47, "y": 25, "to": "forest", "tx": 6, "ty": 30 }
-    ],
-    "npcs": [
-      { "id": "guide", "x": 27, "y": 33, "dir": 0 },
-      { "id": "tool", "x": 33, "y": 19, "dir": 0 },
-      { "id": "weapon", "x": 36, "y": 34, "dir": 0 },
-      { "id": "inn", "x": 12, "y": 20, "dir": 0 },
-      { "id": "job", "x": 25, "y": 11, "dir": 0 },
-      { "id": "kafra", "x": 22, "y": 31, "dir": 0 },
-      { "id": "captain", "x": 44, "y": 27, "dir": 1 },
-      { "id": "herbalist", "x": 13, "y": 26, "dir": 0 },
-      { "id": "refiner", "x": 38, "y": 31, "dir": 0 },
-      { "id": "girl", "x": 19, "y": 39, "dir": 0 }
+ {
+  "id": "aurora",
+  "name": "晨曦鎮",
+  "type": "town",
+  "w": 50,
+  "h": 50,
+  "seed": 3,
+  "base": "grass",
+  "bgm": "town",
+  "border": "forest",
+  "pos": [
+   2,
+   2
+  ],
+  "areas": [
+   {
+    "t": "road",
+    "shape": "circle",
+    "x": 25.5,
+    "y": 25.5,
+    "r": 7.5
+   },
+   {
+    "t": "deepgrass",
+    "shape": "blob",
+    "x": 9,
+    "y": 41,
+    "r": 5
+   },
+   {
+    "t": "water",
+    "shape": "blob",
+    "x": 41,
+    "y": 41,
+    "r": 3.5
+   },
+   {
+    "t": "sand",
+    "shape": "blob",
+    "x": 41,
+    "y": 41,
+    "r": 5
+   },
+   {
+    "t": "water",
+    "shape": "blob",
+    "x": 41,
+    "y": 41,
+    "r": 3.2
+   }
+  ],
+  "roads": [
+   {
+    "t": "road",
+    "width": 3.2,
+    "pts": [
+     [
+      25.5,
+      25.5
+     ],
+     [
+      25.5,
+      35
+     ],
+     [
+      24.5,
+      42
+     ],
+     [
+      25.5,
+      49
+     ]
     ]
+   },
+   {
+    "t": "road",
+    "width": 3.2,
+    "pts": [
+     [
+      25.5,
+      25.5
+     ],
+     [
+      34,
+      25.5
+     ],
+     [
+      42,
+      26.5
+     ],
+     [
+      49,
+      25.5
+     ]
+    ]
+   },
+   {
+    "t": "road",
+    "width": 3,
+    "pts": [
+     [
+      25.5,
+      25.5
+     ],
+     [
+      25.5,
+      16
+     ],
+     [
+      25.5,
+      11
+     ]
+    ]
+   },
+   {
+    "t": "road",
+    "width": 2.6,
+    "pts": [
+     [
+      25.5,
+      25.5
+     ],
+     [
+      17,
+      25
+     ],
+     [
+      11.5,
+      23
+     ],
+     [
+      11.5,
+      21
+     ]
+    ]
+   },
+   {
+    "t": "road",
+    "width": 2.2,
+    "pts": [
+     [
+      25.5,
+      19
+     ],
+     [
+      33,
+      19.5
+     ]
+    ]
+   },
+   {
+    "t": "road",
+    "width": 2.2,
+    "pts": [
+     [
+      30,
+      25.5
+     ],
+     [
+      36,
+      30
+     ],
+     [
+      36,
+      34
+     ]
+    ]
+   },
+   {
+    "t": "road",
+    "width": 2,
+    "pts": [
+     [
+      20,
+      25
+     ],
+     [
+      12,
+      30
+     ],
+     [
+      11,
+      34
+     ]
+    ]
+   },
+   {
+    "t": "road",
+    "width": 2,
+    "pts": [
+     [
+      25.5,
+      33
+     ],
+     [
+      33,
+      40
+     ],
+     [
+      33,
+      42
+     ]
+    ]
+   }
+  ],
+  "props": [
+   {
+    "type": "fountain",
+    "x": 24,
+    "y": 24
+   },
+   {
+    "type": "church",
+    "x": 23,
+    "y": 5,
+    "v": 0
+   },
+   {
+    "type": "inn",
+    "x": 9,
+    "y": 15,
+    "v": 0
+   },
+   {
+    "type": "shop",
+    "x": 31,
+    "y": 15,
+    "v": 1
+   },
+   {
+    "type": "smith",
+    "x": 34,
+    "y": 30,
+    "v": 3
+   },
+   {
+    "type": "house",
+    "x": 9,
+    "y": 30,
+    "v": 2
+   },
+   {
+    "type": "house2",
+    "x": 15,
+    "y": 36,
+    "v": 1
+   },
+   {
+    "type": "house",
+    "x": 31,
+    "y": 38,
+    "v": 0
+   },
+   {
+    "type": "house2",
+    "x": 40,
+    "y": 14,
+    "v": 2
+   },
+   {
+    "type": "stall",
+    "x": 18,
+    "y": 20,
+    "v": 0
+   },
+   {
+    "type": "stall",
+    "x": 31,
+    "y": 29,
+    "v": 2
+   },
+   {
+    "type": "stall",
+    "x": 31,
+    "y": 21,
+    "v": 1
+   },
+   {
+    "type": "lamp",
+    "x": 21,
+    "y": 21
+   },
+   {
+    "type": "lamp",
+    "x": 29,
+    "y": 21
+   },
+   {
+    "type": "lamp",
+    "x": 21,
+    "y": 30
+   },
+   {
+    "type": "lamp",
+    "x": 29,
+    "y": 30
+   },
+   {
+    "type": "lamp",
+    "x": 23,
+    "y": 38
+   },
+   {
+    "type": "lamp",
+    "x": 27,
+    "y": 38
+   },
+   {
+    "type": "lamp",
+    "x": 38,
+    "y": 24
+   },
+   {
+    "type": "lamp",
+    "x": 38,
+    "y": 28
+   },
+   {
+    "type": "statue",
+    "x": 23,
+    "y": 12
+   },
+   {
+    "type": "statue",
+    "x": 27,
+    "y": 12
+   },
+   {
+    "type": "well",
+    "x": 15,
+    "y": 21
+   },
+   {
+    "type": "sign",
+    "x": 27,
+    "y": 44
+   },
+   {
+    "type": "sign",
+    "x": 44,
+    "y": 23
+   },
+   {
+    "type": "barrel",
+    "x": 14,
+    "y": 19
+   },
+   {
+    "type": "barrel",
+    "x": 35,
+    "y": 18
+   },
+   {
+    "type": "crate",
+    "x": 36,
+    "y": 18
+   },
+   {
+    "type": "crate",
+    "x": 38,
+    "y": 32
+   },
+   {
+    "type": "barrel",
+    "x": 39,
+    "y": 33
+   },
+   {
+    "type": "fence",
+    "x": 8,
+    "y": 34,
+    "v": 0
+   },
+   {
+    "type": "fence",
+    "x": 9,
+    "y": 34,
+    "v": 0
+   },
+   {
+    "type": "fence",
+    "x": 14,
+    "y": 34,
+    "v": 0
+   },
+   {
+    "type": "tent",
+    "x": 41,
+    "y": 34,
+    "v": 0
+   }
+  ],
+  "scatter": [
+   {
+    "type": "tree",
+    "n": 16,
+    "v": [
+     0,
+     1,
+     2
+    ]
+   },
+   {
+    "type": "flowers",
+    "n": 50
+   },
+   {
+    "type": "tuft",
+    "n": 30
+   },
+   {
+    "type": "bush",
+    "n": 12
+   },
+   {
+    "type": "reeds",
+    "n": 6,
+    "on": [
+     "sand"
+    ]
+   }
+  ],
+  "portals": [
+   {
+    "x": 25,
+    "y": 47,
+    "to": "prt_fild",
+    "tx": 28,
+    "ty": 6
+   },
+   {
+    "x": 47,
+    "y": 25,
+    "to": "forest",
+    "tx": 6,
+    "ty": 30
+   }
+  ],
+  "npcs": [
+   {
+    "id": "guide",
+    "x": 27,
+    "y": 33,
+    "dir": 0
+   },
+   {
+    "id": "tool",
+    "x": 33,
+    "y": 19,
+    "dir": 0
+   },
+   {
+    "id": "weapon",
+    "x": 36,
+    "y": 34,
+    "dir": 0
+   },
+   {
+    "id": "inn",
+    "x": 12,
+    "y": 20,
+    "dir": 0
+   },
+   {
+    "id": "job",
+    "x": 25,
+    "y": 11,
+    "dir": 0
+   },
+   {
+    "id": "kafra",
+    "x": 22,
+    "y": 31,
+    "dir": 0
+   },
+   {
+    "id": "captain",
+    "x": 44,
+    "y": 27,
+    "dir": 1
+   },
+   {
+    "id": "herbalist",
+    "x": 13,
+    "y": 26,
+    "dir": 0
+   },
+   {
+    "id": "refiner",
+    "x": 38,
+    "y": 31,
+    "dir": 0
+   },
+   {
+    "id": "girl",
+    "x": 19,
+    "y": 39,
+    "dir": 0
+   }
+  ]
+ },
+ {
+  "id": "prt_fild",
+  "name": "南方草原",
+  "type": "field",
+  "w": 56,
+  "h": 56,
+  "seed": 11,
+  "base": "grass",
+  "bgm": "field1",
+  "level": [
+   1,
+   5
+  ],
+  "border": "forest",
+  "pos": [
+   2,
+   4
+  ],
+  "areas": [
+   {
+    "t": "deepgrass",
+    "shape": "blob",
+    "x": 14,
+    "y": 40,
+    "r": 7
+   },
+   {
+    "t": "water",
+    "shape": "blob",
+    "x": 40,
+    "y": 15,
+    "r": 5
+   },
+   {
+    "t": "sand",
+    "shape": "blob",
+    "x": 40,
+    "y": 15,
+    "r": 7
+   },
+   {
+    "t": "water",
+    "shape": "blob",
+    "x": 40,
+    "y": 15,
+    "r": 4.5
+   },
+   {
+    "t": "dirt",
+    "shape": "blob",
+    "x": 36,
+    "y": 40,
+    "r": 4
+   }
+  ],
+  "roads": [
+   {
+    "t": "dirt",
+    "width": 2.6,
+    "pts": [
+     [
+      28,
+      1
+     ],
+     [
+      26,
+      12
+     ],
+     [
+      31,
+      22
+     ],
+     [
+      25,
+      32
+     ],
+     [
+      28,
+      44
+     ],
+     [
+      24,
+      52
+     ]
+    ]
+   },
+   {
+    "t": "dirt",
+    "width": 2,
+    "pts": [
+     [
+      25,
+      32
+     ],
+     [
+      14,
+      30
+     ],
+     [
+      6,
+      34
+     ]
+    ]
+   }
+  ],
+  "scatter": [
+   {
+    "type": "tree",
+    "n": 22
+   },
+   {
+    "type": "pine",
+    "n": 6,
+    "v": [
+     0,
+     1
+    ]
+   },
+   {
+    "type": "bush",
+    "n": 14
+   },
+   {
+    "type": "rock",
+    "n": 10
+   },
+   {
+    "type": "flowers",
+    "n": 30
+   },
+   {
+    "type": "tuft",
+    "n": 50
+   },
+   {
+    "type": "mushroom",
+    "n": 6
+   },
+   {
+    "type": "stump",
+    "n": 3
+   },
+   {
+    "type": "reeds",
+    "n": 8,
+    "on": [
+     "sand"
+    ]
+   }
+  ],
+  "portals": [
+   {
+    "x": 28,
+    "y": 3,
+    "to": "aurora",
+    "tx": 25,
+    "ty": 44
+   }
+  ],
+  "spawns": [
+   {
+    "m": "jelly",
+    "n": 16
+   },
+   {
+    "m": "bunny",
+    "n": 6
+   },
+   {
+    "m": "caterpillar",
+    "n": 8
+   },
+   {
+    "m": "chick",
+    "n": 5
+   }
+  ]
+ },
+ {
+  "id": "forest",
+  "name": "微風森林",
+  "type": "field",
+  "w": 60,
+  "h": 60,
+  "seed": 21,
+  "base": "grass",
+  "bgm": "field2",
+  "level": [
+   5,
+   10
+  ],
+  "border": "pine",
+  "pos": [
+   4,
+   2
+  ],
+  "areas": [
+   {
+    "t": "deepgrass",
+    "shape": "blob",
+    "x": 20,
+    "y": 14,
+    "r": 9
+   },
+   {
+    "t": "deepgrass",
+    "shape": "blob",
+    "x": 44,
+    "y": 44,
+    "r": 10
+   },
+   {
+    "t": "water",
+    "shape": "blob",
+    "x": 14,
+    "y": 46,
+    "r": 4.5
+   },
+   {
+    "t": "dirt",
+    "shape": "blob",
+    "x": 40,
+    "y": 40,
+    "r": 5
+   }
+  ],
+  "roads": [
+   {
+    "t": "dirt",
+    "width": 2.6,
+    "pts": [
+     [
+      1,
+      30
+     ],
+     [
+      12,
+      28
+     ],
+     [
+      22,
+      33
+     ],
+     [
+      32,
+      30
+     ],
+     [
+      42,
+      24
+     ],
+     [
+      50,
+      14
+     ],
+     [
+      54,
+      7
+     ]
+    ]
+   },
+   {
+    "t": "dirt",
+    "width": 2.2,
+    "pts": [
+     [
+      32,
+      30
+     ],
+     [
+      35,
+      42
+     ],
+     [
+      30,
+      50
+     ],
+     [
+      31,
+      58
+     ]
+    ]
+   },
+   {
+    "t": "dirt",
+    "width": 1.8,
+    "pts": [
+     [
+      35,
+      40
+     ],
+     [
+      40,
+      40
+     ]
+    ]
+   }
+  ],
+  "scatter": [
+   {
+    "type": "tree",
+    "n": 18,
+    "minRing": 8
+   },
+   {
+    "type": "pine",
+    "n": 9,
+    "minRing": 8,
+    "v": [
+     0,
+     1,
+     2
+    ]
+   },
+   {
+    "type": "tree",
+    "n": 60,
+    "ring": 7
+   },
+   {
+    "type": "pine",
+    "n": 50,
+    "ring": 7,
+    "v": [
+     0,
+     1,
+     2
+    ]
+   },
+   {
+    "type": "bush",
+    "n": 16
+   },
+   {
+    "type": "rock",
+    "n": 8
+   },
+   {
+    "type": "mushroom",
+    "n": 14,
+    "on": [
+     "grass",
+     "deepgrass"
+    ]
+   },
+   {
+    "type": "flowers",
+    "n": 24
+   },
+   {
+    "type": "tuft",
+    "n": 60,
+    "on": [
+     "grass",
+     "deepgrass"
+    ]
+   },
+   {
+    "type": "stump",
+    "n": 6
+   },
+   {
+    "type": "log",
+    "n": 5
+   }
+  ],
+  "portals": [
+   {
+    "x": 3,
+    "y": 30,
+    "to": "aurora",
+    "tx": 44,
+    "ty": 25
+   },
+   {
+    "x": 54,
+    "y": 6,
+    "to": "mine1",
+    "tx": 30,
+    "ty": 50
+   },
+   {
+    "x": 31,
+    "y": 56,
+    "to": "coast",
+    "tx": 30,
+    "ty": 6
+   }
+  ],
+  "spawns": [
+   {
+    "m": "mushkin",
+    "n": 10
+   },
+   {
+    "m": "bunny",
+    "n": 6
+   },
+   {
+    "m": "petal",
+    "n": 8
+   },
+   {
+    "m": "buzz",
+    "n": 6
+   },
+   {
+    "m": "jellyg",
+    "n": 6
+   }
+  ],
+  "mvp": {
+   "m": "kingjelly",
+   "x": 42,
+   "y": 42,
+   "respawn": 600
   },
-  {
-    "id": "prt_fild", "name": "南方草原", "type": "field", "w": 56, "h": 56, "seed": 11, "base": "grass", "bgm": "field1",
-    "level": [1, 5], "border": "forest", "pos": [2, 4],
-    "areas": [
-      { "t": "deepgrass", "shape": "blob", "x": 14, "y": 40, "r": 7 },
-      { "t": "water", "shape": "blob", "x": 40, "y": 15, "r": 5 },
-      { "t": "sand", "shape": "blob", "x": 40, "y": 15, "r": 7 },
-      { "t": "water", "shape": "blob", "x": 40, "y": 15, "r": 4.5 },
-      { "t": "dirt", "shape": "blob", "x": 36, "y": 40, "r": 4 }
+  "clearings": [
+   {
+    "x": 20,
+    "y": 20,
+    "r": 5
+   },
+   {
+    "x": 40,
+    "y": 22,
+    "r": 5
+   },
+   {
+    "x": 22,
+    "y": 42,
+    "r": 5
+   },
+   {
+    "x": 42,
+    "y": 42,
+    "r": 6
+   },
+   {
+    "x": 30,
+    "y": 31,
+    "r": 4
+   }
+  ]
+ },
+ {
+  "id": "coast",
+  "name": "金沙海岸",
+  "type": "field",
+  "w": 60,
+  "h": 60,
+  "seed": 31,
+  "base": "sand",
+  "bgm": "beach",
+  "level": [
+   10,
+   15
+  ],
+  "border": "palm",
+  "pos": [
+   4,
+   4
+  ],
+  "areas": [
+   {
+    "t": "water",
+    "shape": "rect",
+    "x": 46,
+    "y": 0,
+    "w": 14,
+    "h": 60
+   },
+   {
+    "t": "water",
+    "shape": "blob",
+    "x": 46,
+    "y": 10,
+    "r": 6
+   },
+   {
+    "t": "water",
+    "shape": "blob",
+    "x": 44,
+    "y": 28,
+    "r": 7
+   },
+   {
+    "t": "water",
+    "shape": "blob",
+    "x": 46,
+    "y": 46,
+    "r": 6
+   },
+   {
+    "t": "grass",
+    "shape": "blob",
+    "x": 10,
+    "y": 14,
+    "r": 9
+   },
+   {
+    "t": "grass",
+    "shape": "blob",
+    "x": 8,
+    "y": 34,
+    "r": 7
+   },
+   {
+    "t": "dirt",
+    "shape": "blob",
+    "x": 22,
+    "y": 40,
+    "r": 3
+   }
+  ],
+  "roads": [
+   {
+    "t": "dirt",
+    "width": 2.4,
+    "pts": [
+     [
+      30,
+      1
+     ],
+     [
+      28,
+      14
+     ],
+     [
+      22,
+      26
+     ],
+     [
+      26,
+      40
+     ],
+     [
+      18,
+      50
+     ],
+     [
+      11,
+      57
+     ]
+    ]
+   }
+  ],
+  "scatter": [
+   {
+    "type": "palm",
+    "n": 26,
+    "on": [
+     "sand",
+     "grass"
+    ]
+   },
+   {
+    "type": "rock",
+    "n": 14
+   },
+   {
+    "type": "reeds",
+    "n": 10
+   },
+   {
+    "type": "tree",
+    "n": 8,
+    "on": [
+     "grass"
+    ]
+   },
+   {
+    "type": "bush",
+    "n": 8,
+    "on": [
+     "grass"
+    ]
+   },
+   {
+    "type": "tuft",
+    "n": 30,
+    "on": [
+     "grass"
+    ]
+   },
+   {
+    "type": "crate",
+    "n": 3
+   },
+   {
+    "type": "barrel",
+    "n": 3
+   }
+  ],
+  "portals": [
+   {
+    "x": 30,
+    "y": 3,
+    "to": "forest",
+    "tx": 31,
+    "ty": 53
+   },
+   {
+    "x": 11,
+    "y": 56,
+    "to": "swamp",
+    "tx": 48,
+    "ty": 7
+   }
+  ],
+  "spawns": [
+   {
+    "m": "crab",
+    "n": 12
+   },
+   {
+    "m": "gull",
+    "n": 8
+   },
+   {
+    "m": "shellsnake",
+    "n": 6
+   },
+   {
+    "m": "jellyb",
+    "n": 8
+   }
+  ]
+ },
+ {
+  "id": "swamp",
+  "name": "迷霧沼澤",
+  "type": "field",
+  "w": 60,
+  "h": 60,
+  "seed": 41,
+  "base": "mud",
+  "bgm": "swamp",
+  "level": [
+   18,
+   25
+  ],
+  "border": "dead",
+  "pos": [
+   3,
+   6
+  ],
+  "tint": "rgba(40,60,50,0.18)",
+  "areas": [
+   {
+    "t": "water",
+    "shape": "blob",
+    "x": 20,
+    "y": 20,
+    "r": 6
+   },
+   {
+    "t": "water",
+    "shape": "blob",
+    "x": 36,
+    "y": 44,
+    "r": 7
+   },
+   {
+    "t": "deepgrass",
+    "shape": "blob",
+    "x": 12,
+    "y": 40,
+    "r": 6
+   },
+   {
+    "t": "dirt",
+    "shape": "blob",
+    "x": 30,
+    "y": 30,
+    "r": 4
+   }
+  ],
+  "roads": [
+   {
+    "t": "dirt",
+    "width": 2.2,
+    "pts": [
+     [
+      50,
+      1
+     ],
+     [
+      44,
+      12
+     ],
+     [
+      30,
+      30
+     ],
+     [
+      20,
+      38
+     ],
+     [
+      10,
+      52
+     ]
+    ]
+   }
+  ],
+  "scatter": [
+   {
+    "type": "deadtree",
+    "n": 30,
+    "on": [
+     "mud",
+     "deepgrass"
+    ]
+   },
+   {
+    "type": "reeds",
+    "n": 30
+   },
+   {
+    "type": "rock",
+    "n": 10
+   },
+   {
+    "type": "mushroom",
+    "n": 12,
+    "v": [
+     2,
+     3
+    ]
+   },
+   {
+    "type": "log",
+    "n": 6
+   },
+   {
+    "type": "stump",
+    "n": 6
+   }
+  ],
+  "portals": [
+   {
+    "x": 50,
+    "y": 4,
+    "to": "coast",
+    "tx": 12,
+    "ty": 53
+   }
+  ],
+  "spawns": [
+   {
+    "m": "zombie",
+    "n": 10
+   },
+   {
+    "m": "wisp",
+    "n": 8
+   },
+   {
+    "m": "toadstool",
+    "n": 8
+   },
+   {
+    "m": "viper",
+    "n": 6
+   }
+  ]
+ },
+ {
+  "id": "mine1",
+  "name": "古老礦坑 B1",
+  "type": "dungeon",
+  "w": 60,
+  "h": 60,
+  "seed": 51,
+  "base": "cave",
+  "bgm": "dungeon1",
+  "level": [
+   12,
+   20
+  ],
+  "pos": [
+   6,
+   1
+  ],
+  "dark": 0.55,
+  "rooms": [
+   [
+    24,
+    46,
+    12,
+    10
+   ],
+   [
+    22,
+    30,
+    14,
+    10
+   ],
+   [
+    6,
+    26,
+    10,
+    12
+   ],
+   [
+    42,
+    28,
+    12,
+    12
+   ],
+   [
+    20,
+    8,
+    16,
+    12
+   ],
+   [
+    44,
+    6,
+    10,
+    10
+   ]
+  ],
+  "corridors": [
+   {
+    "width": 3,
+    "pts": [
+     [
+      30,
+      48
+     ],
+     [
+      29,
+      36
+     ]
+    ]
+   },
+   {
+    "width": 3,
+    "pts": [
+     [
+      24,
+      34
+     ],
+     [
+      12,
+      32
+     ]
+    ]
+   },
+   {
+    "width": 3,
+    "pts": [
+     [
+      34,
+      34
+     ],
+     [
+      47,
+      33
+     ]
+    ]
+   },
+   {
+    "width": 3,
+    "pts": [
+     [
+      28,
+      30
+     ],
+     [
+      28,
+      16
+     ]
+    ]
+   },
+   {
+    "width": 2.6,
+    "pts": [
+     [
+      34,
+      14
+     ],
+     [
+      48,
+      12
+     ]
+    ]
+   },
+   {
+    "width": 2.6,
+    "pts": [
+     [
+      11,
+      30
+     ],
+     [
+      10,
+      18
+     ],
+     [
+      22,
+      12
+     ]
+    ]
+   }
+  ],
+  "props": [
+   {
+    "type": "torch",
+    "x": 25,
+    "y": 47
+   },
+   {
+    "type": "torch",
+    "x": 34,
+    "y": 47
+   },
+   {
+    "type": "torch",
+    "x": 23,
+    "y": 31
+   },
+   {
+    "type": "torch",
+    "x": 34,
+    "y": 31
+   },
+   {
+    "type": "torch",
+    "x": 7,
+    "y": 27
+   },
+   {
+    "type": "torch",
+    "x": 43,
+    "y": 29
+   },
+   {
+    "type": "torch",
+    "x": 21,
+    "y": 9
+   },
+   {
+    "type": "torch",
+    "x": 34,
+    "y": 9
+   },
+   {
+    "type": "torch",
+    "x": 45,
+    "y": 7
+   },
+   {
+    "type": "crate",
+    "x": 33,
+    "y": 53
+   },
+   {
+    "type": "barrel",
+    "x": 26,
+    "y": 53
+   }
+  ],
+  "scatter": [
+   {
+    "type": "crystal",
+    "n": 12,
+    "on": [
+     "cave"
+    ]
+   },
+   {
+    "type": "rock",
+    "n": 16,
+    "on": [
+     "cave"
+    ]
+   },
+   {
+    "type": "mushroom",
+    "n": 8,
+    "v": [
+     2,
+     3
     ],
-    "roads": [ { "t": "dirt", "width": 2.6, "pts": [[28, 1], [26, 12], [31, 22], [25, 32], [28, 44], [24, 52]] },
-               { "t": "dirt", "width": 2, "pts": [[25, 32], [14, 30], [6, 34]] } ],
-    "scatter": [
-      { "type": "tree", "n": 22 }, { "type": "pine", "n": 6, "v": [0, 1] }, { "type": "bush", "n": 14 }, { "type": "rock", "n": 10 },
-      { "type": "flowers", "n": 30 }, { "type": "tuft", "n": 50 }, { "type": "mushroom", "n": 6 }, { "type": "stump", "n": 3 },
-      { "type": "reeds", "n": 8, "on": ["sand"] }
-    ],
-    "portals": [ { "x": 28, "y": 3, "to": "aurora", "tx": 25, "ty": 44 } ],
-    "spawns": [ { "m": "jelly", "n": 16 }, { "m": "bunny", "n": 6 }, { "m": "caterpillar", "n": 8 }, { "m": "chick", "n": 5 } ]
-  },
-  {
-    "id": "forest", "name": "微風森林", "type": "field", "w": 60, "h": 60, "seed": 21, "base": "grass", "bgm": "field2",
-    "level": [5, 10], "border": "pine", "pos": [4, 2],
-    "areas": [
-      { "t": "deepgrass", "shape": "blob", "x": 20, "y": 14, "r": 9 },
-      { "t": "deepgrass", "shape": "blob", "x": 44, "y": 44, "r": 10 },
-      { "t": "water", "shape": "blob", "x": 14, "y": 46, "r": 4.5 },
-      { "t": "dirt", "shape": "blob", "x": 40, "y": 40, "r": 5 }
-    ],
-    "roads": [
-      { "t": "dirt", "width": 2.6, "pts": [[1, 30], [12, 28], [22, 33], [32, 30], [42, 24], [50, 14], [54, 7]] },
-      { "t": "dirt", "width": 2.2, "pts": [[32, 30], [35, 42], [30, 50], [31, 58]] },
-      { "t": "dirt", "width": 1.8, "pts": [[35, 40], [40, 40]] }
-    ],
-    "scatter": [
-      { "type": "tree", "n": 40 }, { "type": "pine", "n": 22, "v": [0, 1, 2] }, { "type": "bush", "n": 16 }, { "type": "rock", "n": 8 },
-      { "type": "mushroom", "n": 14, "on": ["grass", "deepgrass"] }, { "type": "flowers", "n": 24 }, { "type": "tuft", "n": 60, "on": ["grass", "deepgrass"] },
-      { "type": "stump", "n": 6 }, { "type": "log", "n": 5 }
-    ],
-    "portals": [
-      { "x": 3, "y": 30, "to": "aurora", "tx": 44, "ty": 25 },
-      { "x": 54, "y": 6, "to": "mine1", "tx": 30, "ty": 50 },
-      { "x": 31, "y": 56, "to": "coast", "tx": 30, "ty": 6 }
-    ],
-    "spawns": [ { "m": "mushkin", "n": 10 }, { "m": "bunny", "n": 6 }, { "m": "petal", "n": 8 }, { "m": "buzz", "n": 6 }, { "m": "jellyg", "n": 6 } ],
-    "mvp": { "m": "kingjelly", "x": 42, "y": 42, "respawn": 600 }
-  },
-  {
-    "id": "coast", "name": "金沙海岸", "type": "field", "w": 60, "h": 60, "seed": 31, "base": "sand", "bgm": "beach",
-    "level": [10, 15], "border": "palm", "pos": [4, 4],
-    "areas": [
-      { "t": "water", "shape": "rect", "x": 46, "y": 0, "w": 14, "h": 60 },
-      { "t": "water", "shape": "blob", "x": 46, "y": 10, "r": 6 },
-      { "t": "water", "shape": "blob", "x": 44, "y": 28, "r": 7 },
-      { "t": "water", "shape": "blob", "x": 46, "y": 46, "r": 6 },
-      { "t": "grass", "shape": "blob", "x": 10, "y": 14, "r": 9 },
-      { "t": "grass", "shape": "blob", "x": 8, "y": 34, "r": 7 },
-      { "t": "dirt", "shape": "blob", "x": 22, "y": 40, "r": 3 }
-    ],
-    "roads": [ { "t": "dirt", "width": 2.4, "pts": [[30, 1], [28, 14], [22, 26], [26, 40], [18, 50], [11, 57]] } ],
-    "scatter": [
-      { "type": "palm", "n": 26, "on": ["sand", "grass"] }, { "type": "rock", "n": 14 }, { "type": "reeds", "n": 10 }, { "type": "tree", "n": 8, "on": ["grass"] },
-      { "type": "bush", "n": 8, "on": ["grass"] }, { "type": "tuft", "n": 30, "on": ["grass"] }, { "type": "crate", "n": 3 }, { "type": "barrel", "n": 3 }
-    ],
-    "portals": [
-      { "x": 30, "y": 3, "to": "forest", "tx": 31, "ty": 53 },
-      { "x": 11, "y": 56, "to": "swamp", "tx": 48, "ty": 7 }
-    ],
-    "spawns": [ { "m": "crab", "n": 12 }, { "m": "gull", "n": 8 }, { "m": "shellsnake", "n": 6 }, { "m": "jellyb", "n": 8 } ]
-  },
-  {
-    "id": "swamp", "name": "迷霧沼澤", "type": "field", "w": 60, "h": 60, "seed": 41, "base": "mud", "bgm": "swamp",
-    "level": [18, 25], "border": "dead", "pos": [3, 6], "tint": "rgba(40,60,50,0.18)",
-    "areas": [
-      { "t": "water", "shape": "blob", "x": 20, "y": 20, "r": 6 },
-      { "t": "water", "shape": "blob", "x": 36, "y": 44, "r": 7 },
-      { "t": "deepgrass", "shape": "blob", "x": 12, "y": 40, "r": 6 },
-      { "t": "dirt", "shape": "blob", "x": 30, "y": 30, "r": 4 }
-    ],
-    "roads": [ { "t": "dirt", "width": 2.2, "pts": [[50, 1], [44, 12], [30, 30], [20, 38], [10, 52]] } ],
-    "scatter": [
-      { "type": "deadtree", "n": 30, "on": ["mud", "deepgrass"] }, { "type": "reeds", "n": 30 }, { "type": "rock", "n": 10 }, { "type": "mushroom", "n": 12, "v": [2, 3] },
-      { "type": "log", "n": 6 }, { "type": "stump", "n": 6 }
-    ],
-    "portals": [ { "x": 50, "y": 4, "to": "coast", "tx": 12, "ty": 53 } ],
-    "spawns": [ { "m": "zombie", "n": 10 }, { "m": "wisp", "n": 8 }, { "m": "toadstool", "n": 8 }, { "m": "viper", "n": 6 } ]
-  },
-  {
-    "id": "mine1", "name": "古老礦坑 B1", "type": "dungeon", "w": 60, "h": 60, "seed": 51, "base": "cave", "bgm": "dungeon1",
-    "level": [12, 20], "pos": [6, 1], "dark": 0.55,
-    "rooms": [[24, 46, 12, 10], [22, 30, 14, 10], [6, 26, 10, 12], [42, 28, 12, 12], [20, 8, 16, 12], [44, 6, 10, 10]],
-    "corridors": [
-      { "width": 3, "pts": [[30, 48], [29, 36]] }, { "width": 3, "pts": [[24, 34], [12, 32]] }, { "width": 3, "pts": [[34, 34], [47, 33]] },
-      { "width": 3, "pts": [[28, 30], [28, 16]] }, { "width": 2.6, "pts": [[34, 14], [48, 12]] }, { "width": 2.6, "pts": [[11, 30], [10, 18], [22, 12]] }
-    ],
-    "props": [
-      { "type": "torch", "x": 25, "y": 47 }, { "type": "torch", "x": 34, "y": 47 }, { "type": "torch", "x": 23, "y": 31 }, { "type": "torch", "x": 34, "y": 31 },
-      { "type": "torch", "x": 7, "y": 27 }, { "type": "torch", "x": 43, "y": 29 }, { "type": "torch", "x": 21, "y": 9 }, { "type": "torch", "x": 34, "y": 9 }, { "type": "torch", "x": 45, "y": 7 },
-      { "type": "crate", "x": 33, "y": 53 }, { "type": "barrel", "x": 26, "y": 53 }
-    ],
-    "scatter": [ { "type": "crystal", "n": 12, "on": ["cave"] }, { "type": "rock", "n": 16, "on": ["cave"] }, { "type": "mushroom", "n": 8, "v": [2, 3], "on": ["cave"] } ],
-    "portals": [
-      { "x": 30, "y": 53, "to": "forest", "tx": 52, "ty": 9 },
-      { "x": 49, "y": 10, "to": "mine2", "tx": 12, "ty": 47 }
-    ],
-    "spawns": [ { "m": "bat", "n": 10 }, { "m": "skeleton", "n": 8 }, { "m": "goblin", "n": 8 }, { "m": "rockling", "n": 6 } ]
-  },
-  {
-    "id": "mine2", "name": "古老礦坑 B2", "type": "dungeon", "w": 60, "h": 60, "seed": 61, "base": "floor", "bgm": "dungeon2",
-    "level": [25, 35], "pos": [7, 3], "dark": 0.68,
-    "rooms": [[6, 42, 12, 12], [18, 16, 26, 24], [46, 20, 10, 14], [8, 6, 12, 10], [44, 44, 12, 10]],
-    "corridors": [
-      { "width": 3, "pts": [[14, 44], [16, 36], [20, 32]] }, { "width": 3, "pts": [[42, 26], [48, 26]] }, { "width": 2.6, "pts": [[20, 18], [14, 12]] },
-      { "width": 2.6, "pts": [[36, 38], [44, 46], [48, 48]] }
-    ],
-    "props": [
-      { "type": "pillar", "x": 22, "y": 20, "v": 2 }, { "type": "pillar", "x": 39, "y": 20, "v": 0 }, { "type": "pillar", "x": 22, "y": 35, "v": 0 }, { "type": "pillar", "x": 39, "y": 35, "v": 3 },
-      { "type": "torch", "x": 19, "y": 17 }, { "type": "torch", "x": 42, "y": 17 }, { "type": "torch", "x": 19, "y": 38 }, { "type": "torch", "x": 42, "y": 38 },
-      { "type": "torch", "x": 7, "y": 43 }, { "type": "torch", "x": 16, "y": 43 }, { "type": "torch", "x": 47, "y": 21 }, { "type": "torch", "x": 9, "y": 7 }, { "type": "torch", "x": 45, "y": 45 }
-    ],
-    "scatter": [ { "type": "crystal", "n": 14, "on": ["floor"] }, { "type": "rock", "n": 10, "on": ["floor"] } ],
-    "portals": [ { "x": 11, "y": 50, "to": "mine1", "tx": 47, "ty": 12 } ],
-    "spawns": [ { "m": "skeleton2", "n": 10 }, { "m": "orc", "n": 8 }, { "m": "wraith", "n": 6 }, { "m": "rockling", "n": 6 } ],
-    "mvp": { "m": "golem", "x": 31, "y": 27, "respawn": 900 }
+    "on": [
+     "cave"
+    ]
+   }
+  ],
+  "portals": [
+   {
+    "x": 30,
+    "y": 53,
+    "to": "forest",
+    "tx": 52,
+    "ty": 9
+   },
+   {
+    "x": 49,
+    "y": 10,
+    "to": "mine2",
+    "tx": 12,
+    "ty": 47
+   }
+  ],
+  "spawns": [
+   {
+    "m": "bat",
+    "n": 10
+   },
+   {
+    "m": "skeleton",
+    "n": 8
+   },
+   {
+    "m": "goblin",
+    "n": 8
+   },
+   {
+    "m": "rockling",
+    "n": 6
+   }
+  ]
+ },
+ {
+  "id": "mine2",
+  "name": "古老礦坑 B2",
+  "type": "dungeon",
+  "w": 60,
+  "h": 60,
+  "seed": 61,
+  "base": "floor",
+  "bgm": "dungeon2",
+  "level": [
+   25,
+   35
+  ],
+  "pos": [
+   7,
+   3
+  ],
+  "dark": 0.68,
+  "rooms": [
+   [
+    6,
+    42,
+    12,
+    12
+   ],
+   [
+    18,
+    16,
+    26,
+    24
+   ],
+   [
+    46,
+    20,
+    10,
+    14
+   ],
+   [
+    8,
+    6,
+    12,
+    10
+   ],
+   [
+    44,
+    44,
+    12,
+    10
+   ]
+  ],
+  "corridors": [
+   {
+    "width": 3,
+    "pts": [
+     [
+      14,
+      44
+     ],
+     [
+      16,
+      36
+     ],
+     [
+      20,
+      32
+     ]
+    ]
+   },
+   {
+    "width": 3,
+    "pts": [
+     [
+      42,
+      26
+     ],
+     [
+      48,
+      26
+     ]
+    ]
+   },
+   {
+    "width": 2.6,
+    "pts": [
+     [
+      20,
+      18
+     ],
+     [
+      14,
+      12
+     ]
+    ]
+   },
+   {
+    "width": 2.6,
+    "pts": [
+     [
+      36,
+      38
+     ],
+     [
+      44,
+      46
+     ],
+     [
+      48,
+      48
+     ]
+    ]
+   }
+  ],
+  "props": [
+   {
+    "type": "pillar",
+    "x": 22,
+    "y": 20,
+    "v": 2
+   },
+   {
+    "type": "pillar",
+    "x": 39,
+    "y": 20,
+    "v": 0
+   },
+   {
+    "type": "pillar",
+    "x": 22,
+    "y": 35,
+    "v": 0
+   },
+   {
+    "type": "pillar",
+    "x": 39,
+    "y": 35,
+    "v": 3
+   },
+   {
+    "type": "torch",
+    "x": 19,
+    "y": 17
+   },
+   {
+    "type": "torch",
+    "x": 42,
+    "y": 17
+   },
+   {
+    "type": "torch",
+    "x": 19,
+    "y": 38
+   },
+   {
+    "type": "torch",
+    "x": 42,
+    "y": 38
+   },
+   {
+    "type": "torch",
+    "x": 7,
+    "y": 43
+   },
+   {
+    "type": "torch",
+    "x": 16,
+    "y": 43
+   },
+   {
+    "type": "torch",
+    "x": 47,
+    "y": 21
+   },
+   {
+    "type": "torch",
+    "x": 9,
+    "y": 7
+   },
+   {
+    "type": "torch",
+    "x": 45,
+    "y": 45
+   }
+  ],
+  "scatter": [
+   {
+    "type": "crystal",
+    "n": 14,
+    "on": [
+     "floor"
+    ]
+   },
+   {
+    "type": "rock",
+    "n": 10,
+    "on": [
+     "floor"
+    ]
+   }
+  ],
+  "portals": [
+   {
+    "x": 11,
+    "y": 50,
+    "to": "mine1",
+    "tx": 47,
+    "ty": 12
+   }
+  ],
+  "spawns": [
+   {
+    "m": "skeleton2",
+    "n": 10
+   },
+   {
+    "m": "orc",
+    "n": 8
+   },
+   {
+    "m": "wraith",
+    "n": 6
+   },
+   {
+    "m": "rockling",
+    "n": 6
+   }
+  ],
+  "mvp": {
+   "m": "golem",
+   "x": 31,
+   "y": 27,
+   "respawn": 900
   }
+ }
 ]

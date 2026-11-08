@@ -163,7 +163,11 @@ export function buildMap(def: MapDef): GameMap {
       const x = B + Math.floor(rnd() * (w - B * 2)), y = B + Math.floor(rnd() * (h - B * 2));
       const k = y * w + x;
       if (reserved.has(k) || !on.includes(m.terrain[k])) continue;
+      const ring = Math.min(x, y, w - 1 - x, h - 1 - y);
+      if (s.ring !== undefined && ring >= s.ring) continue;          // 只放在邊緣帶
+      if (s.minRing !== undefined && ring < s.minRing) continue;     // 只放在中央
       const pd = PROPS[s.type];
+      if (pd.block && (def.clearings || []).some((c) => Math.hypot(x + 0.5 - c.x, y + 0.5 - c.y) < c.r)) continue; // 戰鬥空地
       if (pd.block) {
         // 不要擋住道路與傳送點周圍；擋路物件之間至少留一格
         let ok = true;

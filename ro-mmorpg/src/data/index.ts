@@ -19,7 +19,8 @@ export interface MapDef {
   rooms?: [number, number, number, number][];
   corridors?: { width: number; pts: XY[] }[];
   props?: { type: string; x: number; y: number; v?: number }[];
-  scatter?: { type: string; n: number; v?: number[]; on?: string[] }[];
+  scatter?: { type: string; n: number; v?: number[]; on?: string[]; ring?: number; minRing?: number }[];
+  clearings?: { x: number; y: number; r: number }[];
   portals: { x: number; y: number; to: string; tx: number; ty: number }[];
   npcs?: { id: string; x: number; y: number; dir?: number }[];
   spawns?: { m: string; n: number }[];
