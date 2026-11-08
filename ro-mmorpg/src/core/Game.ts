@@ -336,6 +336,8 @@ export class Game {
   changeJob(job: string) {
     const ch = this.player.ch, p = this.player;
     ch.job = job; ch.jobLv = 1; ch.jobExp = 0;
+    const bonus = JOBS.jobChangePts?.[DB.job[job].tier] || 0; // 轉職贈送技能點，讓新職業一轉完就能用技能
+    if (bonus) { ch.skillPts += bonus; this.msg(`轉職獎勵：獲得 ${bonus} 點技能點！`, 'sys'); }
     const gift = ({ swordsman: 'sword', mage: 'rod', archer: 'bow', paladin: 'long_spear', elementalist: 'elem_staff', ranger: 'ranger_bow' } as Record<string, string>)[job];
     // 卸下不能用的裝備
     for (const it of [...this.inv.items]) { const s = this.inv.slotOf(it.uid); const d = DB.item[it.id]; if (s && d.jobs && !d.jobs.includes(job)) this.inv.unequip(s); }

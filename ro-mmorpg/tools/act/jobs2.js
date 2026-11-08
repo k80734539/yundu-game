@@ -19,7 +19,7 @@ console.log('mark ready', await page.evaluate(() => window.__game.quests.mark('j
 await talk(); await key('1'); await sleep(200);
 for (let i = 0; i < 7; i++) { await page.keyboard.press('Enter'); await sleep(130); }
 const r = await page.evaluate(() => { const G = window.__game; return { job: G.player.ch.job, feathers: G.inv.count('feather'), weapon: G.player.weaponType(), done: G.quests.isDone('trial_archer') }; });
-console.log('after trial', JSON.stringify(r));
+console.log('after trial', JSON.stringify(r), 'skillPts', await page.evaluate(() => window.__game.player.ch.skillPts));
 // 技能樹前置
 const t = await page.evaluate(() => {
   const G = window.__game, ch = G.player.ch; ch.skillPts = 20;

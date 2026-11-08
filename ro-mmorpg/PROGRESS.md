@@ -313,3 +313,7 @@
 - 刪除確認改為危險模式：取消在前、「刪除」1.2 秒內無效；刪除按鈕改成卡片旁的小字連結。
 - 標題畫面讀取雲端時先顯示「讀取存檔中…」占位，避免版面跳動造成誤點。
 - 測試：`tools/act/cloudsave.js`（刪除→垃圾桶→復原、同裝置／跨裝置）、s8、slots。
+
+## 轉職贈送技能點
+- `data/jobs.json` 新增 `jobChangePts: [0, 5, 5]`（依職業階級）；`Game.changeJob` 轉職時加到 `skillPts` 並顯示「轉職獎勵」。一轉、二轉各 5 點。
+- 測試：`tools/act/jobs2.js`（轉遊俠後 skillPts = 5）。
