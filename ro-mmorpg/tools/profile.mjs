@@ -1,0 +1,34 @@
+// 效能剖析：模擬手機（CPU 降速）開遊戲，用 Chrome Profiler 統計各函式花的時間。用法：node tools/profile.mjs <dist 資料夾> <地圖> [降速倍率]
+import { createRequire } from 'node:module'; import http from 'node:http'; import fs from 'node:fs'; import path from 'node:path';
+const { chromium } = createRequire(import.meta.url)('playwright');
+const root = path.resolve(process.argv[2] || 'dist'), map = process.argv[3] || 'aurora', slow = +(process.argv[4] || 4), perfMode = process.argv[5] || 'smooth', still = process.argv[6] === 'still';
+const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json' };
+const server = http.createServer((req, res) => { let p = decodeURIComponent(req.url.split('?')[0]); if (p === '/') p = '/index.html'; const f = path.join(root, p); if (!fs.existsSync(f)) { res.writeHead(404); return res.end(); } res.writeHead(200, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream' }); fs.createReadStream(f).pipe(res); });
+await new Promise((r) => server.listen(0, r));
+const b = await chromium.launch(); const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, hasTouch: true, isMobile: true });
+const page = await ctx.newPage(); const cdp = await ctx.newCDPSession(page);
+await page.goto(`http://localhost:${server.address().port}/?autostart=1`);
+await page.waitForFunction(() => window.__game && window.__game.loop.running);
+await cdp.send('Emulation.setCPUThrottlingRate', { rate: slow });
+await page.evaluate((m) => { const G = window.__game; G.loadMap(m, m === 'aurora' ? 25 : 28, m === 'aurora' ? 30 : 20); }, map);
+await page.waitForTimeout(1500);
+// 讓角色走動，模擬實際遊玩
+await page.evaluate(([pm, low]) => { window.__game.setPerf(pm); window.__game.r.setLow(low); }, [perfMode, process.env.LOW === '1']);
+if (!still) await page.evaluate(() => { const G = window.__game; window.__walk = setInterval(() => { const p = G.player; G.walkTo(p.x + (Math.random() * 14 - 7), p.y + (Math.random() * 14 - 7), false); }, 2500); });
+await cdp.send('Performance.enable'); const m0 = Object.fromEntries((await cdp.send('Performance.getMetrics')).metrics.map((m) => [m.name, m.value]));
+await cdp.send('Profiler.enable'); await cdp.send('Profiler.setSamplingInterval', { interval: 500 }); await cdp.send('Profiler.start');
+const t0 = await page.evaluate(() => { const G = window.__game; window.__f = 0; window.__ru = 0; window.__up = 0; const r = G.render.bind(G), u = G.update.bind(G); G.render = (a, d) => { const t = performance.now(); r(a, d); window.__ru += performance.now() - t; window.__f++; }; G.update = (d) => { const t = performance.now(); u(d); window.__up += performance.now() - t; }; return performance.now(); });
+await page.waitForTimeout(8000);
+const st = await page.evaluate((t0) => ({ sec: (performance.now() - t0) / 1000, frames: window.__f, renderMs: window.__ru, updateMs: window.__up, fps: window.__game.loop.fps }), t0);
+const m1 = Object.fromEntries((await cdp.send('Performance.getMetrics')).metrics.map((m) => [m.name, m.value]));
+const { profile } = await cdp.send('Profiler.stop');
+const busy = ((m1.TaskDuration - m0.TaskDuration) / ((m1.Timestamp - m0.Timestamp))) * 100;
+const self = new Map(); const dt = profile.timeDeltas; const idIdx = new Map(profile.nodes.map((n) => [n.id, n]));
+profile.samples.forEach((id, i) => { const n = idIdx.get(id); const key = n.callFrame.functionName || '(anon)' + ':' + n.callFrame.lineNumber; self.set(key, (self.get(key) || 0) + (dt[i] || 0)); });
+const total = [...self.values()].reduce((a, c) => a + c, 0);
+console.log(`地圖 ${map}　CPU 降速 ${slow}x　${st.fps} fps（實測 ${(st.frames / st.sec).toFixed(1)}）`);
+console.log(`每幀 render ${(st.renderMs / st.frames).toFixed(2)}ms　update ${(st.updateMs / (st.sec * 60)).toFixed(2)}ms（降速後；真機約為此數的 1/${slow}～同等）`);
+console.log(`主執行緒忙碌度 ${busy.toFixed(0)}%（降速 ${slow}x 下；越低越省電）　每秒繪製 ${(st.frames / st.sec).toFixed(1)} 次`);
+if (process.env.TOP) console.log('CPU 時間排行（self time）：');
+if (process.env.TOP) for (const [k, v] of [...self].sort((a, b) => b[1] - a[1]).slice(0, 14)) console.log(`  ${(v / total * 100).toFixed(1).padStart(5)}%  ${k}`);
+await b.close(); server.close();

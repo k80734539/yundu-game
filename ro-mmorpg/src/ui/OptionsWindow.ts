@@ -12,6 +12,16 @@ export class OptionsWindow extends Win {
     const zoom = h('span');
     zoom.append(btn('－', () => { g.r.setZoom(g.r.zoomBias - 1); this.render(); }, 'sm'), h('span', 'val', ` ${g.r.scale}x `), btn('＋', () => { g.r.setZoom(g.r.zoomBias + 1); this.render(); }, 'sm'));
     row('畫面縮放', zoom);
+    const pf = h('span', 'seg');
+    for (const [k, l, tip] of [['smooth', '流暢', '一律 60 幀'], ['auto', '自動', '移動戰鬥時 60 幀，站著不動時降到 30 幀'], ['saver', '省電', '一律 30 幀，手機最不燙']] as const) {
+      const b = btn(l, () => { g.setPerf(k); this.render(); }, 'sm' + (g.perf === k ? ' on' : '')); b.title = tip; pf.appendChild(b);
+    }
+    row('畫面更新', pf);
+    const rs = h('span', 'seg');
+    for (const [low, l, tip] of [[false, '標準', '用螢幕原生解析度繪製（最清晰）'], [true, '省電', '用較低解析度繪製再放大，手機比較不燙；文字會比較粗']] as const) {
+      const b = btn(l, () => { g.r.setLow(low); try { localStorage.setItem('rom.res', low ? 'low' : 'high'); } catch { /* */ } this.render(); }, 'sm' + (g.r.low === low ? ' on' : '')); b.title = tip; rs.appendChild(b);
+    }
+    row('畫質', rs);
     if (g.audio) {
       for (const [k, l] of [['master', '主音量'], ['bgm', '背景音樂'], ['sfx', '音效']] as const) {
         const s = h('input') as HTMLInputElement; s.type = 'range'; s.min = '0'; s.max = '100'; s.value = String(Math.round(g.audio.vol[k] * 100)); s.className = 'opt-range';

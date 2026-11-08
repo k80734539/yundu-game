@@ -7,6 +7,10 @@ export class Renderer {
   scale = 1;
   zoomBias = 0;
   dpr = 1;
+  /** 省電畫質：canvas 只用遊戲像素的解析度，交給瀏覽器用整數倍放大（填的像素少很多，手機比較不燙） */
+  low = false;
+  /** 畫到 canvas 時實際用的倍率（省電畫質是 1） */
+  drawScale = 1;
   constructor(public canvas: HTMLCanvasElement) {
     this.ctx = canvas.getContext('2d', { alpha: false })!;
     this.resize();
@@ -17,8 +21,6 @@ export class Renderer {
     this.dpr = dpr;
     const cw = window.innerWidth, ch = window.innerHeight;
     const bw = Math.round(cw * dpr), bh = Math.round(ch * dpr);
-    this.canvas.width = bw; this.canvas.height = bh;
-    this.canvas.style.width = cw + 'px'; this.canvas.style.height = ch + 'px';
     // 讓邏輯畫面寬約 640~1400 遊戲像素；只用整數倍
     const target = Math.max(640, Math.min(1400, cw));
     let s = Math.max(1, Math.floor(bw / target));
@@ -28,12 +30,20 @@ export class Renderer {
     s = Math.max(1, s + this.zoomBias);
     this.scale = s;
     this.w = Math.ceil(bw / s); this.h = Math.ceil(bh / s);
+    if (this.low) { // 低解析度緩衝區＋CSS 整數倍放大（多出的不到 1 個遊戲像素被裁掉）
+      this.canvas.width = this.w; this.canvas.height = this.h; this.drawScale = 1;
+      this.canvas.style.width = (this.w * s) / dpr + 'px'; this.canvas.style.height = (this.h * s) / dpr + 'px';
+    } else {
+      this.canvas.width = bw; this.canvas.height = bh; this.drawScale = s;
+      this.canvas.style.width = cw + 'px'; this.canvas.style.height = ch + 'px';
+    }
     this.ctx.imageSmoothingEnabled = false;
   }
+  setLow(v: boolean) { this.low = v; this.resize(); }
   setZoom(bias: number) { this.zoomBias = Math.max(-2, Math.min(2, bias)); this.resize(); }
   begin() {
     const c = this.ctx;
-    c.setTransform(this.scale, 0, 0, this.scale, 0, 0);
+    c.setTransform(this.drawScale, 0, 0, this.drawScale, 0, 0);
     c.imageSmoothingEnabled = false;
     c.globalAlpha = 1;
     c.globalCompositeOperation = 'source-over';

@@ -79,6 +79,7 @@ export class Game {
   items: GroundItem[] = [];
   pickTarget: GroundItem | null = null;
   telegraphs: Telegraph[] = [];
+  perf: 'smooth' | 'auto' | 'saver' = 'smooth'; private calmT = 0;
   slowT = 0; slowScale = 1;   // 擊敗 Boss 的慢動作
   safeUntil = 0;
   hotbar: (HotSlot | null)[] = [{ type: 'item', id: 'red_potion' }, null, null, null, null, null, null, null, { type: 'item', id: 'butterfly_wing' }];
@@ -120,6 +121,8 @@ export class Game {
     this.spawner.init();
     this.ui = new UI(this, uiRoot);
     this.newGameItems();
+    try { const v = localStorage.getItem('rom.perf'); this.perf = v === 'smooth' || v === 'auto' || v === 'saver' ? v : (window.matchMedia?.('(pointer: coarse)').matches ? 'auto' : 'smooth'); } catch { /* */ }
+    try { const v = localStorage.getItem('rom.res'); this.r.low = v === 'low' || (v !== 'high' && !!window.matchMedia?.('(pointer: coarse)').matches); if (this.r.low) this.r.resize(); } catch { /* */ }
     this.loop = new Loop((dt) => this.update(dt), (a, dt) => this.render(a, dt));
     (window as any).__game = this; (window as any).__DB = DB; (window as any).__LOOT = LOOT; (window as any).__GI = GroundItem; (window as any).__BOSSCFG = BOSSFIGHT;
   }
@@ -641,6 +644,18 @@ export class Game {
     this.cam.updateShake(dt);
     if (this.clickMark.t > 0) this.clickMark.t -= dt;
     this.ui.update(dt);
+    this.updatePerf(dt);
+  }
+  /** 畫面更新率：流暢＝60；省電＝30；自動＝移動、戰鬥、施法時 60，站著不動（沒有怪物追你）時降到 30，少耗電、手機不容易發燙 */
+  setPerf(m: 'smooth' | 'auto' | 'saver') { this.perf = m; try { localStorage.setItem('rom.perf', m); } catch { /* */ } this.calmT = 0; }
+  updatePerf(dt: number) {
+    if (this.perf === 'smooth') { this.loop.renderFps = 60; return; }
+    if (this.perf === 'saver') { this.loop.renderFps = 30; return; }
+    const p = this.player;
+    const busy = p.state !== 'idle' || this.input.down || p.path.length > 0 || this.monsters.some((m) => m.aggroOn && !m.dead) || this.telegraphs.length > 0 ||
+      this.projectiles.length > 0 || this.skills.cast !== null || this.fx.parts.activeCount > 30 || this.warp !== null || this.fade > 0 || this.hitStop > 0 || this.slowT > 0 || this.ui.dialog.isOpen;
+    if (busy) this.calmT = 0; else this.calmT += dt;
+    this.loop.renderFps = this.calmT > 1.5 ? 30 : 60;
   }
 
   handleInput(dt: number) {

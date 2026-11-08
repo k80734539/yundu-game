@@ -394,3 +394,4 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 .code-ta { width: 100%; box-sizing: border-box; margin: 6px 0; font: 11px/14px monospace; word-break: break-all; }
 .code-msg { min-height: 16px; font-size: 12px; color: #2a7a3a; }
 #title .btns .btn.dis { opacity: .5; }
+.seg { display: inline-flex; gap: 2px; } .seg .btn.on { background: linear-gradient(#8ab4f0, #4c70b0); color: #fff; border-color: #2c4a8a; }
