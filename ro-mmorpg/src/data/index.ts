@@ -30,7 +30,7 @@ export interface Look {
   body?: string;            // 怪物外形：slime/bug/rabbit/plant/bat/mushroom/wolf/humanoid/golem/ghost/crab/bee/snake/flower/bird/fish
   color?: string; color2?: string; eye?: string;
   hair?: string; skin?: string; cloth?: string; cloth2?: string; pants?: string; hairStyle?: number;
-  weapon?: string; hat?: string; scale?: number; sheet?: string;
+  weapon?: string; hat?: string; scale?: number; sheet?: string; cape?: string; mouth?: string;
 }
 export interface DropDef { item: string; rate: number }
 export interface MonsterDef {

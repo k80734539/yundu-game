@@ -40,7 +40,13 @@ function limb(c: CanvasRenderingContext2D, x0: number, y0: number, x1: number, y
   c.strokeStyle = OUTC; c.lineWidth = w + 2; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.stroke();
   c.strokeStyle = css(col); c.lineWidth = w; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.stroke();
   c.strokeStyle = css(shade(col, 0.25)); c.lineWidth = Math.max(1, w * 0.3); c.beginPath(); c.moveTo(x0 - w * 0.25, y0); c.lineTo(x1 - w * 0.25, y1); c.stroke();
-  if (end) { c.fillStyle = OUTC; pxEllipse(c, x1, y1, 4.5, 4.5); c.fillStyle = css(end); pxEllipse(c, x1, y1, 3.5, 3.5); }
+  if (end) {
+    // 袖口
+    const cx = x0 + (x1 - x0) * 0.78, cy = y0 + (y1 - y0) * 0.78;
+    c.fillStyle = OUTC; pxEllipse(c, cx, cy, w / 2 + 1.5, 3); c.fillStyle = css(shade(col, -0.25)); pxEllipse(c, cx, cy, w / 2 + 0.5, 2);
+    c.fillStyle = OUTC; pxEllipse(c, x1, y1, 4.5, 4.5); c.fillStyle = css(end); pxEllipse(c, x1, y1, 3.5, 3.5);
+    c.fillStyle = css(shade(end, 0.35)); c.fillRect(Math.round(x1 - 2), Math.round(y1 - 2), 2, 1);
+  }
 }
 function line(c: CanvasRenderingContext2D, x0: number, y0: number, x1: number, y1: number, w: number, col: string) {
   c.lineCap = 'round'; c.strokeStyle = col; c.lineWidth = w; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.stroke();
@@ -164,14 +170,31 @@ function drawHuman(c: CanvasRenderingContext2D, dir: number, f: number, L: Look)
     oRect(c, ax - 6 + s2 + leanX * 0.5, footY - 5 + Math.min(0, -Math.abs(s2) * 0.3), 12, 6, shade(shoes, -0.2));
     oRect(c, ax - 6 + s1 + leanX * 0.5, by(160), 9, footY - by(160) - 4, pants);
     oRect(c, ax - 10 + s1 + leanX * 0.5, footY - 5 + Math.min(0, -Math.abs(s1) * 0.3), 12, 6, shoes);
+    oRect(c, ax - 6 + s1 + leanX * 0.5, footY - 12, 9, 7, shoes);
+    c.fillStyle = css(shade(shoes, 0.35)); c.fillRect(ax - 6 + s1 + leanX * 0.5, footY - 12, 9, 2);
   } else {
     const liftL = Math.max(0, p.legA) * 4, liftR = Math.max(0, -p.legA) * 4;
     if (!robe) {
       oRect(c, ax - 12, by(160), 9, footY - by(160) - 4 - liftL, pants);
       oRect(c, ax + 3, by(160), 9, footY - by(160) - 4 - liftR, pants);
     }
-    oRect(c, ax - 14, footY - 5 - liftL, 12, 6, shoes);
-    oRect(c, ax + 2, footY - 5 - liftR, 12, 6, shoes);
+    // 靴子：靴筒＋翻邊＋鞋底
+    for (const [x0, lift] of [[ax - 14, liftL], [ax + 2, liftR]]) {
+      oRect(c, x0 + 1, footY - 13 - lift, 10, 9, shoes);
+      oRect(c, x0, footY - 5 - lift, 12, 6, shoes);
+      c.fillStyle = css(shade(shoes, 0.35)); c.fillRect(x0 + 1, footY - 13 - lift, 10, 2);
+      c.fillStyle = css(shade(shoes, -0.5)); c.fillRect(x0, footY - lift, 12, 1);
+      c.fillStyle = css(shade(shoes, 0.25)); c.fillRect(x0 + 2, footY - 4 - lift, 3, 1);
+    }
+    if (!robe) { c.fillStyle = css(shade(pants, -0.3)); c.fillRect(ax - 9, by(166), 1, 8); c.fillRect(ax + 6, by(166), 1, 8); }
+  }
+  // ---- 披風（身後） ----
+  if (L.cape && !robe) {
+    const cp = hex(L.cape), sway = f >= 2 && f < 6 ? Math.sin(((f - 2) / 4) * Math.PI * 2) * 3 : f === 1 ? 1 : 0;
+    if (back) oPoly(c, [[ax - 19, by(130)], [ax + 19, by(130)], [ax + 23 + sway, by(176)], [ax - 23 + sway, by(176)]], cp);
+    else if (side) oPoly(c, [[ax - 2 + leanX, by(130)], [ax + 12 + leanX, by(132)], [ax + 22 + sway, by(172)], [ax + 4 + sway, by(176)]], shade(cp, -0.1));
+    else { oPoly(c, [[ax - 21, by(132)], [ax - 26 - sway, by(172)], [ax - 18, by(170)]], shade(cp, -0.15)); oPoly(c, [[ax + 21, by(132)], [ax + 26 + sway, by(172)], [ax + 18, by(170)]], shade(cp, -0.15)); }
+    if (back) { c.fillStyle = css(shade(cp, -0.3)); c.fillRect(ax - 8, by(140), 1, 30); c.fillRect(ax + 8, by(140), 1, 30); c.fillStyle = css(shade(cp, 0.25)); c.fillRect(ax - 17, by(132), 4, 40); }
   }
   // ---- 身體 ----
   const tx = side ? ax - 12 + leanX : ax - 17, tw = side ? 24 : 34, ty = by(128) + leanY;
@@ -184,53 +207,87 @@ function drawHuman(c: CanvasRenderingContext2D, dir: number, f: number, L: Look)
     if (!side && !back) { c.fillStyle = css(cloth2); c.fillRect(ax - 2, ty + 4, 4, hem - ty - 8); }
   } else {
     oRect(c, tx, ty, tw, 34, cloth);
-    c.fillStyle = css(cloth2); c.fillRect(tx, ty + 24, tw, 4); // 腰帶
-    c.fillStyle = '#e8c050'; if (!back) c.fillRect(side ? tx + 2 : ax - 2, ty + 24, 4, 4);
-    if (!side && !back) { c.fillStyle = css(shade(cloth2, 0.1)); c.fillRect(ax - 6, ty, 12, 5); } // 領口
-    if (L.body === 'armor') { // 肩甲
+    // 衣褶、下擺
+    c.fillStyle = css(shade(cloth, -0.18)); c.fillRect(tx + Math.round(tw * 0.32), ty + 8, 1, 14); c.fillRect(tx + Math.round(tw * 0.7), ty + 10, 1, 12);
+    c.fillStyle = css(shade(cloth, -0.3)); c.fillRect(tx, ty + 32, tw, 2);
+    c.fillStyle = css(cloth2); c.fillRect(tx, ty + 23, tw, 5); // 腰帶
+    c.fillStyle = css(shade(cloth2, 0.3)); c.fillRect(tx, ty + 23, tw, 1);
+    if (!back) { c.fillStyle = OUTC; c.fillRect(side ? tx + 1 : ax - 4, ty + 22, 8, 7); c.fillStyle = '#e8c050'; c.fillRect(side ? tx + 2 : ax - 3, ty + 23, 6, 5); c.fillStyle = '#fff4b0'; c.fillRect(side ? tx + 2 : ax - 3, ty + 23, 2, 2); c.fillStyle = css(cloth2); c.fillRect(side ? tx + 4 : ax - 1, ty + 25, 2, 1); }
+    if (!side && !back) {
+      c.fillStyle = OUTC; c.fillRect(ax - 7, ty - 1, 14, 7);
+      c.fillStyle = css(shade(cloth2, 0.15)); c.fillRect(ax - 6, ty, 12, 5); // 領口
+      c.fillStyle = css(shade(hex(L.skin || '#f8d8b8'), -0.1)); c.beginPath(); c.moveTo(ax - 4, ty); c.lineTo(ax + 4, ty); c.lineTo(ax, ty + 6); c.fill();
+      c.fillStyle = css(shade(cloth2, -0.2)); c.fillRect(ax - 1, ty + 7, 2, 2); c.fillRect(ax - 1, ty + 13, 2, 2); c.fillRect(ax - 1, ty + 19, 2, 2); // 鈕扣
+    }
+    if (L.body === 'armor') { // 胸甲＋肩甲
+      if (!back) { oRect(c, side ? tx + 3 : tx + 5, ty + 3, side ? tw - 6 : tw - 10, 17, hex('#b8c0d0')); c.fillStyle = '#e8eef8'; c.fillRect(side ? tx + 4 : tx + 6, ty + 4, 3, 14); c.fillStyle = '#7a8498'; c.fillRect(side ? tx + 3 : ax - 1, ty + 6, 1, 12); }
       oEllipse(c, side ? tx + 10 : tx - 2, ty + 4, 9, 7, hex('#b8c0d0'));
       if (!side) oEllipse(c, tx + tw + 2, ty + 4, 9, 7, hex('#b8c0d0'));
+      c.fillStyle = '#e8c050'; c.fillRect(side ? tx + 9 : tx - 3, ty + 1, 2, 2); if (!side) c.fillRect(tx + tw + 1, ty + 1, 2, 2);
     }
   }
   // ---- 頭 ----
   const hx = side ? ax - 3 + leanX : ax, hy = by(96) + leanY;
+  // 脖子
+  oRect(c, hx - 6, hy + 20, 12, 12, shade(skin, -0.15));
   // 後髮（正面時在頭後）
   if (!side && !back && (L.hairStyle === 1 || L.hairStyle === 3)) mEllipses(c, [[hx, hy + 14, 30, 22]], shade(hair, -0.2));
   // ---- 手臂（正面/背面兩側，側面前手） ----
   if (side) limb(c, shR[0], shR[1], hR[0], hR[1], 8, cloth, skin);
-  oEllipse(c, hx, hy, side ? 27 : 30, 27, skin);
+  oEllipse(c, hx, hy, side ? 28 : 31, 28, skin);
+  if (!back) { c.fillStyle = css(shade(skin, 0.4)); c.fillRect(hx - (side ? 20 : 20), hy + 2, 4, 2); }
   if (!side) { limb(c, shL[0], shL[1], hL[0], hL[1], 8, cloth, skin); limb(c, shR[0], shR[1], hR[0], hR[1], 8, cloth, skin); }
-  // ---- 臉 ----
+  // ---- 臉：大眼（眼白、雙色虹膜、瞳孔、雙高光、睫毛、眉毛） ----
   if (!back) {
-    const ex = side ? [hx - 16] : [hx - 11, hx + 11];
+    const eye = hex(L.eye || '#3a5a9a');
+    const ex = side ? [hx - 17] : [hx - 12, hx + 12];
     for (const x of ex) {
-      c.fillStyle = OUTC; c.fillRect(x - 3, hy + 3, 6, 11);
-      c.fillStyle = css(hex(L.eye || '#3a5a9a')); c.fillRect(x - 2, hy + 8, 4, 5);
-      c.fillStyle = css(shade(hex(L.eye || '#3a5a9a'), 0.4)); c.fillRect(x - 2, hy + 12, 4, 1);
-      c.fillStyle = '#ffffff'; c.fillRect(x - 2, hy + 4, 2, 3);
-      c.fillStyle = 'rgba(240,120,120,0.55)'; c.fillRect(x - (side ? 3 : 4), hy + 16, 5, 2);
+      const y0 = hy + 2;
+      c.fillStyle = OUTC; c.fillRect(x - 4, y0, 8, 13);              // 眼框
+      c.fillStyle = '#ffffff'; c.fillRect(x - 3, y0 + 2, 6, 10);      // 眼白
+      c.fillStyle = css(shade(eye, -0.35)); c.fillRect(x - 3, y0 + 3, 5, 9); // 虹膜（上暗）
+      c.fillStyle = css(eye); c.fillRect(x - 3, y0 + 7, 5, 5);
+      c.fillStyle = css(shade(eye, 0.45)); c.fillRect(x - 2, y0 + 10, 3, 2); // 虹膜下緣亮
+      c.fillStyle = '#140c18'; c.fillRect(x - 2, y0 + 5, 3, 4);       // 瞳孔
+      c.fillStyle = '#ffffff'; c.fillRect(x - 3, y0 + 3, 2, 3); c.fillRect(x + 1, y0 + 9, 1, 1); // 高光
+      c.fillStyle = OUTC; c.fillRect(x - 5, y0, 10, 2);               // 上睫毛
+      if (!side || true) c.fillRect(x + (x < hx ? -6 : 4), y0 - 1, 2, 2);
+      c.fillStyle = css(shade(hex(L.hair || '#7a4a2a'), -0.35)); c.fillRect(x - 4, y0 - 5, 8, 2); // 眉毛
+      c.fillStyle = 'rgba(240,110,120,0.5)'; c.fillRect(x - (side ? 3 : 5), hy + 17, 6, 2); c.fillRect(x - (side ? 2 : 4), hy + 19, 4, 1);
     }
-    c.fillStyle = css(shade(skin, -0.45)); c.fillRect(side ? hx - 22 : hx - 2, hy + 20, side ? 3 : 4, 1);
+    c.fillStyle = css(shade(skin, -0.25)); c.fillRect(side ? hx - 27 : hx, hy + 15, 1, 2); // 鼻
+    c.fillStyle = css(shade(skin, -0.5)); c.fillRect(side ? hx - 23 : hx - 2, hy + 21, side ? 3 : 4, 1); // 嘴
+    c.fillStyle = '#c8505a'; if (!side) c.fillRect(hx - 1, hy + 22, 2, 1);
   }
   // ---- 頭髮（合成一個形狀） ----
   const hs = L.hairStyle || 0;
   if (back) {
-    const es = [[hx, hy - 3, 31, 27]];
+    const es = [[hx, hy - 7, 32, 31]];
     if (hs === 1 || hs === 3) es.push([hx, hy + 20, 22, 14]); else es.push([hx, hy + 14, 26, 12]);
     mEllipses(c, es, hair);
     c.fillStyle = css(shade(hair, -0.35)); c.fillRect(hx - 1, hy - 6, 2, 22);
   } else if (side) {
-    const es = [[hx + 4, hy - 10, 29, 19], [hx + 15, hy + 3, 16, 20], [hx - 16, hy - 8, 10, 7]];
+    const es = [[hx + 4, hy - 15, 30, 23], [hx + 15, hy + 1, 17, 21], [hx - 17, hy - 10, 11, 8]];
     if (hs === 1) es.push([hx + 20, hy + 20, 10, 16]);
     mEllipses(c, es, hair);
     if (hs === 2) for (let i = 0; i < 3; i++) oPoly(c, [[hx + 6 + i * 8, hy - 24], [hx + 14 + i * 8, hy - 40 + i * 2], [hx + 18 + i * 8, hy - 22]], hair);
   } else {
-    const es = [[hx, hy - 12, 32, 19], [hx - 26, hy + 1, 7, 13], [hx + 26, hy + 1, 7, 13]];
+    const es = [[hx, hy - 16, 34, 23], [hx - 27, hy + 1, 7, 14], [hx + 27, hy + 1, 7, 14]];
     for (let i = -2; i <= 2; i++) es.push([hx + i * 11, hy - 6 + Math.abs(i) * 2, 7, 5]);
     mEllipses(c, es, hair);
     c.fillStyle = css(shade(hair, -0.3)); for (let i = -1; i <= 1; i++) c.fillRect(hx + i * 11 + 5, hy - 8, 1, 6);
     if (hs === 2) for (let i = -1; i <= 1; i++) oPoly(c, [[hx + i * 14 - 7, hy - 24], [hx + i * 16, hy - 40], [hx + i * 14 + 7, hy - 24]], hair);
     if (hs === 3) { oEllipse(c, hx - 30, hy - 14, 8, 8, shade(hair, 0.1)); oEllipse(c, hx + 30, hy - 14, 8, 8, shade(hair, 0.1)); }
+  }
+  // 髮絲與光澤帶（天使光環）
+  {
+    const dk = css(shade(hair, -0.4)), lt = css(shade(hair, 0.45));
+    const cx = side ? hx + 4 : hx, top = hy - 34;
+    c.fillStyle = dk;
+    for (const k of side ? [-12, -2, 8, 16] : [-18, -8, 4, 14]) for (let i = 0; i < 9; i++) c.fillRect(Math.round(cx + k + i * 0.35), top + 8 + i, 1, 1);
+    c.fillStyle = lt;
+    for (let i = -14; i <= 6; i++) { const yy = top + 9 + Math.round((i * i) / 40); if (!back || i < 4) c.fillRect(cx + i - 2, yy, 2, 1); }
+    c.fillRect(cx - 10, top + 5, 4, 1);
   }
   // ---- 帽子 ----
   if (L.hat === 'wizard') {
@@ -465,6 +522,28 @@ function drawMonster(c: CanvasRenderingContext2D, dir: number, f: number, L: Loo
   (MON[L.body || 'slime'] || MON.slime)(c, dir, f, L, s, ax, ay);
 }
 
+// ---------- 左上光源的邊緣打光 ----------
+/** 每個部位都有自己的深色外框：外框（或透明）在左上方的像素加亮、在右下方的像素壓暗，讓每塊都有體積感 */
+function celLight(c: CanvasRenderingContext2D, fw: number) {
+  const img = c.getImageData(0, 0, fw, fw), d = img.data, n = fw * fw;
+  const edge = new Uint8Array(n);
+  for (let i = 0; i < n; i++) { const k = i * 4; edge[i] = d[k + 3] === 0 || (d[k] < 50 && d[k + 1] < 40 && d[k + 2] < 55) ? 1 : 0; }
+  const out = new Uint8ClampedArray(d);
+  for (let y = 2; y < fw - 2; y++) for (let x = 2; x < fw - 2; x++) {
+    const i = y * fw + x; if (edge[i]) continue;
+    const k = i * 4;
+    const ul = edge[i - fw - 1] || edge[i - 1] || edge[i - fw];
+    const dr = edge[i + fw + 1] || edge[i + 1] || edge[i + fw];
+    const dr2 = edge[i + 2 * fw + 2] || edge[i + 2] || edge[i + 2 * fw];
+    let f = 1, add = 0;
+    if (ul && !dr) { f = 1.14; add = 14; }
+    else if (dr) f = 0.78;
+    else if (dr2) f = 0.9;
+    if (f !== 1) { out[k] = d[k] * f + add; out[k + 1] = d[k + 1] * f + add; out[k + 2] = d[k + 2] * f + add * 0.8 + (f < 1 ? 6 : 0); }
+  }
+  img.data.set(out); c.putImageData(img, 0, 0);
+}
+
 // ---------- 生成 sheet ----------
 function buildSheet(fw: number, draw: (c: CanvasRenderingContext2D, dir: number, f: number) => void): Sheet {
   const cv = makeCanvas(fw * FRAMES, fw * ROWS);
@@ -474,6 +553,7 @@ function buildSheet(fw: number, draw: (c: CanvasRenderingContext2D, dir: number,
     cc.clearRect(0, 0, fw, fw);
     draw(cc, dir, f);
     crisp(cc, 0, 0, fw, fw);
+    celLight(cc, fw);
     c.drawImage(cell, f * fw, dir * fw);
     if (dir === 1) { // 鏡像產生面向右
       c.save(); c.translate(f * fw + fw, 2 * fw); c.scale(-1, 1); c.drawImage(cell, 0, 0); c.restore();
@@ -482,16 +562,26 @@ function buildSheet(fw: number, draw: (c: CanvasRenderingContext2D, dir: number,
   return { c: cv, fw, fh: fw, ax: fw / 2, ay: fw - 6 };
 }
 const sheetCache = new Map<string, Sheet>();
+/** 若 look.sheet 指定了 PNG（同規格 4 列×10 格），載入後直接替換程式圖；載入前或失敗時用程式圖 */
+function useImage(s: Sheet, url?: string) {
+  if (!url) return;
+  const img = new Image();
+  img.onload = () => {
+    if (img.width !== s.fw * FRAMES || img.height !== s.fh * ROWS) { console.warn('sprite sheet 尺寸不符', url, img.width, img.height); return; }
+    const c = s.c.getContext('2d')!; c.clearRect(0, 0, s.c.width, s.c.height); c.drawImage(img, 0, 0); s.white = undefined; s.img = img;
+  };
+  img.src = url;
+}
 export function humanSheet(L: Look): Sheet {
   const k = 'h:' + JSON.stringify(L);
   let s = sheetCache.get(k);
-  if (!s) { s = buildSheet(192, (c, dir, f) => drawHuman(c, dir, f, L)); sheetCache.set(k, s); }
+  if (!s) { s = buildSheet(192, (c, dir, f) => drawHuman(c, dir, f, L)); sheetCache.set(k, s); useImage(s, L.sheet); }
   return s;
 }
 export function monsterSheet(L: Look, fw: number): Sheet {
   const k = 'm:' + fw + JSON.stringify(L);
   let s = sheetCache.get(k);
-  if (!s) { s = buildSheet(fw, (c, dir, f) => drawMonster(c, dir, f, L, fw)); sheetCache.set(k, s); }
+  if (!s) { s = buildSheet(fw, (c, dir, f) => drawMonster(c, dir, f, L, fw)); sheetCache.set(k, s); useImage(s, L.sheet); }
   return s;
 }
 /** 受擊閃白用的白色剪影（需要時才生成） */

@@ -22,7 +22,7 @@ const server = http.createServer((req, res) => {
 await new Promise((r) => server.listen(0, r));
 const port = server.address().port;
 const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
+const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: +(process.env.DPR || 1), hasTouch: !!process.env.TOUCH, isMobile: !!process.env.TOUCH });
 const errors = [];
 page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); if (process.env.LOG) console.log('[console]', m.type(), m.text()); });
 page.on('pageerror', (e) => errors.push(String(e)));

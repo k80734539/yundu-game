@@ -280,7 +280,8 @@
    "hairStyle": 2,
    "body": "armor",
    "hat": "helm",
-   "weapon": "sword"
+   "weapon": "sword",
+   "cape": "#3a4a8a"
   },
   "dialog": {
    "start": {

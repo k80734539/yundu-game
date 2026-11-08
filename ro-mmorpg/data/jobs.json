@@ -228,7 +228,8 @@
     "pants": "#3a3a5a",
     "hairStyle": 2,
     "body": "armor",
-    "hat": "band"
+    "hat": "band",
+    "cape": "#b8343a"
    },
    "bonus": [
     [
@@ -433,7 +434,8 @@
     "cloth2": "#8a6a3a",
     "pants": "#5a4a3a",
     "hairStyle": 3,
-    "hat": "feather"
+    "hat": "feather",
+    "cape": "#7a5a34"
    },
    "bonus": [
     [
