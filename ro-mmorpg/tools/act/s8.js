@@ -31,8 +31,8 @@ console.log('respawn', await page.evaluate(() => JSON.stringify({ map: window.__
 // 存檔：主存檔、備份、損壞時改用備份、舊版本遷移
 const sv = await page.evaluate(() => {
   const G = window.__game; G.save.save(); G.player.ch.zeny = 12345; G.save.save();
-  const main = localStorage.getItem('rom.save'), bak = localStorage.getItem('rom.save.bak');
-  localStorage.setItem('rom.save', main.slice(0, main.length - 30)); // 模擬寫到一半壞掉
+  const main = localStorage.getItem('rom.save.s1'), bak = localStorage.getItem('rom.save.s1.bak');
+  localStorage.setItem('rom.save.s1', main.slice(0, main.length - 30)); // 模擬寫到一半壞掉
   const d = G.save.read();
   return { hasBak: !!bak, from: G.save.loadedFrom, zenyFromBak: d && d.ch.zeny, v: JSON.parse(main).v };
 });
@@ -41,7 +41,7 @@ console.log('save', JSON.stringify(sv));
 const mg = await page.evaluate(() => {
   const G = window.__game; const d = G.save.snapshot(); delete d.hotbar; d.savePoint = 'aurora'; delete d.mvp;
   const body = JSON.stringify(d); let h = 0x811c9dc5; for (let i = 0; i < body.length; i++) { h ^= body.charCodeAt(i); h = Math.imul(h, 0x01000193); }
-  localStorage.setItem('rom.save', JSON.stringify({ v: 1, t: Date.now(), sum: (h >>> 0).toString(16), data: body }));
+  localStorage.setItem('rom.save.s1', JSON.stringify({ v: 1, t: Date.now(), sum: (h >>> 0).toString(16), data: body }));
   const r = G.save.read(); return { from: G.save.loadedFrom, hotbar: !!r.hotbar, sp: r.savePoint };
 });
 console.log('migrate', JSON.stringify(mg));
