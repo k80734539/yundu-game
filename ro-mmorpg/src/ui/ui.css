@@ -323,3 +323,5 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 .mslot-n { position: absolute; left: 4px; top: 2px; color: #c8d0e8; font-size: 11px; }
 #minimap.folded ~ #qtrack { top: 30px; }
 #ui.mobile #minimap.folded ~ #qtrack { top: 48px; }
+.sk-req { font-size: 11px; } .sk-req.no { color: #c0302a; } .sk-req.ok { color: #2a8a3a; }
+.sk-row.locked .sk-info b { color: #8a90a8; }

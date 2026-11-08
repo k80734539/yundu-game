@@ -213,9 +213,11 @@
     "sword"
    ],
    "skills": [
+    "sword_mastery",
+    "hp_recovery",
     "bash",
-    "magnum",
     "provoke",
+    "magnum",
     "endure"
    ],
    "attack": "melee",
@@ -321,6 +323,8 @@
     "staff"
    ],
    "skills": [
+    "sp_recovery",
+    "arcane",
     "firebolt",
     "coldbolt",
     "soulstrike",
@@ -420,9 +424,11 @@
     "bow"
    ],
    "skills": [
+    "owl_eye",
+    "vulture_eye",
     "double_strafe",
-    "arrow_shower",
     "concentration",
+    "arrow_shower",
     "charge_arrow"
    ],
    "attack": "arrow",

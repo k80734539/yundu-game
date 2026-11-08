@@ -70,7 +70,7 @@ export interface QuestDef {
   id: string; name: string; npc: string; type: 'kill' | 'collect' | 'talk';
   target: string; count: number; reqLv?: number; prev?: string; job?: string;
   desc: string; done: string; reward: { exp?: number; jexp?: number; zeny?: number; items?: [string, number][] };
-  repeat?: boolean; consume?: boolean;
+  repeat?: boolean; consume?: boolean; trial?: string;
 }
 export interface DialogNode { text: string | string[]; opts?: { label: string; go?: string; act?: string; arg?: string; cond?: string }[]; act?: string; arg?: string; go?: string }
 export interface NpcDef { id: string; name: string; look: Look; title?: string; shop?: string; dialog: Record<string, DialogNode>; mark?: string }

@@ -252,5 +252,49 @@
   },
   "reqLv": 30,
   "prev": "q_cap4"
+ },
+ {
+  "id": "trial_swordsman",
+  "name": "劍士試煉",
+  "npc": "job",
+  "type": "kill",
+  "target": "bunny",
+  "count": 10,
+  "trial": "swordsman",
+  "desc": "劍士要能正面迎擊敵人。到南方草原或微風森林，親手擊敗 10 隻跳跳兔，證明你的勇氣。",
+  "done": "很好，你的劍已經有了重量。",
+  "reward": {
+   "jexp": 0
+  }
+ },
+ {
+  "id": "trial_mage",
+  "name": "法師試煉",
+  "npc": "job",
+  "type": "collect",
+  "target": "petal",
+  "count": 5,
+  "trial": "mage",
+  "consume": true,
+  "desc": "法師要懂得觀察魔力的流動。微風森林的花瓣妖身上帶著魔力，帶 5 片花瓣回來。",
+  "done": "花瓣裡的魔力很穩定，你有法師的眼光。",
+  "reward": {
+   "jexp": 0
+  }
+ },
+ {
+  "id": "trial_archer",
+  "name": "弓箭手試煉",
+  "npc": "job",
+  "type": "collect",
+  "target": "feather",
+  "count": 6,
+  "trial": "archer",
+  "consume": true,
+  "desc": "弓箭手要眼明手快。南方草原的小毛雞跑得很快，收集 6 根羽毛做箭羽吧。",
+  "done": "羽毛都很完整，你的手很穩。",
+  "reward": {
+   "jexp": 0
+  }
  }
 ]

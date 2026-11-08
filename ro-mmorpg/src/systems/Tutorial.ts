@@ -12,7 +12,7 @@ export const STEPS: Step[] = [
   { text: '回到晨曦鎮，向艾莉回報任務（她頭上會出現綠色「?」）。', done: (g) => g.quests.isDone('q_tut1') },
   { text: '職業等級提升會得到技能點數。按 Alt+S 學習「基本技能」。', done: (g) => (g.player.ch.skills.basic || 0) >= 1 },
   { text: '基本技能 Lv3 以後，按 Insert 可以坐下快速回復 HP／SP。', done: (g) => !!g.flags.sat },
-  { text: '職業等級 10、基本技能 Lv9 後，到北邊教堂前找轉職官雷歐轉職！', done: (g) => g.player.ch.job !== 'novice' },
+  { text: '職業等級 10、基本技能 Lv9 後，到北邊教堂前找轉職官雷歐，完成轉職試煉就能轉職！', done: (g) => g.player.ch.job !== 'novice' },
 ];
 export class Tutorial {
   t = 0;

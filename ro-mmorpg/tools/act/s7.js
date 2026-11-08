@@ -12,12 +12,15 @@ await sleep(700);
 await clickNpc('job'); await until();
 console.log('job menu', await opts());
 await key('1'); await until(); console.log('choose', await opts());
-await key('2'); await until(); await key('1'); await sleep(300);
-for (let i = 0; i < 4; i++) await key('Enter');
+await key('2'); await until(); await key('1'); await sleep(300);   // 接受法師試煉
+for (let i = 0; i < 3; i++) await key('Enter');
+await page.evaluate(() => { window.__game.inv.add('petal', 5); });   // 帶回 5 片花瓣
+await clickNpc('job'); await until(); await key('1'); await sleep(200);
+for (let i = 0; i < 12 && await page.evaluate(() => window.__game.ui.dialog.isOpen); i++) await key('Enter');
 const st = await page.evaluate(() => { const G = window.__game; return { job: G.player.ch.job, weapon: G.player.weaponType(), range: G.attackRange(G.player) }; });
 console.log('after', JSON.stringify(st));
 // 學技能、測試三職業都能施放不出錯
-await page.evaluate(() => { const G = window.__game; G.player.ch.skillPts = 30; for (let i = 0; i < 5; i++) { G.learnSkill('firebolt'); G.learnSkill('thunderstorm'); G.learnSkill('coldbolt'); G.learnSkill('soulstrike'); } G.player.sp = G.player.maxSp = 500; G.loadMap('prt_fild', 28, 20); G.hotbar[2] = { type: 'skill', id: 'firebolt' }; G.hotbar[3] = { type: 'skill', id: 'thunderstorm' }; G.ui.hot.render(); });
+await page.evaluate(() => { const G = window.__game; G.player.ch.skillPts = 40; for (let i = 0; i < 5; i++) { G.learnSkill('arcane'); G.learnSkill('firebolt'); G.learnSkill('coldbolt'); G.learnSkill('soulstrike'); G.learnSkill('thunderstorm'); } G.player.sp = G.player.maxSp = 500; G.loadMap('prt_fild', 28, 20); G.hotbar[2] = { type: 'skill', id: 'firebolt' }; G.hotbar[3] = { type: 'skill', id: 'thunderstorm' }; G.ui.hot.render(); });
 await sleep(800);
 const near = () => page.evaluate(() => { const G = window.__game, p = G.player; const m = G.monsters.filter((m) => !m.dead).sort((a, b) => Math.hypot(a.x - p.x, a.y - p.y) - Math.hypot(b.x - p.x, b.y - p.y))[0]; m.hp = m.maxHp = 2000; p.chase = m; return m.name; });
 console.log('target', await near());

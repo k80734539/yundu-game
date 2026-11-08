@@ -16,6 +16,10 @@ export class Quests {
     if (q.prev && !this.isDone(q.prev)) return false;
     if (q.reqLv && ch.baseLv < q.reqLv) return false;
     if (q.job && ch.job !== q.job) return false;
+    if (q.trial) { // 轉職試煉：初心者 Job10＋基本技能 9，且一次只能進行一個
+      if (ch.job !== 'novice' || ch.jobLv < 10 || (ch.skills.basic || 0) < 9) return false;
+      if (Object.keys(this.s).some((k) => k.startsWith('trial_') && this.s[k].st === 'active')) return false;
+    }
     return true;
   }
   progress(q: QuestDef) { return q.type === 'collect' ? Math.min(q.count, this.g.inv.count(q.target)) : Math.min(q.count, this.s[q.id]?.n || 0); }
@@ -27,6 +31,7 @@ export class Quests {
   /** NPC 頭上標記：'?' 可回報、'!' 可接取 */
   mark(npc: string): '' | '!' | '?' {
     const f = this.forNpc(npc);
+    if (npc === 'job' && f.avail.length && f.avail.some((q) => q.trial)) { if (!f.active.length) return '!'; }
     if (f.active.some((q) => this.complete(q))) return '?';
     if (f.avail.length) return '!';
     return '';

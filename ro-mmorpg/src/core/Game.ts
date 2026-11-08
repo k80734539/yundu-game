@@ -226,7 +226,13 @@ export class Game {
     if (!s || ch.skillPts <= 0 || (ch.skills[id] || 0) >= s.maxLv) return false;
     if (!this.skillList().includes(id)) return false;
     if (s.job !== ch.job && s.job !== 'novice') return false;
+    if (this.missingReq(id).length) return false;
     return true;
+  }
+  /** 技能樹：還沒達成的前置條件（例：爆裂斬需要重擊 Lv5） */
+  missingReq(id: string): { id: string; lv: number; name: string }[] {
+    const ch = this.player.ch, s = DB.skill[id];
+    return (s?.req || []).filter((r) => (ch.skills[r.id] || 0) < r.lv).map((r) => ({ ...r, name: DB.skill[r.id]?.name || r.id }));
   }
   learnSkill(id: string) {
     if (!this.canLearn(id)) return;
@@ -256,20 +262,37 @@ export class Game {
     if (ch.job !== 'novice') { d.say(`你已經是${this.player.job.name}了。繼續在這條路上精進吧！`); return; }
     const basic = ch.skills.basic || 0;
     if (ch.jobLv < 10 || basic < 9) {
-      d.say([`轉職需要：職業等級 10（目前 ${ch.jobLv}）、基本技能 Lv9（目前 Lv${basic}）。`, '技能點數可以用 Alt+S 分配到「基本技能」。等你準備好再來吧！']);
+      d.say([`轉職需要：職業等級 10（目前 ${ch.jobLv}）、基本技能 Lv9（目前 Lv${basic}）。`, '技能點數可以在技能視窗分配到「基本技能」。等你準備好再來吧！']);
       return;
     }
-    const pick = (job: string) => {
-      const jd = DB.job[job];
-      d.say(`你確定要成為「${jd.name}」嗎？轉職後無法回頭喔。`, () => d.choose([
-        { label: `是的，我要成為${jd.name}`, fn: () => { this.changeJob(job); d.say([`從今天起，你就是一名${jd.name}了！`, '我送你一把入門武器，好好使用新的技能吧。']); } },
+    // 已在進行的試煉
+    const active = ['swordsman', 'mage', 'archer'].map((j) => DB.quest['trial_' + j]).find((q) => q && this.quests.isActive(q.id));
+    if (active) {
+      const jd = DB.job[active.trial!];
+      if (this.quests.complete(active)) {
+        d.say([active.done, `那麼，從今天起你就是${jd.name}了！`], () => {
+          this.quests.turnIn(active.id); this.changeJob(active.trial!);
+          d.say(['我送你一把入門武器，好好使用新的技能吧。', '新職業的技能有前置條件，先學基礎的技能，才能學更強的。']);
+        });
+      } else {
+        d.say([`你正在進行「${active.name}」：${active.desc}`, `目前進度：${this.quests.progress(active)} / ${active.count}`], () => d.choose([
+          { label: '我會繼續努力', fn: () => d.close() },
+          { label: '我想改選別的職業', fn: () => { this.quests.abandon(active.id); this.jobMenu(d); } },
+        ]));
+      }
+      return;
+    }
+    const offer = (job: string) => {
+      const jd = DB.job[job], q = DB.quest['trial_' + job];
+      d.say([`想成為${jd.name}，就要先通過試煉。`, q.desc, '轉職之後就不能回頭了，確定要接受試煉嗎？'], () => d.choose([
+        { label: `接受「${q.name}」`, fn: () => { this.quests.accept(q.id); d.say('完成後再來找我。祝你好運！'); } },
         { label: '再想想', fn: () => d.close() },
       ]));
     };
-    d.say('選擇你的道路吧：', () => d.choose([
-      { label: '劍士（近戰、耐打）', fn: () => pick('swordsman') },
-      { label: '法師（遠距魔法、詠唱）', fn: () => pick('mage') },
-      { label: '弓箭手（遠距射箭）', fn: () => pick('archer') },
+    d.say('你已經有資格選擇自己的道路了。想成為哪一種冒險者？', () => d.choose([
+      { label: '劍士（近戰、耐打）', fn: () => offer('swordsman') },
+      { label: '法師（遠距魔法、詠唱）', fn: () => offer('mage') },
+      { label: '弓箭手（遠距射箭）', fn: () => offer('archer') },
       { label: '再想想', fn: () => d.close() },
     ]));
   }
@@ -606,7 +629,7 @@ export class Game {
   attackRange(a: Actor) {
     if (a instanceof Monster) return a.def.range;
     const j = this.player.job;
-    if (j.attack === 'arrow') return this.player.weaponType() === 'bow' ? j.range : 1;
+    if (j.attack === 'arrow') return this.player.weaponType() === 'bow' ? j.range + Math.floor((this.player.ch.skills.vulture_eye || 0) / 2) : 1;
     return j.range;
   }
   attackMode(): 'melee' | 'magic' | 'arrow' { const j = this.player.job; if (j.attack === 'arrow' && this.player.weaponType() !== 'bow') return 'melee'; return j.attack; }

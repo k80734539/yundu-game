@@ -89,11 +89,13 @@ export class MobileUI {
     const g = this.ui.g, s = DB.skill[id], lv = g.player.ch.skills[id] || 0;
     const body = `<div class="ii-head"><img src="${iconURL(s.icon.k, s.icon.c)}"><b>${s.name}</b>　Lv ${lv}/${s.maxLv}</div><div class="ii-desc">${s.desc}</div>` +
       (s.type === 'active' ? `<div class="ii-st">SP ${s.sp[Math.max(0, lv - 1)]}　詠唱 ${s.cast[Math.max(0, lv - 1)]} 秒　冷卻 ${s.cd[Math.max(0, lv - 1)]} 秒</div>` : '<div class="ii-st">被動技能</div>');
+    const miss = g.missingReq(id);
+    const reqHtml = s.req?.length ? `<div class="ii-st">需要：${s.req.map((r) => `${DB.skill[r.id]?.name} Lv${r.lv}`).join('、')}${miss.length ? `<br><span class="sk-req no">還差：${miss.map((m) => `${m.name} Lv${m.lv}`).join('、')}</span>` : '　✔'}</div>` : '';
     const btns: [string, () => void, string?][] = [];
     if (lv && s.type === 'active') btns.push(['施放', () => { this.close(); this.ui.toggle('skills'); g.useSkill(id); }, 'pri'], ['放到快捷列', () => this.pickSlot({ type: 'skill', id })]);
     if (g.canLearn(id)) btns.push([`學習（剩 ${g.player.ch.skillPts} 點）`, () => { g.learnSkill(id); this.skill(id); }, lv ? '' : 'pri']);
     btns.push(['關閉', () => this.close()]);
-    this.open(s.name, body, btns);
+    this.open(s.name, body + reqHtml, btns);
   }
   /** 選快捷列的格子 */
   pickSlot(slot: { type: 'item' | 'skill'; id: string }) {

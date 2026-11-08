@@ -62,6 +62,12 @@ export function derive(ch: CharData, equips: EquipInfo[], buffs: Record<string, 
   if (buffs.blessing) { bonus.str += buffs.blessing; bonus.int += buffs.blessing; bonus.dex += buffs.blessing; }
   if (buffs.agiup) bonus.agi += buffs.agiup;
   if (buffs.endure) defB += buffs.endure;
+  // 被動技能
+  const sl = (id: string) => ch.skills[id] || 0;
+  if (sl('owl_eye')) bonus.dex += sl('owl_eye');
+  if (sl('sword_mastery') && (wtype === 'sword' || wtype === 'dagger')) atkB += 4 * sl('sword_mastery');
+  if (sl('vulture_eye') && wtype === 'bow') hitB += sl('vulture_eye');
+  matkPct += 3 * sl('arcane');
   const t = zero();
   for (const k of STAT_KEYS) t[k] = ch.stats[k] + bonus[k];
   const lv = ch.baseLv;
@@ -92,8 +98,8 @@ export function derive(ch: CharData, equips: EquipInfo[], buffs: Record<string, 
     mdef: Math.min(90, mdefB), softMdef: t.int,
     aspd, delay: (200 - aspd) / 50,
     total: t, bonus,
-    hpRegen: Math.max(1, Math.floor(maxHp / 200)) + Math.floor(t.vit / 5),
-    spRegen: 1 + Math.floor(maxSp / 100) + Math.floor(t.int / 6),
+    hpRegen: Math.max(1, Math.floor(maxHp / 200)) + Math.floor(t.vit / 5) + 5 * sl('hp_recovery'),
+    spRegen: 1 + Math.floor(maxSp / 100) + Math.floor(t.int / 6) + 3 * sl('sp_recovery'),
     weight: 2000 + t.str * 30,
   };
 }

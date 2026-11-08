@@ -23,7 +23,10 @@ export class SkillWindow extends Win {
         ic.addEventListener('dblclick', () => g.useSkill(id));
       }
       const info = h('div', 'sk-info');
-      info.innerHTML = `<b>${s.name}</b> <span class="dim">${s.type === 'passive' ? '被動' : 'SP ' + s.sp[Math.max(0, lv - 1)]}</span><br><span class="sk-desc">${s.desc}</span>`;
+      const miss = g.missingReq(id);
+      const reqTxt = s.req?.length ? `<br><span class="sk-req ${miss.length ? 'no' : 'ok'}">需要：${s.req.map((r) => `${DB.skill[r.id]?.name} Lv${r.lv}`).join('、')}${miss.length ? '' : '　✔'}</span>` : '';
+      info.innerHTML = `<b>${s.name}</b> <span class="dim">${s.type === 'passive' ? '被動' : 'SP ' + s.sp[Math.max(0, lv - 1)]}</span><br><span class="sk-desc">${s.desc}</span>${reqTxt}`;
+      if (miss.length && !lv) row.classList.add('locked');
       const lvEl = h('div', 'sk-lv', `${lv}/${s.maxLv}`);
       if (this.ui.m) { row.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('.btn')) return; this.ui.m!.skill(id); }); row.classList.add('tap'); }
       const can = g.canLearn(id);
