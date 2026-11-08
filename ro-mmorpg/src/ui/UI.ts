@@ -149,28 +149,39 @@ export class UI {
     this.death.style.display = 'flex';
   }
   /** 標題畫面：新角色／繼續 */
+  /** 標題畫面：3 個角色欄位（開始／刪除／建立） */
   showTitle() {
     const t = h('div'); t.id = 'title';
     const box = h('div', 'tbox');
-    box.innerHTML = '<h1>晨曦物語</h1><div class="sub">RO 風格單機網頁 MMORPG</div>';
-    const save = this.g.save.read();
-    const btns = h('div', 'btns');
-    const name = h('input') as HTMLInputElement; name.placeholder = '輸入角色名稱'; name.maxLength = 10; name.value = '';
-    name.addEventListener('keydown', (e) => { e.stopPropagation(); if (e.key === 'Enter') go(false); });
-    const go = (cont: boolean) => {
-      const start = () => { t.remove(); this.audio(); this.g.begin(cont, name.value.trim() || '冒險者'); };
-      if (!cont && save) ask('開始新的冒險會覆蓋現有存檔，確定嗎？', start); else start();
-    };
-    if (save) {
-      const jn = DB.job[save.ch.job]?.name || '';
-      btns.appendChild(btn(`繼續冒險（${save.ch.name}　${jn} Lv${save.ch.baseLv}）`, () => go(true)));
-    }
-    const nb = h('div', 'btns'); nb.append(name, btn('新的冒險', () => go(false)));
-    box.append(btns, nb);
-    box.appendChild(h('div', 'note', '點擊移動／攻擊　Alt+E 背包　Alt+A 能力值　Alt+S 技能　F1~F9 快捷列　M 世界地圖'));
+    box.innerHTML = '<h1>晨曦物語</h1><div class="sub">選擇角色</div>';
+    const list = h('div', 'slots');
+    const go = (cont: boolean, slot: number, name = '') => { t.remove(); this.audio(); this.g.begin(cont, name || '冒險者', slot); };
+    const mapName = (id: string) => DB.map[id]?.name || '';
+    this.g.save.list().forEach((info, i) => {
+      const slot = i + 1;
+      const card = h('div', 'slot' + (info ? '' : ' empty'));
+      card.appendChild(h('div', 'slot-n', `欄位 ${slot}`));
+      if (info) {
+        const face = h('canvas', 'slot-face') as HTMLCanvasElement; face.width = 72; face.height = 72;
+        const look = { ...DB.job[info.job]?.look };
+        import('../render/SpriteFactory').then(({ humanSheet }) => { const sh = humanSheet(look); const c = face.getContext('2d')!; c.imageSmoothingEnabled = false; c.drawImage(sh.c, 60, 66, 72, 72, 0, 0, 72, 72); });
+        const tx = h('div', 'slot-info');
+        tx.innerHTML = `<b>${info.name}</b><br>${DB.job[info.job]?.name || ''}　Lv ${info.baseLv}／Job ${info.jobLv}<br><span class="dim">${mapName(info.map)}${info.t ? '　' + new Date(info.t).toLocaleDateString() : ''}</span>`;
+        const bs = h('div', 'slot-btns');
+        bs.append(btn('開始', () => go(true, slot)), btn('刪除', () => ask(`確定要刪除「${info.name}」嗎？刪除後無法復原。`, () => { this.g.save.deleteSlot(slot); t.remove(); this.showTitle(); }), 'warn'));
+        card.append(face, tx, bs);
+      } else {
+        const name = h('input') as HTMLInputElement; name.placeholder = '角色名稱'; name.maxLength = 10; name.id = 'slot-name-' + slot;
+        name.addEventListener('keydown', (e) => { e.stopPropagation(); if (e.key === 'Enter') go(false, slot, name.value.trim()); });
+        const bs = h('div', 'slot-btns'); bs.append(btn('建立角色', () => go(false, slot, name.value.trim())));
+        card.append(h('div', 'slot-info dim', '空欄位'), name, bs);
+      }
+      list.appendChild(card);
+    });
+    box.appendChild(list);
+    box.appendChild(h('div', 'note', this.mobile ? '點地面移動、點怪物攻擊；右下角按鈕開背包、技能、選單' : '點擊移動／攻擊　Alt+E 背包　Alt+A 能力值　Alt+S 技能　F1~F9 快捷列　M 世界地圖'));
     t.appendChild(box);
     this.root.appendChild(t);
-    setTimeout(() => name.focus(), 50);
   }
   audio() { this.g.audio?.unlock(); }
   tutorialHint() {

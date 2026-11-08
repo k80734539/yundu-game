@@ -1,7 +1,10 @@
 import type { Game } from '../core/Game';
 import { DB } from '../data';
 
-export const SAVE_KEY = 'rom.save', BAK_KEY = 'rom.save.bak';
+/** 舊版只有一個存檔（rom.save），現在分成 3 個角色欄位 rom.save.s1~s3（各自有 .bak 備份） */
+export const LEGACY_KEY = 'rom.save', LEGACY_BAK = 'rom.save.bak', SLOTS = 3;
+const keyOf = (n: number) => `rom.save.s${n}`, bakOf = (n: number) => `rom.save.s${n}.bak`;
+export interface SlotInfo { slot: number; name: string; job: string; baseLv: number; jobLv: number; map: string; t: number }
 /** 目前存檔版本；改存檔格式時 +1 並在 migrations 補一個升級函式 */
 export const SAVE_V = 3;
 type Data = Record<string, any>;
@@ -42,7 +45,35 @@ export function unpack(raw: string | null): Data | null {
 export class Save {
   private soonT = -1; private autoT = 0;
   loadedFrom: 'main' | 'backup' | 'new' = 'new';
-  constructor(private g: Game) {}
+  slot = 1;
+  constructor(private g: Game) { this.migrateLegacy(); }
+  /** 舊的單一存檔搬到欄位 1 */
+  migrateLegacy() {
+    try {
+      const old = localStorage.getItem(LEGACY_KEY);
+      if (!old) return;
+      if (!localStorage.getItem(keyOf(1))) { localStorage.setItem(keyOf(1), old); const b = localStorage.getItem(LEGACY_BAK); if (b) localStorage.setItem(bakOf(1), b); }
+      localStorage.removeItem(LEGACY_KEY); localStorage.removeItem(LEGACY_BAK);
+    } catch { /* */ }
+  }
+  readSlot(n: number): Data | null {
+    let main: string | null = null, bak: string | null = null;
+    try { main = localStorage.getItem(keyOf(n)); bak = localStorage.getItem(bakOf(n)); } catch { return null; }
+    const d = unpack(main); if (d) { this.loadedFrom = 'main'; return d; }
+    const b = unpack(bak); if (b) { this.loadedFrom = 'backup'; return b; }
+    return null;
+  }
+  /** 三個欄位的摘要（標題畫面用） */
+  list(): (SlotInfo | null)[] {
+    const out: (SlotInfo | null)[] = [];
+    for (let n = 1; n <= SLOTS; n++) {
+      const d = this.readSlot(n);
+      let t = 0; try { t = JSON.parse(localStorage.getItem(keyOf(n)) || '{}').t || 0; } catch { /* */ }
+      out.push(d ? { slot: n, name: d.ch.name, job: d.ch.job, baseLv: d.ch.baseLv, jobLv: d.ch.jobLv, map: d.map, t } : null);
+    }
+    return out;
+  }
+  deleteSlot(n: number) { try { localStorage.removeItem(keyOf(n)); localStorage.removeItem(bakOf(n)); } catch { /* */ } }
   snapshot(): Data {
     const g = this.g, p = g.player;
     return {
@@ -53,9 +84,9 @@ export class Save {
   }
   save(manual = false) {
     try {
-      const prev = localStorage.getItem(SAVE_KEY);
-      if (prev && unpack(prev)) localStorage.setItem(BAK_KEY, prev); // 只備份「驗證通過」的舊存檔
-      localStorage.setItem(SAVE_KEY, pack(this.snapshot()));
+      const prev = localStorage.getItem(keyOf(this.slot));
+      if (prev && unpack(prev)) localStorage.setItem(bakOf(this.slot), prev); // 只備份「驗證通過」的舊存檔
+      localStorage.setItem(keyOf(this.slot), pack(this.snapshot()));
       if (manual) this.g.msg('已存檔。', 'sys');
     } catch (e) { if (manual) this.g.msg('存檔失敗（瀏覽器儲存空間不可用）。', 'warn'); }
   }
@@ -65,15 +96,7 @@ export class Save {
     this.autoT += dt; if (this.autoT >= 30) { this.autoT = 0; this.save(); }
   }
   /** 讀取：主存檔壞了就用備份 */
-  read(): Data | null {
-    let main: string | null = null, bak: string | null = null;
-    try { main = localStorage.getItem(SAVE_KEY); bak = localStorage.getItem(BAK_KEY); } catch { return null; }
-    const d = unpack(main);
-    if (d) { this.loadedFrom = 'main'; return d; }
-    const b = unpack(bak);
-    if (b) { this.loadedFrom = 'backup'; console.warn('主存檔損壞，已改用備份'); return b; }
-    return null;
-  }
+  read(): Data | null { return this.readSlot(this.slot); }
   hasSave() { return !!this.read(); }
   apply(d: Data) {
     const g = this.g, p = g.player;
@@ -89,5 +112,6 @@ export class Save {
     p.hp = Math.max(1, Math.min(p.maxHp, d.hp ?? p.maxHp)); p.sp = Math.min(p.maxSp, d.sp ?? p.maxSp);
     return { map: DB.map[d.map] ? d.map : 'aurora', x: d.x, y: d.y };
   }
-  reset() { try { localStorage.removeItem(SAVE_KEY); localStorage.removeItem(BAK_KEY); } catch { /* */ } location.reload(); }
+  /** 存檔後回到角色選擇畫面 */
+  toTitle() { this.save(); location.reload(); }
 }

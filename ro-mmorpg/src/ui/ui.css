@@ -325,3 +325,19 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 #ui.mobile #minimap.folded ~ #qtrack { top: 48px; }
 .sk-req { font-size: 11px; } .sk-req.no { color: #c0302a; } .sk-req.ok { color: #2a8a3a; }
 .sk-row.locked .sk-info b { color: #8a90a8; }
+/* ---------- 角色選擇 ---------- */
+.slots { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 6px 0 4px; }
+.slot { width: 200px; min-height: 196px; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px; background: linear-gradient(rgba(250,251,255,.95), rgba(226,232,246,.95)); border: 1px solid #5d6a8a; border-radius: 6px; color: #22305a; text-shadow: none; box-shadow: 0 4px 14px rgba(0,0,0,.4); }
+.slot.empty { background: rgba(240,244,252,.75); }
+.slot-n { align-self: flex-start; font-size: 11px; color: #5c6a90; font-weight: bold; }
+.slot-face { width: 72px; height: 72px; image-rendering: pixelated; background: #dde6f6; border: 1px solid #a8b4d0; border-radius: 4px; }
+.slot-info { font-size: 13px; line-height: 19px; text-align: center; flex: 1; }
+.slot.empty .slot-info { display: flex; align-items: center; font-size: 15px; }
+.slot input { width: 150px; font-size: 14px; }
+.slot-btns { display: flex; gap: 6px; }
+.slot-btns .btn { font-size: 14px; padding: 3px 14px; line-height: 20px; }
+.btn.warn { color: #a02a20; }
+#title .slots + .note { margin-top: 12px; }
+@media (max-height: 500px) { .slot { width: 170px; min-height: 0; padding: 6px; gap: 3px; } .slot-face { width: 48px; height: 48px; } #title h1 { font-size: 30px; } #title .sub { margin-bottom: 8px; } }
+@media (max-width: 560px) { .slots { flex-direction: column; align-items: center; gap: 8px; } .slot { width: 86vw; min-height: 0; flex-direction: row; flex-wrap: wrap; justify-content: center; } }
+#ui:has(#title) #mdock, #ui:has(#title) #hotbar, #ui:has(#title) #hud, #ui:has(#title) #chat { display: none; }

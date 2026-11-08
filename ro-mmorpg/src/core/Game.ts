@@ -68,7 +68,7 @@ export class Game {
   holdT = 0;
   ui!: UI;
   audio: Audio = new Audio();
-  save: any = null;
+  save!: Save;
   inv: Inventory;
   spawner: Spawner;
   items: GroundItem[] = [];
@@ -119,8 +119,9 @@ export class Game {
   /** 開機：先載入城鎮當標題背景 */
   boot() { this.loadMap('aurora', 29, 27); this.loop.start(); }
   /** 標題畫面按下開始：continue=true 讀檔，否則新角色 */
-  begin(cont: boolean, name = '冒險者') {
+  begin(cont: boolean, name = '冒險者', slot = 1) {
     this.inTitle = false;
+    this.save.slot = slot;
     if (cont) {
       const d = this.save.read();
       if (d) {
@@ -318,6 +319,36 @@ export class Game {
     this.announce(`【公告】${ch.name} 轉職成為${DB.job[job].name}！`);
     this.ev.emit('stats'); this.ev.emit('inv');
     this.save?.saveSoon();
+  }
+  // ------------------------------------------------------------ 重新配點
+  /** Lv20 以下免費，之後 5000 Zeny */
+  resetCost() { return this.player.ch.baseLv <= 20 ? 0 : 5000; }
+  resetSkills(): string {
+    const ch = this.player.ch, cost = this.resetCost();
+    let n = 0; for (const [id, lv] of Object.entries(ch.skills)) if (id !== 'basic') n += lv;
+    if (!n) return '你還沒有可以重置的技能點。';
+    if (ch.zeny < cost) return `重置需要 ${cost} Zeny。`;
+    ch.zeny -= cost;
+    ch.skills = ch.skills.basic ? { basic: ch.skills.basic } : {};
+    ch.skillPts += n;
+    for (const k of Object.keys(this.buffT)) { delete this.buffT[k]; delete this.player.buffs[k]; }
+    this.hotbar = this.hotbar.map((h) => (h && h.type === 'skill' && !ch.skills[h.id] ? null : h));
+    this.player.recalc(); this.ui.hot.render(); this.ev.emit('stats'); this.save.saveSoon();
+    this.msg(`技能點已重置，取回 ${n} 點（基本技能保留）。`, 'sys');
+    return `完成了！你取回了 ${n} 點技能點，可以重新分配。`;
+  }
+  resetStats(): string {
+    const ch = this.player.ch, cost = this.resetCost();
+    let n = 0;
+    for (const k of Object.keys(ch.stats) as StatKey[]) { for (let x = 5; x < ch.stats[k]; x++) n += statCost(x); }
+    if (!n) return '你的能力值還是初始狀態。';
+    if (ch.zeny < cost) return `重置需要 ${cost} Zeny。`;
+    ch.zeny -= cost;
+    for (const k of Object.keys(ch.stats) as StatKey[]) ch.stats[k] = 5;
+    ch.statPts += n;
+    this.player.recalc(); this.ev.emit('stats'); this.save.saveSoon();
+    this.msg(`能力值已重置，取回 ${n} 點能力點數。`, 'sys');
+    return `完成了！六項能力回到 5，取回 ${n} 點能力點數。`;
   }
   // ------------------------------------------------------------ 狀態
   toggleSit() {
