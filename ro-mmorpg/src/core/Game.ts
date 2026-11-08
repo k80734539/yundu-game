@@ -41,6 +41,7 @@ import { Projectile } from '../entities/Projectile';
 import { engage as aiEngage } from '../systems/AI';
 import { magicVsMonster } from '../systems/Combat';
 import { Save } from '../systems/Save';
+import debugJson from '../../data/debug.json';
 import { Audio } from '../systems/Audio';
 import { Tutorial } from '../systems/Tutorial';
 import { refineRate, refineMaterial, refineFee } from '../systems/Refine';
@@ -151,6 +152,7 @@ export class Game {
       this.save.save();
     }
     this.spawner.announceAlive();
+    if (this.debug.infiniteRedPotion) { this.topUpRedPotion(); this.msg('【測試模式】紅色藥水無限（輸入 /infpotion 可關閉）', 'sys'); }
     this.ev.emit('stats'); this.ev.emit('inv'); this.ev.emit('quest');
     this.ui.tutorialHint();
   }
@@ -189,8 +191,17 @@ export class Game {
     } else if (d.buff === 'butterfly') {
       this.warpTo(this.savePoint.map, this.savePoint.x, this.savePoint.y);
     }
-    this.inv.remove(uid, 1);
+    if (d.id === 'red_potion' && this.debug.infiniteRedPotion) this.topUpRedPotion(); // 測試用：紅色藥水不會用完
+    else this.inv.remove(uid, 1);
     return true;
+  }
+  debug = { ...debugJson } as { infiniteRedPotion: boolean; redPotionStock: number };
+  /** 無限紅水：補到庫存數量，並確保快捷列 F1 有紅色藥水 */
+  topUpRedPotion() {
+    if (!this.debug.infiniteRedPotion) return;
+    const n = this.debug.redPotionStock - this.inv.count('red_potion');
+    if (n > 0) this.inv.add('red_potion', n);
+    if (!this.hotbar[0]) { this.hotbar[0] = { type: 'item', id: 'red_potion' }; this.ui.hot.render(); }
   }
   teleport(x: number, y: number) {
     const p = this.player;
@@ -495,6 +506,7 @@ export class Game {
       case 'where': this.msg(`${this.map.def.name}（${Math.floor(p.x)}, ${Math.floor(p.y)}）`, 'sys'); break;
       case 'exp': this.msg(`Base ${p.ch.baseExp}　Job ${p.ch.jobExp}`, 'sys'); break;
       case 'fps': this.showFps = !this.showFps; break;
+      case 'infpotion': this.debug.infiniteRedPotion = !this.debug.infiniteRedPotion; this.topUpRedPotion(); this.msg(`紅色藥水無限：${this.debug.infiniteRedPotion ? '開' : '關'}`, 'sys'); break;
       case 'save': this.save.save(true); break;
       case 'sit': this.toggleSit(); break;
       default: this.msg(`未知指令：/${cmd}`, 'warn');

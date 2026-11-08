@@ -1,0 +1,5 @@
+{
+  "_說明": "測試用開關。正式給玩家時把 infiniteRedPotion 改成 false。聊天框輸入 /infpotion 可以在遊戲中開關。",
+  "infiniteRedPotion": true,
+  "redPotionStock": 99
+}
