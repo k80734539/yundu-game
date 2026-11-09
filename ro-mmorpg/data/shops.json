@@ -42,7 +42,13 @@
    "guard_dagger",
    "helm",
    "ring",
-   "glove"
+   "glove",
+   "blade",
+   "great_bow",
+   "arc_wand",
+   "chain_mail",
+   "buckler",
+   "muffler"
   ]
  },
  {
@@ -51,6 +57,52 @@
   "items": [
    "oridecon",
    "elunium"
+  ]
+ },
+ {
+  "id": "quarter",
+  "name": "遠征軍需處",
+  "items": [
+   "steel_blade",
+   "steel_spear",
+   "hunter_bow",
+   "sage_staff",
+   "shadow_dagger",
+   "mithril_blade",
+   "mithril_spear",
+   "mithril_bow",
+   "mithril_staff",
+   "mithril_dagger",
+   "steel_plate",
+   "hunter_vest",
+   "mystic_robe",
+   "steel_helm",
+   "hunter_cap",
+   "sage_hat",
+   "kite_shield",
+   "wind_cloak",
+   "traveler_boots",
+   "power_ring",
+   "nimble_glove",
+   "wisdom_earring",
+   "gale_brooch",
+   "vital_pendant",
+   "lucky_charm",
+   "mithril_plate",
+   "dragon_vest",
+   "archmage_robe",
+   "knight_helm",
+   "hawk_cowl",
+   "star_circlet",
+   "tower_shield",
+   "moon_cloak",
+   "wind_boots",
+   "titan_ring",
+   "eagle_glove",
+   "sage_earring",
+   "tempest_brooch",
+   "spell_ward",
+   "arcane_aegis"
   ]
  }
 ]

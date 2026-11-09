@@ -2648,5 +2648,975 @@
   "bonus": {
    "str": 4
   }
+ },
+ {
+  "id": "steel_blade",
+  "name": "精鋼劍",
+  "type": "weapon",
+  "price": 9000,
+  "weight": 90,
+  "desc": "鍛得很紮實的鋼劍。",
+  "icon": {
+   "k": "sword",
+   "c": "#8ab0e0"
+  },
+  "slot": "weapon",
+  "wtype": "sword",
+  "atk": 84,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "swordsman",
+   "paladin"
+  ]
+ },
+ {
+  "id": "steel_spear",
+  "name": "精鋼長槍",
+  "type": "weapon",
+  "price": 11000,
+  "weight": 90,
+  "desc": "槍頭是精鋼打造。",
+  "icon": {
+   "k": "sword",
+   "c": "#8ab0e0"
+  },
+  "slot": "weapon",
+  "wtype": "spear",
+  "atk": 92,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "paladin"
+  ]
+ },
+ {
+  "id": "hunter_bow",
+  "name": "獵人弓",
+  "type": "weapon",
+  "price": 9500,
+  "weight": 90,
+  "desc": "老獵人愛用的強弓。",
+  "icon": {
+   "k": "bow",
+   "c": "#8ab0e0"
+  },
+  "slot": "weapon",
+  "wtype": "bow",
+  "atk": 82,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "archer",
+   "ranger"
+  ]
+ },
+ {
+  "id": "sage_staff",
+  "name": "賢者杖",
+  "type": "weapon",
+  "price": 9500,
+  "weight": 90,
+  "desc": "MATK +28%，INT +2。",
+  "icon": {
+   "k": "staff",
+   "c": "#8ab0e0"
+  },
+  "slot": "weapon",
+  "wtype": "staff",
+  "atk": 50,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "mage",
+   "elementalist"
+  ],
+  "matk": 28,
+  "bonus": {
+   "int": 2
+  }
+ },
+ {
+  "id": "shadow_dagger",
+  "name": "影刃",
+  "type": "weapon",
+  "price": 7000,
+  "weight": 90,
+  "desc": "輕巧鋒利的匕首。",
+  "icon": {
+   "k": "dagger",
+   "c": "#8ab0e0"
+  },
+  "slot": "weapon",
+  "wtype": "dagger",
+  "atk": 66,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "archer",
+   "ranger"
+  ]
+ },
+ {
+  "id": "mithril_blade",
+  "name": "秘銀劍",
+  "type": "weapon",
+  "price": 32000,
+  "weight": 90,
+  "desc": "秘銀鍛造，輕而鋒利。",
+  "icon": {
+   "k": "sword",
+   "c": "#70e0c8"
+  },
+  "slot": "weapon",
+  "wtype": "sword",
+  "atk": 128,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "swordsman",
+   "paladin"
+  ],
+  "bonus": {
+   "str": 2
+  }
+ },
+ {
+  "id": "mithril_spear",
+  "name": "秘銀長槍",
+  "type": "weapon",
+  "price": 38000,
+  "weight": 90,
+  "desc": "秘銀槍尖閃著冷光。",
+  "icon": {
+   "k": "sword",
+   "c": "#70e0c8"
+  },
+  "slot": "weapon",
+  "wtype": "spear",
+  "atk": 148,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "paladin"
+  ],
+  "bonus": {
+   "str": 2
+  }
+ },
+ {
+  "id": "mithril_bow",
+  "name": "秘銀弓",
+  "type": "weapon",
+  "price": 34000,
+  "weight": 90,
+  "desc": "弓身嵌著秘銀絲。",
+  "icon": {
+   "k": "bow",
+   "c": "#70e0c8"
+  },
+  "slot": "weapon",
+  "wtype": "bow",
+  "atk": 120,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "archer",
+   "ranger"
+  ],
+  "bonus": {
+   "dex": 2
+  }
+ },
+ {
+  "id": "mithril_staff",
+  "name": "秘銀法杖",
+  "type": "weapon",
+  "price": 34000,
+  "weight": 90,
+  "desc": "MATK +38%，INT +3。",
+  "icon": {
+   "k": "staff",
+   "c": "#70e0c8"
+  },
+  "slot": "weapon",
+  "wtype": "staff",
+  "atk": 72,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "mage",
+   "elementalist"
+  ],
+  "matk": 38,
+  "bonus": {
+   "int": 3
+  }
+ },
+ {
+  "id": "mithril_dagger",
+  "name": "秘銀匕首",
+  "type": "weapon",
+  "price": 26000,
+  "weight": 90,
+  "desc": "出鞘無聲的秘銀匕首。",
+  "icon": {
+   "k": "dagger",
+   "c": "#70e0c8"
+  },
+  "slot": "weapon",
+  "wtype": "dagger",
+  "atk": 98,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "archer",
+   "ranger"
+  ],
+  "bonus": {
+   "agi": 2
+  }
+ },
+ {
+  "id": "steel_plate",
+  "name": "精鋼鎧",
+  "type": "armor",
+  "price": 26000,
+  "weight": 120,
+  "desc": "厚重的鋼甲。",
+  "icon": {
+   "k": "mail",
+   "c": "#8ab0e0"
+  },
+  "slot": "armor",
+  "def": 14,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin"
+  ]
+ },
+ {
+  "id": "hunter_vest",
+  "name": "獵人皮甲",
+  "type": "armor",
+  "price": 24000,
+  "weight": 40,
+  "desc": "輕便的硬皮甲，FLEE +4。",
+  "icon": {
+   "k": "mail",
+   "c": "#8ab0e0"
+  },
+  "slot": "armor",
+  "def": 10,
+  "slots": 1,
+  "jobs": [
+   "archer",
+   "ranger",
+   "novice"
+  ],
+  "bonus": {
+   "flee": 4
+  }
+ },
+ {
+  "id": "mystic_robe",
+  "name": "秘法長袍",
+  "type": "armor",
+  "price": 26000,
+  "weight": 30,
+  "desc": "MDEF +22，SP +60。",
+  "icon": {
+   "k": "robe",
+   "c": "#8ab0e0"
+  },
+  "slot": "armor",
+  "def": 5,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist"
+  ],
+  "mdef": 22,
+  "bonus": {
+   "sp": 60
+  }
+ },
+ {
+  "id": "steel_helm",
+  "name": "精鋼盔",
+  "type": "armor",
+  "price": 14000,
+  "weight": 40,
+  "desc": "護住整個頭部的鋼盔。",
+  "icon": {
+   "k": "helm",
+   "c": "#8ab0e0"
+  },
+  "slot": "head",
+  "def": 8,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin",
+   "archer",
+   "ranger"
+  ]
+ },
+ {
+  "id": "hunter_cap",
+  "name": "獵人帽",
+  "type": "armor",
+  "price": 12000,
+  "weight": 40,
+  "desc": "帶羽毛的皮帽，DEX +1。",
+  "icon": {
+   "k": "cap",
+   "c": "#8ab0e0"
+  },
+  "slot": "head",
+  "def": 5,
+  "slots": 1,
+  "jobs": [
+   "archer",
+   "ranger"
+  ],
+  "bonus": {
+   "dex": 1
+  }
+ },
+ {
+  "id": "sage_hat",
+  "name": "賢者帽",
+  "type": "armor",
+  "price": 12000,
+  "weight": 40,
+  "desc": "MDEF +12，INT +1。",
+  "icon": {
+   "k": "cap",
+   "c": "#8ab0e0"
+  },
+  "slot": "head",
+  "def": 3,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist"
+  ],
+  "mdef": 12,
+  "bonus": {
+   "int": 1
+  }
+ },
+ {
+  "id": "kite_shield",
+  "name": "鳶盾",
+  "type": "armor",
+  "price": 22000,
+  "weight": 40,
+  "desc": "上寬下窄的盾牌。",
+  "icon": {
+   "k": "shield",
+   "c": "#8ab0e0"
+  },
+  "slot": "shield",
+  "def": 8,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin",
+   "archer",
+   "ranger"
+  ]
+ },
+ {
+  "id": "wind_cloak",
+  "name": "疾風披風",
+  "type": "armor",
+  "price": 20000,
+  "weight": 40,
+  "desc": "FLEE +8。",
+  "icon": {
+   "k": "cape",
+   "c": "#8ab0e0"
+  },
+  "slot": "garment",
+  "def": 5,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "mage",
+   "elementalist",
+   "archer",
+   "ranger"
+  ],
+  "bonus": {
+   "flee": 8
+  }
+ },
+ {
+  "id": "traveler_boots",
+  "name": "旅人長靴",
+  "type": "armor",
+  "price": 16000,
+  "weight": 40,
+  "desc": "HP +100。",
+  "icon": {
+   "k": "shoes",
+   "c": "#8ab0e0"
+  },
+  "slot": "shoes",
+  "def": 4,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "mage",
+   "elementalist",
+   "archer",
+   "ranger"
+  ],
+  "bonus": {
+   "hp": 100
+  }
+ },
+ {
+  "id": "power_ring",
+  "name": "蠻力戒指",
+  "type": "armor",
+  "price": 18000,
+  "weight": 10,
+  "desc": "STR +4。",
+  "icon": {
+   "k": "ring",
+   "c": "#8ab0e0"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "mage",
+   "elementalist",
+   "archer",
+   "ranger"
+  ],
+  "bonus": {
+   "str": 4
+  }
+ },
+ {
+  "id": "nimble_glove",
+  "name": "神射手套",
+  "type": "armor",
+  "price": 18000,
+  "weight": 10,
+  "desc": "DEX +4。",
+  "icon": {
+   "k": "glove",
+   "c": "#8ab0e0"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "mage",
+   "elementalist",
+   "archer",
+   "ranger"
+  ],
+  "bonus": {
+   "dex": 4
+  }
+ },
+ {
+  "id": "wisdom_earring",
+  "name": "賢者耳環",
+  "type": "armor",
+  "price": 18000,
+  "weight": 10,
+  "desc": "INT +4。",
+  "icon": {
+   "k": "earring",
+   "c": "#8ab0e0"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "mage",
+   "elementalist",
+   "archer",
+   "ranger"
+  ],
+  "bonus": {
+   "int": 4
+  }
+ },
+ {
+  "id": "gale_brooch",
+  "name": "烈風胸針",
+  "type": "armor",
+  "price": 18000,
+  "weight": 10,
+  "desc": "AGI +4。",
+  "icon": {
+   "k": "brooch",
+   "c": "#8ab0e0"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "mage",
+   "elementalist",
+   "archer",
+   "ranger"
+  ],
+  "bonus": {
+   "agi": 4
+  }
+ },
+ {
+  "id": "vital_pendant",
+  "name": "生命墜飾",
+  "type": "armor",
+  "price": 15000,
+  "weight": 10,
+  "desc": "VIT +3、HP +100。",
+  "icon": {
+   "k": "ring",
+   "c": "#8ab0e0"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "mage",
+   "elementalist",
+   "archer",
+   "ranger"
+  ],
+  "bonus": {
+   "vit": 3,
+   "hp": 100
+  }
+ },
+ {
+  "id": "lucky_charm",
+  "name": "幸運符",
+  "type": "armor",
+  "price": 15000,
+  "weight": 10,
+  "desc": "LUK +4。",
+  "icon": {
+   "k": "brooch",
+   "c": "#8ab0e0"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "mage",
+   "elementalist",
+   "archer",
+   "ranger"
+  ],
+  "bonus": {
+   "luk": 4
+  }
+ },
+ {
+  "id": "mithril_plate",
+  "name": "秘銀鎧",
+  "type": "armor",
+  "price": 70000,
+  "weight": 100,
+  "desc": "VIT +2。",
+  "icon": {
+   "k": "mail",
+   "c": "#70e0c8"
+  },
+  "slot": "armor",
+  "def": 22,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin"
+  ],
+  "bonus": {
+   "vit": 2
+  },
+  "mdef": 6
+ },
+ {
+  "id": "dragon_vest",
+  "name": "龍鱗皮甲",
+  "type": "armor",
+  "price": 65000,
+  "weight": 40,
+  "desc": "FLEE +8。",
+  "icon": {
+   "k": "mail",
+   "c": "#70e0c8"
+  },
+  "slot": "armor",
+  "def": 16,
+  "slots": 1,
+  "jobs": [
+   "archer",
+   "ranger",
+   "novice"
+  ],
+  "bonus": {
+   "flee": 8
+  }
+ },
+ {
+  "id": "archmage_robe",
+  "name": "大法師長袍",
+  "type": "armor",
+  "price": 70000,
+  "weight": 30,
+  "desc": "MDEF +38，SP +120，INT +2。",
+  "icon": {
+   "k": "robe",
+   "c": "#70e0c8"
+  },
+  "slot": "armor",
+  "def": 8,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist"
+  ],
+  "mdef": 38,
+  "bonus": {
+   "sp": 120,
+   "int": 2
+  }
+ },
+ {
+  "id": "knight_helm",
+  "name": "騎士盔",
+  "type": "armor",
+  "price": 38000,
+  "weight": 40,
+  "desc": "頂級的鋼盔。",
+  "icon": {
+   "k": "helm",
+   "c": "#70e0c8"
+  },
+  "slot": "head",
+  "def": 12,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin",
+   "archer",
+   "ranger"
+  ]
+ },
+ {
+  "id": "hawk_cowl",
+  "name": "鷹眼頭巾",
+  "type": "armor",
+  "price": 34000,
+  "weight": 40,
+  "desc": "DEX +2、HIT +8。",
+  "icon": {
+   "k": "cap",
+   "c": "#70e0c8"
+  },
+  "slot": "head",
+  "def": 8,
+  "slots": 1,
+  "jobs": [
+   "archer",
+   "ranger"
+  ],
+  "bonus": {
+   "dex": 2,
+   "hit": 8
+  }
+ },
+ {
+  "id": "star_circlet",
+  "name": "星輝頭冠",
+  "type": "armor",
+  "price": 35000,
+  "weight": 40,
+  "desc": "MDEF +20，INT +2。",
+  "icon": {
+   "k": "ribbon",
+   "c": "#70e0c8"
+  },
+  "slot": "head",
+  "def": 5,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist"
+  ],
+  "mdef": 20,
+  "bonus": {
+   "int": 2
+  }
+ },
+ {
+  "id": "tower_shield",
+  "name": "塔盾",
+  "type": "armor",
+  "price": 55000,
+  "weight": 120,
+  "desc": "幾乎能遮住全身的大盾。",
+  "icon": {
+   "k": "shield",
+   "c": "#70e0c8"
+  },
+  "slot": "shield",
+  "def": 13,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin"
+  ]
+ },
+ {
+  "id": "moon_cloak",
+  "name": "月影披風",
+  "type": "armor",
+  "price": 50000,
+  "weight": 40,
+  "desc": "FLEE +14，MDEF +10。",
+  "icon": {
+   "k": "cape",
+   "c": "#70e0c8"
+  },
+  "slot": "garment",
+  "def": 8,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "mage",
+   "elementalist",
+   "archer",
+   "ranger"
+  ],
+  "mdef": 10,
+  "bonus": {
+   "flee": 14
+  }
+ },
+ {
+  "id": "wind_boots",
+  "name": "風行靴",
+  "type": "armor",
+  "price": 45000,
+  "weight": 40,
+  "desc": "HP +250，FLEE +8。",
+  "icon": {
+   "k": "shoes",
+   "c": "#70e0c8"
+  },
+  "slot": "shoes",
+  "def": 7,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "mage",
+   "elementalist",
+   "archer",
+   "ranger"
+  ],
+  "bonus": {
+   "hp": 250,
+   "flee": 8
+  }
+ },
+ {
+  "id": "titan_ring",
+  "name": "泰坦戒指",
+  "type": "armor",
+  "price": 48000,
+  "weight": 10,
+  "desc": "STR +6、HP +100。",
+  "icon": {
+   "k": "ring",
+   "c": "#70e0c8"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "mage",
+   "elementalist",
+   "archer",
+   "ranger"
+  ],
+  "bonus": {
+   "str": 6,
+   "hp": 100
+  }
+ },
+ {
+  "id": "eagle_glove",
+  "name": "鷹眼手套",
+  "type": "armor",
+  "price": 48000,
+  "weight": 10,
+  "desc": "DEX +5、HIT +10。",
+  "icon": {
+   "k": "glove",
+   "c": "#70e0c8"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "mage",
+   "elementalist",
+   "archer",
+   "ranger"
+  ],
+  "bonus": {
+   "dex": 5,
+   "hit": 10
+  }
+ },
+ {
+  "id": "sage_earring",
+  "name": "大賢者耳環",
+  "type": "armor",
+  "price": 48000,
+  "weight": 10,
+  "desc": "INT +6、SP +80。",
+  "icon": {
+   "k": "earring",
+   "c": "#70e0c8"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "mage",
+   "elementalist",
+   "archer",
+   "ranger"
+  ],
+  "bonus": {
+   "int": 6,
+   "sp": 80
+  }
+ },
+ {
+  "id": "tempest_brooch",
+  "name": "暴風胸針",
+  "type": "armor",
+  "price": 48000,
+  "weight": 10,
+  "desc": "AGI +5、FLEE +8。",
+  "icon": {
+   "k": "brooch",
+   "c": "#70e0c8"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "mage",
+   "elementalist",
+   "archer",
+   "ranger"
+  ],
+  "bonus": {
+   "agi": 5,
+   "flee": 8
+  }
+ },
+ {
+  "id": "spell_ward",
+  "name": "法術護盾",
+  "type": "armor",
+  "price": 18000,
+  "weight": 30,
+  "desc": "MDEF +12。",
+  "icon": {
+   "k": "shield",
+   "c": "#8ab0e0"
+  },
+  "slot": "shield",
+  "def": 2,
+  "mdef": 12,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist"
+  ]
+ },
+ {
+  "id": "arcane_aegis",
+  "name": "奧術盾",
+  "type": "armor",
+  "price": 48000,
+  "weight": 30,
+  "desc": "MDEF +22、INT +1。",
+  "icon": {
+   "k": "shield",
+   "c": "#70e0c8"
+  },
+  "slot": "shield",
+  "def": 4,
+  "mdef": 22,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist"
+  ],
+  "bonus": {
+   "int": 1
+  }
  }
 ]

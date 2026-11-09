@@ -419,5 +419,45 @@
     ]
    }
   }
+ },
+ {
+  "id": "quarter",
+  "name": "軍需官 凱爾",
+  "title": "遠征軍需處",
+  "shop": "quarter",
+  "look": {
+   "skin": "#d8a880",
+   "hair": "#8a8a90",
+   "cloth": "#3a4a6a",
+   "cloth2": "#d0b050",
+   "pants": "#2a2a3a",
+   "hairStyle": 2,
+   "body": "armor",
+   "hat": "helm"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "遠征隊專用的軍需品都在這裡。",
+     "等級夠了再來看看，好東西都不便宜。"
+    ],
+    "opts": [
+     {
+      "label": "購買",
+      "act": "shop",
+      "arg": "quarter"
+     },
+     {
+      "label": "出售",
+      "act": "sell",
+      "arg": "quarter"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
  }
 ]
