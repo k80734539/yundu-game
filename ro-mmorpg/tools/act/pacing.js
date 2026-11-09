@@ -28,7 +28,7 @@ const res = await page.evaluate(() => {
     if (MERC && !G.mercs.active && ch.baseLv >= 10 && ch.zeny >= G.mercs.cost() * 1.5) { ch.zeny -= 0; G.mercs.hire({ swordsman: 'alchemist', mage: 'bard', archer: 'bard' }[CLS]); }
     // 轉職（略過試煉）
     if (jobTier === 0 && ch.jobLv >= 10 && (ch.skills.basic || 0) >= 9) { G.changeJob(CLS); jobTier = 1; rec('轉職一轉(分)'); G.resetStats(); }  // Lv20 以下重新配點免費
-    if (jobTier === 2 && ch.jobLv >= 50 && ch.baseLv >= 70) { G.changeJob(T3); jobTier = 3; rec('轉職三轉(分)'); }
+    if (jobTier === 2 && ch.jobLv >= 50 && ch.baseLv >= 60) { G.changeJob(T3); jobTier = 3; rec('轉職三轉(分)'); }
     if (jobTier === 1 && ch.jobLv >= 40) { G.changeJob(T2); jobTier = 2; rec('轉職二轉(分)'); }
     // 加點
     for (let k = 0; k < 10 && ch.statPts > 0; k++) { const b = ch.statPts; { const plan = jobTier === 0 ? ['str', 'dex', 'agi', 'str', 'vit'] : PL; G.raiseStat(plan[(ch.baseLv + k) % plan.length]); } if (ch.statPts === b) break; }

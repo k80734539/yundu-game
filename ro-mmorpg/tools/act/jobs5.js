@@ -6,9 +6,9 @@ const R = await page.evaluate(() => {
   out.jobs = {};
   for (const [t2, [t1, t3]] of Object.entries(chains)) {
     const r = {};
-    ch.baseLv = 69; ch.job = 'novice'; ch.jobLv = 10; G.changeJob(t1); ch.jobLv = 40; G.changeJob(t2); ch.jobLv = 50; ch.skills = { basic: 9 };
+    ch.baseLv = 59; ch.job = 'novice'; ch.jobLv = 10; G.changeJob(t1); ch.jobLv = 40; G.changeJob(t2); ch.jobLv = 50; ch.skills = { basic: 9 };
     delete G.quests.s['trial3_' + t3];
-    r.acceptAt69 = G.quests.canAccept(Q('trial3_' + t3)); ch.baseLv = 70; r.acceptAt70 = G.quests.canAccept(Q('trial3_' + t3));
+    r.acceptAt59 = G.quests.canAccept(Q('trial3_' + t3)); ch.baseLv = 60; r.acceptAt60 = G.quests.canAccept(Q('trial3_' + t3));
     G.quests.accept('trial3_' + t3); G.loadMap(Q('trial3_' + t3).arena, 20, 30);
     const boss = G.monsters.find((m) => m.isMvp); r.boss = boss && boss.def.id; p.x = p.px = boss.x; p.y = p.py = boss.y + 5;
     // 開打：觀察招式、擊敗

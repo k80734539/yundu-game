@@ -336,7 +336,8 @@ export class Game {
     }
     if (cur.tier === 2) { // 三轉
       const next = JOBS.jobs.find((j) => j.prev === ch.job)!;
-      if (ch.jobLv < 50 || ch.baseLv < 70) { d.say([`${cur.name}的終點是「${next.name}」。`, `三轉需要職業等級 50（目前 ${ch.jobLv}）、基本等級 70（目前 ${ch.baseLv}）。繼續修練吧！`]); return; }
+      const need3 = JOBS.thirdJobBaseLv ?? 60;
+      if (ch.jobLv < 50 || ch.baseLv < need3) { d.say([`${cur.name}的終點是「${next.name}」。`, `三轉需要職業等級 50（目前 ${ch.jobLv}）、基本等級 ${need3}（目前 ${ch.baseLv}）。繼續修練吧！`]); return; }
       d.say([`你的${cur.name}之路已經走到了盡頭。`, `真正的終點是「${next.name}」，不過要先通過專屬的試煉。`], () => d.choose([
         { label: `我想成為${next.name}`, fn: () => offer(next.id) },
         { label: '再想想', fn: () => d.close() },
