@@ -1,11 +1,13 @@
 import { DB, MERCS, type MercType } from '../data';
 import { Merc } from '../entities/Merc';
+import { Beast } from '../entities/Beast';
 import { Monster } from '../entities/Monster';
 import type { Game } from '../core/Game';
 
 /** 傭兵系統：雇用、跟隨、各職能的行為（補血／戰鬥之歌／炸彈）、契約倒數、存檔 */
 export class MercSystem {
   merc: Merc | null = null;
+  beast: Beast | null = null;
   left = 0;               // 契約剩餘秒數
   private songKey = 0;
   constructor(private g: Game) {}
@@ -37,11 +39,13 @@ export class MercSystem {
     m.speed = p.speed * 1.15;
     this.merc = m; g.entities.push(m);
     g.fx.ring(m.x, m.y, '#fff0a0', 0.6, 40);
+    if (t.beast) { const b = new Beast(t.beast, m.x + 1, m.y + 0.5); b.speed = p.speed * t.beast.speedMul; this.beast = b; g.entities.push(b); }
   }
   dismiss(silent = false) {
     const g = this.g, m = this.merc; if (!m) return;
     m.remove = true; this.merc = null; this.left = 0;
-    g.entities = g.entities.filter((e) => e !== m);
+    const b = this.beast; if (b) { b.remove = true; this.beast = null; }
+    g.entities = g.entities.filter((e) => e !== m && e !== b);
     delete g.player.buffs.merc_song; g.player.recalc(); g.ev.emit('stats');
     if (!silent) g.msg(`${m.name}離開了。`, 'sys');
   }
@@ -78,6 +82,29 @@ export class MercSystem {
     if (t.spGive) this.spGive(m, t.spGive);
     if (t.song) { this.songKey += dt; if (this.songKey > 1) { this.songKey = 0; this.applySong(); } }
     if (t.bomb) this.bomb(m, t.bomb);
+    if (t.beast && this.beast) this.updateBeast(this.beast, t.beast, dt);
+  }
+  private updateBeast(b: Beast, c: NonNullable<MercType['beast']>, dt: number) {
+    const g = this.g, p = g.player;
+    b.updateAnim(dt); b.cd -= dt; b.pathT -= dt;
+    let tgt: Monster | null = (p.chase instanceof Monster && !p.chase.dead) ? p.chase : null;
+    if (!tgt) tgt = g.monsters.filter((x) => !x.dead && x.aggroOn === p).sort((a, o) => Math.hypot(a.x - b.x, a.y - b.y) - Math.hypot(o.x - b.x, o.y - b.y))[0] || null;
+    if (tgt && Math.hypot(tgt.x - p.x, tgt.y - p.y) > 14) tgt = null;
+    const goal = tgt || p, d = Math.hypot(goal.x - b.x, goal.y - b.y), stop = tgt ? c.range : MERCS.followDist;
+    if (d > MERCS.teleportDist) { const pos = g.map.nearestWalkable(p.x, p.y, 4); if (pos) { b.x = b.px = pos[0] + 0.5; b.y = b.py = pos[1] + 0.5; b.path = []; } }
+    else if (d > stop && b.pathT <= 0) { b.pathT = 0.3; b.setPath(g.pf.find(b.x, b.y, goal.x, goal.y, 1200, Math.max(0.6, stop - 0.4))); }
+    if (b.path.length && d > stop) { b.stepPath(dt); if (b.state !== 'attack') b.state = 'walk'; }
+    else if (d > stop && d < 10 && b.pathT > 0.2) { // 找不到路徑時（目標站在難走的格子）直線靠近
+      const nx = b.x + ((goal.x - b.x) / d) * b.speed * dt, ny = b.y + ((goal.y - b.y) / d) * b.speed * dt;
+      if (g.map.canWalk(nx, ny)) { b.face(goal.x, goal.y); b.x = nx; b.y = ny; if (b.state !== 'attack') b.state = 'walk'; }
+    } else { b.path = []; if (b.state === 'walk') b.state = 'idle'; }
+    if (b.atkAnimT >= 0) { b.atkAnimT += dt; if (b.atkAnimT >= b.atkAnimDur) { b.atkAnimT = -1; b.state = 'idle'; } }
+    if (tgt && d <= stop + 0.4 && b.cd <= 0) {
+      b.cd = c.cd; b.face(tgt.x, tgt.y); b.startAttack(0.35);
+      const base = p.d.atkMax * c.atkMul + p.ch.baseLv * c.perLv; let dmg = Math.max(1, Math.round(base * (100 - tgt.def.def) / 100) - tgt.def.vit);
+      if (tgt.isMvp) dmg = Math.round(dmg * MERCS.bossFactor);
+      g.after(0.15, () => { if (!tgt!.dead) { g.applyDamage(p, tgt!, dmg, 'deal'); g.engage(tgt!); g.fx.burst(tgt!.x, tgt!.y, -tgt!.bbox.y0 * 0.5, '#ffffff', 6, 70, 'spark', 0.3, 2); } });
+    }
   }
   private priest(m: Merc, h: NonNullable<MercType['heal']>, dt: number) {
     void dt; const g = this.g, p = g.player, k = p.hp / p.maxHp;

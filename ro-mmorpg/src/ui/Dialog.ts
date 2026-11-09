@@ -152,7 +152,7 @@ export class Dialog {
       return;
     }
     const price = ms.cost();
-    for (const t of MERCS.types) list.push({ label: `${t.title}：${t.desc}`, fn: () => { const err = ms.hire(t.id); this.say(err || `${t.name}跟你簽約了！契約三十分鐘，她會一直跟著你。`.replace('她', t.id === 'alchemist' ? '他' : '她')); } });
+    for (const t of MERCS.types) list.push({ label: `${t.title}：${t.desc}`, fn: () => { const err = ms.hire(t.id); this.say(err || `${t.name}跟你簽約了！契約三十分鐘，她會一直跟著你。`.replace('她', t.id === 'alchemist' || t.id === 'tamer' ? '他' : '她')); } });
     list.push({ label: '再見', fn: () => this.close() });
     this.say([`目前沒有雇用任何傭兵。雇用一位需要 ${price.toLocaleString()} Zeny（依你的等級計算）。`, '傭兵不會被怪物攻擊，不吃經驗，也不會搶你的掉落物。打大型 Boss 時效果會減弱。'], () => this.choose(list));
   }

@@ -90,6 +90,37 @@
     "defDown": 15,
     "defDownSec": 8
    }
+  },
+  {
+   "id": "tamer",
+   "name": "馴獸師 雷歐",
+   "title": "馴獸師",
+   "desc": "帶著戰獸並肩作戰：戰獸會衝上去咬你正在打的怪，傷害穩定、不會跑掉。",
+   "look": {
+    "skin": "#d8b088",
+    "hair": "#8a5a2a",
+    "cloth": "#5a7a3a",
+    "cloth2": "#c09040",
+    "pants": "#4a3a2a",
+    "hairStyle": 2,
+    "hat": "feather",
+    "cape": "#6a4a2a"
+   },
+   "beast": {
+    "name": "雪原戰狼",
+    "look": {
+     "body": "wolf",
+     "color": "#c8d8e8",
+     "color2": "#80b8ff",
+     "scale": 1.5
+    },
+    "frame": 192,
+    "cd": 1.1,
+    "atkMul": 0.5,
+    "perLv": 9,
+    "speedMul": 1.25,
+    "range": 1.4
+   }
   }
  ]
 }

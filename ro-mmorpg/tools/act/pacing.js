@@ -25,7 +25,7 @@ const res = await page.evaluate(() => {
         const best = cand.filter((i) => i.slot === slot && i.price <= ch.zeny && val(i) >= curV * 1.2 + 2).sort((a, b) => val(b) - val(a))[0];  // 只買明顯升級的
         if (best) { G.inv.add(best.id); const it = G.inv.items.filter((i) => i.id === best.id).pop(); if (!it) continue; ch.zeny -= best.price; G.inv.equipItem(it.uid, ch.job, ch.baseLv); if (mineUid[slot]) { try { G.sell(mineUid[slot], 1); } catch (e) { /* ignore */ } } mineUid[slot] = it.uid; p.recalc(true); mine[slot] = val(best); bought.push(best.id + '@Lv' + ch.baseLv); } } }
     // 傭兵：契約到期就續雇（錢夠才雇）；劍士雇煉金術士、法師與弓箭手雇樂師
-    if (MERC && !G.mercs.active && ch.baseLv >= 10 && ch.zeny >= G.mercs.cost() * 1.5) { ch.zeny -= 0; G.mercs.hire({ swordsman: 'alchemist', mage: 'bard', archer: 'bard' }[CLS]); }
+    if (MERC && !G.mercs.active && ch.baseLv >= 10 && ch.zeny >= G.mercs.cost() * 1.5) { ch.zeny -= 0; G.mercs.hire({ swordsman: 'alchemist', mage: 'bard', archer: 'tamer' }[CLS]); }
     // 轉職（略過試煉）
     if (jobTier === 0 && ch.jobLv >= 10 && (ch.skills.basic || 0) >= 9) { G.changeJob(CLS); jobTier = 1; rec('轉職一轉(分)'); G.resetStats(); }  // Lv20 以下重新配點免費
     if (jobTier === 2 && ch.jobLv >= 50 && ch.baseLv >= 60) { G.changeJob(T3); jobTier = 3; rec('轉職三轉(分)'); }

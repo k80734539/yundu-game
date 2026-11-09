@@ -132,6 +132,7 @@ export interface MercType {
   heal?: { low: number; cd: number; pct: number; flat: number; bigLow: number; bigCd: number; bigPct: number };
   spGive?: { below: number; pct: number; cd: number };
   song?: { base: number; perLv: number; stats: Record<string, number> };
+  beast?: { name: string; look: Look; frame: number; cd: number; atkMul: number; perLv: number; speedMul: number; range: number };
   bomb?: { cd: number; range: number; radius: number; atkMul: number; perLv: number; defIgnore: number; defDown: number; defDownSec: number };
 }
 export interface MercConfig { contractSec: number; costBase: number; costPerLv: number; bossFactor: number; followDist: number; teleportDist: number; types: MercType[] }
