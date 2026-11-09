@@ -425,5 +425,28 @@
   "reqLv": 22,
   "prev": "q_herb3",
   "consume": true
+ },
+ {
+  "id": "q_mvp_bandit",
+  "name": "討伐赤鬃山賊王",
+  "npc": "captain",
+  "type": "kill",
+  "target": "bandit_king",
+  "count": 1,
+  "desc": "赤岩峽谷的山賊團有個凶悍的頭目，人稱赤鬃山賊王。他會召集手下、丟煙幕彈，別被包圍。",
+  "done": "山賊團垮了！這是王國的賞金。",
+  "reward": {
+   "exp": 9000,
+   "jexp": 4500,
+   "zeny": 12000,
+   "items": [
+    [
+     "oridecon",
+     3
+    ]
+   ]
+  },
+  "reqLv": 28,
+  "prev": "q_cap4b"
  }
 ]

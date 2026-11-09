@@ -197,6 +197,27 @@
     "serpent_bow",
     "serpent_lance"
    ]
+  },
+  "bandit_king": {
+   "zeny": [
+    6000,
+    10000
+   ],
+   "material": "bandit_seal",
+   "materialCount": [
+    2,
+    4
+   ],
+   "equipChance": 0.3,
+   "exclusiveChance": 0.08,
+   "cardChance": 0.01,
+   "card": "bandit_king_card",
+   "exclusives": [
+    "bandit_blade",
+    "bandit_staff",
+    "bandit_bow",
+    "bandit_lance"
+   ]
   }
  },
  "ownJobChance": 0.7,
@@ -246,6 +267,17 @@
     "serpent_staff",
     "serpent_bow",
     "serpent_lance"
+   ]
+  },
+  {
+   "cost": {
+    "bandit_seal": 22
+   },
+   "items": [
+    "bandit_blade",
+    "bandit_staff",
+    "bandit_bow",
+    "bandit_lance"
    ]
   }
  ],

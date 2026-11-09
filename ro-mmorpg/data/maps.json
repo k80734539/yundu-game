@@ -2145,6 +2145,12 @@
     "m": "dust_golem",
     "n": 6
    }
-  ]
+  ],
+  "mvp": {
+   "m": "bandit_king",
+   "x": 44,
+   "y": 40,
+   "respawn": 900
+  }
  }
 ]

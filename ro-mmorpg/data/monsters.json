@@ -1754,5 +1754,80 @@
     "rate": 0.008
    }
   ]
+ },
+ {
+  "id": "bandit_king",
+  "name": "赤鬃山賊王",
+  "lv": 31,
+  "hp": 16000,
+  "atk": [
+   100,
+   140
+  ],
+  "def": 28,
+  "mdef": 15,
+  "str": 55,
+  "agi": 30,
+  "vit": 45,
+  "int": 10,
+  "dex": 55,
+  "luk": 15,
+  "exp": 2600,
+  "jexp": 1400,
+  "range": 1,
+  "adelay": 1500,
+  "speed": 2.4,
+  "aggro": true,
+  "frame": 256,
+  "look": {
+   "body": "humanoid",
+   "skin": "#c89060",
+   "hair": "#c04020",
+   "cloth": "#8a2a2a",
+   "cloth2": "#e0b040",
+   "pants": "#2a2a30",
+   "eye": "#ffcc20",
+   "weapon": "axe",
+   "hat": "band",
+   "hairStyle": 2,
+   "scale": 1.5
+  },
+  "drops": [
+   {
+    "item": "bandit_seal",
+    "rate": 0.6
+   },
+   {
+    "item": "bandit_badge",
+    "rate": 1.0
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.6
+   },
+   {
+    "item": "great_bow",
+    "rate": 0.15
+   },
+   {
+    "item": "blade",
+    "rate": 0.15
+   },
+   {
+    "item": "bandit_king_card",
+    "rate": 0.05
+   }
+  ],
+  "mvp": true,
+  "skills": [
+   {
+    "id": "stomp",
+    "chance": 0.25
+   },
+   {
+    "id": "summon",
+    "chance": 0.2
+   }
+  ]
  }
 ]

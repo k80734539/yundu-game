@@ -784,7 +784,7 @@ export class Game {
   /** MVP 技能：召喚手下、範圍重擊（先出現紅色預警圈） */
   monsterSkill(m: Monster, id: string) {
     if (id === 'summon') {
-      const minion = m.def.id === 'golem' ? 'rockling' : 'jelly';
+      const minion = m.def.id === 'golem' ? 'rockling' : m.def.id === 'bandit_king' ? 'bandit' : 'jelly';
       const alive = this.monsters.filter((x) => x.summoned && !x.dead).length;
       if (alive >= 4) return;
       for (let i = 0; i < 2; i++) {

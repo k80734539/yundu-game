@@ -2280,5 +2280,128 @@
    "def": 4,
    "mdef": 6
   }
+ },
+ {
+  "id": "bandit_seal",
+  "name": "山賊王印",
+  "type": "etc",
+  "price": 3500,
+  "weight": 1,
+  "desc": "赤鬃山賊王隨身的印信，可在鍛造處換取專屬武器。",
+  "icon": {
+   "k": "crown",
+   "c": "#e07040"
+  }
+ },
+ {
+  "id": "bandit_king_card",
+  "name": "赤鬃山賊王卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入武器的卡片。ATK +30、CRIT +5。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "weapon",
+  "bonus": {
+   "atk": 30,
+   "crit": 5
+  }
+ },
+ {
+  "id": "bandit_blade",
+  "name": "山賊王砍刀",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "山賊王隨手搶來的厚背砍刀。",
+  "icon": {
+   "k": "sword",
+   "c": "#e07040"
+  },
+  "slot": "weapon",
+  "wtype": "sword",
+  "atk": 90,
+  "wlv": 2,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin"
+  ],
+  "bossEx": "bandit_king",
+  "bonus": {
+   "str": 2
+  }
+ },
+ {
+  "id": "bandit_staff",
+  "name": "山賊王法杖",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "從商隊搶來的法杖，MATK +22%。",
+  "icon": {
+   "k": "staff",
+   "c": "#e07040"
+  },
+  "slot": "weapon",
+  "wtype": "staff",
+  "atk": 46,
+  "wlv": 2,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist"
+  ],
+  "bossEx": "bandit_king",
+  "matk": 22
+ },
+ {
+  "id": "bandit_bow",
+  "name": "山賊王短弓",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "偷襲商旅用的強力短弓。",
+  "icon": {
+   "k": "bow",
+   "c": "#e07040"
+  },
+  "slot": "weapon",
+  "wtype": "bow",
+  "atk": 78,
+  "wlv": 2,
+  "slots": 1,
+  "jobs": [
+   "archer",
+   "ranger"
+  ],
+  "bossEx": "bandit_king",
+  "bonus": {
+   "dex": 2
+  }
+ },
+ {
+  "id": "bandit_lance",
+  "name": "山賊王長槍",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "槍桿纏著紅布條的長槍。",
+  "icon": {
+   "k": "sword",
+   "c": "#e07040"
+  },
+  "slot": "weapon",
+  "wtype": "spear",
+  "atk": 104,
+  "wlv": 2,
+  "slots": 1,
+  "jobs": [
+   "paladin"
+  ],
+  "bossEx": "bandit_king"
  }
 ]

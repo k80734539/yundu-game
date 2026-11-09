@@ -1,53 +1,342 @@
 {
-  "_說明": "Boss 戰設定。時間單位是秒、距離單位是格。mult 是乘在怪物攻擊力上的倍率。windup 是『預兆時間』：範圍技的紅色警示區出現後，要等這麼久才造成傷害。",
-  "global": {
-    "maxRepeat": 2,
-    "enrageAt": 0.5,
-    "frenzyAt": 0.2,
-    "phases": [
-      { "name": "一般", "gap": 1.5, "aspd": 1.0, "moveMul": 1.0, "windupMul": 1.0 },
-      { "name": "狂暴", "gap": 1.0, "aspd": 1.3, "moveMul": 1.15, "windupMul": 0.9 },
-      { "name": "瀕死狂暴", "gap": 1.0, "aspd": 1.45, "moveMul": 1.3, "windupMul": 0.8 }
-    ],
-    "minWindup": { "melee": 0.25, "aoe": 0.8, "barrage": 0.8, "charge": 0.6, "summon": 0.8 },
-    "roar": { "enrage": 1.2, "frenzy": 0.8 },
-    "respawn": 120,
-    "victory": { "hitStop": 0.2, "slowScale": 0.3, "slowTime": 1.6 }
+ "_說明": "Boss 戰設定。時間單位是秒、距離單位是格。mult 是乘在怪物攻擊力上的倍率。windup 是『預兆時間』：範圍技的紅色警示區出現後，要等這麼久才造成傷害。",
+ "global": {
+  "maxRepeat": 2,
+  "enrageAt": 0.5,
+  "frenzyAt": 0.2,
+  "phases": [
+   {
+    "name": "一般",
+    "gap": 1.5,
+    "aspd": 1.0,
+    "moveMul": 1.0,
+    "windupMul": 1.0
+   },
+   {
+    "name": "狂暴",
+    "gap": 1.0,
+    "aspd": 1.3,
+    "moveMul": 1.15,
+    "windupMul": 0.9
+   },
+   {
+    "name": "瀕死狂暴",
+    "gap": 1.0,
+    "aspd": 1.45,
+    "moveMul": 1.3,
+    "windupMul": 0.8
+   }
+  ],
+  "minWindup": {
+   "melee": 0.25,
+   "aoe": 0.8,
+   "barrage": 0.8,
+   "charge": 0.6,
+   "summon": 0.8
   },
-  "bosses": {
-    "kingjelly": {
-      "moves": [
-        { "id": "attack", "name": "撞擊", "type": "melee", "weight": 4, "mult": 0.5, "windup": 0.5, "recover": 0.3 },
-        { "id": "slam", "name": "果凍重壓", "type": "aoe", "center": "target", "radius": 2.2, "weight": 4, "mult": 2.0, "windup": 1.0, "recover": 0.6, "maxDist": 9 },
-        { "id": "charge", "name": "果凍衝撞", "type": "charge", "length": 7, "width": 1.4, "weight": 3, "mult": 1.7, "windup": 0.9, "dashTime": 0.3, "recover": 0.7, "minDist": 0, "maxDist": 9 }
-      ],
-      "enrageMoves": [
-        { "id": "summon", "name": "召喚小啵啵", "type": "summon", "weight": 3, "windup": 1.0, "recover": 0.5, "maxDist": 14 }
-      ],
-      "firstKill": { "exp": 3000, "jexp": 1500, "zeny": 5000, "items": [["white_potion", 5]] }
-    },
-    "golem": {
-      "moves": [
-        { "id": "attack", "name": "拳擊", "type": "melee", "weight": 4, "mult": 0.5, "windup": 0.6, "recover": 0.3 },
-        { "id": "stomp", "name": "震地重踏", "type": "aoe", "center": "self", "radius": 3.2, "weight": 4, "mult": 2.0, "windup": 1.1, "recover": 0.7, "maxDist": 6.5 },
-        { "id": "charge", "name": "巨像衝鋒", "type": "charge", "length": 8, "width": 1.6, "weight": 3, "mult": 1.7, "windup": 1.0, "dashTime": 0.35, "recover": 0.8, "minDist": 0, "maxDist": 10 }
-      ],
-      "enrageMoves": [
-        { "id": "quake", "name": "連環震地", "type": "barrage", "radius": 1.8, "count": 4, "interval": 0.45, "spread": 3, "weight": 3, "mult": 1.8, "windup": 0.9, "recover": 0.7, "maxDist": 9 }
-      ],
-      "firstKill": { "exp": 15000, "jexp": 7000, "zeny": 20000, "items": [["elunium", 5], ["oridecon", 5]] }
-    },
-    "serpent": {
-      "moves": [
-        { "id": "attack", "name": "噬咬", "type": "melee", "weight": 4, "mult": 0.5, "windup": 0.45, "recover": 0.3 },
-        { "id": "tail", "name": "橫掃尾擊", "type": "aoe", "center": "self", "radius": 3.0, "weight": 3, "mult": 2.0, "windup": 0.9, "recover": 0.6, "maxDist": 6 },
-        { "id": "spit", "name": "毒液吐息", "type": "aoe", "center": "target", "radius": 2.2, "weight": 3, "mult": 2.2, "windup": 1.0, "recover": 0.6, "maxDist": 10 },
-        { "id": "charge", "name": "蛇行突襲", "type": "charge", "length": 9, "width": 1.4, "weight": 3, "mult": 1.8, "windup": 0.8, "dashTime": 0.28, "recover": 0.7, "minDist": 0, "maxDist": 11 }
-      ],
-      "enrageMoves": [
-        { "id": "rain", "name": "毒雨", "type": "barrage", "radius": 1.7, "count": 5, "interval": 0.4, "spread": 3.5, "weight": 4, "mult": 1.9, "windup": 0.9, "recover": 0.7, "maxDist": 10 }
-      ],
-      "firstKill": { "exp": 40000, "jexp": 20000, "zeny": 50000, "items": [["white_potion", 10], ["oridecon", 10]] }
-    }
+  "roar": {
+   "enrage": 1.2,
+   "frenzy": 0.8
+  },
+  "respawn": 120,
+  "victory": {
+   "hitStop": 0.2,
+   "slowScale": 0.3,
+   "slowTime": 1.6
   }
+ },
+ "bosses": {
+  "kingjelly": {
+   "moves": [
+    {
+     "id": "attack",
+     "name": "撞擊",
+     "type": "melee",
+     "weight": 4,
+     "mult": 0.5,
+     "windup": 0.5,
+     "recover": 0.3
+    },
+    {
+     "id": "slam",
+     "name": "果凍重壓",
+     "type": "aoe",
+     "center": "target",
+     "radius": 2.2,
+     "weight": 4,
+     "mult": 2.0,
+     "windup": 1.0,
+     "recover": 0.6,
+     "maxDist": 9
+    },
+    {
+     "id": "charge",
+     "name": "果凍衝撞",
+     "type": "charge",
+     "length": 7,
+     "width": 1.4,
+     "weight": 3,
+     "mult": 1.7,
+     "windup": 0.9,
+     "dashTime": 0.3,
+     "recover": 0.7,
+     "minDist": 0,
+     "maxDist": 9
+    }
+   ],
+   "enrageMoves": [
+    {
+     "id": "summon",
+     "name": "召喚小啵啵",
+     "type": "summon",
+     "weight": 3,
+     "windup": 1.0,
+     "recover": 0.5,
+     "maxDist": 14
+    }
+   ],
+   "firstKill": {
+    "exp": 3000,
+    "jexp": 1500,
+    "zeny": 5000,
+    "items": [
+     [
+      "white_potion",
+      5
+     ]
+    ]
+   }
+  },
+  "golem": {
+   "moves": [
+    {
+     "id": "attack",
+     "name": "拳擊",
+     "type": "melee",
+     "weight": 4,
+     "mult": 0.5,
+     "windup": 0.6,
+     "recover": 0.3
+    },
+    {
+     "id": "stomp",
+     "name": "震地重踏",
+     "type": "aoe",
+     "center": "self",
+     "radius": 3.2,
+     "weight": 4,
+     "mult": 2.0,
+     "windup": 1.1,
+     "recover": 0.7,
+     "maxDist": 6.5
+    },
+    {
+     "id": "charge",
+     "name": "巨像衝鋒",
+     "type": "charge",
+     "length": 8,
+     "width": 1.6,
+     "weight": 3,
+     "mult": 1.7,
+     "windup": 1.0,
+     "dashTime": 0.35,
+     "recover": 0.8,
+     "minDist": 0,
+     "maxDist": 10
+    }
+   ],
+   "enrageMoves": [
+    {
+     "id": "quake",
+     "name": "連環震地",
+     "type": "barrage",
+     "radius": 1.8,
+     "count": 4,
+     "interval": 0.45,
+     "spread": 3,
+     "weight": 3,
+     "mult": 1.8,
+     "windup": 0.9,
+     "recover": 0.7,
+     "maxDist": 9
+    }
+   ],
+   "firstKill": {
+    "exp": 15000,
+    "jexp": 7000,
+    "zeny": 20000,
+    "items": [
+     [
+      "elunium",
+      5
+     ],
+     [
+      "oridecon",
+      5
+     ]
+    ]
+   }
+  },
+  "serpent": {
+   "moves": [
+    {
+     "id": "attack",
+     "name": "噬咬",
+     "type": "melee",
+     "weight": 4,
+     "mult": 0.5,
+     "windup": 0.45,
+     "recover": 0.3
+    },
+    {
+     "id": "tail",
+     "name": "橫掃尾擊",
+     "type": "aoe",
+     "center": "self",
+     "radius": 3.0,
+     "weight": 3,
+     "mult": 2.0,
+     "windup": 0.9,
+     "recover": 0.6,
+     "maxDist": 6
+    },
+    {
+     "id": "spit",
+     "name": "毒液吐息",
+     "type": "aoe",
+     "center": "target",
+     "radius": 2.2,
+     "weight": 3,
+     "mult": 2.2,
+     "windup": 1.0,
+     "recover": 0.6,
+     "maxDist": 10
+    },
+    {
+     "id": "charge",
+     "name": "蛇行突襲",
+     "type": "charge",
+     "length": 9,
+     "width": 1.4,
+     "weight": 3,
+     "mult": 1.8,
+     "windup": 0.8,
+     "dashTime": 0.28,
+     "recover": 0.7,
+     "minDist": 0,
+     "maxDist": 11
+    }
+   ],
+   "enrageMoves": [
+    {
+     "id": "rain",
+     "name": "毒雨",
+     "type": "barrage",
+     "radius": 1.7,
+     "count": 5,
+     "interval": 0.4,
+     "spread": 3.5,
+     "weight": 4,
+     "mult": 1.9,
+     "windup": 0.9,
+     "recover": 0.7,
+     "maxDist": 10
+    }
+   ],
+   "firstKill": {
+    "exp": 40000,
+    "jexp": 20000,
+    "zeny": 50000,
+    "items": [
+     [
+      "white_potion",
+      10
+     ],
+     [
+      "oridecon",
+      10
+     ]
+    ]
+   }
+  },
+  "bandit_king": {
+   "moves": [
+    {
+     "id": "attack",
+     "name": "砍擊",
+     "type": "melee",
+     "weight": 4,
+     "mult": 0.5,
+     "windup": 0.5,
+     "recover": 0.3
+    },
+    {
+     "id": "smoke",
+     "name": "煙幕爆破",
+     "type": "aoe",
+     "center": "target",
+     "radius": 2.4,
+     "weight": 4,
+     "mult": 2.0,
+     "windup": 1.0,
+     "recover": 0.6,
+     "maxDist": 9
+    },
+    {
+     "id": "charge",
+     "name": "斬馬突襲",
+     "type": "charge",
+     "length": 8,
+     "width": 1.5,
+     "weight": 3,
+     "mult": 1.7,
+     "windup": 0.9,
+     "dashTime": 0.3,
+     "recover": 0.7,
+     "minDist": 0,
+     "maxDist": 10
+    }
+   ],
+   "enrageMoves": [
+    {
+     "id": "summon",
+     "name": "召集山賊",
+     "type": "summon",
+     "weight": 3,
+     "windup": 1.0,
+     "recover": 0.5,
+     "maxDist": 14
+    },
+    {
+     "id": "knives",
+     "name": "飛刀雨",
+     "type": "barrage",
+     "radius": 1.7,
+     "count": 5,
+     "interval": 0.4,
+     "spread": 3,
+     "weight": 3,
+     "mult": 1.8,
+     "windup": 0.9,
+     "recover": 0.7,
+     "maxDist": 9
+    }
+   ],
+   "firstKill": {
+    "exp": 7000,
+    "jexp": 3500,
+    "zeny": 9000,
+    "items": [
+     [
+      "white_potion",
+      5
+     ],
+     [
+      "oridecon",
+      3
+     ]
+    ]
+   }
+  }
+ }
 }
