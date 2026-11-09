@@ -876,8 +876,11 @@
     "pants": "#c8c8d8",
     "hairStyle": 2,
     "body": "armor",
-    "hat": "helm",
-    "cape": "#c02030"
+    "hat": "crownhelm",
+    "cape": "#c02030",
+    "wings": "#fff2b8",
+    "pauldron": "#e0b030",
+    "aura": "#ffe080"
    },
    "bonus": [
     [
@@ -978,8 +981,10 @@
     "pants": "#1a1a4a",
     "hairStyle": 1,
     "body": "robe",
-    "hat": "wizard",
-    "cape": "#6a3ad0"
+    "hat": "archwizard",
+    "cape": "#6a3ad0",
+    "pauldron": "#ffd060",
+    "aura": "#b080ff"
    },
    "bonus": [
     [
@@ -1071,8 +1076,10 @@
     "cloth2": "#60c0a0",
     "pants": "#1a2a2a",
     "hairStyle": 3,
-    "hat": "band",
-    "cape": "#1a2a2a"
+    "hat": "huntmask",
+    "cape": "#1a2a2a",
+    "scarf": "#60c0a0",
+    "aura": "#60ffc0"
    },
    "bonus": [
     [

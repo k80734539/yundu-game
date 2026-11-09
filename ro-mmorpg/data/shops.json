@@ -102,7 +102,27 @@
    "sage_earring",
    "tempest_brooch",
    "spell_ward",
-   "arcane_aegis"
+   "arcane_aegis",
+   "star_blade",
+   "star_spear",
+   "star_bow",
+   "star_staff",
+   "star_dagger",
+   "star_plate",
+   "star_vest",
+   "star_robe",
+   "star_helm",
+   "star_hat",
+   "star_shield",
+   "star_ward",
+   "star_cloak",
+   "star_boots",
+   "star_ring",
+   "star_glove",
+   "star_earring",
+   "star_brooch",
+   "star_pendant",
+   "star_charm"
   ]
  }
 ]

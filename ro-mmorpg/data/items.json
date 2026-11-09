@@ -4097,5 +4097,546 @@
    "dex": 6,
    "crit": 4
   }
+ },
+ {
+  "id": "star_blade",
+  "name": "星隕劍",
+  "type": "weapon",
+  "price": 90000,
+  "weight": 90,
+  "desc": "隕鐵鍛造的長劍。",
+  "icon": {
+   "k": "sword",
+   "c": "#c8a0ff"
+  },
+  "slot": "weapon",
+  "wtype": "sword",
+  "atk": 175,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "swordsman",
+   "paladin",
+   "templar"
+  ],
+  "bonus": {
+   "str": 3
+  }
+ },
+ {
+  "id": "star_spear",
+  "name": "星隕長槍",
+  "type": "weapon",
+  "price": 100000,
+  "weight": 90,
+  "desc": "隕鐵槍尖，STR +3。",
+  "icon": {
+   "k": "sword",
+   "c": "#c8a0ff"
+  },
+  "slot": "weapon",
+  "wtype": "spear",
+  "atk": 200,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "paladin",
+   "templar"
+  ],
+  "bonus": {
+   "str": 3
+  }
+ },
+ {
+  "id": "star_bow",
+  "name": "星隕弓",
+  "type": "weapon",
+  "price": 95000,
+  "weight": 90,
+  "desc": "弓弦是星砂絲。",
+  "icon": {
+   "k": "bow",
+   "c": "#c8a0ff"
+  },
+  "slot": "weapon",
+  "wtype": "bow",
+  "atk": 165,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "dex": 3
+  }
+ },
+ {
+  "id": "star_staff",
+  "name": "星隕法杖",
+  "type": "weapon",
+  "price": 95000,
+  "weight": 90,
+  "desc": "MATK +52%，INT +4。",
+  "icon": {
+   "k": "staff",
+   "c": "#c8a0ff"
+  },
+  "slot": "weapon",
+  "wtype": "staff",
+  "atk": 88,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "mage",
+   "elementalist",
+   "archmage"
+  ],
+  "matk": 52,
+  "bonus": {
+   "int": 4
+  }
+ },
+ {
+  "id": "star_dagger",
+  "name": "星隕匕首",
+  "type": "weapon",
+  "price": 80000,
+  "weight": 90,
+  "desc": "AGI +3。",
+  "icon": {
+   "k": "dagger",
+   "c": "#c8a0ff"
+  },
+  "slot": "weapon",
+  "wtype": "dagger",
+  "atk": 128,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "agi": 3
+  }
+ },
+ {
+  "id": "star_plate",
+  "name": "星隕鎧",
+  "type": "armor",
+  "price": 200000,
+  "weight": 110,
+  "desc": "VIT +3。",
+  "icon": {
+   "k": "mail",
+   "c": "#c8a0ff"
+  },
+  "slot": "armor",
+  "def": 26,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin",
+   "templar"
+  ],
+  "bonus": {
+   "vit": 3
+  },
+  "mdef": 8
+ },
+ {
+  "id": "star_vest",
+  "name": "星隕皮甲",
+  "type": "armor",
+  "price": 190000,
+  "weight": 40,
+  "desc": "FLEE +12。",
+  "icon": {
+   "k": "mail",
+   "c": "#c8a0ff"
+  },
+  "slot": "armor",
+  "def": 19,
+  "slots": 1,
+  "jobs": [
+   "archer",
+   "ranger",
+   "sniper",
+   "novice"
+  ],
+  "bonus": {
+   "flee": 12
+  }
+ },
+ {
+  "id": "star_robe",
+  "name": "星隕長袍",
+  "type": "armor",
+  "price": 200000,
+  "weight": 30,
+  "desc": "MDEF +36，SP +180，INT +3。",
+  "icon": {
+   "k": "robe",
+   "c": "#c8a0ff"
+  },
+  "slot": "armor",
+  "def": 10,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist",
+   "archmage"
+  ],
+  "mdef": 36,
+  "bonus": {
+   "sp": 180,
+   "int": 3
+  }
+ },
+ {
+  "id": "star_helm",
+  "name": "星隕盔",
+  "type": "armor",
+  "price": 110000,
+  "weight": 40,
+  "desc": "頂級頭盔。",
+  "icon": {
+   "k": "helm",
+   "c": "#c8a0ff"
+  },
+  "slot": "head",
+  "def": 15,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin",
+   "templar",
+   "archer",
+   "ranger",
+   "sniper"
+  ]
+ },
+ {
+  "id": "star_hat",
+  "name": "星隕法帽",
+  "type": "armor",
+  "price": 110000,
+  "weight": 40,
+  "desc": "MDEF +14，INT +3。",
+  "icon": {
+   "k": "cap",
+   "c": "#c8a0ff"
+  },
+  "slot": "head",
+  "def": 6,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist",
+   "archmage"
+  ],
+  "mdef": 14,
+  "bonus": {
+   "int": 3
+  }
+ },
+ {
+  "id": "star_shield",
+  "name": "星隕盾",
+  "type": "armor",
+  "price": 150000,
+  "weight": 100,
+  "desc": "堅固的大盾。",
+  "icon": {
+   "k": "shield",
+   "c": "#c8a0ff"
+  },
+  "slot": "shield",
+  "def": 16,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin",
+   "templar"
+  ]
+ },
+ {
+  "id": "star_ward",
+  "name": "星隕護符盾",
+  "type": "armor",
+  "price": 150000,
+  "weight": 30,
+  "desc": "MDEF +24，INT +2。",
+  "icon": {
+   "k": "shield",
+   "c": "#c8a0ff"
+  },
+  "slot": "shield",
+  "def": 5,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist",
+   "archmage"
+  ],
+  "mdef": 24,
+  "bonus": {
+   "int": 2
+  }
+ },
+ {
+  "id": "star_cloak",
+  "name": "星隕披風",
+  "type": "armor",
+  "price": 140000,
+  "weight": 40,
+  "desc": "FLEE +18，MDEF +12。",
+  "icon": {
+   "k": "cape",
+   "c": "#c8a0ff"
+  },
+  "slot": "garment",
+  "def": 9,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "mdef": 12,
+  "bonus": {
+   "flee": 18
+  }
+ },
+ {
+  "id": "star_boots",
+  "name": "星隕靴",
+  "type": "armor",
+  "price": 130000,
+  "weight": 40,
+  "desc": "HP +400，FLEE +12。",
+  "icon": {
+   "k": "shoes",
+   "c": "#c8a0ff"
+  },
+  "slot": "shoes",
+  "def": 8,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "hp": 400,
+   "flee": 12
+  }
+ },
+ {
+  "id": "star_ring",
+  "name": "星隕力量戒",
+  "type": "armor",
+  "price": 140000,
+  "weight": 10,
+  "desc": "STR +8、HP +200。",
+  "icon": {
+   "k": "ring",
+   "c": "#c8a0ff"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "str": 8,
+   "hp": 200
+  }
+ },
+ {
+  "id": "star_glove",
+  "name": "星隕敏捷手套",
+  "type": "armor",
+  "price": 140000,
+  "weight": 10,
+  "desc": "DEX +7、HIT +14。",
+  "icon": {
+   "k": "glove",
+   "c": "#c8a0ff"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "dex": 7,
+   "hit": 14
+  }
+ },
+ {
+  "id": "star_earring",
+  "name": "星隕智慧耳環",
+  "type": "armor",
+  "price": 140000,
+  "weight": 10,
+  "desc": "INT +8、SP +140。",
+  "icon": {
+   "k": "earring",
+   "c": "#c8a0ff"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "int": 8,
+   "sp": 140
+  }
+ },
+ {
+  "id": "star_brooch",
+  "name": "星隕疾風胸針",
+  "type": "armor",
+  "price": 140000,
+  "weight": 10,
+  "desc": "AGI +7、FLEE +14。",
+  "icon": {
+   "k": "brooch",
+   "c": "#c8a0ff"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "agi": 7,
+   "flee": 14
+  }
+ },
+ {
+  "id": "star_pendant",
+  "name": "星隕生命墜飾",
+  "type": "armor",
+  "price": 130000,
+  "weight": 10,
+  "desc": "VIT +6、HP +400。",
+  "icon": {
+   "k": "ring",
+   "c": "#c8a0ff"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "vit": 6,
+   "hp": 400
+  }
+ },
+ {
+  "id": "star_charm",
+  "name": "星隕幸運符",
+  "type": "armor",
+  "price": 130000,
+  "weight": 10,
+  "desc": "LUK +8、CRIT +4。",
+  "icon": {
+   "k": "brooch",
+   "c": "#c8a0ff"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "luk": 8,
+   "crit": 4
+  }
  }
 ]

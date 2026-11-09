@@ -34,6 +34,7 @@ export interface Look {
   color?: string; color2?: string; eye?: string;
   hair?: string; skin?: string; cloth?: string; cloth2?: string; pants?: string; hairStyle?: number;
   weapon?: string; hat?: string; scale?: number; sheet?: string; cape?: string; mouth?: string;
+  wings?: string; pauldron?: string; scarf?: string; aura?: string; // 三轉專屬外觀：光翼／肩甲／圍巾（畫在精靈圖裡）、光環（遊戲內畫在腳下）
 }
 export interface DropDef { item: string; rate: number }
 export interface MonsterDef {

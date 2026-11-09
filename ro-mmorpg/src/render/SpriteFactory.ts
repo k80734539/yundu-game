@@ -194,6 +194,17 @@ function drawHuman(c: CanvasRenderingContext2D, dir: number, f: number, L: Look)
     }
     if (!robe) { c.fillStyle = css(shade(pants, -0.3)); c.fillRect(ax - 9, by(166), 1, 8); c.fillRect(ax + 6, by(166), 1, 8); }
   }
+  // ---- 三轉專屬：光翼與圍巾（最底層） ----
+  if (L.wings) {
+    const wc = hex(L.wings), sw = f >= 2 && f < 6 ? Math.sin(((f - 2) / 4) * Math.PI * 2) * 2 : 0;
+    const wing = (sx: number, d: number) => oPoly(c, [[sx, by(132)], [sx + d * 30, by(94) + sw], [sx + d * 46, by(100) + sw], [sx + d * 38, by(114)], [sx + d * 48, by(124)], [sx + d * 32, by(136)], [sx + d * 36, by(150)], [sx + d * 14, by(150)]], wc);
+    if (side) wing(ax + 4 + leanX, 1); else { wing(ax - 16, -1); wing(ax + 16, 1); }
+  }
+  if (L.scarf) {
+    const sc = hex(L.scarf), sw = f >= 2 && f < 6 ? Math.sin(((f - 2) / 4) * Math.PI * 2) * 4 : f === 1 ? 1 : 0;
+    if (side) oPoly(c, [[ax + 2 + leanX, by(124)], [ax + 10 + leanX, by(126)], [ax + 26 + sw, by(146)], [ax + 18 + sw, by(158)]], sc);
+    else oPoly(c, [[ax - 6, by(124)], [ax + 6, by(124)], [ax + 22 + sw, by(150)], [ax + 14 + sw, by(162)]], sc);
+  }
   // ---- 披風（身後） ----
   if (L.cape && !robe) {
     const cp = hex(L.cape), sway = f >= 2 && f < 6 ? Math.sin(((f - 2) / 4) * Math.PI * 2) * 3 : f === 1 ? 1 : 0;
@@ -229,6 +240,7 @@ function drawHuman(c: CanvasRenderingContext2D, dir: number, f: number, L: Look)
       if (!back) { oRect(c, side ? tx + 3 : tx + 5, ty + 3, side ? tw - 6 : tw - 10, 17, hex('#b8c0d0')); c.fillStyle = '#e8eef8'; c.fillRect(side ? tx + 4 : tx + 6, ty + 4, 3, 14); c.fillStyle = '#7a8498'; c.fillRect(side ? tx + 3 : ax - 1, ty + 6, 1, 12); }
       oEllipse(c, side ? tx + 10 : tx - 2, ty + 4, 9, 7, hex('#b8c0d0'));
       if (!side) oEllipse(c, tx + tw + 2, ty + 4, 9, 7, hex('#b8c0d0'));
+      if (L.pauldron) { const pc = hex(L.pauldron); oEllipse(c, side ? tx + 10 : tx - 3, ty + 3, 12, 9, pc); if (!side) oEllipse(c, tx + tw + 3, ty + 3, 12, 9, pc); c.fillStyle = css(shade(pc, 0.4)); c.fillRect(side ? tx + 7 : tx - 7, ty - 1, 6, 2); if (!side) c.fillRect(tx + tw, ty - 1, 6, 2); }
       c.fillStyle = '#e8c050'; c.fillRect(side ? tx + 9 : tx - 3, ty + 1, 2, 2); if (!side) c.fillRect(tx + tw + 1, ty + 1, 2, 2);
     }
   }
@@ -314,6 +326,32 @@ function drawHuman(c: CanvasRenderingContext2D, dir: number, f: number, L: Look)
   } else if (L.hat === 'hood') {
     oEllipse(c, hx, hy - 8, 34, 26, hex(L.cloth2 || '#4a4a5a'));
     if (!back) { c.fillStyle = css(skin); pxEllipse(c, side ? hx - 8 : hx, hy + 6, side ? 16 : 22, 16); }
+  }
+  // ---- 三轉專屬頭飾與肩披 ----
+  if (L.hat === 'crownhelm') {
+    const gold = hex('#e8c040');
+    oPoly(c, [[hx - 30, hy - 14], [hx - 54, hy - 38], [hx - 46, hy - 12]], gold); if (!side) oPoly(c, [[hx + 30, hy - 14], [hx + 54, hy - 38], [hx + 46, hy - 12]], gold);
+    oEllipse(c, hx, hy - 12, 33, 20, hex('#f0f0f8'));
+    c.fillStyle = OUTC; c.fillRect(hx - 32, hy - 2, 64, 5); c.fillStyle = '#e8c040'; c.fillRect(hx - 31, hy - 1, 62, 3);
+    oPoly(c, [[hx - 4, hy - 26], [hx + 4, hy - 26], [hx + 6, hy - 40], [hx, hy - 46], [hx - 6, hy - 40]], gold);
+    c.fillStyle = '#ff4060'; c.fillRect(hx - 2, hy - 20, 4, 5);
+  } else if (L.hat === 'archwizard') {
+    const tilt = side ? 12 : 0;
+    oPoly(c, [[hx - 26 + tilt * 0.3, hy - 22], [hx + 26 + tilt * 0.3, hy - 22], [hx + 8 + tilt, hy - 72]], hex('#3a2a8a'));
+    oEllipse(c, hx, hy - 22, 38, 7, hex('#5a3ad0'), false);
+    c.fillStyle = '#ffd060'; c.fillRect(hx - 25, hy - 26, 50, 4);
+    oPoly(c, [[hx + 8 + tilt, hy - 82], [hx + 13 + tilt, hy - 73], [hx + 8 + tilt, hy - 66], [hx + 3 + tilt, hy - 73]], hex('#ffd860'));
+    oEllipse(c, hx, hy - 34, 5, 5, hex('#ff80ff'));
+  } else if (L.hat === 'huntmask') {
+    const dk = hex(L.cloth || '#2a3a3a');
+    if (!side) { oEllipse(c, hx - 27, hy + 10, 7, 16, dk); oEllipse(c, hx + 27, hy + 10, 7, 16, dk); } else oEllipse(c, hx + 6, hy + 8, 11, 18, dk);
+    oEllipse(c, hx, hy - 12, 33, 20, dk);
+    c.fillStyle = OUTC; c.fillRect(hx - 32, hy - 3, 64, 6); c.fillStyle = css(hex(L.cloth2 || '#60c0a0')); c.fillRect(hx - 31, hy - 2, 62, 4); c.fillStyle = '#ffffff'; c.fillRect(hx - 31, hy - 2, 62, 1);
+  }
+  if (L.pauldron && robe) { // 長袍職業：肩披
+    const pc = hex(L.pauldron);
+    if (side) { oEllipse(c, tx + 8, ty + 4, 10, 7, pc); } else { oEllipse(c, tx - 2, ty + 4, 10, 7, pc); oEllipse(c, tx + tw + 2, ty + 4, 10, 7, pc); }
+    c.fillStyle = css(shade(pc, 0.4)); if (side) c.fillRect(tx + 4, ty + 1, 5, 2); else { c.fillRect(tx - 6, ty + 1, 5, 2); c.fillRect(tx + tw, ty + 1, 5, 2); }
   }
   if (!weaponBehind) drawW();
 }

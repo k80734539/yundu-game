@@ -1112,6 +1112,15 @@ export class Game {
       c.globalAlpha = e.dead ? Math.max(0, 1 - e.deadT) : 1;
       c.drawImage(sh, Math.round(ex - L - sh.width / 2), Math.round(ey - T - sh.height / 2));
       c.globalAlpha = 1;
+      const aura = e === this.player && !e.dead ? (this.player.look && this.player.look.aura) : null;
+      if (aura) { // 三轉專屬光環：腳下發光的橢圓＋脈動
+        const pulse = 0.5 + 0.5 * Math.sin(this.time * 3), ax0 = Math.round(ex - L), ay0 = Math.round(ey - T);
+        c.save(); c.globalCompositeOperation = 'lighter';
+        const gr = c.createRadialGradient(ax0, ay0, 2, ax0, ay0, 46); gr.addColorStop(0, aura + 'aa'); gr.addColorStop(0.6, aura + '40'); gr.addColorStop(1, aura + '00');
+        c.fillStyle = gr; c.globalAlpha = 0.55 + 0.25 * pulse; c.beginPath(); c.ellipse(ax0, ay0, 46 + pulse * 3, 20 + pulse * 1.5, 0, 0, Math.PI * 2); c.fill();
+        c.globalAlpha = 0.8; c.strokeStyle = aura; c.lineWidth = 1; c.beginPath(); c.ellipse(ax0, ay0, 30 + pulse * 2, 12 + pulse, 0, 0, Math.PI * 2); c.stroke();
+        c.restore();
+      }
       dl.add(e.iy(alpha) + e.ix(alpha), K_ACTOR, e);
     }
     dl.sort();
