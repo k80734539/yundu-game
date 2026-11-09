@@ -385,5 +385,45 @@
   },
   "reqLv": 45,
   "prev": "q_cap5"
+ },
+ {
+  "id": "q_cap4b",
+  "name": "峽谷山賊",
+  "npc": "captain",
+  "type": "kill",
+  "target": "bandit",
+  "count": 12,
+  "desc": "迷霧沼澤南邊新發現了赤岩峽谷，山賊在那裡設了據點，商旅都不敢走。擊敗 12 名峽谷山賊。",
+  "done": "商路安全多了，這是賞金。",
+  "reward": {
+   "exp": 3600,
+   "jexp": 2000,
+   "zeny": 4000
+  },
+  "reqLv": 22,
+  "prev": "q_cap4"
+ },
+ {
+  "id": "q_herb4",
+  "name": "蠍尾毒液",
+  "npc": "herbalist",
+  "type": "collect",
+  "target": "scorpion_tail",
+  "count": 8,
+  "desc": "赤岩峽谷的赤岩蠍，尾針的毒液能做強效藥。幫我收集 8 條蠍尾。",
+  "done": "太棒了！這些藥水請收下。",
+  "reward": {
+   "exp": 3000,
+   "jexp": 1700,
+   "items": [
+    [
+     "white_potion",
+     5
+    ]
+   ]
+  },
+  "reqLv": 22,
+  "prev": "q_herb3",
+  "consume": true
  }
 ]

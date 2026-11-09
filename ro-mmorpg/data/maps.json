@@ -1247,6 +1247,13 @@
     "to": "coast",
     "tx": 12,
     "ty": 53
+   },
+   {
+    "x": 9,
+    "y": 53,
+    "to": "canyon",
+    "tx": 9,
+    "ty": 10
    }
   ],
   "spawns": [
@@ -1740,6 +1747,13 @@
     "to": "ruins",
     "tx": 10,
     "ty": 47
+   },
+   {
+    "x": 52,
+    "y": 50,
+    "to": "canyon",
+    "tx": 50,
+    "ty": 49
    }
   ],
   "spawns": [
@@ -1991,5 +2005,146 @@
    "y": 13,
    "respawn": 1200
   }
+ },
+ {
+  "id": "canyon",
+  "name": "赤岩峽谷",
+  "type": "field",
+  "w": 60,
+  "h": 60,
+  "seed": 83,
+  "base": "dirt",
+  "bgm": "field2",
+  "level": [
+   22,
+   30
+  ],
+  "border": "dead",
+  "pos": [
+   5,
+   5
+  ],
+  "tint": "rgba(190,95,45,0.16)",
+  "areas": [
+   {
+    "t": "sand",
+    "shape": "blob",
+    "x": 20,
+    "y": 20,
+    "r": 7
+   },
+   {
+    "t": "sand",
+    "shape": "blob",
+    "x": 40,
+    "y": 38,
+    "r": 8
+   },
+   {
+    "t": "sand",
+    "shape": "blob",
+    "x": 14,
+    "y": 46,
+    "r": 5
+   },
+   {
+    "t": "water",
+    "shape": "blob",
+    "x": 32,
+    "y": 10,
+    "r": 3
+   },
+   {
+    "t": "dirt",
+    "shape": "blob",
+    "x": 30,
+    "y": 30,
+    "r": 4
+   }
+  ],
+  "roads": [
+   {
+    "t": "dirt",
+    "width": 2.2,
+    "pts": [
+     [
+      6,
+      8
+     ],
+     [
+      16,
+      16
+     ],
+     [
+      28,
+      26
+     ],
+     [
+      40,
+      36
+     ],
+     [
+      52,
+      50
+     ]
+    ]
+   }
+  ],
+  "scatter": [
+   {
+    "type": "rock",
+    "n": 46
+   },
+   {
+    "type": "deadtree",
+    "n": 14,
+    "on": [
+     "dirt",
+     "sand"
+    ]
+   },
+   {
+    "type": "stump",
+    "n": 6
+   },
+   {
+    "type": "log",
+    "n": 4
+   }
+  ],
+  "portals": [
+   {
+    "x": 6,
+    "y": 8,
+    "to": "swamp",
+    "tx": 10,
+    "ty": 50
+   },
+   {
+    "x": 53,
+    "y": 51,
+    "to": "mine2",
+    "tx": 49,
+    "ty": 50
+   }
+  ],
+  "spawns": [
+   {
+    "m": "scorpion",
+    "n": 10
+   },
+   {
+    "m": "bandit",
+    "n": 8
+   },
+   {
+    "m": "canyon_hawk",
+    "n": 8
+   },
+   {
+    "m": "dust_golem",
+    "n": 6
+   }
+  ]
  }
 ]

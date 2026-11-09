@@ -1555,5 +1555,204 @@
     "chance": 0.15
    }
   ]
+ },
+ {
+  "id": "scorpion",
+  "name": "赤岩蠍",
+  "lv": 24,
+  "hp": 850,
+  "atk": [
+   52,
+   68
+  ],
+  "def": 14,
+  "mdef": 6,
+  "str": 28,
+  "agi": 22,
+  "vit": 20,
+  "int": 0,
+  "dex": 38,
+  "luk": 8,
+  "exp": 105,
+  "jexp": 60,
+  "range": 1,
+  "adelay": 1500,
+  "speed": 2.4,
+  "aggro": true,
+  "frame": 128,
+  "look": {
+   "body": "bug",
+   "color": "#b5532e",
+   "color2": "#2a1a10",
+   "scale": 1.8
+  },
+  "drops": [
+   {
+    "item": "scorpion_tail",
+    "rate": 0.6
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.03
+   },
+   {
+    "item": "scorpion_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "bandit",
+  "name": "峽谷山賊",
+  "lv": 26,
+  "hp": 1000,
+  "atk": [
+   60,
+   78
+  ],
+  "def": 12,
+  "mdef": 8,
+  "str": 32,
+  "agi": 28,
+  "vit": 22,
+  "int": 0,
+  "dex": 42,
+  "luk": 12,
+  "exp": 118,
+  "jexp": 66,
+  "range": 1,
+  "adelay": 1400,
+  "speed": 2.6,
+  "aggro": true,
+  "frame": 224,
+  "look": {
+   "body": "humanoid",
+   "skin": "#d0a070",
+   "hair": "#2a1a10",
+   "cloth": "#6a4a2a",
+   "cloth2": "#c05030",
+   "pants": "#3a2a22",
+   "eye": "#202020",
+   "weapon": "sword",
+   "hat": "band",
+   "hairStyle": 1,
+   "scale": 1.05
+  },
+  "drops": [
+   {
+    "item": "bandit_badge",
+    "rate": 0.6
+   },
+   {
+    "item": "yellow_potion",
+    "rate": 0.06
+   },
+   {
+    "item": "guard_dagger",
+    "rate": 0.005
+   },
+   {
+    "item": "bandit_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "canyon_hawk",
+  "name": "岩隼",
+  "lv": 27,
+  "hp": 800,
+  "atk": [
+   58,
+   74
+  ],
+  "def": 8,
+  "mdef": 10,
+  "str": 24,
+  "agi": 40,
+  "vit": 14,
+  "int": 0,
+  "dex": 48,
+  "luk": 14,
+  "exp": 128,
+  "jexp": 72,
+  "range": 1,
+  "adelay": 1200,
+  "speed": 3.4,
+  "aggro": true,
+  "frame": 160,
+  "look": {
+   "body": "bird",
+   "color": "#8a6a4a",
+   "color2": "#e0c070",
+   "scale": 1.9
+  },
+  "drops": [
+   {
+    "item": "canyon_feather",
+    "rate": 0.6
+   },
+   {
+    "item": "hood",
+    "rate": 0.01
+   },
+   {
+    "item": "hawk_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "dust_golem",
+  "name": "沙塵岩偶",
+  "lv": 29,
+  "hp": 1500,
+  "atk": [
+   72,
+   92
+  ],
+  "def": 22,
+  "mdef": 10,
+  "str": 40,
+  "agi": 10,
+  "vit": 34,
+  "int": 0,
+  "dex": 36,
+  "luk": 5,
+  "exp": 152,
+  "jexp": 84,
+  "range": 1,
+  "adelay": 1700,
+  "speed": 1.8,
+  "aggro": true,
+  "frame": 224,
+  "look": {
+   "body": "golem",
+   "color": "#b89060",
+   "color2": "#ffb040",
+   "scale": 1.4
+  },
+  "drops": [
+   {
+    "item": "dust_core",
+    "rate": 0.6
+   },
+   {
+    "item": "iron_ore",
+    "rate": 0.3
+   },
+   {
+    "item": "oridecon",
+    "rate": 0.02
+   },
+   {
+    "item": "elunium",
+    "rate": 0.02
+   },
+   {
+    "item": "dust_golem_card",
+    "rate": 0.008
+   }
+  ]
  }
 ]

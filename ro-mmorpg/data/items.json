@@ -2165,5 +2165,120 @@
   "bonus": {
    "str": 3
   }
+ },
+ {
+  "id": "scorpion_tail",
+  "name": "蠍尾",
+  "type": "etc",
+  "price": 30,
+  "weight": 1,
+  "desc": "帶毒的蠍尾，藥師會想要。",
+  "icon": {
+   "k": "scale",
+   "c": "#b5532e"
+  }
+ },
+ {
+  "id": "bandit_badge",
+  "name": "山賊徽章",
+  "type": "etc",
+  "price": 34,
+  "weight": 1,
+  "desc": "山賊團的粗糙徽章。",
+  "icon": {
+   "k": "brooch",
+   "c": "#c05030"
+  }
+ },
+ {
+  "id": "canyon_feather",
+  "name": "岩隼羽毛",
+  "type": "etc",
+  "price": 32,
+  "weight": 1,
+  "desc": "堅硬的猛禽羽毛。",
+  "icon": {
+   "k": "feather",
+   "c": "#8a6a4a"
+  }
+ },
+ {
+  "id": "dust_core",
+  "name": "塵岩核心",
+  "type": "etc",
+  "price": 36,
+  "weight": 1,
+  "desc": "沙塵岩偶體內的核心。",
+  "icon": {
+   "k": "core",
+   "c": "#b89060"
+  }
+ },
+ {
+  "id": "scorpion_card",
+  "name": "赤岩蠍卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入武器的卡片。ATK +24、CRIT +3。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "weapon",
+  "bonus": {
+   "atk": 24,
+   "crit": 3
+  }
+ },
+ {
+  "id": "bandit_card",
+  "name": "峽谷山賊卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入鞋子的卡片。AGI +2、FLEE +8。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "shoes",
+  "bonus": {
+   "agi": 2,
+   "flee": 8
+  }
+ },
+ {
+  "id": "hawk_card",
+  "name": "岩隼卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入披風的卡片。FLEE +15。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "garment",
+  "bonus": {
+   "flee": 15
+  }
+ },
+ {
+  "id": "dust_golem_card",
+  "name": "沙塵岩偶卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入盾牌的卡片。DEF +4、MDEF +6。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "shield",
+  "bonus": {
+   "def": 4,
+   "mdef": 6
+  }
  }
 ]
