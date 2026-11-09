@@ -1,7 +1,7 @@
 import type { UI } from './UI';
 import { h } from './Window';
 import type { Npc } from '../entities/Npc';
-import { DB, MAPS } from '../data';
+import { DB, MAPS, MERCS } from '../data';
 
 export interface Choice { label: string; fn: () => void; cls?: string }
 /** NPC 對話框：打字機效果、分頁、選項（點擊或數字鍵選擇） */
@@ -95,6 +95,7 @@ export class Dialog {
       case 'save': g.savePoint = { map: g.map.def.id, x: Math.floor(npc.x), y: Math.floor(npc.y) + 2 }; g.save?.saveSoon(); this.say('已經幫你設定好儲存點了。'); g.msg('儲存點已設定在 ' + g.map.def.name + '。', 'sys'); break;
       case 'quests': this.questMenu(); break;
       case 'warpmenu': this.warpMenu(); break;
+      case 'mercmenu': this.mercMenu(); break;
       case 'jobmenu': g.jobMenu(this); break;
       case 'refine': this.close(); this.ui.open('refine'); break;
       case 'cards': this.close(); this.ui.open('cards'); break;
@@ -138,6 +139,22 @@ export class Dialog {
       { label: '接受', fn: () => { g.quests.accept(id); this.say('拜託你了！', () => this.close()); } },
       { label: '再考慮一下', fn: () => this.close() },
     ]));
+  }
+  mercMenu() {
+    const g = this.ui.g, ms = g.mercs, list: Choice[] = [];
+    if (ms.active) {
+      const m = ms.merc!;
+      this.say([`${m.name}的契約還剩約 ${Math.ceil(ms.left / 60)} 分鐘。`, m.type.desc], () => this.choose([
+        { label: '續約（重新計算 30 分鐘）', fn: () => { const t = m.type, price = ms.cost(); if (g.player.ch.zeny < price) { this.say('Zeny 不足喔。'); return; } g.player.ch.zeny -= price; g.ev.emit('stats'); ms.left = MERCS.contractSec; this.say(`續約完成（${price.toLocaleString()} Zeny）。${t.title}會繼續跟著你。`); } },
+        { label: '解雇傭兵', fn: () => { ms.dismiss(); this.say('好的，契約已經解除。'); } },
+        { label: '再見', fn: () => this.close() },
+      ]));
+      return;
+    }
+    const price = ms.cost();
+    for (const t of MERCS.types) list.push({ label: `${t.title}：${t.desc}`, fn: () => { const err = ms.hire(t.id); this.say(err || `${t.name}跟你簽約了！契約三十分鐘，她會一直跟著你。`.replace('她', t.id === 'alchemist' ? '他' : '她')); } });
+    list.push({ label: '再見', fn: () => this.close() });
+    this.say([`目前沒有雇用任何傭兵。雇用一位需要 ${price.toLocaleString()} Zeny（依你的等級計算）。`, '傭兵不會被怪物攻擊，不吃經驗，也不會搶你的掉落物。打大型 Boss 時效果會減弱。'], () => this.choose(list));
   }
   warpMenu() {
     const g = this.ui.g;

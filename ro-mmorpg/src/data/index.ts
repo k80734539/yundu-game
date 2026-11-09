@@ -6,6 +6,7 @@ import skillsJson from '../../data/skills.json';
 import jobsJson from '../../data/jobs.json';
 import questsJson from '../../data/quests.json';
 import npcsJson from '../../data/npcs.json';
+import mercsJson from '../../data/mercs.json';
 import shopsJson from '../../data/shops.json';
 import lootJson from '../../data/loot.json';
 import bossJson from '../../data/bossfights.json';
@@ -125,3 +126,13 @@ export interface BossFightConfig {
   bosses: Record<string, { moves: BossMove[]; enrageMoves: BossMove[]; firstKill: { exp: number; jexp: number; zeny: number; items: [string, number][] } }>;
 }
 export const BOSSFIGHT = bossJson as unknown as BossFightConfig;
+
+export interface MercType {
+  id: string; name: string; title: string; desc: string; look: Look;
+  heal?: { low: number; cd: number; pct: number; flat: number; bigLow: number; bigCd: number; bigPct: number };
+  spGive?: { below: number; pct: number; cd: number };
+  song?: { base: number; perLv: number; stats: Record<string, number> };
+  bomb?: { cd: number; range: number; radius: number; atkMul: number; perLv: number; defIgnore: number; defDown: number; defDownSec: number };
+}
+export interface MercConfig { contractSec: number; costBase: number; costPerLv: number; bossFactor: number; followDist: number; teleportDist: number; types: MercType[] }
+export const MERCS = mercsJson as unknown as MercConfig;

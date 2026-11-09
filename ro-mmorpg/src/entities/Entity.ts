@@ -1,5 +1,5 @@
 let NEXT_ID = 1;
-export type Kind = 'player' | 'monster' | 'npc' | 'item' | 'projectile';
+export type Kind = 'player' | 'monster' | 'npc' | 'merc' | 'item' | 'projectile';
 /** 所有實體的基底：位置以格為單位的浮點數，上一幀位置用來插值 */
 export abstract class Entity {
   id = NEXT_ID++;

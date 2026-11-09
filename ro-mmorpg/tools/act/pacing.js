@@ -1,7 +1,7 @@
 // 升級節奏模擬：機器人從 Lv1 練起，依等級自動換地圖、加點、學技能、轉職（略過試煉任務），記錄各等級／職業等級的遊戲內時間。
 // 用法：把 'CLSNAME' 換成 swordsman/mage/archer，CAPMIN_VAL 換成上限（遊戲內分鐘）。無裝備升級、藥水無限、不做任務，所以是「最保守」的節奏。
 const res = await page.evaluate(() => {
-  const BUYGEAR = true, CLS = 'CLSNAME', CAPMIN = CAPMIN_VAL;
+  const MERC = true, BUYGEAR = true, CLS = 'CLSNAME', CAPMIN = CAPMIN_VAL;
   const G = window.__game, p = G.player, ch = p.ch, DB = window.__DB;
   G.loop.running = false;
   const PL = { swordsman: ['str', 'str', 'vit', 'dex', 'agi'], mage: ['int', 'int', 'dex', 'int', 'vit'], archer: ['dex', 'dex', 'agi', 'dex', 'str'] }[CLS];
@@ -24,6 +24,8 @@ const res = await page.evaluate(() => {
       for (const slot of ['weapon', 'armor', 'head', 'shield', 'garment', 'shoes']) { const val = (i) => (i.atk || 0) + (i.matk || 0) + (i.def || 0) * 4 + (i.mdef || 0); const curV = mine[slot] ?? -1;
         const best = cand.filter((i) => i.slot === slot && i.price <= ch.zeny && val(i) >= curV * 1.2 + 2).sort((a, b) => val(b) - val(a))[0];  // 只買明顯升級的
         if (best) { G.inv.add(best.id); const it = G.inv.items.filter((i) => i.id === best.id).pop(); if (!it) continue; ch.zeny -= best.price; G.inv.equipItem(it.uid, ch.job, ch.baseLv); if (mineUid[slot]) { try { G.sell(mineUid[slot], 1); } catch (e) { /* ignore */ } } mineUid[slot] = it.uid; p.recalc(true); mine[slot] = val(best); bought.push(best.id + '@Lv' + ch.baseLv); } } }
+    // 傭兵：契約到期就續雇（錢夠才雇）；劍士雇煉金術士、法師與弓箭手雇樂師
+    if (MERC && !G.mercs.active && ch.baseLv >= 10 && ch.zeny >= G.mercs.cost() * 1.5) { ch.zeny -= 0; G.mercs.hire({ swordsman: 'alchemist', mage: 'bard', archer: 'bard' }[CLS]); }
     // 轉職（略過試煉）
     if (jobTier === 0 && ch.jobLv >= 10 && (ch.skills.basic || 0) >= 9) { G.changeJob(CLS); jobTier = 1; rec('轉職一轉(分)'); G.resetStats(); }  // Lv20 以下重新配點免費
     if (jobTier === 2 && ch.jobLv >= 50 && ch.baseLv >= 70) { G.changeJob(T3); jobTier = 3; rec('轉職三轉(分)'); }

@@ -58,6 +58,7 @@ export type CloudState = 'pending' | 'on' | 'off';
 export class Save {
   private soonT = -1; private autoT = 0;
   loadedFrom: 'main' | 'backup' | 'new' = 'new';
+  pendingMerc: { type: string; left: number } | null = null;
   slot = 1;
   cloud: { state: CloudState; uid: string; db: any; err: string; syncedAt: number } = { state: 'pending', uid: '', db: null, err: '', syncedAt: 0 };
   private pushQ = new Map<number, string | { trashed: string | null }>(); private pushT = -1; private pushing = false;
@@ -184,7 +185,7 @@ export class Save {
     return {
       ch: p.ch, hp: Math.ceil(p.hp), sp: Math.ceil(p.sp), inv: g.inv.toJSON(), hotbar: g.hotbar,
       map: g.map.def.id, x: Math.floor(p.x), y: Math.floor(p.y), savePoint: g.savePoint,
-      quests: g.quests.s, flags: g.flags, mvp: g.spawner.mvp, audio: g.audio?.vol || null,
+      quests: g.quests.s, flags: g.flags, mvp: g.spawner.mvp, audio: g.audio?.vol || null, merc: g.mercs.toJSON(),
     };
   }
   save(manual = false) {
@@ -223,6 +224,7 @@ export class Save {
     if (d.audio && g.audio) g.audio.loadVol(d.audio);
     p.recalc(); p.refreshLook();
     p.hp = Math.max(1, Math.min(p.maxHp, d.hp ?? p.maxHp)); p.sp = Math.min(p.maxSp, d.sp ?? p.maxSp);
+    this.pendingMerc = d.merc ?? null; // 地圖載入完成後再讓傭兵出現
     return { map: DB.map[d.map] ? d.map : 'aurora', x: d.x, y: d.y };
   }
   /** 存檔後回到角色選擇畫面 */

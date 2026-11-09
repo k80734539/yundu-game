@@ -459,5 +459,38 @@
     ]
    }
   }
+ },
+ {
+  "id": "merc",
+  "name": "傭兵團長 巴頓",
+  "title": "傭兵公會",
+  "look": {
+   "skin": "#d0a070",
+   "hair": "#5a4a3a",
+   "cloth": "#4a3a5a",
+   "cloth2": "#d0b050",
+   "pants": "#2a2a3a",
+   "hairStyle": 2,
+   "body": "armor",
+   "hat": "helm"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "傭兵公會，專門提供各種輔助人才。",
+     "牧師、樂師、煉金術士，看你需要哪一種。契約三十分鐘，到期可以續約。"
+    ],
+    "opts": [
+     {
+      "label": "雇用傭兵",
+      "act": "mercmenu"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
  }
 ]

@@ -1,0 +1,95 @@
+{
+ "_說明": "傭兵：輔助型，不與玩家職業重複。契約秒數、價格、各傭兵的數值都在這裡調。傭兵不會被怪物攻擊（不會倒下），打 MVP 時效果減弱（bossFactor）。",
+ "contractSec": 1800,
+ "costBase": 300,
+ "costPerLv": 120,
+ "bossFactor": 0.6,
+ "followDist": 2.6,
+ "teleportDist": 12,
+ "types": [
+  {
+   "id": "priest",
+   "name": "牧師 瑪琳",
+   "title": "牧師",
+   "desc": "自動替你補血：血量低於 60% 時小補、低於 35% 時大補，並且會替你回復一點 SP。",
+   "look": {
+    "skin": "#f8e0c8",
+    "hair": "#f0d890",
+    "cloth": "#f6f2ff",
+    "cloth2": "#e0b040",
+    "pants": "#c0b8e0",
+    "hairStyle": 1,
+    "body": "robe",
+    "hat": "ribbon",
+    "weapon": "staff",
+    "cape": "#e8e0f8"
+   },
+   "heal": {
+    "low": 0.6,
+    "cd": 4,
+    "pct": 0.1,
+    "flat": 30,
+    "bigLow": 0.35,
+    "bigCd": 12,
+    "bigPct": 0.3
+   },
+   "spGive": {
+    "below": 0.7,
+    "pct": 0.04,
+    "cd": 6
+   }
+  },
+  {
+   "id": "bard",
+   "name": "樂師 洛琪",
+   "title": "樂師",
+   "desc": "演奏戰鬥之歌，持續提高你的攻擊力（含魔法攻擊）、攻擊速度與閃避，整個契約期間都有效。",
+   "look": {
+    "skin": "#f8d8b8",
+    "hair": "#d04a8a",
+    "cloth": "#8a3a7a",
+    "cloth2": "#f0c050",
+    "pants": "#3a2a4a",
+    "hairStyle": 3,
+    "hat": "feather",
+    "cape": "#c04a8a"
+   },
+   "song": {
+    "base": 5,
+    "perLv": 0.6,
+    "stats": {
+     "atk": 1,
+     "matkPct": 0.5,
+     "flee": 0.8,
+     "aspd": 0.15
+    }
+   }
+  },
+  {
+   "id": "alchemist",
+   "name": "煉金術士 古斯",
+   "title": "煉金術士",
+   "desc": "對你正在打的怪丟炸彈，造成範圍傷害並降低防禦——特別適合對付高防禦的怪物。",
+   "look": {
+    "skin": "#d8b088",
+    "hair": "#4a3a2a",
+    "cloth": "#6a4a2a",
+    "cloth2": "#60c070",
+    "pants": "#3a3a2a",
+    "hairStyle": 2,
+    "hat": "band",
+    "cape": "#3a5a3a"
+   },
+   "bomb": {
+    "cd": 3.2,
+    "range": 9,
+    "radius": 2.2,
+    "atkMul": 0.6,
+    "perLv": 8,
+    "defIgnore": 0.5,
+    "defDown": 15,
+    "defDownSec": 8
+   }
+  }
+ ]
+}

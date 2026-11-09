@@ -28,7 +28,9 @@ import { Spawner } from '../systems/Spawner';
 import { Inventory } from '../systems/Inventory';
 import { GroundItem } from '../entities/GroundItem';
 import { iconCanvas } from '../render/IconArt';
+import { MercSystem } from '../systems/Mercs';
 import { Npc } from '../entities/Npc';
+import { Merc } from '../entities/Merc';
 import type { HotSlot } from '../ui/Hotbar';
 import type { PropInst } from '../systems/MapLoader';
 import { Quests } from '../systems/Quests';
@@ -89,6 +91,7 @@ export class Game {
   quests: Quests;
   flags: Record<string, any> = { visited: {} };
   skills: SkillSystem;
+  mercs: MercSystem;
   loot: Loot;
   buffT: Record<string, number> = {}; buffMax: Record<string, number> = {};
   projectiles: Projectile[] = [];
@@ -112,6 +115,7 @@ export class Game {
     this.spawner = new Spawner(this);
     this.quests = new Quests(this);
     this.skills = new SkillSystem(this);
+    this.mercs = new MercSystem(this);
     this.loot = new Loot(this);
     this.save = new Save(this);
     this.tutorial = new Tutorial(this);
@@ -142,11 +146,14 @@ export class Game {
       const d = this.save.read();
       if (d) {
         const pos = this.save.apply(d);
+        this.mercs.dismiss(true);
         this.loadMap(pos.map, pos.x, pos.y);
+        this.mercs.restore(this.save.pendingMerc); this.save.pendingMerc = null;
         this.msg(`歡迎回來，${this.player.ch.name}！${this.save.loadedFrom === 'backup' ? '（主存檔損壞，已從備份還原）' : ''}`, 'sys');
       }
     } else {
       this.save.clearTrash(slot);
+      this.mercs.dismiss(true);
       this.player.ch.name = name || '冒險者';
       this.newGameItems();
       this.spawner.init();
@@ -562,6 +569,7 @@ export class Game {
     this.ground.warm(this.cam.left(this.r.w) - 64, this.cam.top(this.r.h) - 64, this.r.w + 128, this.r.h + 128);
     this.lights = this.props.filter((r) => r.def.anim === 'flame' || r.p.type === 'lamp' || r.def.anim === 'crystal').map((r) => ({ x: r.fx, y: r.fy - (r.p.type === 'lamp' ? 80 : r.def.anim === 'flame' ? 50 : 20), r: r.def.anim === 'crystal' ? 70 : 130 }));
     this.spawnNpcs();
+    this.mercs?.onMapLoad();
     this.talkTarget = null;
     this.flags.visited[def.id] = true;
     this.ui.onMap();
@@ -640,6 +648,7 @@ export class Game {
     this.updatePlayer(dt);
     if (!this.player.dead) this.checkPortals();
     for (const m of this.monsters) this.updateMonster(m, dt);
+    this.mercs.update(dt);
     for (const n of this.npcs) { n.updateAnim(dt); if (n.talkT > 0) { n.talkT -= dt; if (n.talkT <= 0) n.dir = n.baseDir; } }
     for (const k in this.skillCd) if (this.skillCd[k] > 0) this.skillCd[k] -= dt;
     // 移除淡出完成的實體
@@ -1314,6 +1323,7 @@ export class Game {
       } else if (this.shout) this.label(c, this.shout.text, x, y + e.bbox.y0 - 22 - (1.1 - this.shout.t) * 10, '#ffd860');
     }
     if (e instanceof Monster && e.frozenT > 0) { /* 冰凍圖示由 drawActor 處理 */ }
+    if (e instanceof Merc) { const lm = Math.max(0, Math.ceil(this.mercs.left / 60)); this.label(c, `${e.name}（剩 ${lm} 分）`, x, y + 14, '#ffe8a0'); }
     if (e instanceof Npc) {
       this.label(c, e.name, x, y + 14, '#a8e8ff');
       const mk = this.quests.mark(e.def.id);

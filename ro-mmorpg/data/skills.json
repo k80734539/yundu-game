@@ -3933,5 +3933,36 @@
     "lv": 5
    }
   ]
+ },
+ {
+  "id": "merc_song",
+  "name": "戰鬥之歌",
+  "job": "merc",
+  "maxLv": 1,
+  "type": "passive",
+  "target": "self",
+  "icon": {
+   "k": "sk_conc",
+   "c": "#f0c050"
+  },
+  "sp": [
+   0
+  ],
+  "cast": [
+   0
+  ],
+  "cd": [
+   0
+  ],
+  "range": 0,
+  "effect": "passive",
+  "fx": "none",
+  "desc": "樂師傭兵的戰鬥之歌：攻擊、攻速、閃避提升。",
+  "buffStat": {
+   "atk": 1,
+   "matkPct": 0.5,
+   "flee": 0.8,
+   "aspd": 0.15
+  }
  }
 ]
