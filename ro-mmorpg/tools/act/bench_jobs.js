@@ -25,7 +25,7 @@ const res = await page.evaluate((CLS) => {
   const score = (id) => { const s = DB.skill[id], lv = ch.skills[id]; return ((s.power || [100])[lv - 1] || 100) * (s.hits === 'lv' ? lv : s.hits === 'half' ? Math.ceil(lv / 2) : (typeof s.hits === 'number' ? s.hits : 1)) / (((s.cast || [0])[lv - 1] || 0) + ((s.cd || [0.5])[lv - 1] || 0.5)); };
   const atkIds = learned.filter((id) => !['buff', 'debuff'].includes(DB.skill[id].effect)).sort((a, b) => score(b) - score(a));
   p.recalc(true); p.hp = p.maxHp; p.sp = p.maxSp;
-  G.loadMap('ruins', 12, 12);
+  G.loadMap('ruins', 10, 47);
   const step = 1 / 60; let t = 0, kills = 0, skillCasts = 0, buffT = 0, skT = 0, noSp = 0;
   G.ev.on('kill', () => kills++);
   const GOAL = 8, CAP = 400;
