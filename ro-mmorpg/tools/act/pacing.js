@@ -21,7 +21,7 @@ const res = await page.evaluate(() => {
     // 買裝備（真的用掉落賣出前的 Zeny；每 20 秒檢查，每欄位買買得起的最好一件）
     if (BUYGEAR && (buyT -= step) <= 0) { buyT = 20; const shops = (Array.isArray(DB.shop) ? DB.shop : Object.values(DB.shop)).filter((x) => x.id === 'weapon' || x.id === 'quarter'); const cand = shops.flatMap((x) => x.items).map((id) => DB.item[id]).filter((i) => i && i.slot && i.jobs && i.jobs.includes(ch.job));
       for (const slot of ['weapon', 'armor', 'head', 'shield', 'garment', 'shoes']) { const val = (i) => (i.atk || 0) + (i.matk || 0) + (i.def || 0) * 4 + (i.mdef || 0); const curV = mine[slot] ?? -1;
-        const best = cand.filter((i) => i.slot === slot && i.price <= ch.zeny && val(i) >= curV * 1.3 + 3).sort((a, b) => val(b) - val(a))[0];  // 只買明顯升級的
+        const best = cand.filter((i) => i.slot === slot && i.price <= ch.zeny && val(i) >= curV * 1.2 + 2).sort((a, b) => val(b) - val(a))[0];  // 只買明顯升級的
         if (best) { G.inv.add(best.id); const it = G.inv.items.filter((i) => i.id === best.id).pop(); if (!it) continue; ch.zeny -= best.price; G.inv.equipItem(it.uid, ch.job, ch.baseLv); if (mineUid[slot]) { try { G.sell(mineUid[slot], 1); } catch (e) { /* ignore */ } } mineUid[slot] = it.uid; p.recalc(true); mine[slot] = val(best); bought.push(best.id + '@Lv' + ch.baseLv); } } }
     // 轉職（略過試煉）
     if (jobTier === 0 && ch.jobLv >= 10 && (ch.skills.basic || 0) >= 9) { G.changeJob(CLS); jobTier = 1; rec('轉職一轉(分)'); G.resetStats(); }  // Lv20 以下重新配點免費
