@@ -19,10 +19,10 @@ const res = await page.evaluate(() => {
   const sc = (id) => { const s = DB.skill[id], lv = ch.skills[id]; return ((s.power || [100])[lv - 1] || 100) * (s.hits === 'lv' ? lv : s.hits === 'half' ? Math.ceil(lv / 2) : (typeof s.hits === 'number' ? s.hits : 1)) / (((s.cast || [0])[lv - 1] || 0) + ((s.cd || [0.5])[lv - 1] || 0.5)); };
   while (t < CAPMIN * 60) {
     // 轉職（略過試煉）
-    if (jobTier === 0 && ch.jobLv >= 10 && (ch.skills.basic || 0) >= 9) { G.changeJob(CLS); jobTier = 1; rec('轉職一轉(分)'); }
+    if (jobTier === 0 && ch.jobLv >= 10 && (ch.skills.basic || 0) >= 9) { G.changeJob(CLS); jobTier = 1; rec('轉職一轉(分)'); G.resetStats(); }  // Lv20 以下重新配點免費
     if (jobTier === 1 && ch.jobLv >= 40) { G.changeJob(T2); jobTier = 2; rec('轉職二轉(分)'); }
     // 加點
-    for (let k = 0; k < 10 && ch.statPts > 0; k++) { const b = ch.statPts; G.raiseStat(PL[(ch.baseLv + k) % PL.length]); if (ch.statPts === b) break; }
+    for (let k = 0; k < 10 && ch.statPts > 0; k++) { const b = ch.statPts; { const plan = jobTier === 0 ? ['str', 'dex', 'agi', 'str', 'vit'] : PL; G.raiseStat(plan[(ch.baseLv + k) % plan.length]); } if (ch.statPts === b) break; }
     learnT -= step; if (ch.skillPts > 0 && learnT <= 0) { learnT = 0.3; if ((ch.skills.basic || 0) < 9 && jobTier === 0) G.learnSkill('basic'); else for (const [id, cap] of PRI) if (DB.skill[id] && (ch.skills[id] || 0) < +cap && G.learnSkill(id)) break; }
     if (ch.baseLv !== lastLv) { for (let l = lastLv + 1; l <= ch.baseLv; l++) if (l % 5 === 0 || l === 10) rec('Lv' + l + '(分)'); lastLv = ch.baseLv; lastLvT = t; }
     if (ch.jobLv % 10 === 0) rec('Job' + ch.jobLv + '(分)');
@@ -37,7 +37,7 @@ const res = await page.evaluate(() => {
     if (p.dead) { deaths++; deathsByMap[curMap] = (deathsByMap[curMap] || 0) + 1; G.respawn(); for (let i = 0; i < 40; i++) G.update(step); G.loadMap(curMap, mx, my); continue; }
     const ptype = ch.baseLv >= 18 ? 'white_potion' : 'red_potion';
     if (potCd <= 0 && p.hp < p.maxHp * 0.45 && G.monsters.some((m) => m.aggroOn === p && !m.dead)) { const it = G.inv.items.find((i) => i.id === ptype); if (it) { G.useItem(it.uid); potCd = 1; } }
-    if (potCd <= 0 && p.sp < p.maxSp * 0.15 && ch.baseLv >= 15) { const it = G.inv.items.find((i) => i.id === 'blue_potion'); if (it) { G.useItem(it.uid); potCd = 1; } }
+    if (potCd <= 0 && p.sp < p.maxSp * 0.15 && ch.baseLv >= 5) { const it = G.inv.items.find((i) => i.id === 'blue_potion'); if (it) { G.useItem(it.uid); potCd = 1; } }
     if (!(p.chase && !p.chase.dead)) {
       const c = G.monsters.filter((m) => !m.dead && !m.isMvp && m.def.lv <= ch.baseLv + 5).sort((a, b) => Math.hypot(a.x - p.x, a.y - p.y) - Math.hypot(b.x - p.x, b.y - p.y));
       if (c[0]) p.chase = c[0];
