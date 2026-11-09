@@ -14,7 +14,7 @@ export function playerVsMonster(d: Derived, m: MonsterDef, r: () => number, mult
   }
   if (!forceHit && r() * 100 >= clampRate(80 + d.hit - mFlee)) return { dmg: 0, kind: 'miss' };
   const atk = rint(r, d.atkMin, Math.max(d.atkMin, d.atkMax));
-  const dmg = Math.round(atk * mult * (100 - m.def) / 100) - m.vit;
+  const dmg = Math.round(atk * mult * (100 - m.def * (1 - (d.pierce || 0) / 100)) / 100) - m.vit; // 穿甲：無視部分防禦
   return { dmg: Math.max(1, dmg), kind: 'deal' };
 }
 /** 玩家魔法攻擊：必中，MATK 隨機 × 倍率，扣魔防 */

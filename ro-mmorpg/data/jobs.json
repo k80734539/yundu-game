@@ -418,7 +418,7 @@
    "id": "archer",
    "name": "弓箭手",
    "tier": 1,
-   "hpK": 0.8,
+   "hpK": 0.5,
    "hpB": 5,
    "spK": 4,
    "spB": 0,
@@ -439,7 +439,8 @@
     "concentration",
     "arrow_shower",
     "charge_arrow",
-    "eagle_focus"
+    "eagle_focus",
+    "armor_pierce"
    ],
    "attack": "arrow",
    "range": 9,
@@ -736,7 +737,7 @@
    "name": "遊俠",
    "tier": 2,
    "prev": "archer",
-   "hpK": 1.1,
+   "hpK": 0.9,
    "hpB": 5,
    "spK": 5,
    "spB": 0,

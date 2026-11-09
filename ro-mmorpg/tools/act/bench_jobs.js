@@ -13,7 +13,7 @@ const res = await page.evaluate((CLS) => {
   const B = {
     swordsman: { sword_mastery: 10, bash: 10, hp_recovery: 5, provoke: 5, endure: 3, magnum: 5, battle_spirit: 10 },
     mage: { arcane: 10, firebolt: 10, coldbolt: 10, soulstrike: 10, thunderstorm: 10, sp_recovery: 10, mana_focus: 10 },
-    archer: { owl_eye: 10, vulture_eye: 5, double_strafe: 10, concentration: 5, arrow_shower: 10, charge_arrow: 10, eagle_focus: 10 },
+    archer: { owl_eye: 10, vulture_eye: 5, double_strafe: 10, concentration: 5, arrow_shower: 10, charge_arrow: 10, eagle_focus: 10, armor_pierce: 10 },
     paladin: { spear_mastery: 10, pierce: 10, riding: 5, guard: 5, whirlwind: 5 },
     elementalist: { mana_cycle: 10, meteor: 10, frost_nova: 10, chain_lightning: 10, barrier: 5 },
     ranger: { hunter_instinct: 10, falcon: 10, multi_shot: 10, seeker_arrow: 10, trap: 10, wind_step: 5 },

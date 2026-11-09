@@ -889,10 +889,8 @@
    "novice",
    "swordsman",
    "mage",
-   "archer",
    "paladin",
-   "elementalist",
-   "ranger"
+   "elementalist"
   ]
  },
  {
@@ -911,10 +909,8 @@
   "slots": 1,
   "jobs": [
    "swordsman",
-   "archer",
    "novice",
-   "paladin",
-   "ranger"
+   "paladin"
   ]
  },
  {
@@ -3030,9 +3026,7 @@
   "slots": 1,
   "jobs": [
    "swordsman",
-   "paladin",
-   "archer",
-   "ranger"
+   "paladin"
   ]
  },
  {

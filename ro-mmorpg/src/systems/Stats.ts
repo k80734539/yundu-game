@@ -18,7 +18,7 @@ export interface Derived {
   statusAtk: number; weaponAtk: number; atkMin: number; atkMax: number;
   matkMin: number; matkMax: number;
   hit: number; flee: number; crit: number; pdodge: number;
-  def: number; softDef: number; mdef: number; softMdef: number;
+  def: number; softDef: number; mdef: number; softMdef: number; pierce: number;
   aspd: number; delay: number;
   total: Stats6; bonus: Stats6;
   hpRegen: number; spRegen: number; weight: number;
@@ -106,7 +106,7 @@ export function derive(ch: CharData, equips: EquipInfo[], buffs: Record<string, 
     crit: 1 + Math.floor(t.luk * 0.3) + critB,
     pdodge: 1 + Math.floor(t.luk / 10),
     def: Math.min(90, defB), softDef: Math.floor(t.vit / 2) + Math.floor(t.vit * t.vit / 150),
-    mdef: Math.min(90, mdefB), softMdef: t.int,
+    mdef: Math.min(90, mdefB), softMdef: t.int, pierce: sl('armor_pierce') ? (DB.skill.armor_pierce.value?.[sl('armor_pierce') - 1] || 0) : 0,
     aspd, delay: (200 - aspd) / 50,
     total: t, bonus,
     hpRegen: Math.max(1, Math.floor(maxHp / 200)) + Math.floor(t.vit / 5) + 5 * sl('hp_recovery'),
