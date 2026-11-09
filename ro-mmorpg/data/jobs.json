@@ -223,7 +223,8 @@
     "bash",
     "provoke",
     "magnum",
-    "endure"
+    "endure",
+    "battle_spirit"
    ],
    "attack": "melee",
    "range": 1,
@@ -436,7 +437,8 @@
     "double_strafe",
     "concentration",
     "arrow_shower",
-    "charge_arrow"
+    "charge_arrow",
+    "eagle_focus"
    ],
    "attack": "arrow",
    "range": 9,

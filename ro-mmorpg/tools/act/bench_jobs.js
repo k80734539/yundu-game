@@ -11,9 +11,9 @@ const res = await page.evaluate((CLS) => {
   const PL = { swordsman: ['str', 'str', 'vit', 'dex', 'agi'], mage: ['int', 'int', 'dex', 'int', 'vit'], archer: ['dex', 'dex', 'agi', 'dex', 'str'] }[T1];
   for (let k = 0; ch.statPts > 0 && k < 3000; k++) { const b = ch.statPts; G.raiseStat(PL[k % PL.length]); if (ch.statPts === b) { G.raiseStat(PL[0]); if (ch.statPts === b) break; } }
   const B = {
-    swordsman: { sword_mastery: 10, bash: 10, hp_recovery: 5, provoke: 5, endure: 3, magnum: 5 },
+    swordsman: { sword_mastery: 10, bash: 10, hp_recovery: 5, provoke: 5, endure: 3, magnum: 5, battle_spirit: 10 },
     mage: { arcane: 10, firebolt: 10, coldbolt: 10, soulstrike: 10, thunderstorm: 10, sp_recovery: 10 },
-    archer: { owl_eye: 10, vulture_eye: 5, double_strafe: 10, concentration: 5, arrow_shower: 10, charge_arrow: 10 },
+    archer: { owl_eye: 10, vulture_eye: 5, double_strafe: 10, concentration: 5, arrow_shower: 10, charge_arrow: 10, eagle_focus: 10 },
     paladin: { spear_mastery: 10, pierce: 10, riding: 5, guard: 5, whirlwind: 5 },
     elementalist: { mana_cycle: 10, meteor: 10, frost_nova: 10, chain_lightning: 10, barrier: 5 },
     ranger: { hunter_instinct: 10, falcon: 10, multi_shot: 10, seeker_arrow: 10, trap: 10, wind_step: 5 },
