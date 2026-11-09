@@ -34,10 +34,11 @@ export class QuestTracker {
     ui.g.ev.on('quest', () => this.render()); ui.g.ev.on('inv', () => this.render());
   }
   render() {
-    const qs = this.ui.g.quests, list = qs.activeList();
-    this.el.style.display = list.length ? 'block' : 'none';
+    const qs = this.ui.g.quests, list = qs.activeList(), gd = this.ui.g.inTitle ? null : this.ui.g.guide.get();
+    this.sig = gd ? gd.text + (gd.sub || '') : '';
+    this.el.style.display = list.length || gd ? 'block' : 'none';
     this.el.innerHTML = '';
-    const head = h('div', 'qt-head'); head.append(h('span', 'fold-ic'), h('span', '', `任務追蹤（${list.length}）`)); head.title = '點擊收合／展開';
+    const head = h('div', 'qt-head'); head.append(h('span', 'fold-ic'), h('span', '', `任務追蹤（${list.length}）${gd ? ' 📍' : ''}`)); head.title = '點擊收合／展開';
     head.addEventListener('click', () => this.ui.setFold('qtrack', !this.ui.fold.qtrack, this.el));
     this.el.appendChild(head);
     this.el.classList.toggle('folded', !!this.ui.fold.qtrack);
@@ -49,5 +50,20 @@ export class QuestTracker {
       d.innerHTML = `<div class="qt-name">${done ? '✔ ' : ''}${q.name}</div><div class="qt-prog">${tgt} ${qs.progress(q)}/${q.count}${done ? '　→ ' + DB.npc[q.npc]?.name : ''}</div>`;
       this.el.appendChild(d);
     }
+    if (gd) { // 下一步：去哪裡、找誰；點一下可開關畫面上的方向箭頭
+      const off = !!this.ui.g.flags.guideOff;
+      const b = h('div', 'qt-guide' + (off ? ' off' : '')); b.title = '點一下開關畫面上的方向箭頭';
+      b.innerHTML = `<div class="qt-gt">📍 ${gd.text}</div>${gd.sub ? `<div class="qt-sub">${gd.sub}</div>` : ''}<div class="qt-sub">${gd.arrow ? (off ? '箭頭：關' : '箭頭：開') : ''}</div>`;
+      b.addEventListener('click', () => { this.ui.g.flags.guideOff = !this.ui.g.flags.guideOff; this.render(); });
+      this.el.appendChild(b);
+    }
+  }
+  sig = ''; private t = 0;
+  /** 每秒檢查引導內容有沒有變（升級、換地圖、進度）才重畫 */
+  update(dt: number) {
+    this.t += dt; if (this.t < 1) return; this.t = 0;
+    const gd = this.ui.g.inTitle ? null : this.ui.g.guide.get(1);
+    const sig = gd ? gd.text + (gd.sub || '') : '';
+    if (sig !== this.sig) this.render();
   }
 }

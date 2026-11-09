@@ -29,6 +29,7 @@ import { Inventory } from '../systems/Inventory';
 import { GroundItem } from '../entities/GroundItem';
 import { iconCanvas } from '../render/IconArt';
 import { MercSystem } from '../systems/Mercs';
+import { Guide } from '../systems/Guide';
 import { Npc } from '../entities/Npc';
 import { Merc } from '../entities/Merc';
 import type { HotSlot } from '../ui/Hotbar';
@@ -92,6 +93,7 @@ export class Game {
   flags: Record<string, any> = { visited: {} };
   skills: SkillSystem;
   mercs: MercSystem;
+  guide: Guide;
   loot: Loot;
   buffT: Record<string, number> = {}; buffMax: Record<string, number> = {};
   projectiles: Projectile[] = [];
@@ -116,6 +118,7 @@ export class Game {
     this.quests = new Quests(this);
     this.skills = new SkillSystem(this);
     this.mercs = new MercSystem(this);
+    this.guide = new Guide(this);
     this.loot = new Loot(this);
     this.save = new Save(this);
     this.tutorial = new Tutorial(this);
@@ -1144,6 +1147,7 @@ export class Game {
     this.fx.drawParticles(c, L, T);
     // 頭上資訊（血條、名稱）
     for (const e of this.entities) if (e instanceof Actor) this.drawOverhead(c, e, L, T);
+    this.drawGuideArrow(c, L, T);
     this.fx.drawTexts(c, L, T);
     this.drawPortalLabels(c, L, T);
     this.drawDarkness(c, L, T, W, H);
@@ -1156,6 +1160,21 @@ export class Game {
       c.fillText(`粒子 ${this.fx.parts.activeCount}/${this.fx.parts.items.length}  飄字 ${this.fx.texts.activeCount}/${this.fx.texts.items.length}`, W - 224, H - 38);
       c.fillText(`繪製清單 ${dl.n}  投射物 ${this.projectiles.length}`, W - 224, H - 24);
     }
+  }
+  /** 任務引導箭頭：在玩家身旁指向下一步的目標（NPC、怪物或傳送點） */
+  drawGuideArrow(c: CanvasRenderingContext2D, L: number, T: number) {
+    if (this.inTitle || this.flags.guideOff || this.ui.dialog.isOpen || this.player.dead) return;
+    const gd = this.guide.get(); if (!gd || !gd.arrow) return;
+    const a = this.alpha, p = this.player;
+    const px = isoX(p.ix(a), p.iy(a)) - L, py = isoY(p.ix(a), p.iy(a)) - T - 40, tx = isoX(gd.x, gd.y) - L, ty = isoY(gd.x, gd.y) - T - 20;
+    const dx = tx - px, dy = ty - py, dist = Math.hypot(gd.x - p.x, gd.y - p.y); if (dist < 4) return;
+    const ang = Math.atan2(dy, dx), r = 62 + Math.sin(this.time * 4) * 3, ax = px + Math.cos(ang) * r, ay = py + Math.sin(ang) * r;
+    c.save(); c.translate(Math.round(ax), Math.round(ay)); c.rotate(ang);
+    c.fillStyle = '#ffd860'; c.strokeStyle = '#3a2a10'; c.lineWidth = 2;
+    c.beginPath(); c.moveTo(11, 0); c.lineTo(-7, -8); c.lineTo(-3, 0); c.lineTo(-7, 8); c.closePath(); c.stroke(); c.fill();
+    c.restore();
+    c.font = 'bold 10px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 3; c.strokeStyle = '#2a1c08'; c.fillStyle = '#ffe9a0';
+    const lt = `${Math.round(dist)} 格`; c.strokeText(lt, ax, ay + 14); c.fillText(lt, ax, ay + 14);
   }
   drawPortals(c: CanvasRenderingContext2D, L: number, T: number) {
     const t = this.time;

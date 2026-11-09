@@ -1,0 +1,95 @@
+import { DB, MAPS, QUESTS, QuestDef } from '../data';
+import { Monster } from '../entities/Monster';
+import type { Game } from '../core/Game';
+
+export interface GuideTarget {
+  text: string;            // 顯示在任務追蹤下方的一行說明
+  sub?: string;            // 補充（路線）
+  x: number; y: number;    // 箭頭指向的世界座標（格）；null 時不畫箭頭
+  arrow: boolean;
+}
+
+/** 任務引導：告訴玩家「下一步要去哪裡、找誰」，並提供畫面上的方向箭頭 */
+export class Guide {
+  private cache: GuideTarget | null = null; private t = 99; private key = '';
+  constructor(private g: Game) {}
+  private mapName(id: string) { return DB.map[id]?.name || id; }
+  /** 這個 NPC 站在哪張地圖、哪個座標 */
+  npcAt(npc: string): { map: string; x: number; y: number } | null {
+    for (const m of MAPS) { const n = (m.npcs || []).find((o) => o.id === npc); if (n) return { map: m.id, x: n.x + 0.5, y: n.y + 0.5 }; }
+    return null;
+  }
+  /** 哪些地圖有這種怪（含 MVP） */
+  monsterMaps(mon: string): string[] {
+    return MAPS.filter((m) => (m.spawns || []).some((s) => s.m === mon) || m.mvp?.m === mon).map((m) => m.id);
+  }
+  /** 哪些地圖的怪會掉這個道具 */
+  itemMaps(item: string): { maps: string[]; mons: string[] } {
+    const mons = Object.values(DB.monster).filter((m) => m.drops.some((d) => d.item === item)).map((m) => m.id);
+    const maps = new Set<string>(); for (const mo of mons) for (const mp of this.monsterMaps(mo)) maps.add(mp);
+    return { maps: [...maps], mons };
+  }
+  /** 從 from 走到 to 的地圖路線（BFS，經由傳送點），回傳地圖 id 陣列（含起終點） */
+  route(from: string, to: string): string[] | null {
+    if (from === to) return [from];
+    const prev: Record<string, string> = { [from]: '' }, q = [from];
+    while (q.length) {
+      const cur = q.shift()!;
+      for (const p of DB.map[cur]?.portals || []) {
+        if (prev[p.to] !== undefined || DB.map[p.to]?.hidden) continue;
+        prev[p.to] = cur; if (p.to === to) { const r = [to]; let c = to; while (prev[c]) { c = prev[c]; r.unshift(c); } return r; }
+        q.push(p.to);
+      }
+    }
+    return null;
+  }
+  /** 往目標地圖的下一步：回傳該傳送點座標與下一張地圖 */
+  private hop(to: string): { x: number; y: number; next: string; route: string[] } | null {
+    const cur = this.g.map.def.id, r = this.route(cur, to); if (!r || r.length < 2) return null;
+    const p = DB.map[cur].portals.find((o) => o.to === r[1]); if (!p) return null;
+    return { x: p.x + 0.5, y: p.y + 0.5, next: r[1], route: r };
+  }
+  private routeText(r: string[]) { return r.map((m) => this.mapName(m)).join(' → '); }
+  /** 玩家目前最該做的事 */
+  compute(): GuideTarget | null {
+    const g = this.g, qs = g.quests, cur = g.map.def.id;
+    const active = QUESTS.filter((q) => qs.isActive(q.id));
+    const ready = active.find((q) => qs.complete(q));
+    const toNpc = (q: QuestDef, verb: string): GuideTarget | null => {
+      const at = this.npcAt(q.npc), nm = DB.npc[q.npc]?.name || q.npc; if (!at) return null;
+      if (at.map === cur) return { text: `${verb}「${q.name}」→ ${nm}`, sub: '就在這張地圖', x: at.x, y: at.y, arrow: true };
+      const h = this.hop(at.map);
+      return { text: `${verb}「${q.name}」→ ${nm}（${this.mapName(at.map)}）`, sub: h ? '路線：' + this.routeText(h.route) : undefined, x: h?.x ?? 0, y: h?.y ?? 0, arrow: !!h };
+    };
+    if (ready) return toNpc(ready, '回報');
+    // 進行中的任務：去哪裡打／收集
+    for (const q of active) {
+      let maps: string[] = [], mons: string[] = [];
+      if (q.type === 'kill') { maps = this.monsterMaps(q.target); mons = [q.target]; }
+      else if (q.type === 'collect') { const r = this.itemMaps(q.target); maps = r.maps; mons = r.mons; }
+      else continue;
+      if (!maps.length) continue;
+      const what = q.type === 'kill' ? DB.monster[q.target]?.name : `${DB.item[q.target]?.name}（${mons.slice(0, 2).map((m) => DB.monster[m].name).join('、')}掉落）`;
+      if (maps.includes(cur)) {
+        const m = g.monsters.filter((o: Monster) => !o.dead && mons.includes(o.def.id)).sort((a, b) => Math.hypot(a.x - g.player.x, a.y - g.player.y) - Math.hypot(b.x - g.player.x, b.y - g.player.y))[0];
+        return { text: `進行中「${q.name}」：${q.type === 'kill' ? '擊敗' : '收集'} ${what}`, sub: '就在這張地圖', x: m?.x ?? g.player.x, y: m?.y ?? g.player.y, arrow: !!m };
+      }
+      const routes = maps.map((mp) => this.route(cur, mp)).filter((r): r is string[] => !!r).sort((a, b) => a.length - b.length);
+      if (routes[0]) { const h = this.hop(routes[0][routes[0].length - 1]); return { text: `進行中「${q.name}」：去 ${this.mapName(routes[0][routes[0].length - 1])} ${q.type === 'kill' ? '擊敗' : '收集'} ${what}`, sub: '路線：' + this.routeText(routes[0]), x: h?.x ?? 0, y: h?.y ?? 0, arrow: !!h }; }
+    }
+    // 沒有進行中任務：建議下一個可接的
+    const avail = QUESTS.filter((q) => qs.canAccept(q)).sort((a, b) => (a.reqLv || 0) - (b.reqLv || 0));
+    if (avail[0]) return toNpc(avail[0], '可接');
+    // 還沒解鎖：下一個等級門檻
+    const locked = QUESTS.filter((q) => !qs.s[q.id] && (!q.prev || qs.isDone(q.prev)) && (q.reqLv || 0) > g.player.ch.baseLv && !q.trial).sort((a, b) => (a.reqLv || 0) - (b.reqLv || 0))[0];
+    if (locked) return { text: `下一個任務：Lv${locked.reqLv} 解鎖「${locked.name}」（${DB.npc[locked.npc]?.name}）`, sub: '先去練功吧', x: 0, y: 0, arrow: false };
+    return null;
+  }
+  /** 取得（快取的）引導目標；任務／等級／地圖改變或過一小段時間才重算 */
+  get(dt = 0): GuideTarget | null {
+    const g = this.g, key = `${g.map.def.id}|${g.player.ch.baseLv}|${JSON.stringify(g.quests.s)}|${g.inv.items.length}`;
+    this.t += dt;
+    if (key !== this.key || this.t > 0.6) { this.key = key; this.t = 0; this.cache = this.compute(); }
+    return this.cache;
+  }
+}

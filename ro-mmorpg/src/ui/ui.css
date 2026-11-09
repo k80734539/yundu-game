@@ -400,3 +400,9 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 .slot.loading { opacity: .7; }
 .ask-box .win-foot .btn.warn { color: #a02a20; font-weight: bold; }
 .ask-box .win-foot .btn.dis { opacity: .35; }
+
+#qtrack .qt-guide { margin-top: 4px; padding: 3px 5px; border-top: 1px dashed rgba(255,220,120,.5); color: #ffe9a0; cursor: pointer; }
+#qtrack .qt-guide .qt-gt { font-weight: bold; }
+#qtrack .qt-guide .qt-sub { font-size: 11px; color: #cfd8f0; opacity: .85; }
+#qtrack .qt-guide.off { opacity: .6; }
+#qtrack.folded .qt-guide { display: none; }

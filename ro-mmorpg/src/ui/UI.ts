@@ -113,6 +113,7 @@ export class UI {
     this.hot.update();
     this.bossbar.update();
     this.dialog.update(dt);
+    this.qtrack.update(dt);
     const bt = this.g.buffT, keys = Object.keys(bt);
     const bk = keys.map((k) => k + Math.ceil(bt[k])).join(',');
     if (bk !== this.buffKey) {
