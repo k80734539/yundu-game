@@ -218,6 +218,27 @@
     "bandit_bow",
     "bandit_lance"
    ]
+  },
+  "frost_king": {
+   "zeny": [
+    40000,
+    60000
+   ],
+   "material": "frost_core",
+   "materialCount": [
+    2,
+    4
+   ],
+   "equipChance": 0.3,
+   "exclusiveChance": 0.08,
+   "cardChance": 0.01,
+   "card": "frost_king_card",
+   "exclusives": [
+    "frost_blade",
+    "frost_staff",
+    "frost_bow",
+    "frost_lance"
+   ]
   }
  },
  "ownJobChance": 0.7,
@@ -278,6 +299,17 @@
     "bandit_staff",
     "bandit_bow",
     "bandit_lance"
+   ]
+  },
+  {
+   "cost": {
+    "frost_core": 25
+   },
+   "items": [
+    "frost_blade",
+    "frost_staff",
+    "frost_bow",
+    "frost_lance"
    ]
   }
  ],

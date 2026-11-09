@@ -1829,5 +1829,244 @@
     "chance": 0.2
    }
   ]
+ },
+ {
+  "id": "frost_wolf",
+  "name": "霜牙狼",
+  "lv": 48,
+  "hp": 4800,
+  "atk": [
+   150,
+   190
+  ],
+  "def": 40,
+  "mdef": 20,
+  "str": 60,
+  "agi": 30,
+  "vit": 50,
+  "int": 10,
+  "dex": 65,
+  "luk": 10,
+  "exp": 640,
+  "jexp": 360,
+  "range": 1,
+  "adelay": 1300,
+  "speed": 3.2,
+  "aggro": true,
+  "frame": 192,
+  "look": {
+   "body": "wolf",
+   "color": "#c8d8e8",
+   "color2": "#80b8ff",
+   "scale": 1.5
+  },
+  "drops": [
+   {
+    "item": "frost_fang",
+    "rate": 0.6
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.04
+   },
+   {
+    "item": "frost_wolf_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "snow_yeti",
+  "name": "雪原雪怪",
+  "lv": 51,
+  "hp": 6500,
+  "atk": [
+   170,
+   215
+  ],
+  "def": 55,
+  "mdef": 25,
+  "str": 75,
+  "agi": 30,
+  "vit": 70,
+  "int": 10,
+  "dex": 60,
+  "luk": 10,
+  "exp": 720,
+  "jexp": 400,
+  "range": 1,
+  "adelay": 1700,
+  "speed": 1.9,
+  "aggro": true,
+  "frame": 224,
+  "look": {
+   "body": "golem",
+   "color": "#e8f0f8",
+   "color2": "#80c0ff",
+   "scale": 1.5
+  },
+  "drops": [
+   {
+    "item": "yeti_fur",
+    "rate": 0.6
+   },
+   {
+    "item": "oridecon",
+    "rate": 0.02
+   },
+   {
+    "item": "snow_yeti_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "ice_wraith",
+  "name": "寒霜幽魂",
+  "lv": 53,
+  "hp": 3800,
+  "atk": [
+   150,
+   190
+  ],
+  "def": 20,
+  "mdef": 80,
+  "str": 45,
+  "agi": 30,
+  "vit": 35,
+  "int": 10,
+  "dex": 75,
+  "luk": 10,
+  "exp": 760,
+  "jexp": 430,
+  "range": 2,
+  "adelay": 1300,
+  "speed": 3.0,
+  "aggro": true,
+  "frame": 160,
+  "look": {
+   "body": "ghost",
+   "color": "#a0d8ff",
+   "scale": 2.0
+  },
+  "drops": [
+   {
+    "item": "ice_shard",
+    "rate": 0.6
+   },
+   {
+    "item": "blue_potion",
+    "rate": 0.1
+   },
+   {
+    "item": "ice_wraith_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "ice_mantis",
+  "name": "冰霜螳螂",
+  "lv": 56,
+  "hp": 5200,
+  "atk": [
+   185,
+   235
+  ],
+  "def": 45,
+  "mdef": 30,
+  "str": 70,
+  "agi": 30,
+  "vit": 45,
+  "int": 10,
+  "dex": 80,
+  "luk": 10,
+  "exp": 850,
+  "jexp": 480,
+  "range": 1,
+  "adelay": 1200,
+  "speed": 2.8,
+  "aggro": true,
+  "frame": 192,
+  "look": {
+   "body": "bug",
+   "color": "#a0c8ff",
+   "color2": "#ffffff",
+   "scale": 2.2
+  },
+  "drops": [
+   {
+    "item": "mantis_claw",
+    "rate": 0.6
+   },
+   {
+    "item": "elunium",
+    "rate": 0.02
+   },
+   {
+    "item": "ice_mantis_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "frost_king",
+  "name": "霜牙狼王",
+  "lv": 62,
+  "hp": 130000,
+  "atk": [
+   320,
+   420
+  ],
+  "def": 60,
+  "mdef": 45,
+  "str": 100,
+  "agi": 30,
+  "vit": 90,
+  "int": 10,
+  "dex": 100,
+  "luk": 10,
+  "exp": 28000,
+  "jexp": 14000,
+  "range": 1,
+  "adelay": 1500,
+  "speed": 2.4,
+  "aggro": true,
+  "frame": 288,
+  "look": {
+   "body": "wolf",
+   "color": "#e8f4ff",
+   "color2": "#60a8ff",
+   "scale": 2.4
+  },
+  "drops": [
+   {
+    "item": "frost_core",
+    "rate": 0.6
+   },
+   {
+    "item": "frost_fang",
+    "rate": 1.0
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.8
+   },
+   {
+    "item": "frost_king_card",
+    "rate": 0.05
+   }
+  ],
+  "mvp": true,
+  "skills": [
+   {
+    "id": "stomp",
+    "chance": 0.25
+   },
+   {
+    "id": "summon",
+    "chance": 0.2
+   }
+  ]
  }
 ]

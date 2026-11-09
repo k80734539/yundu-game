@@ -2403,5 +2403,250 @@
    "paladin"
   ],
   "bossEx": "bandit_king"
+ },
+ {
+  "id": "frost_fang",
+  "name": "霜狼牙",
+  "type": "etc",
+  "price": 60,
+  "weight": 1,
+  "desc": "冰冷的狼牙。",
+  "icon": {
+   "k": "bone",
+   "c": "#c8d8e8"
+  }
+ },
+ {
+  "id": "yeti_fur",
+  "name": "雪怪毛皮",
+  "type": "etc",
+  "price": 64,
+  "weight": 1,
+  "desc": "厚實的白色毛皮。",
+  "icon": {
+   "k": "scale",
+   "c": "#e8f0f8"
+  }
+ },
+ {
+  "id": "ice_shard",
+  "name": "寒霜碎片",
+  "type": "etc",
+  "price": 66,
+  "weight": 1,
+  "desc": "幽魂凝結的冰晶碎片。",
+  "icon": {
+   "k": "core",
+   "c": "#a0d8ff"
+  }
+ },
+ {
+  "id": "mantis_claw",
+  "name": "冰螳之爪",
+  "type": "etc",
+  "price": 70,
+  "weight": 1,
+  "desc": "結著霜的鋒利前爪。",
+  "icon": {
+   "k": "bone",
+   "c": "#a0c8ff"
+  }
+ },
+ {
+  "id": "frost_core",
+  "name": "霜狼核心",
+  "type": "etc",
+  "price": 9000,
+  "weight": 1,
+  "desc": "霜牙狼王體內結成的寒冰核心，可在鍛造處換取專屬武器。",
+  "icon": {
+   "k": "core",
+   "c": "#80c8ff"
+  }
+ },
+ {
+  "id": "frost_wolf_card",
+  "name": "霜牙狼卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入披風的卡片。FLEE +20。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "garment",
+  "bonus": {
+   "flee": 20
+  }
+ },
+ {
+  "id": "snow_yeti_card",
+  "name": "雪原雪怪卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入鎧甲的卡片。VIT +4、HP +300。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "armor",
+  "bonus": {
+   "vit": 4,
+   "hp": 300
+  }
+ },
+ {
+  "id": "ice_wraith_card",
+  "name": "寒霜幽魂卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入披風的卡片。INT +5、MATK +25。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "garment",
+  "bonus": {
+   "int": 5,
+   "matk": 25
+  }
+ },
+ {
+  "id": "ice_mantis_card",
+  "name": "冰霜螳螂卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入武器的卡片。ATK +35、CRIT +5。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "weapon",
+  "bonus": {
+   "atk": 35,
+   "crit": 5
+  }
+ },
+ {
+  "id": "frost_king_card",
+  "name": "霜牙狼王卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入武器的卡片。ATK +45、HIT +12。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "weapon",
+  "bonus": {
+   "atk": 45,
+   "hit": 12
+  }
+ },
+ {
+  "id": "frost_blade",
+  "name": "霜牙冰刃",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "狼王牙齒打造的寒冰長劍。",
+  "icon": {
+   "k": "sword",
+   "c": "#80c8ff"
+  },
+  "slot": "weapon",
+  "wtype": "sword",
+  "atk": 165,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin"
+  ],
+  "bossEx": "frost_king",
+  "bonus": {
+   "str": 3,
+   "agi": 2
+  }
+ },
+ {
+  "id": "frost_staff",
+  "name": "霜晶杖",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "冰晶凝成的法杖，MATK +48%。",
+  "icon": {
+   "k": "staff",
+   "c": "#80c8ff"
+  },
+  "slot": "weapon",
+  "wtype": "staff",
+  "atk": 85,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist"
+  ],
+  "bossEx": "frost_king",
+  "matk": 48,
+  "bonus": {
+   "int": 4
+  }
+ },
+ {
+  "id": "frost_bow",
+  "name": "霜羽弓",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "弓身凝著永不融化的霜。",
+  "icon": {
+   "k": "bow",
+   "c": "#80c8ff"
+  },
+  "slot": "weapon",
+  "wtype": "bow",
+  "atk": 150,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "archer",
+   "ranger"
+  ],
+  "bossEx": "frost_king",
+  "bonus": {
+   "dex": 4
+  }
+ },
+ {
+  "id": "frost_lance",
+  "name": "霜刃長槍",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "槍尖是千年寒冰。",
+  "icon": {
+   "k": "sword",
+   "c": "#80c8ff"
+  },
+  "slot": "weapon",
+  "wtype": "spear",
+  "atk": 195,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "paladin"
+  ],
+  "bossEx": "frost_king",
+  "bonus": {
+   "str": 4
+  }
  }
 ]

@@ -1979,6 +1979,13 @@
     "to": "mine2",
     "tx": 50,
     "ty": 26
+   },
+   {
+    "x": 12,
+    "y": 12,
+    "to": "snowfield",
+    "tx": 9,
+    "ty": 50
    }
   ],
   "spawns": [
@@ -2151,6 +2158,140 @@
    "x": 44,
    "y": 40,
    "respawn": 900
+  }
+ },
+ {
+  "id": "snowfield",
+  "name": "凜冬雪原",
+  "type": "field",
+  "w": 60,
+  "h": 60,
+  "seed": 97,
+  "base": "snow",
+  "bgm": "field2",
+  "level": [
+   48,
+   60
+  ],
+  "border": "dead",
+  "pos": [
+   9,
+   3
+  ],
+  "tint": "rgba(170,205,255,0.16)",
+  "areas": [
+   {
+    "t": "water",
+    "shape": "blob",
+    "x": 24,
+    "y": 22,
+    "r": 5
+   },
+   {
+    "t": "water",
+    "shape": "blob",
+    "x": 46,
+    "y": 40,
+    "r": 6
+   },
+   {
+    "t": "dirt",
+    "shape": "blob",
+    "x": 32,
+    "y": 32,
+    "r": 4
+   },
+   {
+    "t": "dirt",
+    "shape": "blob",
+    "x": 14,
+    "y": 40,
+    "r": 3
+   }
+  ],
+  "roads": [
+   {
+    "t": "dirt",
+    "width": 2.2,
+    "pts": [
+     [
+      6,
+      53
+     ],
+     [
+      20,
+      42
+     ],
+     [
+      34,
+      30
+     ],
+     [
+      46,
+      16
+     ]
+    ]
+   }
+  ],
+  "scatter": [
+   {
+    "type": "pine",
+    "n": 70,
+    "v": [
+     0,
+     1,
+     2
+    ]
+   },
+   {
+    "type": "rock",
+    "n": 30
+   },
+   {
+    "type": "deadtree",
+    "n": 10,
+    "on": [
+     "snow",
+     "dirt"
+    ]
+   },
+   {
+    "type": "stump",
+    "n": 5
+   }
+  ],
+  "portals": [
+   {
+    "x": 6,
+    "y": 53,
+    "to": "ruins",
+    "tx": 12,
+    "ty": 15
+   }
+  ],
+  "spawns": [
+   {
+    "m": "frost_wolf",
+    "n": 10
+   },
+   {
+    "m": "snow_yeti",
+    "n": 7
+   },
+   {
+    "m": "ice_wraith",
+    "n": 7
+   },
+   {
+    "m": "ice_mantis",
+    "n": 6
+   }
+  ],
+  "mvp": {
+   "m": "frost_king",
+   "x": 46,
+   "y": 14,
+   "respawn": 1800
   }
  }
 ]

@@ -448,5 +448,49 @@
   },
   "reqLv": 28,
   "prev": "q_cap4b"
+ },
+ {
+  "id": "q_cap6",
+  "name": "雪原狼群",
+  "npc": "captain",
+  "type": "kill",
+  "target": "frost_wolf",
+  "count": 20,
+  "desc": "失落遺跡北邊出現了通往凜冬雪原的路，霜牙狼群在那裡橫行。擊敗 20 隻霜牙狼。",
+  "done": "雪原的路暫時安全了，這是你的報酬。",
+  "reward": {
+   "exp": 30000,
+   "jexp": 15000,
+   "zeny": 30000
+  },
+  "reqLv": 48,
+  "prev": "q_cap5"
+ },
+ {
+  "id": "q_mvp_frost",
+  "name": "討伐霜牙狼王",
+  "npc": "captain",
+  "type": "kill",
+  "target": "frost_king",
+  "count": 1,
+  "desc": "雪原深處的霜牙狼王統領著所有狼群，冰霜咆哮能凍結一整片地面。只有頂尖的冒險者才有機會。",
+  "done": "傳說中的霜牙狼王……王國將永遠記得你的名字。",
+  "reward": {
+   "exp": 150000,
+   "jexp": 70000,
+   "zeny": 150000,
+   "items": [
+    [
+     "elunium",
+     5
+    ],
+    [
+     "oridecon",
+     5
+    ]
+   ]
+  },
+  "reqLv": 55,
+  "prev": "q_cap6"
  }
 ]

@@ -337,6 +337,101 @@
      ]
     ]
    }
+  },
+  "frost_king": {
+   "moves": [
+    {
+     "id": "attack",
+     "name": "狼牙撕咬",
+     "type": "melee",
+     "weight": 4,
+     "mult": 0.5,
+     "windup": 0.4,
+     "recover": 0.3
+    },
+    {
+     "id": "howl",
+     "name": "冰霜咆哮",
+     "type": "aoe",
+     "center": "self",
+     "radius": 3.6,
+     "weight": 3,
+     "mult": 2.0,
+     "windup": 1.0,
+     "recover": 0.6,
+     "maxDist": 7
+    },
+    {
+     "id": "frostfloor",
+     "name": "寒冰裂地",
+     "type": "aoe",
+     "center": "target",
+     "radius": 2.3,
+     "weight": 3,
+     "mult": 2.2,
+     "windup": 1.0,
+     "recover": 0.6,
+     "maxDist": 10
+    },
+    {
+     "id": "charge",
+     "name": "凍牙撲殺",
+     "type": "charge",
+     "length": 10,
+     "width": 1.5,
+     "weight": 3,
+     "mult": 1.9,
+     "windup": 0.8,
+     "dashTime": 0.26,
+     "recover": 0.7,
+     "minDist": 0,
+     "maxDist": 12
+    }
+   ],
+   "enrageMoves": [
+    {
+     "id": "summon",
+     "name": "召喚霜狼",
+     "type": "summon",
+     "weight": 3,
+     "windup": 1.0,
+     "recover": 0.5,
+     "maxDist": 14
+    },
+    {
+     "id": "icicle",
+     "name": "冰錐亂舞",
+     "type": "barrage",
+     "radius": 1.7,
+     "count": 6,
+     "interval": 0.35,
+     "spread": 3.2,
+     "weight": 3,
+     "mult": 1.9,
+     "windup": 0.9,
+     "recover": 0.7,
+     "maxDist": 10
+    }
+   ],
+   "firstKill": {
+    "exp": 60000,
+    "jexp": 30000,
+    "zeny": 80000,
+    "items": [
+     [
+      "white_potion",
+      10
+     ],
+     [
+      "oridecon",
+      10
+     ],
+     [
+      "elunium",
+      10
+     ]
+    ]
+   }
   }
  }
 }
