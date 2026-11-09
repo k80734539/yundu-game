@@ -176,8 +176,13 @@ export class Game {
     else if (d.type === 'weapon' || d.type === 'armor') {
       const slot = this.inv.slotOf(uid);
       if (slot) { this.inv.unequip(slot); this.ui.sfx('equip'); return; }
+      const hadShield = this.inv.equip.shield !== undefined, hadWeapon = this.inv.equip.weapon !== undefined;
       const err = this.inv.equipItem(uid, this.player.ch.job, this.player.ch.baseLv);
-      if (err) this.msg(err, 'warn'); else { this.msg(`裝備了 ${this.inv.displayName(it)}`, 'item'); this.ui.sfx('equip'); }
+      if (err) this.msg(err, 'warn'); else {
+        this.msg(`裝備了 ${this.inv.displayName(it)}`, 'item'); this.ui.sfx('equip');
+        if (hadShield && this.inv.equip.shield === undefined) this.msg('弓是雙手武器，已自動卸下盾牌。', 'warn');
+        if (hadWeapon && this.inv.equip.weapon === undefined) this.msg('弓是雙手武器，裝上盾牌會卸下弓；沒有武器時攻擊力會大幅下降。', 'warn');
+      }
     } else if (d.type === 'card') this.ui.open('cards');
   }
   useItem(uid: number): boolean {
