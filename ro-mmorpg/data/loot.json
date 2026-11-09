@@ -239,6 +239,27 @@
     "frost_bow",
     "frost_lance"
    ]
+  },
+  "flame_wyrm": {
+   "zeny": [
+    80000,
+    120000
+   ],
+   "material": "flame_core",
+   "materialCount": [
+    2,
+    4
+   ],
+   "equipChance": 0.3,
+   "exclusiveChance": 0.08,
+   "cardChance": 0.01,
+   "card": "flame_wyrm_card",
+   "exclusives": [
+    "flame_blade",
+    "flame_staff",
+    "flame_bow",
+    "flame_lance"
+   ]
   }
  },
  "ownJobChance": 0.7,
@@ -310,6 +331,17 @@
     "frost_staff",
     "frost_bow",
     "frost_lance"
+   ]
+  },
+  {
+   "cost": {
+    "flame_core": 28
+   },
+   "items": [
+    "flame_blade",
+    "flame_staff",
+    "flame_bow",
+    "flame_lance"
    ]
   }
  ],

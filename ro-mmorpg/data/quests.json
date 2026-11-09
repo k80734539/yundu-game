@@ -492,5 +492,49 @@
   },
   "reqLv": 55,
   "prev": "q_cap6"
+ },
+ {
+  "id": "q_cap7",
+  "name": "熔岩谷的先遣",
+  "npc": "captain",
+  "type": "kill",
+  "target": "ember_golem",
+  "count": 20,
+  "desc": "凜冬雪原深處的山壁裂開了，通往熔岩谷。餘燼岩偶守著入口。擊敗 20 隻餘燼岩偶。",
+  "done": "熔岩谷的入口暫時打通了，這是報酬。",
+  "reward": {
+   "exp": 150000,
+   "jexp": 60000,
+   "zeny": 120000
+  },
+  "reqLv": 60,
+  "prev": "q_cap6"
+ },
+ {
+  "id": "q_mvp_flame",
+  "name": "討伐赤焰地龍",
+  "npc": "captain",
+  "type": "kill",
+  "target": "flame_wyrm",
+  "count": 1,
+  "desc": "熔岩谷深處盤踞著赤焰地龍，牠的火雨能燒光整片戰場。只有最強的冒險者才敢挑戰。",
+  "done": "赤焰地龍倒下了……你是這個世界的傳說。",
+  "reward": {
+   "exp": 800000,
+   "jexp": 300000,
+   "zeny": 500000,
+   "items": [
+    [
+     "elunium",
+     10
+    ],
+    [
+     "oridecon",
+     10
+    ]
+   ]
+  },
+  "reqLv": 70,
+  "prev": "q_cap7"
  }
 ]

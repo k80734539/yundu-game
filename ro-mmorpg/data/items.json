@@ -3612,5 +3612,250 @@
   "bonus": {
    "int": 1
   }
+ },
+ {
+  "id": "magma_gel",
+  "name": "熔岩凝膠",
+  "type": "etc",
+  "price": 90,
+  "weight": 1,
+  "desc": "尚有餘溫的紅色凝膠。",
+  "icon": {
+   "k": "scale",
+   "c": "#ff6a30"
+  }
+ },
+ {
+  "id": "ember_core",
+  "name": "餘燼核心",
+  "type": "etc",
+  "price": 100,
+  "weight": 1,
+  "desc": "岩偶體內的火種。",
+  "icon": {
+   "k": "core",
+   "c": "#ff5020"
+  }
+ },
+ {
+  "id": "cinder_feather",
+  "name": "灰燼羽毛",
+  "type": "etc",
+  "price": 95,
+  "weight": 1,
+  "desc": "燒焦邊緣的黑色羽毛。",
+  "icon": {
+   "k": "feather",
+   "c": "#5a4040"
+  }
+ },
+ {
+  "id": "ash_shard",
+  "name": "灰燼碎片",
+  "type": "etc",
+  "price": 100,
+  "weight": 1,
+  "desc": "幽魂散落的灰燼。",
+  "icon": {
+   "k": "core",
+   "c": "#ff9060"
+  }
+ },
+ {
+  "id": "flame_core",
+  "name": "赤焰龍核",
+  "type": "etc",
+  "price": 12000,
+  "weight": 1,
+  "desc": "赤焰地龍體內的火焰核心，可在鍛造處換取專屬武器。",
+  "icon": {
+   "k": "core",
+   "c": "#ff4020"
+  }
+ },
+ {
+  "id": "magma_slime_card",
+  "name": "熔岩史萊姆卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入鎧甲的卡片。VIT +5、HP +400。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "armor",
+  "bonus": {
+   "vit": 5,
+   "hp": 400
+  }
+ },
+ {
+  "id": "ember_golem_card",
+  "name": "餘燼岩偶卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入盾牌的卡片。DEF +6、MDEF +8。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "shield",
+  "bonus": {
+   "def": 6,
+   "mdef": 8
+  }
+ },
+ {
+  "id": "cinder_hawk_card",
+  "name": "灰燼隼卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入披風的卡片。FLEE +25。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "garment",
+  "bonus": {
+   "flee": 25
+  }
+ },
+ {
+  "id": "ash_wraith_card",
+  "name": "灰燼幽魂卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入披風的卡片。INT +6、MATK +35。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "garment",
+  "bonus": {
+   "int": 6,
+   "matk": 35
+  }
+ },
+ {
+  "id": "flame_wyrm_card",
+  "name": "赤焰地龍卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入武器的卡片。ATK +60、CRIT +8。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "weapon",
+  "bonus": {
+   "atk": 60,
+   "crit": 8
+  }
+ },
+ {
+  "id": "flame_blade",
+  "name": "赤焰斬龍劍",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "劍身流動著熔岩。",
+  "icon": {
+   "k": "sword",
+   "c": "#ff7040"
+  },
+  "slot": "weapon",
+  "wtype": "sword",
+  "atk": 205,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin"
+  ],
+  "bossEx": "flame_wyrm",
+  "bonus": {
+   "str": 4,
+   "vit": 2
+  }
+ },
+ {
+  "id": "flame_staff",
+  "name": "赤焰之心",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "MATK +58%。",
+  "icon": {
+   "k": "staff",
+   "c": "#ff7040"
+  },
+  "slot": "weapon",
+  "wtype": "staff",
+  "atk": 100,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist"
+  ],
+  "bossEx": "flame_wyrm",
+  "matk": 58,
+  "bonus": {
+   "int": 5
+  }
+ },
+ {
+  "id": "flame_bow",
+  "name": "赤焰烈弓",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "射出的箭帶著火星。",
+  "icon": {
+   "k": "bow",
+   "c": "#ff7040"
+  },
+  "slot": "weapon",
+  "wtype": "bow",
+  "atk": 185,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "archer",
+   "ranger"
+  ],
+  "bossEx": "flame_wyrm",
+  "bonus": {
+   "dex": 5
+  }
+ },
+ {
+  "id": "flame_lance",
+  "name": "赤焰龍槍",
+  "type": "weapon",
+  "price": 20000,
+  "weight": 100,
+  "desc": "槍尖是赤焰地龍的牙。",
+  "icon": {
+   "k": "sword",
+   "c": "#ff7040"
+  },
+  "slot": "weapon",
+  "wtype": "spear",
+  "atk": 240,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "paladin"
+  ],
+  "bossEx": "flame_wyrm",
+  "bonus": {
+   "str": 5
+  }
  }
 ]

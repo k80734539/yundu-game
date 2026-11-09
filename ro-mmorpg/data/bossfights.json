@@ -432,6 +432,101 @@
      ]
     ]
    }
+  },
+  "flame_wyrm": {
+   "moves": [
+    {
+     "id": "attack",
+     "name": "龍牙撕咬",
+     "type": "melee",
+     "weight": 4,
+     "mult": 0.5,
+     "windup": 0.45,
+     "recover": 0.3
+    },
+    {
+     "id": "tail",
+     "name": "熔岩橫掃",
+     "type": "aoe",
+     "center": "self",
+     "radius": 3.8,
+     "weight": 3,
+     "mult": 2.0,
+     "windup": 0.9,
+     "recover": 0.6,
+     "maxDist": 7
+    },
+    {
+     "id": "lavafloor",
+     "name": "熔岩爆裂",
+     "type": "aoe",
+     "center": "target",
+     "radius": 2.5,
+     "weight": 3,
+     "mult": 2.3,
+     "windup": 1.0,
+     "recover": 0.6,
+     "maxDist": 10
+    },
+    {
+     "id": "charge",
+     "name": "赤焰突襲",
+     "type": "charge",
+     "length": 11,
+     "width": 1.6,
+     "weight": 3,
+     "mult": 1.9,
+     "windup": 0.8,
+     "dashTime": 0.26,
+     "recover": 0.7,
+     "minDist": 0,
+     "maxDist": 13
+    }
+   ],
+   "enrageMoves": [
+    {
+     "id": "summon",
+     "name": "召喚熔岩",
+     "type": "summon",
+     "weight": 3,
+     "windup": 1.0,
+     "recover": 0.5,
+     "maxDist": 14
+    },
+    {
+     "id": "meteor",
+     "name": "火雨",
+     "type": "barrage",
+     "radius": 1.8,
+     "count": 7,
+     "interval": 0.32,
+     "spread": 3.4,
+     "weight": 3,
+     "mult": 2.0,
+     "windup": 0.9,
+     "recover": 0.7,
+     "maxDist": 11
+    }
+   ],
+   "firstKill": {
+    "exp": 300000,
+    "jexp": 150000,
+    "zeny": 250000,
+    "items": [
+     [
+      "white_potion",
+      15
+     ],
+     [
+      "oridecon",
+      15
+     ],
+     [
+      "elunium",
+      15
+     ]
+    ]
+   }
   }
  }
 }

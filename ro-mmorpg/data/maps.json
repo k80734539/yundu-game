@@ -2273,6 +2273,13 @@
     "to": "ruins",
     "tx": 12,
     "ty": 15
+   },
+   {
+    "x": 54,
+    "y": 8,
+    "to": "volcano",
+    "tx": 9,
+    "ty": 50
    }
   ],
   "spawns": [
@@ -2298,6 +2305,134 @@
    "x": 46,
    "y": 14,
    "respawn": 1800
+  }
+ },
+ {
+  "id": "volcano",
+  "name": "熔岩谷",
+  "type": "field",
+  "w": 60,
+  "h": 60,
+  "seed": 113,
+  "base": "cave",
+  "bgm": "dungeon2",
+  "level": [
+   60,
+   78
+  ],
+  "border": "dead",
+  "pos": [
+   10,
+   3
+  ],
+  "tint": "rgba(255,90,30,0.2)",
+  "areas": [
+   {
+    "t": "dirt",
+    "shape": "blob",
+    "x": 22,
+    "y": 26,
+    "r": 7
+   },
+   {
+    "t": "dirt",
+    "shape": "blob",
+    "x": 40,
+    "y": 38,
+    "r": 8
+   },
+   {
+    "t": "dirt",
+    "shape": "blob",
+    "x": 14,
+    "y": 44,
+    "r": 5
+   }
+  ],
+  "roads": [
+   {
+    "t": "dirt",
+    "width": 2.2,
+    "pts": [
+     [
+      6,
+      53
+     ],
+     [
+      20,
+      44
+     ],
+     [
+      32,
+      32
+     ],
+     [
+      44,
+      18
+     ],
+     [
+      48,
+      12
+     ]
+    ]
+   }
+  ],
+  "scatter": [
+   {
+    "type": "rock",
+    "n": 60
+   },
+   {
+    "type": "crystal",
+    "n": 14,
+    "on": [
+     "cave"
+    ]
+   },
+   {
+    "type": "deadtree",
+    "n": 12,
+    "on": [
+     "dirt"
+    ]
+   },
+   {
+    "type": "stump",
+    "n": 4
+   }
+  ],
+  "portals": [
+   {
+    "x": 6,
+    "y": 53,
+    "to": "snowfield",
+    "tx": 51,
+    "ty": 10
+   }
+  ],
+  "spawns": [
+   {
+    "m": "magma_slime",
+    "n": 10
+   },
+   {
+    "m": "ember_golem",
+    "n": 7
+   },
+   {
+    "m": "cinder_hawk",
+    "n": 7
+   },
+   {
+    "m": "ash_wraith",
+    "n": 6
+   }
+  ],
+  "mvp": {
+   "m": "flame_wyrm",
+   "x": 48,
+   "y": 12,
+   "respawn": 2400
   }
  }
 ]

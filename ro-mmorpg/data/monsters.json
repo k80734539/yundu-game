@@ -2068,5 +2068,239 @@
     "chance": 0.2
    }
   ]
+ },
+ {
+  "id": "magma_slime",
+  "name": "熔岩史萊姆",
+  "lv": 60,
+  "hp": 8000,
+  "atk": [
+   240,
+   300
+  ],
+  "def": 50,
+  "mdef": 30,
+  "str": 85,
+  "agi": 35,
+  "vit": 70,
+  "int": 15,
+  "dex": 80,
+  "luk": 12,
+  "exp": 2400,
+  "jexp": 1300,
+  "range": 1,
+  "adelay": 1400,
+  "speed": 2.2,
+  "aggro": true,
+  "frame": 160,
+  "look": {
+   "body": "slime",
+   "color": "#ff6a30",
+   "scale": 2.0
+  },
+  "drops": [
+   {
+    "item": "magma_gel",
+    "rate": 0.6
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.05
+   },
+   {
+    "item": "magma_slime_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "ember_golem",
+  "name": "餘燼岩偶",
+  "lv": 64,
+  "hp": 11000,
+  "atk": [
+   280,
+   350
+  ],
+  "def": 62,
+  "mdef": 35,
+  "str": 100,
+  "agi": 35,
+  "vit": 90,
+  "int": 15,
+  "dex": 80,
+  "luk": 12,
+  "exp": 3400,
+  "jexp": 1800,
+  "range": 1,
+  "adelay": 1700,
+  "speed": 1.9,
+  "aggro": true,
+  "frame": 224,
+  "look": {
+   "body": "golem",
+   "color": "#4a3a36",
+   "color2": "#ff5020",
+   "scale": 1.5
+  },
+  "drops": [
+   {
+    "item": "ember_core",
+    "rate": 0.6
+   },
+   {
+    "item": "oridecon",
+    "rate": 0.03
+   },
+   {
+    "item": "ember_golem_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "cinder_hawk",
+  "name": "灰燼隼",
+  "lv": 68,
+  "hp": 8500,
+  "atk": [
+   300,
+   370
+  ],
+  "def": 40,
+  "mdef": 45,
+  "str": 90,
+  "agi": 35,
+  "vit": 60,
+  "int": 15,
+  "dex": 100,
+  "luk": 12,
+  "exp": 4800,
+  "jexp": 2500,
+  "range": 1,
+  "adelay": 1200,
+  "speed": 3.5,
+  "aggro": true,
+  "frame": 160,
+  "look": {
+   "body": "bird",
+   "color": "#5a4040",
+   "color2": "#ff8030",
+   "scale": 2.1
+  },
+  "drops": [
+   {
+    "item": "cinder_feather",
+    "rate": 0.6
+   },
+   {
+    "item": "cinder_hawk_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "ash_wraith",
+  "name": "灰燼幽魂",
+  "lv": 72,
+  "hp": 7500,
+  "atk": [
+   300,
+   380
+  ],
+  "def": 25,
+  "mdef": 80,
+  "str": 60,
+  "agi": 35,
+  "vit": 50,
+  "int": 15,
+  "dex": 110,
+  "luk": 12,
+  "exp": 6800,
+  "jexp": 3500,
+  "range": 2,
+  "adelay": 1300,
+  "speed": 3.0,
+  "aggro": true,
+  "frame": 160,
+  "look": {
+   "body": "ghost",
+   "color": "#ff9060",
+   "scale": 2.2
+  },
+  "drops": [
+   {
+    "item": "ash_shard",
+    "rate": 0.6
+   },
+   {
+    "item": "blue_potion",
+    "rate": 0.1
+   },
+   {
+    "item": "ash_wraith_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "flame_wyrm",
+  "name": "赤焰地龍",
+  "lv": 78,
+  "hp": 300000,
+  "atk": [
+   520,
+   680
+  ],
+  "def": 70,
+  "mdef": 55,
+  "str": 130,
+  "agi": 35,
+  "vit": 120,
+  "int": 15,
+  "dex": 130,
+  "luk": 12,
+  "exp": 90000,
+  "jexp": 45000,
+  "range": 1,
+  "adelay": 1500,
+  "speed": 2.3,
+  "aggro": true,
+  "frame": 320,
+  "look": {
+   "body": "snake",
+   "color": "#d03018",
+   "color2": "#ffb040",
+   "scale": 4.0
+  },
+  "drops": [
+   {
+    "item": "flame_core",
+    "rate": 0.6
+   },
+   {
+    "item": "ember_core",
+    "rate": 1.0
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.8
+   },
+   {
+    "item": "flame_wyrm_card",
+    "rate": 0.05
+   }
+  ],
+  "mvp": true,
+  "skills": [
+   {
+    "id": "stomp",
+    "chance": 0.25
+   },
+   {
+    "id": "summon",
+    "chance": 0.2
+   }
+  ]
  }
 ]
