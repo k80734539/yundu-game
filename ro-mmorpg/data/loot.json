@@ -318,5 +318,14 @@
   "bigFrom": "legend",
   "hitStop": 0.1,
   "shake": 4
+ },
+ "zenyDrop": {
+  "_說明": "一般怪物掉落 Zeny：數量 = 怪物等級 × perLevel × 隨機倍率（spread），chance 是掉落機率。",
+  "perLevel": 2.5,
+  "chance": 0.75,
+  "spread": [
+   0.6,
+   1.4
+  ]
  }
 }

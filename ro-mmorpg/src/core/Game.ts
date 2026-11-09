@@ -940,6 +940,8 @@ export class Game {
     const list: { id: string; n: number; rar?: import('../data').Rarity }[] = [];
     if (m.isMvp && LOOT.boss[m.def.id]) list.push(...this.loot.bossDrops(m.def.id));
     else for (const dr of m.def.drops) if (this.rnd() < dr.rate && DB.item[dr.item]) list.push({ id: dr.item, n: 1, rar: this.loot.monsterRarity(DB.item[dr.item]) });
+    const zd = (LOOT as any).zenyDrop; // 一般怪物依等級掉 Zeny
+    if (zd && !m.isMvp && this.rnd() < zd.chance) list.push({ id: 'zeny', n: Math.max(1, Math.round(m.def.lv * zd.perLevel * (zd.spread[0] + this.rnd() * (zd.spread[1] - zd.spread[0])))) });
     for (const e of list) {
       const def = DB.item[e.id]; if (!def) continue;
       const a = k * 2.1 + this.rnd(), rr = k === 0 ? 0.2 : 0.6 + this.rnd() * 0.6;

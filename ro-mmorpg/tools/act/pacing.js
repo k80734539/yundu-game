@@ -13,7 +13,7 @@ const res = await page.evaluate(() => {
   }[CLS].map((e) => e.split(':'));
   const mapFor = (lv) => (lv >= 48 ? ['snowfield', 46, 20] : lv >= 35 ? ['ruins', 10, 47] : lv >= 30 ? ['mine2', 24, 24] : lv >= 22 ? ['canyon', 20, 20] : lv >= 18 ? ['swamp', 30, 30] : lv >= 15 ? ['mine1', 24, 24] : lv >= 10 ? ['coast', 20, 30] : lv >= 5 ? ['forest', 6, 30] : ['prt_fild', 28, 8]);
   const step = 1 / 60; let t = 0, curMap = '', kills = 0, deaths = 0, lastLvT = 0, lastLv = 1;
-  const ms = {}, killsByMap = {}, deathsByMap = {}; G.ev.on('kill', (id) => { kills++; if (BUYGEAR) { const md = DB.monster[id]; if (md) for (const d of md.drops) { const it = DB.item[d.item]; if (it) ch.zeny += d.rate * Math.floor(it.price / 2); } } /* 期望值：撿起掉落物並賣店 */ killsByMap[curMap] = (killsByMap[curMap] || 0) + 1; });
+  const ms = {}, killsByMap = {}, deathsByMap = {}; G.ev.on('kill', (id) => { kills++; if (BUYGEAR) { const md = DB.monster[id]; if (md) for (const d of md.drops) { const it = DB.item[d.item]; if (it) ch.zeny += d.rate * Math.floor(it.price / 2); } } const zd = window.__LOOT.zenyDrop; if (md && zd) ch.zeny += md.lv * zd.perLevel * zd.chance; /* 期望值：撿起掉落物並賣店（含 Zeny 掉落） */ killsByMap[curMap] = (killsByMap[curMap] || 0) + 1; });
   let buyT = 0; const bought = [], mine = {}, mineUid = {}; let jobTier = 0, potCd = 0, skT = 0, buffT = 0, learnT = 0, fin = null;
   const rec = (k) => { if (!(k in ms)) ms[k] = +(t / 60).toFixed(1); };
   const sc = (id) => { const s = DB.skill[id], lv = ch.skills[id]; return ((s.power || [100])[lv - 1] || 100) * (s.hits === 'lv' ? lv : s.hits === 'half' ? Math.ceil(lv / 2) : (typeof s.hits === 'number' ? s.hits : 1)) / (((s.cast || [0])[lv - 1] || 0) + ((s.cd || [0.5])[lv - 1] || 0.5)); };
