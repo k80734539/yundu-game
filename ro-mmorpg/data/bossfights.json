@@ -527,6 +527,216 @@
      ]
     ]
    }
+  },
+  "trial_templar": {
+   "moves": [
+    {
+     "id": "attack",
+     "name": "重劍斬擊",
+     "type": "melee",
+     "weight": 4,
+     "mult": 0.5,
+     "windup": 0.5,
+     "recover": 0.3
+    },
+    {
+     "id": "shieldbash",
+     "name": "盾牌衝擊",
+     "type": "aoe",
+     "center": "self",
+     "radius": 3.4,
+     "weight": 3,
+     "mult": 2.0,
+     "windup": 0.9,
+     "recover": 0.6,
+     "maxDist": 7
+    },
+    {
+     "id": "charge",
+     "name": "騎士衝鋒",
+     "type": "charge",
+     "length": 10,
+     "width": 1.6,
+     "weight": 3,
+     "mult": 1.9,
+     "windup": 0.8,
+     "dashTime": 0.28,
+     "recover": 0.7,
+     "minDist": 0,
+     "maxDist": 12
+    }
+   ],
+   "enrageMoves": [
+    {
+     "id": "lightrain",
+     "name": "聖光雨",
+     "type": "barrage",
+     "radius": 1.8,
+     "count": 6,
+     "interval": 0.35,
+     "spread": 3.2,
+     "weight": 3,
+     "mult": 1.9,
+     "windup": 0.9,
+     "recover": 0.7,
+     "maxDist": 10
+    }
+   ],
+   "firstKill": {
+    "exp": 40000,
+    "jexp": 20000,
+    "zeny": 60000,
+    "items": [
+     [
+      "white_potion",
+      10
+     ]
+    ]
+   }
+  },
+  "trial_archmage": {
+   "moves": [
+    {
+     "id": "burst",
+     "name": "奧術彈幕",
+     "type": "barrage",
+     "radius": 1.6,
+     "count": 4,
+     "interval": 0.4,
+     "spread": 3,
+     "weight": 3,
+     "mult": 1.6,
+     "windup": 0.9,
+     "recover": 0.6,
+     "maxDist": 11
+    },
+    {
+     "id": "void",
+     "name": "虛空爆裂",
+     "type": "aoe",
+     "center": "target",
+     "radius": 2.6,
+     "weight": 4,
+     "mult": 2.2,
+     "windup": 1.0,
+     "recover": 0.6,
+     "maxDist": 11
+    },
+    {
+     "id": "nova",
+     "name": "魔力新星",
+     "type": "aoe",
+     "center": "self",
+     "radius": 4.0,
+     "weight": 3,
+     "mult": 2.0,
+     "windup": 1.1,
+     "recover": 0.7,
+     "maxDist": 8
+    },
+    {
+     "id": "attack",
+     "name": "靈體衝撞",
+     "type": "melee",
+     "weight": 1,
+     "mult": 0.5,
+     "windup": 0.5,
+     "recover": 0.3
+    }
+   ],
+   "enrageMoves": [
+    {
+     "id": "storm",
+     "name": "災厄風暴",
+     "type": "barrage",
+     "radius": 1.9,
+     "count": 8,
+     "interval": 0.3,
+     "spread": 3.6,
+     "weight": 4,
+     "mult": 2.0,
+     "windup": 0.9,
+     "recover": 0.7,
+     "maxDist": 12
+    }
+   ],
+   "firstKill": {
+    "exp": 40000,
+    "jexp": 20000,
+    "zeny": 60000,
+    "items": [
+     [
+      "blue_potion",
+      20
+     ]
+    ]
+   }
+  },
+  "trial_sniper": {
+   "moves": [
+    {
+     "id": "attack",
+     "name": "匕首突刺",
+     "type": "melee",
+     "weight": 3,
+     "mult": 0.5,
+     "windup": 0.4,
+     "recover": 0.3
+    },
+    {
+     "id": "snipe",
+     "name": "致命狙擊",
+     "type": "charge",
+     "length": 12,
+     "width": 1.2,
+     "weight": 4,
+     "mult": 2.2,
+     "windup": 1.0,
+     "dashTime": 0.2,
+     "recover": 0.7,
+     "minDist": 3,
+     "maxDist": 14
+    },
+    {
+     "id": "arrowrain",
+     "name": "箭雨",
+     "type": "aoe",
+     "center": "target",
+     "radius": 2.4,
+     "weight": 3,
+     "mult": 2.0,
+     "windup": 0.9,
+     "recover": 0.6,
+     "maxDist": 12
+    }
+   ],
+   "enrageMoves": [
+    {
+     "id": "volley",
+     "name": "連環箭雨",
+     "type": "barrage",
+     "radius": 1.6,
+     "count": 8,
+     "interval": 0.28,
+     "spread": 3.4,
+     "weight": 4,
+     "mult": 1.8,
+     "windup": 0.8,
+     "recover": 0.7,
+     "maxDist": 12
+    }
+   ],
+   "firstKill": {
+    "exp": 40000,
+    "jexp": 20000,
+    "zeny": 60000,
+    "items": [
+     [
+      "white_potion",
+      10
+     ]
+    ]
+   }
   }
  }
 }

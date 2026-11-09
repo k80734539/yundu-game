@@ -15,7 +15,7 @@ export interface MapDef {
   id: string; name: string; type: 'town' | 'field' | 'dungeon';
   w: number; h: number; seed: number; base: string; bgm: string;
   level?: XY; border?: 'forest' | 'pine' | 'palm' | 'dead' | 'rock' | 'wall';
-  dark?: number; tint?: string;
+  dark?: number; tint?: string; hidden?: boolean;
   areas?: { t: string; shape: 'circle' | 'rect' | 'blob'; x: number; y: number; r?: number; w?: number; h?: number }[];
   roads?: { t: string; width: number; pts: XY[] }[];
   rooms?: [number, number, number, number][];
@@ -62,6 +62,7 @@ export interface SkillDef {
   power?: number[]; hits?: number | string; aoe?: number; element?: string; knock?: number; dmg?: 'magic' | 'phys';
   effect: string; fx: string; desc: string; req?: { id: string; lv: number }[];
   value?: number[]; dur?: number[];
+  passiveBonus?: Record<string, number>; buffStat?: Record<string, number>; // 通用：被動每級加成／增益對應的能力值倍率
 }
 export interface JobDef {
   id: string; name: string; tier: number; hpK: number; spK: number; hpB: number; spB: number;
@@ -73,7 +74,7 @@ export interface QuestDef {
   id: string; name: string; npc: string; type: 'kill' | 'collect' | 'talk';
   target: string; count: number; reqLv?: number; prev?: string; job?: string;
   desc: string; done: string; reward: { exp?: number; jexp?: number; zeny?: number; items?: [string, number][] };
-  repeat?: boolean; consume?: boolean; trial?: string;
+  repeat?: boolean; consume?: boolean; trial?: string; arena?: string;
 }
 export interface DialogNode { text: string | string[]; opts?: { label: string; go?: string; act?: string; arg?: string; cond?: string }[]; act?: string; arg?: string; go?: string }
 export interface NpcDef { id: string; name: string; look: Look; title?: string; shop?: string; dialog: Record<string, DialogNode>; mark?: string }
@@ -83,7 +84,7 @@ export const MAPS = mapsJson as unknown as MapDef[];
 export const MONSTERS = monstersJson as unknown as MonsterDef[];
 export const ITEMS = itemsJson as unknown as ItemDef[];
 export const SKILLS = skillsJson as unknown as SkillDef[];
-export const JOBS = jobsJson as unknown as { jobs: JobDef[]; expBase: number[]; expJob: number[]; expJob1: number[]; expJob2: number[]; jobChangePts?: number[] };
+export const JOBS = jobsJson as unknown as { jobs: JobDef[]; expBase: number[]; expJob: number[]; expJob1: number[]; expJob2: number[]; expJob3?: number[]; jobChangePts?: number[] };
 export const QUESTS = questsJson as unknown as QuestDef[];
 export const NPCS = npcsJson as unknown as NpcDef[];
 export const SHOPS = shopsJson as unknown as ShopDef[];

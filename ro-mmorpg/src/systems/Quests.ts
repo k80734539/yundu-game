@@ -20,6 +20,7 @@ export class Quests {
       const tj = DB.job[q.trial];
       if (tj.tier === 1 && (ch.job !== 'novice' || ch.jobLv < 10 || (ch.skills.basic || 0) < 9)) return false;
       if (tj.tier === 2 && (ch.job !== tj.prev || ch.jobLv < 40)) return false;
+      if (tj.tier === 3 && (ch.job !== tj.prev || ch.jobLv < 50 || ch.baseLv < 70)) return false;
       if (Object.keys(this.s).some((k) => this.def(k)?.trial && this.s[k].st === 'active')) return false;
     }
     return true;

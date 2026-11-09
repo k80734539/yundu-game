@@ -2838,5 +2838,1100 @@
     "lv": 5
    }
   ]
+ },
+ {
+  "id": "templar_mastery",
+  "name": "聖殿精通",
+  "job": "templar",
+  "maxLv": 10,
+  "type": "passive",
+  "target": "self",
+  "icon": {
+   "k": "shield",
+   "c": "#f0d060"
+  },
+  "sp": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "cast": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "cd": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "range": 0,
+  "effect": "passive",
+  "fx": "none",
+  "desc": "VIT +Lv、DEF +Lv。",
+  "req": [
+   {
+    "id": "guard",
+    "lv": 3
+   }
+  ],
+  "passiveBonus": {
+   "vit": 1,
+   "def": 1
+  }
+ },
+ {
+  "id": "holy_smite",
+  "name": "聖光斬",
+  "job": "templar",
+  "maxLv": 10,
+  "type": "active",
+  "target": "enemy",
+  "icon": {
+   "k": "sk_bash",
+   "c": "#fff0a0"
+  },
+  "sp": [
+   20,
+   22,
+   23,
+   25,
+   26,
+   28,
+   29,
+   31,
+   32,
+   34
+  ],
+  "cast": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "cd": [
+   1.2,
+   1.2,
+   1.2,
+   1.2,
+   1.2,
+   1.2,
+   1.2,
+   1.2,
+   1.2,
+   1.2
+  ],
+  "range": 1,
+  "effect": "melee",
+  "fx": "slash",
+  "desc": "以聖光灌注武器，連續斬擊單一目標。",
+  "power": [
+   380,
+   438,
+   496,
+   553,
+   611,
+   669,
+   727,
+   784,
+   842,
+   900
+  ],
+  "req": [
+   {
+    "id": "pierce",
+    "lv": 5
+   },
+   {
+    "id": "templar_mastery",
+    "lv": 2
+   }
+  ]
+ },
+ {
+  "id": "judgment_hammer",
+  "name": "審判之錘",
+  "job": "templar",
+  "maxLv": 10,
+  "type": "active",
+  "target": "self",
+  "icon": {
+   "k": "sk_bash",
+   "c": "#ffd040"
+  },
+  "sp": [
+   35,
+   37,
+   39,
+   42,
+   44,
+   46,
+   48,
+   51,
+   53,
+   55
+  ],
+  "cast": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "cd": [
+   2.0,
+   2.0,
+   2.0,
+   2.0,
+   2.0,
+   2.0,
+   2.0,
+   2.0,
+   2.0,
+   2.0
+  ],
+  "range": 0,
+  "effect": "aoe_self",
+  "fx": "slash",
+  "desc": "聖錘砸地，震飛周圍敵人。",
+  "power": [
+   300,
+   347,
+   393,
+   440,
+   487,
+   533,
+   580,
+   627,
+   673,
+   720
+  ],
+  "aoe": 3.5,
+  "req": [
+   {
+    "id": "holy_smite",
+    "lv": 5
+   },
+   {
+    "id": "whirlwind",
+    "lv": 3
+   }
+  ],
+  "knock": 3
+ },
+ {
+  "id": "divine_aegis",
+  "name": "神聖庇護",
+  "job": "templar",
+  "maxLv": 10,
+  "type": "active",
+  "target": "self",
+  "icon": {
+   "k": "shield",
+   "c": "#fff0c0"
+  },
+  "sp": [
+   40,
+   40,
+   40,
+   40,
+   40,
+   40,
+   40,
+   40,
+   40,
+   40
+  ],
+  "cast": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "cd": [
+   25,
+   25,
+   25,
+   25,
+   25,
+   25,
+   25,
+   25,
+   25,
+   25
+  ],
+  "range": 0,
+  "effect": "buff",
+  "fx": "buff_gold",
+  "desc": "神聖庇護降臨：DEF 與 MDEF 增加，持續 (30+5×Lv) 秒。",
+  "value": [
+   4,
+   8,
+   12,
+   16,
+   20,
+   24,
+   28,
+   32,
+   36,
+   40
+  ],
+  "dur": [
+   35,
+   40,
+   45,
+   50,
+   55,
+   60,
+   65,
+   70,
+   75,
+   80
+  ],
+  "req": [
+   {
+    "id": "templar_mastery",
+    "lv": 3
+   },
+   {
+    "id": "guard",
+    "lv": 5
+   }
+  ],
+  "buffStat": {
+   "def": 1,
+   "mdef": 0.6
+  }
+ },
+ {
+  "id": "heaven_wrath",
+  "name": "天罰",
+  "job": "templar",
+  "maxLv": 5,
+  "type": "active",
+  "target": "self",
+  "icon": {
+   "k": "sk_bash",
+   "c": "#ffffff"
+  },
+  "sp": [
+   100,
+   115,
+   130,
+   145,
+   160
+  ],
+  "cast": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "cd": [
+   60,
+   60,
+   60,
+   60,
+   60
+  ],
+  "range": 0,
+  "effect": "aoe_self",
+  "fx": "slash",
+  "desc": "召喚天罰，對周圍所有敵人造成毀滅性的打擊。",
+  "power": [
+   1100,
+   1400,
+   1700,
+   2000,
+   2300
+  ],
+  "aoe": 4.5,
+  "req": [
+   {
+    "id": "judgment_hammer",
+    "lv": 5
+   },
+   {
+    "id": "divine_aegis",
+    "lv": 3
+   }
+  ],
+  "knock": 4
+ },
+ {
+  "id": "arcane_supremacy",
+  "name": "奧術至高",
+  "job": "archmage",
+  "maxLv": 10,
+  "type": "passive",
+  "target": "self",
+  "icon": {
+   "k": "sk_soul",
+   "c": "#c0a0ff"
+  },
+  "sp": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "cast": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "cd": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "range": 0,
+  "effect": "passive",
+  "fx": "none",
+  "desc": "INT +Lv、MATK +(2×Lv)%。",
+  "req": [
+   {
+    "id": "mana_cycle",
+    "lv": 3
+   }
+  ],
+  "passiveBonus": {
+   "int": 1,
+   "matkPct": 2
+  }
+ },
+ {
+  "id": "arcane_burst",
+  "name": "奧術彈",
+  "job": "archmage",
+  "maxLv": 10,
+  "type": "active",
+  "target": "enemy",
+  "icon": {
+   "k": "sk_soul",
+   "c": "#d0b0ff"
+  },
+  "sp": [
+   30,
+   32,
+   35,
+   37,
+   40,
+   42,
+   45,
+   47,
+   50,
+   52
+  ],
+  "cast": [
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5
+  ],
+  "cd": [
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0
+  ],
+  "range": 10,
+  "effect": "bolt",
+  "fx": "soul",
+  "desc": "凝聚奧術能量射出，傷害極高。",
+  "power": [
+   200,
+   236,
+   271,
+   307,
+   342,
+   378,
+   413,
+   449,
+   484,
+   520
+  ],
+  "hits": 1,
+  "req": [
+   {
+    "id": "arcane_supremacy",
+    "lv": 2
+   },
+   {
+    "id": "chain_lightning",
+    "lv": 3
+   }
+  ],
+  "element": "ghost",
+  "dmg": "magic"
+ },
+ {
+  "id": "void_lance",
+  "name": "虛空長矛",
+  "job": "archmage",
+  "maxLv": 10,
+  "type": "active",
+  "target": "enemy",
+  "icon": {
+   "k": "sk_thunder",
+   "c": "#a080ff"
+  },
+  "sp": [
+   45,
+   48,
+   52,
+   55,
+   58,
+   62,
+   65,
+   68,
+   72,
+   75
+  ],
+  "cast": [
+   0.8,
+   0.8,
+   0.8,
+   0.8,
+   0.8,
+   0.8,
+   0.8,
+   0.8,
+   0.8,
+   0.8
+  ],
+  "cd": [
+   1.8,
+   1.8,
+   1.8,
+   1.8,
+   1.8,
+   1.8,
+   1.8,
+   1.8,
+   1.8,
+   1.8
+  ],
+  "range": 10,
+  "effect": "chain",
+  "fx": "thunder",
+  "desc": "虛空之矛連鎖貫穿多個敵人。",
+  "power": [
+   190,
+   216,
+   241,
+   267,
+   292,
+   318,
+   343,
+   369,
+   394,
+   420
+  ],
+  "value": [
+   3,
+   3,
+   4,
+   4,
+   5,
+   5,
+   6,
+   6,
+   7,
+   7
+  ],
+  "req": [
+   {
+    "id": "arcane_burst",
+    "lv": 5
+   }
+  ],
+  "dmg": "magic"
+ },
+ {
+  "id": "mana_surge",
+  "name": "魔力奔流",
+  "job": "archmage",
+  "maxLv": 10,
+  "type": "active",
+  "target": "self",
+  "icon": {
+   "k": "sk_endure",
+   "c": "#b0a0ff"
+  },
+  "sp": [
+   45,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45
+  ],
+  "cast": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "cd": [
+   30,
+   30,
+   30,
+   30,
+   30,
+   30,
+   30,
+   30,
+   30,
+   30
+  ],
+  "range": 0,
+  "effect": "buff",
+  "fx": "buff_green",
+  "desc": "魔力奔流：INT 增加，持續 (30+5×Lv) 秒。",
+  "value": [
+   3,
+   6,
+   8,
+   11,
+   13,
+   16,
+   18,
+   21,
+   23,
+   26
+  ],
+  "dur": [
+   35,
+   40,
+   45,
+   50,
+   55,
+   60,
+   65,
+   70,
+   75,
+   80
+  ],
+  "req": [
+   {
+    "id": "arcane_supremacy",
+    "lv": 3
+   },
+   {
+    "id": "barrier",
+    "lv": 3
+   }
+  ],
+  "buffStat": {
+   "int": 1,
+   "dex": 0.4
+  }
+ },
+ {
+  "id": "cataclysm",
+  "name": "元素災厄",
+  "job": "archmage",
+  "maxLv": 5,
+  "type": "active",
+  "target": "enemy",
+  "icon": {
+   "k": "sk_thunder",
+   "c": "#ff80ff"
+  },
+  "sp": [
+   160,
+   185,
+   210,
+   235,
+   260
+  ],
+  "cast": [
+   3.0,
+   3.0,
+   3.0,
+   3.0,
+   3.0
+  ],
+  "cd": [
+   60,
+   60,
+   60,
+   60,
+   60
+  ],
+  "range": 10,
+  "effect": "aoe_target",
+  "fx": "meteor",
+  "desc": "召喚災厄級的隕石雨，覆蓋一大片範圍。",
+  "power": [
+   300,
+   380,
+   460,
+   540,
+   620
+  ],
+  "hits": 8,
+  "aoe": 4.5,
+  "req": [
+   {
+    "id": "void_lance",
+    "lv": 5
+   },
+   {
+    "id": "mana_surge",
+    "lv": 3
+   },
+   {
+    "id": "meteor",
+    "lv": 5
+   }
+  ],
+  "element": "fire",
+  "dmg": "magic"
+ },
+ {
+  "id": "sniper_mastery",
+  "name": "狙擊精通",
+  "job": "sniper",
+  "maxLv": 10,
+  "type": "passive",
+  "target": "self",
+  "icon": {
+   "k": "sk_conc",
+   "c": "#80e0c0"
+  },
+  "sp": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "cast": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "cd": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "range": 0,
+  "effect": "passive",
+  "fx": "none",
+  "desc": "DEX +Lv、爆擊 +Lv、命中 +(2×Lv)。",
+  "req": [
+   {
+    "id": "seeker_arrow",
+    "lv": 3
+   }
+  ],
+  "passiveBonus": {
+   "dex": 1,
+   "crit": 1,
+   "hit": 2
+  }
+ },
+ {
+  "id": "snipe",
+  "name": "狙擊",
+  "job": "sniper",
+  "maxLv": 10,
+  "type": "active",
+  "target": "enemy",
+  "icon": {
+   "k": "sk_double",
+   "c": "#a0ffd0"
+  },
+  "sp": [
+   25,
+   27,
+   28,
+   30,
+   32,
+   33,
+   35,
+   37,
+   38,
+   40
+  ],
+  "cast": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "cd": [
+   3.0,
+   3.0,
+   3.0,
+   3.0,
+   3.0,
+   3.0,
+   3.0,
+   3.0,
+   3.0,
+   3.0
+  ],
+  "range": 11,
+  "effect": "arrow",
+  "fx": "double",
+  "desc": "鎖定要害的致命一箭。",
+  "power": [
+   650,
+   761,
+   872,
+   983,
+   1094,
+   1206,
+   1317,
+   1428,
+   1539,
+   1650
+  ],
+  "hits": 1,
+  "req": [
+   {
+    "id": "sniper_mastery",
+    "lv": 2
+   },
+   {
+    "id": "seeker_arrow",
+    "lv": 5
+   }
+  ]
+ },
+ {
+  "id": "rain_of_death",
+  "name": "滅絕箭雨",
+  "job": "sniper",
+  "maxLv": 10,
+  "type": "active",
+  "target": "enemy",
+  "icon": {
+   "k": "sk_double",
+   "c": "#60d0a0"
+  },
+  "sp": [
+   40,
+   43,
+   46,
+   48,
+   51,
+   54,
+   57,
+   59,
+   62,
+   65
+  ],
+  "cast": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "cd": [
+   3.5,
+   3.5,
+   3.5,
+   3.5,
+   3.5,
+   3.5,
+   3.5,
+   3.5,
+   3.5,
+   3.5
+  ],
+  "range": 10,
+  "effect": "aoe_target",
+  "fx": "arrowrain",
+  "desc": "箭雨覆蓋目標範圍，擊退敵人。",
+  "power": [
+   280,
+   321,
+   362,
+   403,
+   444,
+   486,
+   527,
+   568,
+   609,
+   650
+  ],
+  "aoe": 3.5,
+  "req": [
+   {
+    "id": "snipe",
+    "lv": 3
+   },
+   {
+    "id": "trap",
+    "lv": 3
+   }
+  ],
+  "knock": 2
+ },
+ {
+  "id": "hunters_mark",
+  "name": "獵魔印記",
+  "job": "sniper",
+  "maxLv": 10,
+  "type": "active",
+  "target": "self",
+  "icon": {
+   "k": "sk_conc",
+   "c": "#40c090"
+  },
+  "sp": [
+   40,
+   40,
+   40,
+   40,
+   40,
+   40,
+   40,
+   40,
+   40,
+   40
+  ],
+  "cast": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "cd": [
+   25,
+   25,
+   25,
+   25,
+   25,
+   25,
+   25,
+   25,
+   25,
+   25
+  ],
+  "range": 0,
+  "effect": "buff",
+  "fx": "buff_green",
+  "desc": "獵魔印記：爆擊增加，持續 (30+5×Lv) 秒。",
+  "value": [
+   4,
+   8,
+   12,
+   16,
+   20,
+   24,
+   28,
+   32,
+   36,
+   40
+  ],
+  "dur": [
+   35,
+   40,
+   45,
+   50,
+   55,
+   60,
+   65,
+   70,
+   75,
+   80
+  ],
+  "req": [
+   {
+    "id": "sniper_mastery",
+    "lv": 3
+   },
+   {
+    "id": "wind_step",
+    "lv": 3
+   }
+  ],
+  "buffStat": {
+   "crit": 1,
+   "hit": 1.5
+  }
+ },
+ {
+  "id": "phantom_volley",
+  "name": "幻影連射",
+  "job": "sniper",
+  "maxLv": 5,
+  "type": "active",
+  "target": "enemy",
+  "icon": {
+   "k": "sk_double",
+   "c": "#ffffff"
+  },
+  "sp": [
+   110,
+   128,
+   145,
+   162,
+   180
+  ],
+  "cast": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "cd": [
+   60,
+   60,
+   60,
+   60,
+   60
+  ],
+  "range": 11,
+  "effect": "arrow",
+  "fx": "double",
+  "desc": "一瞬間射出十支幻影箭矢。",
+  "power": [
+   320,
+   400,
+   480,
+   560,
+   640
+  ],
+  "hits": 10,
+  "req": [
+   {
+    "id": "snipe",
+    "lv": 5
+   },
+   {
+    "id": "hunters_mark",
+    "lv": 3
+   },
+   {
+    "id": "multi_shot",
+    "lv": 5
+   }
+  ]
  }
 ]

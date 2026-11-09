@@ -2302,5 +2302,149 @@
     "chance": 0.2
    }
   ]
+ },
+ {
+  "id": "trial_templar",
+  "name": "試煉騎士 鋼心",
+  "lv": 74,
+  "hp": 130000,
+  "atk": [
+   380,
+   480
+  ],
+  "def": 60,
+  "mdef": 40,
+  "str": 110,
+  "agi": 50,
+  "vit": 100,
+  "int": 60,
+  "dex": 120,
+  "luk": 20,
+  "exp": 15000,
+  "jexp": 8000,
+  "range": 1,
+  "adelay": 1500,
+  "speed": 2.4,
+  "aggro": true,
+  "frame": 288,
+  "look": {
+   "body": "humanoid",
+   "skin": "#d0b090",
+   "hair": "#e8e0c0",
+   "cloth": "#8a8a98",
+   "cloth2": "#e0b030",
+   "pants": "#3a3a48",
+   "eye": "#80c0ff",
+   "weapon": "sword",
+   "hat": "helm",
+   "body2": "armor",
+   "scale": 1.7
+  },
+  "drops": [
+   {
+    "item": "white_potion",
+    "rate": 1.0
+   }
+  ],
+  "mvp": true,
+  "skills": [
+   {
+    "id": "stomp",
+    "chance": 0.3
+   }
+  ]
+ },
+ {
+  "id": "trial_archmage",
+  "name": "試煉術士 湮",
+  "lv": 74,
+  "hp": 100000,
+  "atk": [
+   360,
+   460
+  ],
+  "def": 35,
+  "mdef": 85,
+  "str": 110,
+  "agi": 50,
+  "vit": 100,
+  "int": 60,
+  "dex": 120,
+  "luk": 20,
+  "exp": 15000,
+  "jexp": 8000,
+  "range": 1,
+  "adelay": 1500,
+  "speed": 2.4,
+  "aggro": true,
+  "frame": 288,
+  "look": {
+   "body": "ghost",
+   "color": "#9a70ff",
+   "scale": 3.0
+  },
+  "drops": [
+   {
+    "item": "white_potion",
+    "rate": 1.0
+   }
+  ],
+  "mvp": true,
+  "skills": [
+   {
+    "id": "stomp",
+    "chance": 0.3
+   }
+  ]
+ },
+ {
+  "id": "trial_sniper",
+  "name": "試煉獵手 影",
+  "lv": 74,
+  "hp": 110000,
+  "atk": [
+   400,
+   500
+  ],
+  "def": 45,
+  "mdef": 45,
+  "str": 110,
+  "agi": 50,
+  "vit": 100,
+  "int": 60,
+  "dex": 120,
+  "luk": 20,
+  "exp": 15000,
+  "jexp": 8000,
+  "range": 1,
+  "adelay": 1500,
+  "speed": 2.4,
+  "aggro": true,
+  "frame": 288,
+  "look": {
+   "body": "humanoid",
+   "skin": "#c8a888",
+   "hair": "#202028",
+   "cloth": "#1a2a2a",
+   "cloth2": "#50b090",
+   "pants": "#101a1a",
+   "eye": "#60ffc0",
+   "weapon": "dagger",
+   "hat": "band",
+   "scale": 1.6
+  },
+  "drops": [
+   {
+    "item": "white_potion",
+    "rate": 1.0
+   }
+  ],
+  "mvp": true,
+  "skills": [
+   {
+    "id": "stomp",
+    "chance": 0.3
+   }
+  ]
  }
 ]

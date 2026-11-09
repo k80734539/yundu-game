@@ -260,6 +260,54 @@
     "flame_bow",
     "flame_lance"
    ]
+  },
+  "trial_templar": {
+   "zeny": [
+    20000,
+    30000
+   ],
+   "material": "ancient_core",
+   "materialCount": [
+    1,
+    2
+   ],
+   "equipChance": 0.2,
+   "exclusiveChance": 0.0,
+   "cardChance": 0.0,
+   "card": "golem_card",
+   "exclusives": []
+  },
+  "trial_archmage": {
+   "zeny": [
+    20000,
+    30000
+   ],
+   "material": "ancient_core",
+   "materialCount": [
+    1,
+    2
+   ],
+   "equipChance": 0.2,
+   "exclusiveChance": 0.0,
+   "cardChance": 0.0,
+   "card": "golem_card",
+   "exclusives": []
+  },
+  "trial_sniper": {
+   "zeny": [
+    20000,
+    30000
+   ],
+   "material": "ancient_core",
+   "materialCount": [
+    1,
+    2
+   ],
+   "equipChance": 0.2,
+   "exclusiveChance": 0.0,
+   "cardChance": 0.0,
+   "card": "golem_card",
+   "exclusives": []
   }
  },
  "ownJobChance": 0.7,

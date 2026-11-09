@@ -34,13 +34,13 @@ export class WorldMap extends Win {
     // 羊皮紙紋理
     for (let i = 0; i < 400; i++) { c.fillStyle = `rgba(120,90,40,${0.04 + (i % 5) * 0.01})`; c.fillRect((i * 97) % 584, (i * 53) % 400, 2, 1); }
     // 依地圖 pos 自動置中縮放到畫布內
-    const xs = MAPS.map((d) => d.pos[0]), ys = MAPS.map((d) => d.pos[1]);
+    const xs = MAPS.filter((d) => !d.hidden).map((d) => d.pos[0]), ys = MAPS.filter((d) => !d.hidden).map((d) => d.pos[1]);
     const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
     const CX = Math.min(80, (this.cv.width - 140) / Math.max(1, maxX - minX)), CY = Math.min(64, (this.cv.height - 130) / Math.max(1, maxY - minY));
     const OX = (this.cv.width - (maxX - minX) * CX - 120) / 2, OY = 22 + (this.cv.height - 130 - (maxY - minY) * CY) / 2;
     const centers: Record<string, [number, number]> = {};
     this.nodes = [];
-    for (const d of MAPS) {
+    for (const d of MAPS.filter((m) => !m.hidden)) {
       const m = mapData(d.id); const img = miniBase(m, 1);
       const x = OX + (d.pos[0] - minX) * CX + (120 - img.width) / 2, y = OY + (d.pos[1] - minY) * CY;
       centers[d.id] = [x + img.width / 2, y + img.height / 2];
@@ -48,7 +48,7 @@ export class WorldMap extends Win {
     }
     // 連線
     c.strokeStyle = 'rgba(120,80,40,.7)'; c.lineWidth = 2; c.setLineDash([5, 4]);
-    for (const d of MAPS) for (const p of d.portals) {
+    for (const d of MAPS.filter((m) => !m.hidden)) for (const p of d.portals) {
       const a = centers[d.id], b = centers[p.to]; if (!a || !b || d.id > p.to) continue;
       c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke();
     }

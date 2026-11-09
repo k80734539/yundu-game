@@ -292,7 +292,7 @@ export class Game {
   // ------------------------------------------------------------ 轉職
   jobMenu(d: Dialog) {
     const ch = this.player.ch, cur = this.player.job;
-    if (cur.tier >= 2) { d.say(`你已經是${cur.name}了，這是目前最高的職業。繼續在這條路上精進吧！`); return; }
+    if (cur.tier >= 3) { d.say(`你已經是${cur.name}了，這是目前最高的職業。繼續在這條路上精進吧！`); return; }
     // 已在進行的試煉
     const active = QUESTS.find((q) => q.trial && this.quests.isActive(q.id));
     if (active) {
@@ -300,10 +300,11 @@ export class Game {
       if (this.quests.complete(active)) {
         d.say([active.done, `那麼，從今天起你就是${jd.name}了！`], () => {
           this.quests.turnIn(active.id); this.changeJob(active.trial!);
-          d.say([`我送你一件${jd.tier === 2 ? '專屬武器' : '入門武器'}，好好使用新的技能吧。`, '新職業的技能有前置條件，先學基礎的技能，才能學更強的。']);
+          d.say([`我送你一件${jd.tier >= 2 ? '專屬武器' : '入門武器'}，好好使用新的技能吧。`, '新職業的技能有前置條件，先學基礎的技能，才能學更強的。']);
         });
       } else {
         d.say([`你正在進行「${active.name}」：${active.desc}`, `目前進度：${this.quests.progress(active)} / ${active.count}`], () => d.choose([
+          ...(active.arena ? [{ label: '前往試煉之間', fn: () => { d.close(); this.loadMap(active.arena!, 20, 30); } }] : []),
           { label: '我會繼續努力', fn: () => d.close() },
           ...(cur.tier === 0 ? [{ label: '我想改選別的職業', fn: () => { this.quests.abandon(active.id); this.jobMenu(d); } }] : []),
         ]));
@@ -326,6 +327,15 @@ export class Game {
       ]));
       return;
     }
+    if (cur.tier === 2) { // 三轉
+      const next = JOBS.jobs.find((j) => j.prev === ch.job)!;
+      if (ch.jobLv < 50 || ch.baseLv < 70) { d.say([`${cur.name}的終點是「${next.name}」。`, `三轉需要職業等級 50（目前 ${ch.jobLv}）、基本等級 70（目前 ${ch.baseLv}）。繼續修練吧！`]); return; }
+      d.say([`你的${cur.name}之路已經走到了盡頭。`, `真正的終點是「${next.name}」，不過要先通過專屬的試煉。`], () => d.choose([
+        { label: `我想成為${next.name}`, fn: () => offer(next.id) },
+        { label: '再想想', fn: () => d.close() },
+      ]));
+      return;
+    }
     const basic = ch.skills.basic || 0;
     if (ch.jobLv < 10 || basic < 9) {
       d.say([`轉職需要：職業等級 10（目前 ${ch.jobLv}）、基本技能 Lv9（目前 Lv${basic}）。`, '技能點數可以在技能視窗分配到「基本技能」。等你準備好再來吧！']);
@@ -343,7 +353,7 @@ export class Game {
     ch.job = job; ch.jobLv = 1; ch.jobExp = 0;
     const bonus = JOBS.jobChangePts?.[DB.job[job].tier] || 0; // 轉職贈送技能點，讓新職業一轉完就能用技能
     if (bonus) { ch.skillPts += bonus; this.msg(`轉職獎勵：獲得 ${bonus} 點技能點！`, 'sys'); }
-    const gift = ({ swordsman: 'sword', mage: 'rod', archer: 'bow', paladin: 'long_spear', elementalist: 'elem_staff', ranger: 'ranger_bow' } as Record<string, string>)[job];
+    const gift = ({ swordsman: 'sword', mage: 'rod', archer: 'bow', paladin: 'long_spear', elementalist: 'elem_staff', ranger: 'ranger_bow', templar: 'holy_lance', archmage: 'archmage_rod', sniper: 'sniper_bow' } as Record<string, string>)[job];
     // 卸下不能用的裝備
     for (const it of [...this.inv.items]) { const s = this.inv.slotOf(it.uid); const d = DB.item[it.id]; if (s && d.jobs && !d.jobs.includes(job)) this.inv.unequip(s); }
     if (this.inv.add(gift)) { const it = this.inv.items.filter((i) => i.id === gift).pop()!; this.inv.equipItem(it.uid, job, ch.baseLv); }

@@ -2434,5 +2434,281 @@
    "y": 12,
    "respawn": 2400
   }
+ },
+ {
+  "id": "trial_templar",
+  "name": "聖殿試煉之間",
+  "type": "dungeon",
+  "hidden": true,
+  "w": 40,
+  "h": 40,
+  "seed": 121,
+  "base": "floor",
+  "bgm": "dungeon2",
+  "level": [
+   70,
+   99
+  ],
+  "pos": [
+   10,
+   0
+  ],
+  "dark": 0.55,
+  "rooms": [
+   [
+    8,
+    8,
+    24,
+    24
+   ]
+  ],
+  "corridors": [],
+  "props": [
+   {
+    "type": "pillar",
+    "x": 12,
+    "y": 12,
+    "v": 0
+   },
+   {
+    "type": "pillar",
+    "x": 28,
+    "y": 12,
+    "v": 2
+   },
+   {
+    "type": "pillar",
+    "x": 12,
+    "y": 28,
+    "v": 3
+   },
+   {
+    "type": "pillar",
+    "x": 28,
+    "y": 28,
+    "v": 0
+   },
+   {
+    "type": "torch",
+    "x": 10,
+    "y": 10
+   },
+   {
+    "type": "torch",
+    "x": 30,
+    "y": 10
+   },
+   {
+    "type": "torch",
+    "x": 10,
+    "y": 30
+   },
+   {
+    "type": "torch",
+    "x": 30,
+    "y": 30
+   }
+  ],
+  "scatter": [],
+  "portals": [
+   {
+    "x": 20,
+    "y": 34,
+    "to": "aurora",
+    "tx": 25,
+    "ty": 14
+   }
+  ],
+  "spawns": [],
+  "mvp": {
+   "m": "trial_templar",
+   "x": 20,
+   "y": 15,
+   "respawn": 120
+  }
+ },
+ {
+  "id": "trial_archmage",
+  "name": "奧術試煉之間",
+  "type": "dungeon",
+  "hidden": true,
+  "w": 40,
+  "h": 40,
+  "seed": 122,
+  "base": "floor",
+  "bgm": "dungeon2",
+  "level": [
+   70,
+   99
+  ],
+  "pos": [
+   10,
+   0
+  ],
+  "dark": 0.55,
+  "rooms": [
+   [
+    8,
+    8,
+    24,
+    24
+   ]
+  ],
+  "corridors": [],
+  "props": [
+   {
+    "type": "pillar",
+    "x": 12,
+    "y": 12,
+    "v": 0
+   },
+   {
+    "type": "pillar",
+    "x": 28,
+    "y": 12,
+    "v": 2
+   },
+   {
+    "type": "pillar",
+    "x": 12,
+    "y": 28,
+    "v": 3
+   },
+   {
+    "type": "pillar",
+    "x": 28,
+    "y": 28,
+    "v": 0
+   },
+   {
+    "type": "torch",
+    "x": 10,
+    "y": 10
+   },
+   {
+    "type": "torch",
+    "x": 30,
+    "y": 10
+   },
+   {
+    "type": "torch",
+    "x": 10,
+    "y": 30
+   },
+   {
+    "type": "torch",
+    "x": 30,
+    "y": 30
+   }
+  ],
+  "scatter": [],
+  "portals": [
+   {
+    "x": 20,
+    "y": 34,
+    "to": "aurora",
+    "tx": 25,
+    "ty": 14
+   }
+  ],
+  "spawns": [],
+  "mvp": {
+   "m": "trial_archmage",
+   "x": 20,
+   "y": 15,
+   "respawn": 120
+  }
+ },
+ {
+  "id": "trial_sniper",
+  "name": "狩魔試煉之間",
+  "type": "dungeon",
+  "hidden": true,
+  "w": 40,
+  "h": 40,
+  "seed": 123,
+  "base": "floor",
+  "bgm": "dungeon2",
+  "level": [
+   70,
+   99
+  ],
+  "pos": [
+   10,
+   0
+  ],
+  "dark": 0.55,
+  "rooms": [
+   [
+    8,
+    8,
+    24,
+    24
+   ]
+  ],
+  "corridors": [],
+  "props": [
+   {
+    "type": "pillar",
+    "x": 12,
+    "y": 12,
+    "v": 0
+   },
+   {
+    "type": "pillar",
+    "x": 28,
+    "y": 12,
+    "v": 2
+   },
+   {
+    "type": "pillar",
+    "x": 12,
+    "y": 28,
+    "v": 3
+   },
+   {
+    "type": "pillar",
+    "x": 28,
+    "y": 28,
+    "v": 0
+   },
+   {
+    "type": "torch",
+    "x": 10,
+    "y": 10
+   },
+   {
+    "type": "torch",
+    "x": 30,
+    "y": 10
+   },
+   {
+    "type": "torch",
+    "x": 10,
+    "y": 30
+   },
+   {
+    "type": "torch",
+    "x": 30,
+    "y": 30
+   }
+  ],
+  "scatter": [],
+  "portals": [
+   {
+    "x": 20,
+    "y": 34,
+    "to": "aurora",
+    "tx": 25,
+    "ty": 14
+   }
+  ],
+  "spawns": [],
+  "mvp": {
+   "m": "trial_sniper",
+   "x": 20,
+   "y": 15,
+   "respawn": 120
+  }
  }
 ]

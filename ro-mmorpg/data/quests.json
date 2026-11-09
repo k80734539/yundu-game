@@ -536,5 +536,50 @@
   },
   "reqLv": 70,
   "prev": "q_cap7"
+ },
+ {
+  "id": "trial3_templar",
+  "name": "聖殿守護者試煉",
+  "npc": "job",
+  "type": "kill",
+  "target": "trial_templar",
+  "count": 1,
+  "trial": "templar",
+  "arena": "trial_templar",
+  "desc": "進入聖殿試煉之間，擊敗試煉騎士「鋼心」。他的盾牌能擋下一切，只有真正的守護者才能突破。",
+  "done": "你通過了最後的試煉。",
+  "reward": {
+   "jexp": 0
+  }
+ },
+ {
+  "id": "trial3_archmage",
+  "name": "奧術大師試煉",
+  "npc": "job",
+  "type": "kill",
+  "target": "trial_archmage",
+  "count": 1,
+  "trial": "archmage",
+  "arena": "trial_archmage",
+  "desc": "進入奧術試煉之間，擊敗試煉術士「湮」。他會用彈幕與爆裂淹沒整個房間。",
+  "done": "你通過了最後的試煉。",
+  "reward": {
+   "jexp": 0
+  }
+ },
+ {
+  "id": "trial3_sniper",
+  "name": "獵魔狙擊手試煉",
+  "npc": "job",
+  "type": "kill",
+  "target": "trial_sniper",
+  "count": 1,
+  "trial": "sniper",
+  "arena": "trial_sniper",
+  "desc": "進入狩魔試煉之間，擊敗試煉獵手「影」。他的狙擊與箭雨不會給你喘息的空間。",
+  "done": "你通過了最後的試煉。",
+  "reward": {
+   "jexp": 0
+  }
  }
 ]

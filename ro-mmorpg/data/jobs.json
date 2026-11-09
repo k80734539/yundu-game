@@ -837,6 +837,297 @@
      "dex"
     ]
    ]
+  },
+  {
+   "id": "templar",
+   "name": "聖殿守護者",
+   "tier": 3,
+   "prev": "paladin",
+   "hpK": 1.5,
+   "hpB": 7,
+   "spK": 9,
+   "spB": 0,
+   "maxJob": 50,
+   "aspd": {
+    "none": 158,
+    "dagger": 154,
+    "sword": 153,
+    "spear": 152
+   },
+   "weapons": [
+    "dagger",
+    "sword",
+    "spear"
+   ],
+   "skills": [
+    "templar_mastery",
+    "holy_smite",
+    "judgment_hammer",
+    "divine_aegis",
+    "heaven_wrath"
+   ],
+   "attack": "melee",
+   "range": 1,
+   "look": {
+    "skin": "#f8d8b8",
+    "hair": "#f0e0a0",
+    "cloth": "#f4f4fa",
+    "cloth2": "#e0b030",
+    "pants": "#c8c8d8",
+    "hairStyle": 2,
+    "body": "armor",
+    "hat": "helm",
+    "cape": "#c02030"
+   },
+   "bonus": [
+    [
+     2,
+     "str"
+    ],
+    [
+     4,
+     "vit"
+    ],
+    [
+     6,
+     "vit"
+    ],
+    [
+     8,
+     "str"
+    ],
+    [
+     10,
+     "dex"
+    ],
+    [
+     14,
+     "vit"
+    ],
+    [
+     18,
+     "str"
+    ],
+    [
+     22,
+     "vit"
+    ],
+    [
+     26,
+     "luk"
+    ],
+    [
+     30,
+     "str"
+    ],
+    [
+     34,
+     "vit"
+    ],
+    [
+     38,
+     "dex"
+    ],
+    [
+     42,
+     "str"
+    ],
+    [
+     46,
+     "vit"
+    ],
+    [
+     50,
+     "str"
+    ]
+   ]
+  },
+  {
+   "id": "archmage",
+   "name": "奧術大師",
+   "tier": 3,
+   "prev": "elementalist",
+   "hpK": 0.6,
+   "hpB": 5,
+   "spK": 10,
+   "spB": 0,
+   "maxJob": 50,
+   "aspd": {
+    "none": 144,
+    "dagger": 142,
+    "staff": 142
+   },
+   "weapons": [
+    "dagger",
+    "staff"
+   ],
+   "skills": [
+    "arcane_supremacy",
+    "arcane_burst",
+    "void_lance",
+    "mana_surge",
+    "cataclysm"
+   ],
+   "attack": "magic",
+   "range": 8,
+   "look": {
+    "skin": "#f8e0c8",
+    "hair": "#e8e8ff",
+    "cloth": "#3a2a8a",
+    "cloth2": "#ffd060",
+    "pants": "#1a1a4a",
+    "hairStyle": 1,
+    "body": "robe",
+    "hat": "wizard",
+    "cape": "#6a3ad0"
+   },
+   "bonus": [
+    [
+     2,
+     "int"
+    ],
+    [
+     4,
+     "int"
+    ],
+    [
+     6,
+     "dex"
+    ],
+    [
+     8,
+     "int"
+    ],
+    [
+     12,
+     "int"
+    ],
+    [
+     16,
+     "dex"
+    ],
+    [
+     20,
+     "int"
+    ],
+    [
+     25,
+     "int"
+    ],
+    [
+     30,
+     "luk"
+    ],
+    [
+     35,
+     "int"
+    ],
+    [
+     40,
+     "dex"
+    ],
+    [
+     45,
+     "int"
+    ],
+    [
+     50,
+     "int"
+    ]
+   ]
+  },
+  {
+   "id": "sniper",
+   "name": "獵魔狙擊手",
+   "tier": 3,
+   "prev": "ranger",
+   "hpK": 1.1,
+   "hpB": 5,
+   "spK": 9,
+   "spB": 0,
+   "maxJob": 50,
+   "aspd": {
+    "none": 150,
+    "dagger": 147,
+    "bow": 146
+   },
+   "weapons": [
+    "dagger",
+    "bow"
+   ],
+   "skills": [
+    "sniper_mastery",
+    "snipe",
+    "rain_of_death",
+    "hunters_mark",
+    "phantom_volley"
+   ],
+   "attack": "arrow",
+   "range": 10,
+   "look": {
+    "skin": "#f8d8b8",
+    "hair": "#2a2a30",
+    "cloth": "#2a3a3a",
+    "cloth2": "#60c0a0",
+    "pants": "#1a2a2a",
+    "hairStyle": 3,
+    "hat": "band",
+    "cape": "#1a2a2a"
+   },
+   "bonus": [
+    [
+     2,
+     "dex"
+    ],
+    [
+     4,
+     "dex"
+    ],
+    [
+     6,
+     "agi"
+    ],
+    [
+     8,
+     "dex"
+    ],
+    [
+     12,
+     "luk"
+    ],
+    [
+     16,
+     "dex"
+    ],
+    [
+     20,
+     "agi"
+    ],
+    [
+     25,
+     "dex"
+    ],
+    [
+     30,
+     "dex"
+    ],
+    [
+     35,
+     "luk"
+    ],
+    [
+     40,
+     "dex"
+    ],
+    [
+     45,
+     "agi"
+    ],
+    [
+     50,
+     "dex"
+    ]
+   ]
   }
  ],
  "expJob2": [
@@ -889,5 +1180,56 @@
   11020,
   12342,
   13823
+ ],
+ "expJob3": [
+  81,
+  90,
+  101,
+  113,
+  127,
+  143,
+  159,
+  180,
+  201,
+  224,
+  251,
+  282,
+  316,
+  354,
+  396,
+  443,
+  497,
+  556,
+  622,
+  698,
+  782,
+  875,
+  980,
+  1098,
+  1230,
+  1377,
+  1542,
+  1727,
+  1935,
+  2167,
+  2427,
+  2718,
+  3044,
+  3409,
+  3819,
+  4277,
+  4790,
+  5365,
+  6009,
+  6730,
+  7537,
+  8442,
+  9454,
+  10589,
+  11860,
+  13283,
+  14877,
+  16662,
+  18661
  ]
 }

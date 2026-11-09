@@ -11,7 +11,7 @@ export const statCost = (x: number) => Math.floor((x - 1) / 10) + 2;
 /** 升級獲得的能力點數 */
 export const statPointsForLevel = (lv: number) => Math.floor(lv / 5) + 3;
 export function expNeed(lv: number) { return JOBS.expBase[lv - 1] ?? Infinity; }
-export function jobExpNeed(job: string, jlv: number) { const tier = DB.job[job].tier; const t = tier === 0 ? JOBS.expJob : tier === 1 ? JOBS.expJob1 : JOBS.expJob2; return t[jlv - 1] ?? Infinity; }
+export function jobExpNeed(job: string, jlv: number) { const tier = DB.job[job].tier; const t = tier === 0 ? JOBS.expJob : tier === 1 ? JOBS.expJob1 : tier === 2 ? JOBS.expJob2 : (JOBS.expJob3 || JOBS.expJob2); return t[jlv - 1] ?? Infinity; }
 
 export interface Derived {
   maxHp: number; maxSp: number;
@@ -79,6 +79,14 @@ export function derive(ch: CharData, equips: EquipInfo[], buffs: Record<string, 
   if (buffs.guard) defB += buffs.guard;
   if (buffs.barrier) { defB += buffs.barrier; mdefB += buffs.barrier; }
   if (buffs.wind_step) fleeB += buffs.wind_step;
+  // 通用：技能資料的 passiveBonus（每級加成）與 buffStat（增益值 × 倍率）
+  const addStat = (k: string, v: number) => {
+    if (k === 'def') defB += v; else if (k === 'mdef') mdefB += v; else if (k === 'atk') atkB += v; else if (k === 'matkPct') matkPct += v;
+    else if (k === 'hit') hitB += v; else if (k === 'flee') fleeB += v; else if (k === 'crit') critB += v; else if (k === 'hp') hpB += v; else if (k === 'sp') spB += v; else if (k === 'aspd') aspdB += v;
+    else if (k in bonus) (bonus as Record<string, number>)[k] += v;
+  };
+  for (const [id, lv] of Object.entries(ch.skills)) { const pb = DB.skill[id]?.passiveBonus; if (pb && lv) for (const [k, per] of Object.entries(pb)) addStat(k, per * lv); }
+  for (const [id, v] of Object.entries(buffs)) { const bs = DB.skill[id]?.buffStat; if (bs) for (const [k, mul] of Object.entries(bs)) addStat(k, v * mul); }
   const t = zero();
   for (const k of STAT_KEYS) t[k] = ch.stats[k] + bonus[k];
   const lv = ch.baseLv;
