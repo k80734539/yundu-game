@@ -926,7 +926,7 @@ export class Game {
       this.spawner.onKill(d);
       if (by === this.player && !d.summoned) {
         gainExp(this, d.def.exp, d.def.jexp);
-        for (const id of ['battle_spirit', 'eagle_focus']) { const lv = this.player.ch.skills[id] || 0; if (lv) this.player.sp = Math.min(this.player.maxSp, this.player.sp + (DB.skill[id].value?.[lv - 1] || 0)); } // 擊倒回復 SP 的被動
+        for (const id of ['battle_spirit', 'eagle_focus', 'mana_focus']) { const lv = this.player.ch.skills[id] || 0; if (lv) this.player.sp = Math.min(this.player.maxSp, this.player.sp + (DB.skill[id].value?.[lv - 1] || 0)); } // 擊倒回復 SP 的被動
         this.dropLoot(d);
         if (d.isMvp) { this.mvpReward(d); this.bossVictory(d); }
         this.ev.emit('kill', d.def.id);

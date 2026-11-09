@@ -335,7 +335,8 @@
     "firebolt",
     "coldbolt",
     "soulstrike",
-    "thunderstorm"
+    "thunderstorm",
+    "mana_focus"
    ],
    "attack": "magic",
    "range": 6,
