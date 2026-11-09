@@ -14,15 +14,15 @@ const res = await page.evaluate(() => {
   const mapFor = (lv) => (lv >= 48 ? ['snowfield', 46, 20] : lv >= 35 ? ['ruins', 10, 47] : lv >= 30 ? ['mine2', 24, 24] : lv >= 22 ? ['canyon', 20, 20] : lv >= 18 ? ['swamp', 30, 30] : lv >= 15 ? ['mine1', 24, 24] : lv >= 10 ? ['coast', 20, 30] : lv >= 5 ? ['forest', 6, 30] : ['prt_fild', 28, 8]);
   const step = 1 / 60; let t = 0, curMap = '', kills = 0, deaths = 0, lastLvT = 0, lastLv = 1;
   const ms = {}, killsByMap = {}, deathsByMap = {}; G.ev.on('kill', (id) => { kills++; if (BUYGEAR) { const md = DB.monster[id]; if (md) for (const d of md.drops) { const it = DB.item[d.item]; if (it) ch.zeny += d.rate * Math.floor(it.price / 2); } } /* 期望值：撿起掉落物並賣店 */ killsByMap[curMap] = (killsByMap[curMap] || 0) + 1; });
-  let buyT = 0; const bought = [], mine = {}; let jobTier = 0, potCd = 0, skT = 0, buffT = 0, learnT = 0, fin = null;
+  let buyT = 0; const bought = [], mine = {}, mineUid = {}; let jobTier = 0, potCd = 0, skT = 0, buffT = 0, learnT = 0, fin = null;
   const rec = (k) => { if (!(k in ms)) ms[k] = +(t / 60).toFixed(1); };
   const sc = (id) => { const s = DB.skill[id], lv = ch.skills[id]; return ((s.power || [100])[lv - 1] || 100) * (s.hits === 'lv' ? lv : s.hits === 'half' ? Math.ceil(lv / 2) : (typeof s.hits === 'number' ? s.hits : 1)) / (((s.cast || [0])[lv - 1] || 0) + ((s.cd || [0.5])[lv - 1] || 0.5)); };
   while (t < CAPMIN * 60) {
     // 買裝備（真的用掉落賣出前的 Zeny；每 20 秒檢查，每欄位買買得起的最好一件）
     if (BUYGEAR && (buyT -= step) <= 0) { buyT = 20; const shops = (Array.isArray(DB.shop) ? DB.shop : Object.values(DB.shop)).filter((x) => x.id === 'weapon' || x.id === 'quarter'); const cand = shops.flatMap((x) => x.items).map((id) => DB.item[id]).filter((i) => i && i.slot && i.jobs && i.jobs.includes(ch.job));
       for (const slot of ['weapon', 'armor', 'head', 'shield', 'garment', 'shoes']) { const val = (i) => (i.atk || 0) + (i.matk || 0) + (i.def || 0) * 4 + (i.mdef || 0); const curV = mine[slot] ?? -1;
-        const best = cand.filter((i) => i.slot === slot && i.price <= ch.zeny && val(i) > curV).sort((a, b) => val(b) - val(a))[0];
-        if (best) { ch.zeny -= best.price; G.inv.add(best.id); const it = G.inv.items.filter((i) => i.id === best.id).pop(); G.inv.equipItem(it.uid, ch.job, ch.baseLv); p.recalc(true); mine[slot] = val(best); bought.push(best.id + '@Lv' + ch.baseLv); } } }
+        const best = cand.filter((i) => i.slot === slot && i.price <= ch.zeny && val(i) >= curV * 1.3 + 3).sort((a, b) => val(b) - val(a))[0];  // 只買明顯升級的
+        if (best) { G.inv.add(best.id); const it = G.inv.items.filter((i) => i.id === best.id).pop(); if (!it) continue; ch.zeny -= best.price; G.inv.equipItem(it.uid, ch.job, ch.baseLv); if (mineUid[slot]) { try { G.sell(mineUid[slot], 1); } catch (e) { /* ignore */ } } mineUid[slot] = it.uid; p.recalc(true); mine[slot] = val(best); bought.push(best.id + '@Lv' + ch.baseLv); } } }
     // 轉職（略過試煉）
     if (jobTier === 0 && ch.jobLv >= 10 && (ch.skills.basic || 0) >= 9) { G.changeJob(CLS); jobTier = 1; rec('轉職一轉(分)'); G.resetStats(); }  // Lv20 以下重新配點免費
     if (jobTier === 1 && ch.jobLv >= 40) { G.changeJob(T2); jobTier = 2; rec('轉職二轉(分)'); }
