@@ -1,45 +1,41 @@
-// 職業平衡機器人：把檔尾的 'CLSNAME' 換成 swordsman/paladin/mage/elementalist/archer/ranger，基本 45／職業 50、失落遺跡打 240 秒；無裝備、不閃躲，只能看相對差距
+// 職業輸出測試（固定、可重複）：基本 45／職業 50、固定技能配置、玩家不死，在失落遺跡連續擊殺 8 隻守衛，量總秒數與 SP 耗盡情形。
+// 用法：把檔尾的 'CLSNAME' 換成 swordsman/paladin/mage/elementalist/archer/ranger。秒數越小越強；不含裝備與閃躲，只看相對差距。
 const res = await page.evaluate((CLS) => {
-  const G = window.__game, p = G.player, ch = p.ch;
+  const G = window.__game, p = G.player, ch = G.player.ch, DB = window.__DB;
   G.loop.running = false;
   const T1 = { swordsman: 'swordsman', paladin: 'swordsman', mage: 'mage', elementalist: 'mage', archer: 'archer', ranger: 'archer' }[CLS];
   const T2 = ['paladin', 'elementalist', 'ranger'].includes(CLS) ? CLS : null;
-  ch.baseLv = 45; ch.job = 'novice'; ch.jobLv = 10; ch.skills = { basic: 9 };
-  G.changeJob(T1); ch.jobLv = 50; if (T2) { ch.jobLv = 40; G.changeJob(T2); ch.jobLv = 50; }
-  // 相同的點數預算：一轉 49+5，二轉再加 49+5
-  ch.skillPts = (T2 ? 108 : 54); ch.statPts = 280;
+  ch.baseLv = 45; ch.job = 'novice'; ch.jobLv = 10;
+  G.changeJob(T1); ch.jobLv = 40; if (T2) G.changeJob(T2); ch.jobLv = 50;
+  ch.skillPts = 0; ch.statPts = 280;
   const PL = { swordsman: ['str', 'str', 'vit', 'dex', 'agi'], mage: ['int', 'int', 'dex', 'int', 'vit'], archer: ['dex', 'dex', 'agi', 'dex', 'str'] }[T1];
   for (let k = 0; ch.statPts > 0 && k < 3000; k++) { const b = ch.statPts; G.raiseStat(PL[k % PL.length]); if (ch.statPts === b) { G.raiseStat(PL[0]); if (ch.statPts === b) break; } }
-  const PRI = { swordsman: ['sword_mastery', 'bash', 'hp_recovery', 'provoke', 'endure', 'magnum'], mage: ['arcane', 'firebolt', 'coldbolt', 'soulstrike', 'thunderstorm', 'sp_recovery'], archer: ['owl_eye', 'vulture_eye', 'double_strafe', 'concentration', 'arrow_shower', 'charge_arrow'] }[T1]
-    .concat({ paladin: ['spear_mastery', 'pierce', 'riding', 'guard', 'whirlwind'], elementalist: ['mana_cycle', 'meteor', 'frost_nova', 'chain_lightning', 'barrier'], ranger: ['hunter_instinct', 'falcon', 'multi_shot', 'trap', 'wind_step'] }[T2] || []);
-  for (let round = 0; round < 6; round++) for (const id of (T2 ? PRI.slice(6).concat(PRI.slice(0, 6)) : PRI)) { let g = 0; while (g++ < 12 && G.learnSkill(id)); }
-  const atk = { bash: 1, magnum: 1, firebolt: 1, coldbolt: 1, soulstrike: 1, thunderstorm: 1, double_strafe: 1, arrow_shower: 1, charge_arrow: 1, pierce: 1, whirlwind: 1, meteor: 1, frost_nova: 1, chain_lightning: 1, multi_shot: 1, trap: 1 };
-  const buff = ['guard', 'barrier', 'wind_step', 'endure'];
-  const learned = Object.keys(ch.skills).filter((k) => ch.skills[k] > 0 && k !== 'basic');
-  // 攻擊技能：以「威力×段數 / (詠唱+冷卻)」粗排，強的先放
-  const score = (id) => { const s = DB().skill[id], lv = ch.skills[id]; return ((s.power || [100])[lv - 1] || 100) * (s.hits === 'lv' ? lv : s.hits === 'half' ? Math.ceil(lv / 2) : (typeof s.hits === 'number' ? s.hits : 1)) / (((s.cast || [0])[lv - 1] || 0) + ((s.cd || [0.5])[lv - 1] || 0.5)); };
-  function DB() { return window.__DB; }
-  const atkIds = learned.filter((id) => atk[id]).sort((a, b) => score(b) - score(a));
-  const buffIds = learned.filter((id) => buff.includes(id));
+  const B = {
+    swordsman: { sword_mastery: 10, bash: 10, hp_recovery: 5, provoke: 5, endure: 3, magnum: 5 },
+    mage: { arcane: 10, firebolt: 10, coldbolt: 10, soulstrike: 10, thunderstorm: 10, sp_recovery: 10 },
+    archer: { owl_eye: 10, vulture_eye: 5, double_strafe: 10, concentration: 5, arrow_shower: 10, charge_arrow: 10 },
+    paladin: { spear_mastery: 10, pierce: 10, riding: 5, guard: 5, whirlwind: 5 },
+    elementalist: { mana_cycle: 10, meteor: 10, frost_nova: 10, chain_lightning: 10, barrier: 5 },
+    ranger: { hunter_instinct: 10, falcon: 10, multi_shot: 10, seeker_arrow: 10, trap: 10, wind_step: 5 },
+  };
+  ch.skills = { basic: 9, ...B[T1], ...(T2 ? B[T2] : {}) };
+  for (const k of Object.keys(ch.skills)) if (!DB.skill[k]) delete ch.skills[k];
+  const learned = Object.keys(ch.skills).filter((k) => k !== 'basic' && DB.skill[k].type === 'active');
+  const buffIds = learned.filter((id) => DB.skill[id].effect === 'buff');
+  const score = (id) => { const s = DB.skill[id], lv = ch.skills[id]; return ((s.power || [100])[lv - 1] || 100) * (s.hits === 'lv' ? lv : s.hits === 'half' ? Math.ceil(lv / 2) : (typeof s.hits === 'number' ? s.hits : 1)) / (((s.cast || [0])[lv - 1] || 0) + ((s.cd || [0.5])[lv - 1] || 0.5)); };
+  const atkIds = learned.filter((id) => !['buff', 'debuff'].includes(DB.skill[id].effect)).sort((a, b) => score(b) - score(a));
   p.recalc(true); p.hp = p.maxHp; p.sp = p.maxSp;
-  G.inv.add('white_potion', 60); G.inv.add('blue_potion', 60);
   G.loadMap('ruins', 12, 12);
-  let kills = 0, deaths = 0, pots = 0, sp_pots = 0, t = 0; const step = 1 / 60, DUR = 240;
+  const step = 1 / 60; let t = 0, kills = 0, skillCasts = 0, buffT = 0, skT = 0, noSp = 0;
   G.ev.on('kill', () => kills++);
-  const usePot = (id) => { const it = G.inv.items.find((i) => i.id === id); if (it) { G.useItem(it.uid); return true; } return false; };
-  let potCd = 0, skT = 0, buffT = 0, fast = 0;
-  while (t < DUR) {
-    G.update(step); t += step; potCd -= step; skT -= step; buffT -= step;
-    if (p.dead) { deaths++; G.respawn(); for (let i = 0; i < 30; i++) G.update(step); G.loadMap('ruins', 12, 12); p.hp = p.maxHp; continue; }
-    if (potCd <= 0 && p.hp < p.maxHp * 0.45 && usePot('white_potion')) { pots++; potCd = 1; }
-    if (potCd <= 0 && p.sp < p.maxSp * 0.15 && usePot('blue_potion')) { sp_pots++; potCd = 1; }
-    if (!(p.chase && !p.chase.dead)) {
-      const ms = G.monsters.filter((m) => !m.dead && !m.isMvp).sort((a, b) => Math.hypot(a.x - p.x, a.y - p.y) - Math.hypot(b.x - p.x, b.y - p.y));
-      if (ms[0]) p.chase = ms[0];
-    }
-    if (buffT <= 0) { for (const id of buffIds) if ((G.skillCd[id] || 0) <= 0) G.useSkill(id); buffT = 5; }
-    if (skT <= 0 && !G.skills.cast && p.chase && !p.chase.dead) { for (const id of atkIds) { if ((G.skillCd[id] || 0) <= 0 && p.sp >= DB().skill[id].sp[ch.skills[id] - 1]) { G.useSkill(id); break; } } skT = 0.1; }
+  const GOAL = 8, CAP = 400;
+  while (kills < GOAL && t < CAP) {
+    G.update(step); t += step; buffT -= step; skT -= step;
+    p.hp = p.maxHp; if (p.dead) { G.respawn(); continue; }
+    if (!(p.chase && !p.chase.dead)) { const ms = G.monsters.filter((m) => !m.dead && !m.isMvp && m.def.id === 'ruin_guard').sort((a, b) => Math.hypot(a.x - p.x, a.y - p.y) - Math.hypot(b.x - p.x, b.y - p.y)); if (ms[0]) p.chase = ms[0]; }
+    if (buffT <= 0) { for (const id of buffIds) if ((G.skillCd[id] || 0) <= 0 && p.sp > 60) G.useSkill(id); buffT = 5; }
+    if (skT <= 0 && !G.skills.cast && p.chase && !p.chase.dead) { let used = false; for (const id of atkIds) { if ((G.skillCd[id] || 0) <= 0 && p.sp >= DB.skill[id].sp[ch.skills[id] - 1]) { G.useSkill(id); skillCasts++; used = true; break; } } if (!used) noSp += 0.1; skT = 0.1; }
   }
-  return { cls: CLS, kills, perMin: +(kills / (DUR / 60)).toFixed(1), deaths, whitePots: pots, bluePots: sp_pots, hp: p.maxHp, sp: p.maxSp, atk: atkIds.join(','), stats: ch.stats };
+  return { cls: CLS, seconds: +t.toFixed(0), done: kills >= GOAL, casts: skillCasts, idleNoSp: +noSp.toFixed(0), hp: p.maxHp, sp: p.maxSp, skills: atkIds.join(',') };
 }, 'CLSNAME');
 console.log('RESULT', JSON.stringify(res));

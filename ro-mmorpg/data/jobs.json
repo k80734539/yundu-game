@@ -1,5 +1,9 @@
 {
- "jobChangePts": [0, 5, 5],
+ "jobChangePts": [
+  0,
+  5,
+  5
+ ],
  "expBase": [
   14,
   24,
@@ -201,7 +205,7 @@
    "tier": 1,
    "hpK": 0.7,
    "hpB": 5,
-   "spK": 2,
+   "spK": 4,
    "spB": 0,
    "maxJob": 50,
    "aspd": {
@@ -312,7 +316,7 @@
    "tier": 1,
    "hpK": 0.3,
    "hpB": 5,
-   "spK": 6,
+   "spK": 8,
    "spB": 0,
    "maxJob": 50,
    "aspd": {
@@ -414,7 +418,7 @@
    "tier": 1,
    "hpK": 0.5,
    "hpB": 5,
-   "spK": 2,
+   "spK": 4,
    "spB": 0,
    "maxJob": 50,
    "aspd": {
@@ -521,7 +525,7 @@
    "prev": "swordsman",
    "hpK": 1.1,
    "hpB": 6,
-   "spK": 3,
+   "spK": 5,
    "spB": 0,
    "maxJob": 50,
    "aspd": {
@@ -729,9 +733,9 @@
    "name": "遊俠",
    "tier": 2,
    "prev": "archer",
-   "hpK": 0.7,
+   "hpK": 0.9,
    "hpB": 5,
-   "spK": 3,
+   "spK": 5,
    "spB": 0,
    "maxJob": 50,
    "aspd": {
@@ -748,7 +752,8 @@
     "falcon",
     "multi_shot",
     "trap",
-    "wind_step"
+    "wind_step",
+    "seeker_arrow"
    ],
    "attack": "arrow",
    "range": 9,
