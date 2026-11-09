@@ -6,12 +6,13 @@ const res = await page.evaluate(() => {
   G.loop.running = false;
   const PL = { swordsman: ['str', 'str', 'vit', 'dex', 'agi'], mage: ['int', 'int', 'dex', 'int', 'vit'], archer: ['dex', 'dex', 'agi', 'dex', 'str'] }[CLS];
   const T2 = { swordsman: 'paladin', mage: 'elementalist', archer: 'ranger' }[CLS];
+  const T3 = { swordsman: 'templar', mage: 'archmage', archer: 'sniper' }[CLS];
   const PRI = {
-    swordsman: ['bash:5', 'sword_mastery:5', 'battle_spirit:5', 'bash:10', 'sword_mastery:10', 'hp_recovery:3', 'provoke:5', 'endure:3', 'magnum:5', 'battle_spirit:10', 'spear_mastery:5', 'pierce:10', 'riding:3', 'guard:5', 'whirlwind:5'],
-    mage: ['firebolt:5', 'arcane:3', 'coldbolt:5', 'mana_focus:5', 'soulstrike:5', 'thunderstorm:5', 'firebolt:10', 'arcane:10', 'coldbolt:10', 'mana_focus:10', 'soulstrike:10', 'thunderstorm:10', 'sp_recovery:5', 'mana_cycle:5', 'meteor:10', 'frost_nova:10', 'chain_lightning:10', 'barrier:5'],
-    archer: ['double_strafe:5', 'armor_pierce:5', 'owl_eye:5', 'eagle_focus:5', 'double_strafe:10', 'vulture_eye:3', 'concentration:3', 'arrow_shower:5', 'charge_arrow:5', 'owl_eye:10', 'armor_pierce:10', 'eagle_focus:10', 'hunter_instinct:5', 'multi_shot:10', 'seeker_arrow:10', 'falcon:5', 'trap:5', 'wind_step:5'],
+    swordsman: ['bash:5', 'sword_mastery:5', 'battle_spirit:5', 'bash:10', 'sword_mastery:10', 'hp_recovery:3', 'provoke:5', 'endure:3', 'magnum:5', 'battle_spirit:10', 'spear_mastery:5', 'pierce:10', 'riding:3', 'guard:5', 'whirlwind:5', 'templar_mastery:5', 'holy_smite:10', 'judgment_hammer:10', 'divine_aegis:10', 'heaven_wrath:5', 'templar_mastery:10'],
+    mage: ['firebolt:5', 'arcane:3', 'coldbolt:5', 'mana_focus:5', 'soulstrike:5', 'thunderstorm:5', 'firebolt:10', 'arcane:10', 'coldbolt:10', 'mana_focus:10', 'soulstrike:10', 'thunderstorm:10', 'sp_recovery:5', 'mana_cycle:5', 'meteor:10', 'frost_nova:10', 'chain_lightning:10', 'barrier:5', 'arcane_supremacy:5', 'arcane_burst:10', 'void_lance:10', 'mana_surge:10', 'cataclysm:5', 'arcane_supremacy:10'],
+    archer: ['double_strafe:5', 'armor_pierce:5', 'owl_eye:5', 'eagle_focus:5', 'double_strafe:10', 'vulture_eye:3', 'concentration:3', 'arrow_shower:5', 'charge_arrow:5', 'owl_eye:10', 'armor_pierce:10', 'eagle_focus:10', 'hunter_instinct:5', 'multi_shot:10', 'seeker_arrow:10', 'falcon:5', 'trap:5', 'wind_step:5', 'sniper_mastery:5', 'snipe:10', 'rain_of_death:10', 'hunters_mark:10', 'phantom_volley:5', 'sniper_mastery:10'],
   }[CLS].map((e) => e.split(':'));
-  const mapFor = (lv) => (lv >= 48 ? ['snowfield', 46, 20] : lv >= 35 ? ['ruins', 10, 47] : lv >= 30 ? ['mine2', 24, 24] : lv >= 22 ? ['canyon', 20, 20] : lv >= 18 ? ['swamp', 30, 30] : lv >= 15 ? ['mine1', 24, 24] : lv >= 10 ? ['coast', 20, 30] : lv >= 5 ? ['forest', 6, 30] : ['prt_fild', 28, 8]);
+  const mapFor = (lv) => (lv >= 60 ? ['volcano', 12, 50] : lv >= 48 ? ['snowfield', 46, 20] : lv >= 35 ? ['ruins', 10, 47] : lv >= 30 ? ['mine2', 24, 24] : lv >= 22 ? ['canyon', 20, 20] : lv >= 18 ? ['swamp', 30, 30] : lv >= 15 ? ['mine1', 24, 24] : lv >= 10 ? ['coast', 20, 30] : lv >= 5 ? ['forest', 6, 30] : ['prt_fild', 28, 8]);
   const step = 1 / 60; let t = 0, curMap = '', kills = 0, deaths = 0, lastLvT = 0, lastLv = 1;
   const ms = {}, killsByMap = {}, deathsByMap = {}; G.ev.on('kill', (id) => { kills++; if (BUYGEAR) { const md = DB.monster[id]; if (md) for (const d of md.drops) { const it = DB.item[d.item]; if (it) ch.zeny += d.rate * Math.floor(it.price / 2); } const zd = window.__LOOT.zenyDrop; if (md && zd) ch.zeny += md.lv * zd.perLevel * zd.chance; } /* 期望值：撿起掉落物並賣店（含 Zeny 掉落） */ killsByMap[curMap] = (killsByMap[curMap] || 0) + 1; });
   let idleT = 0, buyT = 0; const bought = [], mine = {}, mineUid = {}; let jobTier = 0, potCd = 0, skT = 0, buffT = 0, learnT = 0, fin = null;
@@ -19,20 +20,21 @@ const res = await page.evaluate(() => {
   const sc = (id) => { const s = DB.skill[id], lv = ch.skills[id]; return ((s.power || [100])[lv - 1] || 100) * (s.hits === 'lv' ? lv : s.hits === 'half' ? Math.ceil(lv / 2) : (typeof s.hits === 'number' ? s.hits : 1)) / (((s.cast || [0])[lv - 1] || 0) + ((s.cd || [0.5])[lv - 1] || 0.5)); };
   while (t < CAPMIN * 60) {
     // 買裝備（真的用掉落賣出前的 Zeny；每 20 秒檢查，每欄位買買得起的最好一件）
-    if (BUYGEAR && (buyT -= step) <= 0) { buyT = 20; const shops = (Array.isArray(DB.shop) ? DB.shop : Object.values(DB.shop)).filter((x) => x.id === 'weapon' || x.id === 'quarter'); const cand = shops.flatMap((x) => x.items).map((id) => DB.item[id]).filter((i) => i && i.slot && i.jobs && i.jobs.includes(ch.job) && (i.slot !== 'weapon' || ({ archer: ['bow'], ranger: ['bow'], mage: ['staff'], elementalist: ['staff'], swordsman: ['sword'], paladin: ['sword', 'spear'] })[ch.job]?.includes(i.wtype) !== false));  // 武器只買本職主武器
+    if (BUYGEAR && (buyT -= step) <= 0) { buyT = 20; const shops = (Array.isArray(DB.shop) ? DB.shop : Object.values(DB.shop)).filter((x) => x.id === 'weapon' || x.id === 'quarter'); const cand = shops.flatMap((x) => x.items).map((id) => DB.item[id]).filter((i) => i && i.slot && i.jobs && i.jobs.includes(ch.job) && (i.slot !== 'weapon' || ({ archer: ['bow'], ranger: ['bow'], mage: ['staff'], elementalist: ['staff'], swordsman: ['sword'], paladin: ['sword', 'spear'], templar: ['sword', 'spear'], archmage: ['staff'], sniper: ['bow'] })[ch.job]?.includes(i.wtype) !== false));  // 武器只買本職主武器
       for (const slot of ['weapon', 'armor', 'head', 'shield', 'garment', 'shoes']) { const val = (i) => (i.atk || 0) + (i.matk || 0) + (i.def || 0) * 4 + (i.mdef || 0); const curV = mine[slot] ?? -1;
         const best = cand.filter((i) => i.slot === slot && i.price <= ch.zeny && val(i) >= curV * 1.2 + 2).sort((a, b) => val(b) - val(a))[0];  // 只買明顯升級的
         if (best) { G.inv.add(best.id); const it = G.inv.items.filter((i) => i.id === best.id).pop(); if (!it) continue; ch.zeny -= best.price; G.inv.equipItem(it.uid, ch.job, ch.baseLv); if (mineUid[slot]) { try { G.sell(mineUid[slot], 1); } catch (e) { /* ignore */ } } mineUid[slot] = it.uid; p.recalc(true); mine[slot] = val(best); bought.push(best.id + '@Lv' + ch.baseLv); } } }
     // 轉職（略過試煉）
     if (jobTier === 0 && ch.jobLv >= 10 && (ch.skills.basic || 0) >= 9) { G.changeJob(CLS); jobTier = 1; rec('轉職一轉(分)'); G.resetStats(); }  // Lv20 以下重新配點免費
+    if (jobTier === 2 && ch.jobLv >= 50 && ch.baseLv >= 70) { G.changeJob(T3); jobTier = 3; rec('轉職三轉(分)'); }
     if (jobTier === 1 && ch.jobLv >= 40) { G.changeJob(T2); jobTier = 2; rec('轉職二轉(分)'); }
     // 加點
     for (let k = 0; k < 10 && ch.statPts > 0; k++) { const b = ch.statPts; { const plan = jobTier === 0 ? ['str', 'dex', 'agi', 'str', 'vit'] : PL; G.raiseStat(plan[(ch.baseLv + k) % plan.length]); } if (ch.statPts === b) break; }
     learnT -= step; if (ch.skillPts > 0 && learnT <= 0) { learnT = 0.3; if ((ch.skills.basic || 0) < 9 && jobTier === 0) G.learnSkill('basic'); else for (const [id, cap] of PRI) if (DB.skill[id] && (ch.skills[id] || 0) < +cap && G.learnSkill(id)) break; }
     if (ch.baseLv !== lastLv) { for (let l = lastLv + 1; l <= ch.baseLv; l++) if (l % 5 === 0 || l === 10) rec('Lv' + l + '(分)'); lastLv = ch.baseLv; lastLvT = t; }
     if (ch.jobLv % 10 === 0) rec('Job' + ch.jobLv + '(分)');
-    if (ch.baseLv >= 60) { fin = 'Lv60'; break; }
-    if (t - lastLvT > 25 * 60) { fin = '停滯：25 分鐘沒升級(Lv' + ch.baseLv + ')'; break; }
+    if (ch.baseLv >= 80) { fin = 'Lv80'; break; }
+    if (t - lastLvT > 40 * 60) { fin = '停滯：40 分鐘沒升級(Lv' + ch.baseLv + ')'; break; }
     // 換地圖
     const [mid, mx, my] = mapFor(ch.baseLv);
     if (mid !== curMap) { curMap = mid; G.loadMap(mid, mx, my); }
