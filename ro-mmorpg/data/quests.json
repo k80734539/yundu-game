@@ -362,5 +362,28 @@
   },
   "reqLv": 35,
   "prev": "q_cap4"
+ },
+ {
+  "id": "q_mvp3",
+  "name": "遺跡巨蛇",
+  "npc": "captain",
+  "type": "kill",
+  "target": "serpent",
+  "count": 1,
+  "desc": "失落遺跡的深處盤踞著一條巨蛇。牠的鱗片比鋼還硬，毒牙能穿透盾牌。只有轉職過的老手才有辦法對付。",
+  "done": "你竟然打倒了遺跡巨蛇！王國欠你一份大禮。",
+  "reward": {
+   "exp": 80000,
+   "jexp": 40000,
+   "zeny": 100000,
+   "items": [
+    [
+     "white_potion",
+     10
+    ]
+   ]
+  },
+  "reqLv": 45,
+  "prev": "q_cap5"
  }
 ]
