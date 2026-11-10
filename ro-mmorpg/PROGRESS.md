@@ -482,3 +482,4 @@
 - 使用者提供三組 96×96 跑步 GIF（背面左後 8 格、正面 6 格、背面 6 格），存於 `assets/sprites/src/novice_run_{NW,S,N}.gif`。
 - `tools/make_sheet8.py` 新增 `RUN`：正面（列 0）、左後（列 3）、背面（列 4）、右後（列 5＝左後鏡像）的走路格改用真跑步圖（等距抽 4 格，腳底以最低點為基準對齊）。其餘方向（左下、左、右、右下）仍是轉身靜態圖＋程式晃動；攻擊都是衝刺。
 - 待補：側面與斜前方的跑步圖、真正的攻擊動畫。截圖 `screenshots/八方向跑步.png`，測試 `tools/act/walk8.js`、`sheet8.js`。
+- 追加左下（novice_run_SW.gif）與右下（novice_run_SE.gif）跑步圖；目前只剩左、右純側面仍是靜態圖＋晃動。

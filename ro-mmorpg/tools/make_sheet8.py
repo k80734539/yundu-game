@@ -9,7 +9,7 @@ from PIL import Image, ImageSequence
 FRAME_ORDER = [0, 7, 6, 5, 4, 3, 2, 1]                      # 列 → 轉身圖的第幾格
 FWD = [(0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1)]  # 各列「往前」的畫面方向（攻擊衝刺用）
 # 真正的跑步動畫：方向 → (檔案, 是否鏡像)。列：S=0 NW=3 N=4 NE=5（NE 由 NW 鏡像）
-RUN = {0: ('assets/sprites/src/novice_run_S.gif', False), 3: ('assets/sprites/src/novice_run_NW.gif', False),
+RUN = {1: ('assets/sprites/src/novice_run_SW.gif', False), 7: ('assets/sprites/src/novice_run_SE.gif', False), 0: ('assets/sprites/src/novice_run_S.gif', False), 3: ('assets/sprites/src/novice_run_NW.gif', False),
        4: ('assets/sprites/src/novice_run_N.gif', False), 5: ('assets/sprites/src/novice_run_NW.gif', True)}
 def run_frames(path, mirror, scale):
     """跑步 GIF → 挑 4 格（平均取樣），裁切後放大；回傳 [(影像, 腳底相對偏移)]，水平中心固定、腳底以最低點為基準"""
