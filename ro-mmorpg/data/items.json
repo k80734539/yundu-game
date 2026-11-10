@@ -4638,5 +4638,504 @@
    "luk": 8,
    "crit": 4
   }
+ },
+ {
+  "id": "cloud_feather",
+  "name": "雲羽",
+  "type": "etc",
+  "price": 276,
+  "weight": 1,
+  "desc": "雲上鷹隼的白色羽毛。",
+  "icon": {
+   "k": "feather",
+   "c": "#e8f0ff"
+  }
+ },
+ {
+  "id": "cloud_hawk_card",
+  "name": "雲翼鷹卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入披風的卡片。FLEE +30、移動加快。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "garment",
+  "bonus": {
+   "flee": 30,
+   "agi": 5
+  }
+ },
+ {
+  "id": "holy_stone",
+  "name": "聖石碎片",
+  "type": "etc",
+  "price": 287,
+  "weight": 1,
+  "desc": "神殿石像身上剝落的白色石塊。",
+  "icon": {
+   "k": "ore",
+   "c": "#f0ece0"
+  }
+ },
+ {
+  "id": "temple_guardian_card",
+  "name": "神殿石像衛卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入盾牌的卡片。DEF +8、MDEF +10。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "shield",
+  "bonus": {
+   "def": 8,
+   "mdef": 10
+  }
+ },
+ {
+  "id": "wind_essence",
+  "name": "風之精華",
+  "type": "etc",
+  "price": 297,
+  "weight": 1,
+  "desc": "凝聚的風，在手中打轉。",
+  "icon": {
+   "k": "soul",
+   "c": "#a0e8ff"
+  }
+ },
+ {
+  "id": "wind_spirit_card",
+  "name": "風之靈卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入披風的卡片。INT +7、MATK +45。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "garment",
+  "bonus": {
+   "int": 7,
+   "matk": 45
+  }
+ },
+ {
+  "id": "sentinel_crest",
+  "name": "侍衛徽章",
+  "type": "etc",
+  "price": 308,
+  "weight": 1,
+  "desc": "天翼侍衛的金色徽章。",
+  "icon": {
+   "k": "brooch",
+   "c": "#ffd860"
+  }
+ },
+ {
+  "id": "winged_sentinel_card",
+  "name": "天翼侍衛卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入鎧甲的卡片。VIT +6、HP +600。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "armor",
+  "bonus": {
+   "vit": 6,
+   "hp": 600
+  }
+ },
+ {
+  "id": "shadow_wing",
+  "name": "影蝠翼",
+  "type": "etc",
+  "price": 315,
+  "weight": 1,
+  "desc": "漆黑的蝠翼，摸起來冰冷。",
+  "icon": {
+   "k": "batwing",
+   "c": "#5a3a8a"
+  }
+ },
+ {
+  "id": "shadow_bat_card",
+  "name": "暗影蝠卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入披風的卡片。FLEE +35。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "garment",
+  "bonus": {
+   "flee": 35
+  }
+ },
+ {
+  "id": "worm_fang",
+  "name": "蠕蟲毒牙",
+  "type": "etc",
+  "price": 325,
+  "weight": 1,
+  "desc": "深淵蠕蟲的紫色毒牙。",
+  "icon": {
+   "k": "tooth",
+   "c": "#a050e0"
+  }
+ },
+ {
+  "id": "abyss_worm_card",
+  "name": "深淵蠕蟲卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入武器的卡片。ATK +45、HP +500。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "weapon",
+  "bonus": {
+   "atk": 45,
+   "hp": 500
+  }
+ },
+ {
+  "id": "void_shard",
+  "name": "虛空碎片",
+  "type": "etc",
+  "price": 336,
+  "weight": 1,
+  "desc": "像是把一小塊黑暗拿在手裡。",
+  "icon": {
+   "k": "crystal",
+   "c": "#8040c0"
+  }
+ },
+ {
+  "id": "void_shade_card",
+  "name": "虛空幽影卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入頭部裝備的卡片。MATK +60、SP +100。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "head",
+  "bonus": {
+   "matk": 60,
+   "sp": 100
+  }
+ },
+ {
+  "id": "fallen_crest",
+  "name": "墮落紋章",
+  "type": "etc",
+  "price": 346,
+  "weight": 1,
+  "desc": "騎士團墜入深淵後，紋章變成了紫色。",
+  "icon": {
+   "k": "brooch",
+   "c": "#a060e0"
+  }
+ },
+ {
+  "id": "fallen_knight_card",
+  "name": "墮落騎士卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入鎧甲的卡片。DEF +10、HP +900。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "armor",
+  "bonus": {
+   "def": 10,
+   "hp": 900
+  }
+ },
+ {
+  "id": "sky_core",
+  "name": "蒼天之核",
+  "type": "etc",
+  "price": 20000,
+  "weight": 1,
+  "desc": "蒼雷守護者胸口的雷核，可在鍛造處換取專屬武器。",
+  "icon": {
+   "k": "core",
+   "c": "#60c8ff"
+  }
+ },
+ {
+  "id": "sky_guardian_card",
+  "name": "蒼雷守護者卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入武器的卡片。ATK +75、CRIT +10。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "weapon",
+  "bonus": {
+   "atk": 75,
+   "crit": 10
+  }
+ },
+ {
+  "id": "sky_blade",
+  "name": "蒼雷劍",
+  "type": "weapon",
+  "price": 40000,
+  "weight": 100,
+  "desc": "劍身流動著雷光。",
+  "icon": {
+   "k": "sword",
+   "c": "#60c8ff"
+  },
+  "slot": "weapon",
+  "wtype": "sword",
+  "atk": 235,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin",
+   "templar"
+  ],
+  "bossEx": "sky_guardian",
+  "bonus": {
+   "str": 6,
+   "vit": 3
+  }
+ },
+ {
+  "id": "sky_staff",
+  "name": "蒼雷法杖",
+  "type": "weapon",
+  "price": 40000,
+  "weight": 100,
+  "desc": "MATK +66%。",
+  "icon": {
+   "k": "staff",
+   "c": "#60c8ff"
+  },
+  "slot": "weapon",
+  "wtype": "staff",
+  "atk": 115,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist",
+   "archmage"
+  ],
+  "bossEx": "sky_guardian",
+  "bonus": {
+   "int": 6
+  },
+  "matk": 66
+ },
+ {
+  "id": "sky_bow",
+  "name": "蒼雷弓",
+  "type": "weapon",
+  "price": 40000,
+  "weight": 100,
+  "desc": "箭矢帶著閃電。",
+  "icon": {
+   "k": "bow",
+   "c": "#60c8ff"
+  },
+  "slot": "weapon",
+  "wtype": "bow",
+  "atk": 212,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bossEx": "sky_guardian",
+  "bonus": {
+   "dex": 6
+  }
+ },
+ {
+  "id": "sky_lance",
+  "name": "蒼雷槍",
+  "type": "weapon",
+  "price": 40000,
+  "weight": 100,
+  "desc": "槍尖是蒼雷守護者的雷刃。",
+  "icon": {
+   "k": "sword",
+   "c": "#60c8ff"
+  },
+  "slot": "weapon",
+  "wtype": "spear",
+  "atk": 275,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "paladin",
+   "templar"
+  ],
+  "bossEx": "sky_guardian",
+  "bonus": {
+   "str": 6
+  }
+ },
+ {
+  "id": "abyss_core",
+  "name": "深淵之核",
+  "type": "etc",
+  "price": 20000,
+  "weight": 1,
+  "desc": "深淵領主的黑暗核心，可在鍛造處換取專屬武器。",
+  "icon": {
+   "k": "core",
+   "c": "#a040ff"
+  }
+ },
+ {
+  "id": "abyss_lord_card",
+  "name": "深淵領主卡片",
+  "type": "card",
+  "price": 20,
+  "weight": 1,
+  "desc": "可插入武器的卡片。ATK +90、CRIT +12。",
+  "icon": {
+   "k": "card",
+   "c": "#e8c050"
+  },
+  "cardFor": "weapon",
+  "bonus": {
+   "atk": 90,
+   "crit": 12
+  }
+ },
+ {
+  "id": "abyss_blade",
+  "name": "深淵斷劍",
+  "type": "weapon",
+  "price": 40000,
+  "weight": 100,
+  "desc": "斷裂的劍身吸走了周圍的光。",
+  "icon": {
+   "k": "sword",
+   "c": "#a040ff"
+  },
+  "slot": "weapon",
+  "wtype": "sword",
+  "atk": 275,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin",
+   "templar"
+  ],
+  "bossEx": "abyss_lord",
+  "bonus": {
+   "str": 7,
+   "vit": 4
+  }
+ },
+ {
+  "id": "abyss_staff",
+  "name": "深淵權杖",
+  "type": "weapon",
+  "price": 40000,
+  "weight": 100,
+  "desc": "MATK +76%。",
+  "icon": {
+   "k": "staff",
+   "c": "#a040ff"
+  },
+  "slot": "weapon",
+  "wtype": "staff",
+  "atk": 130,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist",
+   "archmage"
+  ],
+  "bossEx": "abyss_lord",
+  "bonus": {
+   "int": 7
+  },
+  "matk": 76
+ },
+ {
+  "id": "abyss_bow",
+  "name": "深淵之弓",
+  "type": "weapon",
+  "price": 40000,
+  "weight": 100,
+  "desc": "沒有弦，射出的是影子。",
+  "icon": {
+   "k": "bow",
+   "c": "#a040ff"
+  },
+  "slot": "weapon",
+  "wtype": "bow",
+  "atk": 245,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bossEx": "abyss_lord",
+  "bonus": {
+   "dex": 7
+  }
+ },
+ {
+  "id": "abyss_lance",
+  "name": "深淵長槍",
+  "type": "weapon",
+  "price": 40000,
+  "weight": 100,
+  "desc": "槍尖在黑暗中看不見。",
+  "icon": {
+   "k": "sword",
+   "c": "#a040ff"
+  },
+  "slot": "weapon",
+  "wtype": "spear",
+  "atk": 320,
+  "wlv": 3,
+  "slots": 1,
+  "jobs": [
+   "paladin",
+   "templar"
+  ],
+  "bossEx": "abyss_lord",
+  "bonus": {
+   "str": 7
+  }
  }
 ]

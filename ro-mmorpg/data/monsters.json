@@ -2446,5 +2446,488 @@
     "chance": 0.3
    }
   ]
+ },
+ {
+  "id": "cloud_hawk",
+  "name": "雲翼鷹",
+  "lv": 79,
+  "hp": 9000,
+  "atk": [
+   320,
+   400
+  ],
+  "def": 40,
+  "mdef": 45,
+  "str": 89,
+  "agi": 40,
+  "vit": 79,
+  "int": 20,
+  "dex": 99,
+  "luk": 15,
+  "exp": 12000,
+  "jexp": 6000,
+  "range": 1,
+  "adelay": 1150,
+  "speed": 3.6,
+  "aggro": true,
+  "frame": 160,
+  "look": {
+   "body": "bird",
+   "color": "#e8f0ff",
+   "color2": "#ffd860",
+   "scale": 2.3
+  },
+  "drops": [
+   {
+    "item": "cloud_feather",
+    "rate": 0.6
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.08
+   },
+   {
+    "item": "cloud_hawk_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "temple_guardian",
+  "name": "神殿石像衛",
+  "lv": 82,
+  "hp": 12000,
+  "atk": [
+   340,
+   420
+  ],
+  "def": 60,
+  "mdef": 40,
+  "str": 92,
+  "agi": 40,
+  "vit": 82,
+  "int": 20,
+  "dex": 102,
+  "luk": 15,
+  "exp": 18000,
+  "jexp": 9000,
+  "range": 1,
+  "adelay": 1500,
+  "speed": 1.9,
+  "aggro": true,
+  "frame": 224,
+  "look": {
+   "body": "golem",
+   "color": "#e8e4d8",
+   "color2": "#ffd860",
+   "scale": 1.9
+  },
+  "drops": [
+   {
+    "item": "holy_stone",
+    "rate": 0.6
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.08
+   },
+   {
+    "item": "temple_guardian_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "wind_spirit",
+  "name": "風之靈",
+  "lv": 85,
+  "hp": 10500,
+  "atk": [
+   360,
+   440
+  ],
+  "def": 25,
+  "mdef": 75,
+  "str": 95,
+  "agi": 40,
+  "vit": 85,
+  "int": 20,
+  "dex": 105,
+  "luk": 15,
+  "exp": 28000,
+  "jexp": 14000,
+  "range": 3,
+  "adelay": 1250,
+  "speed": 3.2,
+  "aggro": true,
+  "frame": 160,
+  "look": {
+   "body": "ghost",
+   "color": "#a0e8ff",
+   "scale": 2.3
+  },
+  "drops": [
+   {
+    "item": "wind_essence",
+    "rate": 0.6
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.08
+   },
+   {
+    "item": "wind_spirit_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "winged_sentinel",
+  "name": "天翼侍衛",
+  "lv": 88,
+  "hp": 14000,
+  "atk": [
+   380,
+   460
+  ],
+  "def": 50,
+  "mdef": 50,
+  "str": 98,
+  "agi": 40,
+  "vit": 88,
+  "int": 20,
+  "dex": 108,
+  "luk": 15,
+  "exp": 42000,
+  "jexp": 21000,
+  "range": 1,
+  "adelay": 1300,
+  "speed": 2.7,
+  "aggro": true,
+  "frame": 224,
+  "look": {
+   "body": "humanoid",
+   "skin": "#f0d8c0",
+   "hair": "#fff0b0",
+   "cloth": "#f4f0e8",
+   "cloth2": "#e0b030",
+   "pants": "#c8c0b0",
+   "eye": "#60c0ff",
+   "weapon": "sword",
+   "hat": "helm",
+   "body2": "armor",
+   "scale": 1.25
+  },
+  "drops": [
+   {
+    "item": "sentinel_crest",
+    "rate": 0.6
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.08
+   },
+   {
+    "item": "winged_sentinel_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "shadow_bat",
+  "name": "暗影蝠",
+  "lv": 90,
+  "hp": 11000,
+  "atk": [
+   400,
+   490
+  ],
+  "def": 40,
+  "mdef": 50,
+  "str": 100,
+  "agi": 40,
+  "vit": 90,
+  "int": 20,
+  "dex": 110,
+  "luk": 15,
+  "exp": 60000,
+  "jexp": 30000,
+  "range": 1,
+  "adelay": 1100,
+  "speed": 3.8,
+  "aggro": true,
+  "frame": 160,
+  "look": {
+   "body": "bat",
+   "color": "#3a2a5a",
+   "scale": 2.4
+  },
+  "drops": [
+   {
+    "item": "shadow_wing",
+    "rate": 0.6
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.08
+   },
+   {
+    "item": "shadow_bat_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "abyss_worm",
+  "name": "深淵蠕蟲",
+  "lv": 93,
+  "hp": 14000,
+  "atk": [
+   420,
+   510
+  ],
+  "def": 60,
+  "mdef": 40,
+  "str": 103,
+  "agi": 40,
+  "vit": 93,
+  "int": 20,
+  "dex": 113,
+  "luk": 15,
+  "exp": 100000,
+  "jexp": 50000,
+  "range": 1,
+  "adelay": 1400,
+  "speed": 2.4,
+  "aggro": true,
+  "frame": 192,
+  "look": {
+   "body": "snake",
+   "color": "#5a2a7a",
+   "color2": "#c070ff",
+   "scale": 2.0
+  },
+  "drops": [
+   {
+    "item": "worm_fang",
+    "rate": 0.6
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.08
+   },
+   {
+    "item": "abyss_worm_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "void_shade",
+  "name": "虛空幽影",
+  "lv": 96,
+  "hp": 12000,
+  "atk": [
+   440,
+   530
+  ],
+  "def": 25,
+  "mdef": 80,
+  "str": 106,
+  "agi": 40,
+  "vit": 96,
+  "int": 20,
+  "dex": 116,
+  "luk": 15,
+  "exp": 150000,
+  "jexp": 75000,
+  "range": 3,
+  "adelay": 1250,
+  "speed": 3.1,
+  "aggro": true,
+  "frame": 160,
+  "look": {
+   "body": "ghost",
+   "color": "#9040d0",
+   "scale": 2.5
+  },
+  "drops": [
+   {
+    "item": "void_shard",
+    "rate": 0.6
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.08
+   },
+   {
+    "item": "void_shade_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "fallen_knight",
+  "name": "墮落騎士",
+  "lv": 99,
+  "hp": 16000,
+  "atk": [
+   460,
+   560
+  ],
+  "def": 65,
+  "mdef": 50,
+  "str": 109,
+  "agi": 40,
+  "vit": 99,
+  "int": 20,
+  "dex": 119,
+  "luk": 15,
+  "exp": 240000,
+  "jexp": 120000,
+  "range": 1,
+  "adelay": 1300,
+  "speed": 2.7,
+  "aggro": true,
+  "frame": 224,
+  "look": {
+   "body": "humanoid",
+   "skin": "#b8a8c0",
+   "hair": "#2a1a3a",
+   "cloth": "#3a2a4a",
+   "cloth2": "#a060e0",
+   "pants": "#1a1a2a",
+   "eye": "#ff40a0",
+   "weapon": "sword",
+   "hat": "helm",
+   "body2": "armor",
+   "scale": 1.3
+  },
+  "drops": [
+   {
+    "item": "fallen_crest",
+    "rate": 0.6
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.08
+   },
+   {
+    "item": "fallen_knight_card",
+    "rate": 0.008
+   }
+  ]
+ },
+ {
+  "id": "sky_guardian",
+  "name": "蒼雷守護者",
+  "lv": 88,
+  "hp": 380000,
+  "atk": [
+   560,
+   700
+  ],
+  "def": 90,
+  "mdef": 70,
+  "str": 150,
+  "agi": 40,
+  "vit": 140,
+  "int": 20,
+  "dex": 150,
+  "luk": 15,
+  "exp": 150000,
+  "jexp": 75000,
+  "range": 1,
+  "adelay": 1500,
+  "speed": 2.3,
+  "aggro": true,
+  "frame": 320,
+  "look": {
+   "body": "golem",
+   "color": "#f0ece0",
+   "color2": "#60c8ff",
+   "scale": 4.2
+  },
+  "drops": [
+   {
+    "item": "sky_core",
+    "rate": 0.6
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.8
+   },
+   {
+    "item": "sky_guardian_card",
+    "rate": 0.05
+   }
+  ],
+  "mvp": true,
+  "skills": [
+   {
+    "id": "stomp",
+    "chance": 0.25
+   },
+   {
+    "id": "summon",
+    "chance": 0.2
+   }
+  ]
+ },
+ {
+  "id": "abyss_lord",
+  "name": "深淵領主",
+  "lv": 99,
+  "hp": 480000,
+  "atk": [
+   600,
+   760
+  ],
+  "def": 110,
+  "mdef": 90,
+  "str": 150,
+  "agi": 40,
+  "vit": 140,
+  "int": 20,
+  "dex": 150,
+  "luk": 15,
+  "exp": 400000,
+  "jexp": 200000,
+  "range": 1,
+  "adelay": 1500,
+  "speed": 2.3,
+  "aggro": true,
+  "frame": 320,
+  "look": {
+   "body": "ghost",
+   "color": "#7030c0",
+   "color2": "#ff40a0",
+   "scale": 4.5
+  },
+  "drops": [
+   {
+    "item": "abyss_core",
+    "rate": 0.6
+   },
+   {
+    "item": "white_potion",
+    "rate": 0.8
+   },
+   {
+    "item": "abyss_lord_card",
+    "rate": 0.05
+   }
+  ],
+  "mvp": true,
+  "skills": [
+   {
+    "id": "stomp",
+    "chance": 0.25
+   },
+   {
+    "id": "summon",
+    "chance": 0.2
+   }
+  ]
  }
 ]

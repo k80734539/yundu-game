@@ -737,6 +737,196 @@
      ]
     ]
    }
+  },
+  "sky_guardian": {
+   "moves": [
+    {
+     "id": "attack",
+     "name": "雷拳",
+     "type": "melee",
+     "weight": 4,
+     "mult": 0.5,
+     "windup": 0.45,
+     "recover": 0.3
+    },
+    {
+     "id": "tail",
+     "name": "雷環",
+     "type": "aoe",
+     "center": "self",
+     "radius": 4.0,
+     "weight": 3,
+     "mult": 2.1,
+     "windup": 0.9,
+     "recover": 0.6,
+     "maxDist": 7
+    },
+    {
+     "id": "bolt",
+     "name": "落雷",
+     "type": "aoe",
+     "center": "target",
+     "radius": 2.6,
+     "weight": 3,
+     "mult": 2.4,
+     "windup": 1.0,
+     "recover": 0.6,
+     "maxDist": 10
+    },
+    {
+     "id": "charge",
+     "name": "雷霆衝鋒",
+     "type": "charge",
+     "length": 11,
+     "width": 1.6,
+     "weight": 3,
+     "mult": 2.0,
+     "windup": 0.8,
+     "dashTime": 0.26,
+     "recover": 0.7,
+     "minDist": 0,
+     "maxDist": 13
+    }
+   ],
+   "enrageMoves": [
+    {
+     "id": "summon",
+     "name": "召喚風靈",
+     "type": "summon",
+     "weight": 3,
+     "windup": 1.0,
+     "recover": 0.5,
+     "maxDist": 14
+    },
+    {
+     "id": "meteor",
+     "name": "雷暴",
+     "type": "barrage",
+     "radius": 1.8,
+     "count": 7,
+     "interval": 0.32,
+     "spread": 3.4,
+     "weight": 3,
+     "mult": 2.1,
+     "windup": 0.9,
+     "recover": 0.7,
+     "maxDist": 11
+    }
+   ],
+   "firstKill": {
+    "exp": 2000000,
+    "jexp": 800000,
+    "zeny": 600000,
+    "items": [
+     [
+      "white_potion",
+      20
+     ],
+     [
+      "oridecon",
+      20
+     ],
+     [
+      "elunium",
+      20
+     ]
+    ]
+   }
+  },
+  "abyss_lord": {
+   "moves": [
+    {
+     "id": "attack",
+     "name": "暗爪",
+     "type": "melee",
+     "weight": 4,
+     "mult": 0.5,
+     "windup": 0.45,
+     "recover": 0.3
+    },
+    {
+     "id": "tail",
+     "name": "虛空環",
+     "type": "aoe",
+     "center": "self",
+     "radius": 4.0,
+     "weight": 3,
+     "mult": 2.2,
+     "windup": 0.9,
+     "recover": 0.6,
+     "maxDist": 7
+    },
+    {
+     "id": "bolt",
+     "name": "深淵爆裂",
+     "type": "aoe",
+     "center": "target",
+     "radius": 2.6,
+     "weight": 3,
+     "mult": 2.5,
+     "windup": 1.0,
+     "recover": 0.6,
+     "maxDist": 10
+    },
+    {
+     "id": "charge",
+     "name": "墜影突襲",
+     "type": "charge",
+     "length": 11,
+     "width": 1.6,
+     "weight": 3,
+     "mult": 2.1,
+     "windup": 0.8,
+     "dashTime": 0.26,
+     "recover": 0.7,
+     "minDist": 0,
+     "maxDist": 13
+    }
+   ],
+   "enrageMoves": [
+    {
+     "id": "summon",
+     "name": "召喚幽影",
+     "type": "summon",
+     "weight": 3,
+     "windup": 1.0,
+     "recover": 0.5,
+     "maxDist": 14
+    },
+    {
+     "id": "meteor",
+     "name": "黑暗流星",
+     "type": "barrage",
+     "radius": 1.8,
+     "count": 7,
+     "interval": 0.32,
+     "spread": 3.4,
+     "weight": 3,
+     "mult": 2.1,
+     "windup": 0.9,
+     "recover": 0.7,
+     "maxDist": 11
+    }
+   ],
+   "firstKill": {
+    "exp": 6000000,
+    "jexp": 2400000,
+    "zeny": 1000000,
+    "items": [
+     [
+      "white_potion",
+      20
+     ],
+     [
+      "oridecon",
+      20
+     ],
+     [
+      "elunium",
+      20
+     ]
+    ]
+   }
   }
  }
 }

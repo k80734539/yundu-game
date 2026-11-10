@@ -12,7 +12,7 @@ const res = await page.evaluate(() => {
     mage: ['firebolt:5', 'arcane:3', 'coldbolt:5', 'mana_focus:5', 'soulstrike:5', 'thunderstorm:5', 'firebolt:10', 'arcane:10', 'coldbolt:10', 'mana_focus:10', 'soulstrike:10', 'thunderstorm:10', 'sp_recovery:5', 'mana_cycle:5', 'meteor:10', 'frost_nova:10', 'chain_lightning:10', 'barrier:5', 'arcane_supremacy:5', 'arcane_burst:10', 'void_lance:10', 'mana_surge:10', 'cataclysm:5', 'arcane_supremacy:10'],
     archer: ['double_strafe:5', 'armor_pierce:5', 'owl_eye:5', 'eagle_focus:5', 'double_strafe:10', 'vulture_eye:3', 'concentration:3', 'arrow_shower:5', 'charge_arrow:5', 'owl_eye:10', 'armor_pierce:10', 'eagle_focus:10', 'hunter_instinct:5', 'multi_shot:10', 'seeker_arrow:10', 'falcon:5', 'trap:5', 'wind_step:5', 'sniper_mastery:5', 'snipe:10', 'rain_of_death:10', 'hunters_mark:10', 'phantom_volley:5', 'sniper_mastery:10'],
   }[CLS].map((e) => e.split(':'));
-  const mapFor = (lv) => (lv >= 60 ? ['volcano', 12, 50] : lv >= 48 ? ['snowfield', 46, 20] : lv >= 35 ? ['ruins', 10, 47] : lv >= 30 ? ['mine2', 24, 24] : lv >= 22 ? ['canyon', 20, 20] : lv >= 18 ? ['swamp', 30, 30] : lv >= 15 ? ['mine1', 24, 24] : lv >= 10 ? ['coast', 20, 30] : lv >= 5 ? ['forest', 6, 30] : ['prt_fild', 28, 8]);
+  const mapFor = (lv) => (lv >= 88 ? ['abyss', 10, 12] : lv >= 78 ? ['sky', 47, 47] : lv >= 60 ? ['volcano', 12, 50] : lv >= 48 ? ['snowfield', 46, 20] : lv >= 35 ? ['ruins', 10, 47] : lv >= 30 ? ['mine2', 24, 24] : lv >= 22 ? ['canyon', 20, 20] : lv >= 18 ? ['swamp', 30, 30] : lv >= 15 ? ['mine1', 24, 24] : lv >= 10 ? ['coast', 20, 30] : lv >= 5 ? ['forest', 6, 30] : ['prt_fild', 28, 8]);
   const step = 1 / 60; let t = 0, curMap = '', kills = 0, deaths = 0, lastLvT = 0, lastLv = 1;
   const ms = {}, killsByMap = {}, deathsByMap = {}; G.ev.on('kill', (id) => { kills++; if (BUYGEAR) { const md = DB.monster[id]; if (md) for (const d of md.drops) { const it = DB.item[d.item]; if (it) ch.zeny += d.rate * Math.floor(it.price / 2); } const zd = window.__LOOT.zenyDrop; if (md && zd) ch.zeny += md.lv * zd.perLevel * zd.chance; } /* 期望值：撿起掉落物並賣店（含 Zeny 掉落） */ killsByMap[curMap] = (killsByMap[curMap] || 0) + 1; });
   let idleT = 0, buyT = 0; const bought = [], mine = {}, mineUid = {}; let jobTier = 0, potCd = 0, skT = 0, buffT = 0, learnT = 0, fin = null;
@@ -35,7 +35,7 @@ const res = await page.evaluate(() => {
     learnT -= step; if (ch.skillPts > 0 && learnT <= 0) { learnT = 0.3; if ((ch.skills.basic || 0) < 9 && jobTier === 0) G.learnSkill('basic'); else for (const [id, cap] of PRI) if (DB.skill[id] && (ch.skills[id] || 0) < +cap && G.learnSkill(id)) break; }
     if (ch.baseLv !== lastLv) { for (let l = lastLv + 1; l <= ch.baseLv; l++) if (l % 5 === 0 || l === 10) rec('Lv' + l + '(分)'); lastLv = ch.baseLv; lastLvT = t; }
     if (ch.jobLv % 10 === 0) rec('Job' + ch.jobLv + '(分)');
-    if (ch.baseLv >= 80) { fin = 'Lv80'; break; }
+    if (ch.baseLv >= 99) { fin = 'Lv99'; break; }
     if (t - lastLvT > 40 * 60) { fin = '停滯：40 分鐘沒升級(Lv' + ch.baseLv + ')'; break; }
     // 換地圖
     const [mid, mx, my] = mapFor(ch.baseLv);

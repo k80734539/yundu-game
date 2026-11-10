@@ -581,5 +581,93 @@
   "reward": {
    "jexp": 0
   }
+ },
+ {
+  "id": "q_cap8",
+  "name": "天空神殿的先遣",
+  "npc": "captain",
+  "type": "kill",
+  "target": "temple_guardian",
+  "count": 20,
+  "desc": "熔岩谷盡頭的山壁後面，出現了一道通往雲端的石階。神殿石像衛守在入口。擊敗 20 隻神殿石像衛。",
+  "done": "天空神殿的入口暫時打通了，這是報酬。",
+  "reward": {
+   "exp": 4000000,
+   "jexp": 1500000,
+   "zeny": 400000
+  },
+  "reqLv": 78,
+  "prev": "q_cap7"
+ },
+ {
+  "id": "q_mvp_sky",
+  "name": "討伐蒼雷守護者",
+  "npc": "captain",
+  "type": "kill",
+  "target": "sky_guardian",
+  "count": 1,
+  "desc": "天空神殿深處的蒼雷守護者引來了雷雲。牠一動，整片神殿都在發亮。",
+  "done": "蒼雷守護者倒下了，雲層裂開了一道縫。",
+  "reward": {
+   "exp": 12000000,
+   "jexp": 3000000,
+   "zeny": 1200000,
+   "items": [
+    [
+     "elunium",
+     15
+    ],
+    [
+     "oridecon",
+     15
+    ]
+   ]
+  },
+  "reqLv": 85,
+  "prev": "q_cap8"
+ },
+ {
+  "id": "q_cap9",
+  "name": "深淵迴廊的先遣",
+  "npc": "captain",
+  "type": "kill",
+  "target": "fallen_knight",
+  "count": 15,
+  "desc": "雲層的裂縫下面是一條看不見底的迴廊，墮落騎士在那裡徘徊。擊敗 15 隻墮落騎士。",
+  "done": "深淵迴廊的入口守住了，這是報酬。",
+  "reward": {
+   "exp": 20000000,
+   "jexp": 6000000,
+   "zeny": 800000
+  },
+  "reqLv": 88,
+  "prev": "q_mvp_sky"
+ },
+ {
+  "id": "q_mvp_abyss",
+  "name": "討伐深淵領主",
+  "npc": "captain",
+  "type": "kill",
+  "target": "abyss_lord",
+  "count": 1,
+  "desc": "深淵迴廊的盡頭，有一個吞掉光的影子。沒有人回來說牠長什麼樣子。",
+  "done": "深淵領主倒下了……你已經走到這個世界的盡頭。",
+  "reward": {
+   "exp": 40000000,
+   "jexp": 10000000,
+   "zeny": 2500000,
+   "items": [
+    [
+     "elunium",
+     25
+    ],
+    [
+     "oridecon",
+     25
+    ]
+   ]
+  },
+  "reqLv": 95,
+  "prev": "q_cap9"
  }
 ]

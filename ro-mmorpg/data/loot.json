@@ -308,6 +308,48 @@
    "cardChance": 0.0,
    "card": "golem_card",
    "exclusives": []
+  },
+  "sky_guardian": {
+   "zeny": [
+    150000,
+    220000
+   ],
+   "material": "sky_core",
+   "materialCount": [
+    2,
+    4
+   ],
+   "equipChance": 0.3,
+   "exclusiveChance": 0.08,
+   "cardChance": 0.01,
+   "card": "sky_guardian_card",
+   "exclusives": [
+    "sky_blade",
+    "sky_staff",
+    "sky_bow",
+    "sky_lance"
+   ]
+  },
+  "abyss_lord": {
+   "zeny": [
+    250000,
+    350000
+   ],
+   "material": "abyss_core",
+   "materialCount": [
+    2,
+    4
+   ],
+   "equipChance": 0.3,
+   "exclusiveChance": 0.08,
+   "cardChance": 0.01,
+   "card": "abyss_lord_card",
+   "exclusives": [
+    "abyss_blade",
+    "abyss_staff",
+    "abyss_bow",
+    "abyss_lance"
+   ]
   }
  },
  "ownJobChance": 0.7,
@@ -390,6 +432,28 @@
     "flame_staff",
     "flame_bow",
     "flame_lance"
+   ]
+  },
+  {
+   "cost": {
+    "sky_core": 28
+   },
+   "items": [
+    "sky_blade",
+    "sky_staff",
+    "sky_bow",
+    "sky_lance"
+   ]
+  },
+  {
+   "cost": {
+    "abyss_core": 30
+   },
+   "items": [
+    "abyss_blade",
+    "abyss_staff",
+    "abyss_bow",
+    "abyss_lance"
    ]
   }
  ],
