@@ -8,12 +8,28 @@ import sys
 from PIL import Image, ImageSequence
 FRAME_ORDER = [0, 7, 6, 5, 4, 3, 2, 1]                      # 列 → 轉身圖的第幾格
 FWD = [(0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1)]  # 各列「往前」的畫面方向（攻擊衝刺用）
+# 真正的跑步動畫：方向 → (檔案, 是否鏡像)。列：S=0 NW=3 N=4 NE=5（NE 由 NW 鏡像）
+RUN = {0: ('assets/sprites/src/novice_run_S.gif', False), 3: ('assets/sprites/src/novice_run_NW.gif', False),
+       4: ('assets/sprites/src/novice_run_N.gif', False), 5: ('assets/sprites/src/novice_run_NW.gif', True)}
+def run_frames(path, mirror, scale):
+    """跑步 GIF → 挑 4 格（平均取樣），裁切後放大；回傳 [(影像, 腳底相對偏移)]，水平中心固定、腳底以最低點為基準"""
+    fr = [f.convert('RGBA').copy() for f in ImageSequence.Iterator(Image.open(path))]
+    n = len(fr); pick = [fr[int(i * n / 4)] for i in range(4)]
+    if mirror: pick = [f.transpose(Image.FLIP_LEFT_RIGHT) for f in pick]
+    bbs = [f.split()[3].getbbox() for f in pick]
+    cx = sum((b[0] + b[2]) / 2 for b in bbs) / 4; base = max(b[3] for b in bbs)
+    out = []
+    for f, b in zip(pick, bbs):
+        c = f.crop(b).resize(((b[2] - b[0]) * scale, (b[3] - b[1]) * scale), Image.NEAREST)
+        out.append((c, round(((b[0] + b[2]) / 2 - cx) * scale), (b[3] - base) * scale))
+    return out
 def main():
     a = [x for x in sys.argv[1:] if not x.startswith('--')]; scale = 2
     if '--scale' in sys.argv: scale = int(sys.argv[sys.argv.index('--scale') + 1])
     src, dst = a[0], a[1]
     frames = [f.convert('RGBA').copy() for f in ImageSequence.Iterator(Image.open(src))]
     assert len(frames) == 8, '需要 8 格轉身圖'
+    runs = {r: run_frames(p, m, scale) for r, (p, m) in RUN.items()}
     sheet = Image.new('RGBA', (192 * 10, 192 * 8), (0, 0, 0, 0))
     for row, fi in enumerate(FRAME_ORDER):
         fr = frames[fi]; fr = fr.crop(fr.split()[3].getbbox()); fr = fr.resize((fr.width * scale, fr.height * scale), Image.NEAREST)
@@ -24,7 +40,11 @@ def main():
             elif f < 6: ph = f - 2; dy = [0, -2, 0, -2][ph]; dx = [-1, 0, 1, 0][ph]
             else: k = [-2, 6, 4, 0][f - 6]; dx = fx * k; dy = fy * k // 2
             cell = Image.new('RGBA', (192, 192), (0, 0, 0, 0))
-            cell.alpha_composite(fr, ((192 - fr.width) // 2 + dx, 186 - fr.height + dy))
+            if row in RUN and 2 <= f < 6:
+                c, ox, oy = runs[row][f - 2]
+                cell.alpha_composite(c, (96 - c.width // 2 + ox, 186 - c.height + oy))
+            else:
+                cell.alpha_composite(fr, ((192 - fr.width) // 2 + dx, 186 - fr.height + dy))
             sheet.alpha_composite(cell, (f * 192, row * 192))
     sheet.save(dst); print('已輸出', dst, sheet.size)
 main()
