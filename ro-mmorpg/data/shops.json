@@ -124,5 +124,32 @@
    "star_pendant",
    "star_charm"
   ]
+ },
+ {
+  "id": "starfall",
+  "name": "星落軍需處",
+  "items": [
+   "zenith_circlet",
+   "zenith_blade",
+   "zenith_spear",
+   "zenith_bow",
+   "zenith_staff",
+   "zenith_dagger",
+   "zenith_plate",
+   "zenith_vest",
+   "zenith_robe",
+   "zenith_helm",
+   "zenith_hat",
+   "zenith_shield",
+   "zenith_ward",
+   "zenith_cloak",
+   "zenith_boots",
+   "zenith_ring",
+   "zenith_glove",
+   "zenith_earring",
+   "zenith_brooch",
+   "zenith_pendant",
+   "zenith_charm"
+  ]
  }
 ]

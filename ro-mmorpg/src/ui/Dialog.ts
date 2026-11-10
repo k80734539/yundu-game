@@ -160,7 +160,7 @@ export class Dialog {
     const g = this.ui.g;
     const list: Choice[] = [];
     for (const d of MAPS) {
-      if (d.type === 'town' || !g.flags.visited?.[d.id]) continue;
+      if (!g.flags.visited?.[d.id] || d.id === g.map.def.id) continue;   // 去過的地圖（含其他城鎮）才能傳送；不傳到自己這張
       const price = 100 + (d.level?.[0] || 1) * 50;
       const arrive = d.portals[0];
       list.push({ label: `${d.name}（${price} Zeny）`, fn: () => {

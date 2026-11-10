@@ -5137,5 +5137,595 @@
   "bonus": {
    "str": 7
   }
+ },
+ {
+  "id": "zenith_circlet",
+  "name": "天穹頭冠",
+  "type": "armor",
+  "price": 56000,
+  "weight": 40,
+  "desc": "MDEF +29、INT +3（需 Lv85）",
+  "icon": {
+   "k": "ribbon",
+   "c": "#ffe080"
+  },
+  "slot": "head",
+  "def": 9,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist",
+   "archmage"
+  ],
+  "mdef": 29,
+  "bonus": {
+   "int": 3
+  },
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_blade",
+  "name": "天穹劍",
+  "type": "weapon",
+  "price": 144000,
+  "weight": 90,
+  "desc": "STR +4（需 Lv85）",
+  "icon": {
+   "k": "sword",
+   "c": "#ffe080"
+  },
+  "slot": "weapon",
+  "wtype": "sword",
+  "atk": 228,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "swordsman",
+   "paladin",
+   "templar"
+  ],
+  "bonus": {
+   "str": 4
+  },
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_spear",
+  "name": "天穹長槍",
+  "type": "weapon",
+  "price": 160000,
+  "weight": 90,
+  "desc": "STR +4（需 Lv85）",
+  "icon": {
+   "k": "sword",
+   "c": "#ffe080"
+  },
+  "slot": "weapon",
+  "wtype": "spear",
+  "atk": 260,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "paladin",
+   "templar"
+  ],
+  "bonus": {
+   "str": 4
+  },
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_bow",
+  "name": "天穹弓",
+  "type": "weapon",
+  "price": 152000,
+  "weight": 90,
+  "desc": "DEX +4（需 Lv85）",
+  "icon": {
+   "k": "bow",
+   "c": "#ffe080"
+  },
+  "slot": "weapon",
+  "wtype": "bow",
+  "atk": 214,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "dex": 4
+  },
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_staff",
+  "name": "天穹法杖",
+  "type": "weapon",
+  "price": 152000,
+  "weight": 90,
+  "desc": "MATK +65%、INT +6（需 Lv85）",
+  "icon": {
+   "k": "staff",
+   "c": "#ffe080"
+  },
+  "slot": "weapon",
+  "wtype": "staff",
+  "atk": 114,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "mage",
+   "elementalist",
+   "archmage"
+  ],
+  "matk": 65,
+  "bonus": {
+   "int": 6
+  },
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_dagger",
+  "name": "天穹匕首",
+  "type": "weapon",
+  "price": 128000,
+  "weight": 90,
+  "desc": "AGI +4（需 Lv85）",
+  "icon": {
+   "k": "dagger",
+   "c": "#ffe080"
+  },
+  "slot": "weapon",
+  "wtype": "dagger",
+  "atk": 166,
+  "wlv": 3,
+  "slots": 2,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "agi": 4
+  },
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_plate",
+  "name": "天穹鎧",
+  "type": "armor",
+  "price": 320000,
+  "weight": 110,
+  "desc": "MDEF +12、VIT +4、HP +300（需 Lv85）",
+  "icon": {
+   "k": "mail",
+   "c": "#ffe080"
+  },
+  "slot": "armor",
+  "def": 40,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin",
+   "templar"
+  ],
+  "bonus": {
+   "vit": 4,
+   "hp": 300
+  },
+  "mdef": 12,
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_vest",
+  "name": "天穹皮甲",
+  "type": "armor",
+  "price": 304000,
+  "weight": 40,
+  "desc": "FLEE +18、HP +300（需 Lv85）",
+  "icon": {
+   "k": "mail",
+   "c": "#ffe080"
+  },
+  "slot": "armor",
+  "def": 30,
+  "slots": 1,
+  "jobs": [
+   "archer",
+   "ranger",
+   "sniper",
+   "novice"
+  ],
+  "bonus": {
+   "flee": 18,
+   "hp": 300
+  },
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_robe",
+  "name": "天穹長袍",
+  "type": "armor",
+  "price": 320000,
+  "weight": 30,
+  "desc": "MDEF +52、SP +360、INT +4、HP +300（需 Lv85）",
+  "icon": {
+   "k": "robe",
+   "c": "#ffe080"
+  },
+  "slot": "armor",
+  "def": 16,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist",
+   "archmage"
+  ],
+  "mdef": 52,
+  "bonus": {
+   "sp": 360,
+   "int": 4,
+   "hp": 300
+  },
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_helm",
+  "name": "天穹盔",
+  "type": "armor",
+  "price": 176000,
+  "weight": 40,
+  "desc": "天穹碎片鍛造。（需 Lv85）",
+  "icon": {
+   "k": "helm",
+   "c": "#ffe080"
+  },
+  "slot": "head",
+  "def": 24,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin",
+   "templar",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_hat",
+  "name": "天穹法帽",
+  "type": "armor",
+  "price": 176000,
+  "weight": 40,
+  "desc": "MDEF +20、INT +4（需 Lv85）",
+  "icon": {
+   "k": "cap",
+   "c": "#ffe080"
+  },
+  "slot": "head",
+  "def": 11,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist",
+   "archmage"
+  ],
+  "mdef": 20,
+  "bonus": {
+   "int": 4
+  },
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_shield",
+  "name": "天穹盾",
+  "type": "armor",
+  "price": 240000,
+  "weight": 100,
+  "desc": "天穹碎片鍛造。（需 Lv85）",
+  "icon": {
+   "k": "shield",
+   "c": "#ffe080"
+  },
+  "slot": "shield",
+  "def": 25,
+  "slots": 1,
+  "jobs": [
+   "swordsman",
+   "paladin",
+   "templar"
+  ],
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_ward",
+  "name": "天穹護符盾",
+  "type": "armor",
+  "price": 240000,
+  "weight": 30,
+  "desc": "MDEF +35、INT +3（需 Lv85）",
+  "icon": {
+   "k": "shield",
+   "c": "#ffe080"
+  },
+  "slot": "shield",
+  "def": 9,
+  "slots": 1,
+  "jobs": [
+   "mage",
+   "elementalist",
+   "archmage"
+  ],
+  "mdef": 35,
+  "bonus": {
+   "int": 3
+  },
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_cloak",
+  "name": "天穹披風",
+  "type": "armor",
+  "price": 224000,
+  "weight": 40,
+  "desc": "MDEF +17、FLEE +27、HP +300（需 Lv85）",
+  "icon": {
+   "k": "cape",
+   "c": "#ffe080"
+  },
+  "slot": "garment",
+  "def": 15,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "mdef": 17,
+  "bonus": {
+   "flee": 27,
+   "hp": 300
+  },
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_boots",
+  "name": "天穹靴",
+  "type": "armor",
+  "price": 208000,
+  "weight": 40,
+  "desc": "HP +800、FLEE +18（需 Lv85）",
+  "icon": {
+   "k": "shoes",
+   "c": "#ffe080"
+  },
+  "slot": "shoes",
+  "def": 14,
+  "slots": 1,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "hp": 800,
+   "flee": 18
+  },
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_ring",
+  "name": "天穹力量戒",
+  "type": "armor",
+  "price": 224000,
+  "weight": 10,
+  "desc": "STR +12、HP +400（需 Lv85）",
+  "icon": {
+   "k": "ring",
+   "c": "#ffe080"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "str": 12,
+   "hp": 400
+  },
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_glove",
+  "name": "天穹敏捷手套",
+  "type": "armor",
+  "price": 224000,
+  "weight": 10,
+  "desc": "DEX +10、HIT +21（需 Lv85）",
+  "icon": {
+   "k": "glove",
+   "c": "#ffe080"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "dex": 10,
+   "hit": 21
+  },
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_earring",
+  "name": "天穹智慧耳環",
+  "type": "armor",
+  "price": 224000,
+  "weight": 10,
+  "desc": "INT +12、SP +280（需 Lv85）",
+  "icon": {
+   "k": "earring",
+   "c": "#ffe080"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "int": 12,
+   "sp": 280
+  },
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_brooch",
+  "name": "天穹疾風胸針",
+  "type": "armor",
+  "price": 224000,
+  "weight": 10,
+  "desc": "AGI +10、FLEE +21（需 Lv85）",
+  "icon": {
+   "k": "brooch",
+   "c": "#ffe080"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "agi": 10,
+   "flee": 21
+  },
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_pendant",
+  "name": "天穹生命墜飾",
+  "type": "armor",
+  "price": 208000,
+  "weight": 10,
+  "desc": "VIT +9、HP +800（需 Lv85）",
+  "icon": {
+   "k": "ring",
+   "c": "#ffe080"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "vit": 9,
+   "hp": 800
+  },
+  "reqLv": 85
+ },
+ {
+  "id": "zenith_charm",
+  "name": "天穹幸運符",
+  "type": "armor",
+  "price": 208000,
+  "weight": 10,
+  "desc": "LUK +12、CRIT +6（需 Lv85）",
+  "icon": {
+   "k": "brooch",
+   "c": "#ffe080"
+  },
+  "slot": "acc",
+  "def": 0,
+  "slots": 0,
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "luk": 12,
+   "crit": 6
+  },
+  "reqLv": 85
  }
 ]

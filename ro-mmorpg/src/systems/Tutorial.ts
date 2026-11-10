@@ -25,6 +25,8 @@ export const TIPS: Tip[] = [
     text: '到晨曦鎮東南邊找傭兵團長巴頓：花 Zeny 雇一位輔助傭兵（牧師補血、樂師增益、煉金術士丟炸彈、馴獸師帶戰獸），契約 30 分鐘，不吃經驗。' },
   { id: 'quarter', when: (g) => g.player.ch.baseLv >= 30, done: (g) => !!g.flags.quarterSeen,
     text: '等級 30 以後，到晨曦鎮東邊的軍需官凱爾看看：遠征軍需處賣更強的「星隕」系列武器與防具。' },
+  { id: 'starfall', when: (g) => tier(g) >= 3 && g.player.ch.baseLv >= 70, done: (g) => !!g.flags.visited?.starfall,
+    text: '熔岩谷東北角的傳送點通往「星落鎮」：有傳送員、旅館、鍛造師，還有 Lv85 以上的「天穹」裝備，再往後就是天空神殿與深淵迴廊。' },
   { id: 'job2', when: (g) => tier(g) === 1 && g.player.ch.jobLv >= 40, done: (g) => tier(g) >= 2,
     text: '職業等級 40 了！回晨曦鎮北邊找轉職官雷歐，完成進階試煉就能再轉職。' },
   { id: 'job3', when: (g) => tier(g) === 2 && g.player.ch.jobLv >= 50 && g.player.ch.baseLv >= 60, done: (g) => tier(g) >= 3,

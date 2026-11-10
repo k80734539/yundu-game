@@ -12,7 +12,7 @@ def upsert(lst, obj, key='id'):
 
 # ── 怪物：id, 名稱, 等級, hp, atk, def, mdef, exp, 外觀, 材料(id,名稱,說明,icon), 卡片(slot, 敘述, bonus) ──
 def mob(id, name, lv, hp, atk, df, mdf, exp, look, rng=1, spd=2.6, adelay=1300, frame=192, aggro=True, mat=None, card=None):
-    d = {"id": id, "name": name, "lv": lv, "hp": hp, "atk": atk, "def": df, "mdef": mdf, "str": lv + 10, "agi": 40, "vit": lv, "int": 20, "dex": lv + 20, "luk": 15,
+    d = {"id": id, "name": name, "lv": lv, "hp": hp, "atk": atk, "def": df, "mdef": mdf, "str": lv + 10, "agi": 40, "vit": round(lv * 0.7), "int": 20, "dex": lv + 20, "luk": 15,
          "exp": exp, "jexp": exp // 2, "range": rng, "adelay": adelay, "speed": spd, "aggro": aggro, "frame": frame, "look": look,
          "drops": [{"item": mat[0], "rate": 0.6}, {"item": 'white_potion', "rate": 0.08}, {"item": card[0], "rate": 0.008}]}
     return d
@@ -29,20 +29,20 @@ SKY = [
 ABYSS = [
  dict(id='shadow_bat', name='暗影蝠', lv=90, hp=11000, atk=[400, 490], df=40, mdf=50, exp=60000, look={"body": "bat", "color": "#3a2a5a", "scale": 2.4}, spd=3.8, adelay=1100, frame=160,
       mat=('shadow_wing', '影蝠翼', '漆黑的蝠翼，摸起來冰冷。', 'batwing', '#5a3a8a'), card=('shadow_bat_card', '暗影蝠卡片', 'garment', '可插入披風的卡片。FLEE +35。', {"flee": 35})),
- dict(id='abyss_worm', name='深淵蠕蟲', lv=93, hp=14000, atk=[420, 510], df=60, mdf=40, exp=100000, look={"body": "snake", "color": "#5a2a7a", "color2": "#c070ff", "scale": 2.0}, spd=2.4, adelay=1400, frame=192,
+ dict(id='abyss_worm', name='深淵蠕蟲', lv=93, hp=14000, atk=[420, 510], df=50, mdf=40, exp=100000, look={"body": "snake", "color": "#5a2a7a", "color2": "#c070ff", "scale": 2.0}, spd=2.4, adelay=1400, frame=192,
       mat=('worm_fang', '蠕蟲毒牙', '深淵蠕蟲的紫色毒牙。', 'tooth', '#a050e0'), card=('abyss_worm_card', '深淵蠕蟲卡片', 'weapon', '可插入武器的卡片。ATK +45、HP +500。', {"atk": 45, "hp": 500})),
  dict(id='void_shade', name='虛空幽影', lv=96, hp=12000, atk=[440, 530], df=25, mdf=80, exp=150000, look={"body": "ghost", "color": "#9040d0", "scale": 2.5}, rng=3, spd=3.1, adelay=1250, frame=160,
       mat=('void_shard', '虛空碎片', '像是把一小塊黑暗拿在手裡。', 'crystal', '#8040c0'), card=('void_shade_card', '虛空幽影卡片', 'head', '可插入頭部裝備的卡片。MATK +60、SP +100。', {"matk": 60, "sp": 100})),
- dict(id='fallen_knight', name='墮落騎士', lv=99, hp=16000, atk=[460, 560], df=65, mdf=50, exp=240000, look={"body": "humanoid", "skin": "#b8a8c0", "hair": "#2a1a3a", "cloth": "#3a2a4a", "cloth2": "#a060e0", "pants": "#1a1a2a", "eye": "#ff40a0", "weapon": "sword", "hat": "helm", "body2": "armor", "scale": 1.3}, spd=2.7, adelay=1300, frame=224,
+ dict(id='fallen_knight', name='墮落騎士', lv=99, hp=16000, atk=[460, 560], df=55, mdf=50, exp=240000, look={"body": "humanoid", "skin": "#b8a8c0", "hair": "#2a1a3a", "cloth": "#3a2a4a", "cloth2": "#a060e0", "pants": "#1a1a2a", "eye": "#ff40a0", "weapon": "sword", "hat": "helm", "body2": "armor", "scale": 1.3}, spd=2.7, adelay=1300, frame=224,
       mat=('fallen_crest', '墮落紋章', '騎士團墜入深淵後，紋章變成了紫色。', 'brooch', '#a060e0'), card=('fallen_knight_card', '墮落騎士卡片', 'armor', '可插入鎧甲的卡片。DEF +10、HP +900。', {"def": 10, "hp": 900})),
 ]
 MVPS = {
- 'sky_guardian': dict(name='蒼雷守護者', lv=88, hp=380000, atk=[560, 700], df=90, mdf=70, exp=150000, look={"body": "golem", "color": "#f0ece0", "color2": "#60c8ff", "scale": 4.2}, mat=('sky_core', '蒼天之核', '蒼雷守護者胸口的雷核，可在鍛造處換取專屬武器。', 'core', '#60c8ff'), cnt=28,
+ 'sky_guardian': dict(name='蒼雷守護者', lv=88, hp=380000, atk=[560, 700], df=60, mdf=70, vit=100, exp=150000, look={"body": "golem", "color": "#f0ece0", "color2": "#60c8ff", "scale": 4.2}, mat=('sky_core', '蒼天之核', '蒼雷守護者胸口的雷核，可在鍛造處換取專屬武器。', 'core', '#60c8ff'), cnt=28,
       card=('sky_guardian_card', '蒼雷守護者卡片', '可插入武器的卡片。ATK +75、CRIT +10。', {"atk": 75, "crit": 10}), zeny=[150000, 220000], first={"exp": 2000000, "jexp": 800000, "zeny": 600000},
       weapons=[('sky_blade', '蒼雷劍', 'sword', 'sword', 235, None, ["swordsman", "paladin", "templar"], {"str": 6, "vit": 3}, '劍身流動著雷光。'), ('sky_staff', '蒼雷法杖', 'staff', 'staff', 115, 66, ["mage", "elementalist", "archmage"], {"int": 6}, 'MATK +66%。'), ('sky_bow', '蒼雷弓', 'bow', 'bow', 212, None, ["archer", "ranger", "sniper"], {"dex": 6}, '箭矢帶著閃電。'), ('sky_lance', '蒼雷槍', 'sword', 'spear', 275, None, ["paladin", "templar"], {"str": 6}, '槍尖是蒼雷守護者的雷刃。')],
       color='#60c8ff', title='蒼雷',
       moves=[('attack', '雷拳', 'melee', 4, 0.5), ('tail', '雷環', 'aoe', 3, 2.1), ('bolt', '落雷', 'aoe', 3, 2.4), ('charge', '雷霆衝鋒', 'charge', 3, 2.0)], enr=[('summon', '召喚風靈', 'summon'), ('storm', '雷暴', 'barrage')], minion='wind_spirit'),
- 'abyss_lord': dict(name='深淵領主', lv=99, hp=480000, atk=[600, 760], df=110, mdf=90, exp=400000, look={"body": "ghost", "color": "#7030c0", "color2": "#ff40a0", "scale": 4.5}, mat=('abyss_core', '深淵之核', '深淵領主的黑暗核心，可在鍛造處換取專屬武器。', 'core', '#a040ff'), cnt=30,
+ 'abyss_lord': dict(name='深淵領主', lv=99, hp=480000, atk=[600, 760], df=70, mdf=85, vit=110, exp=400000, look={"body": "ghost", "color": "#7030c0", "color2": "#ff40a0", "scale": 4.5}, mat=('abyss_core', '深淵之核', '深淵領主的黑暗核心，可在鍛造處換取專屬武器。', 'core', '#a040ff'), cnt=30,
       card=('abyss_lord_card', '深淵領主卡片', '可插入武器的卡片。ATK +90、CRIT +12。', {"atk": 90, "crit": 12}), zeny=[250000, 350000], first={"exp": 6000000, "jexp": 2400000, "zeny": 1000000},
       weapons=[('abyss_blade', '深淵斷劍', 'sword', 'sword', 275, None, ["swordsman", "paladin", "templar"], {"str": 7, "vit": 4}, '斷裂的劍身吸走了周圍的光。'), ('abyss_staff', '深淵權杖', 'staff', 'staff', 130, 76, ["mage", "elementalist", "archmage"], {"int": 7}, 'MATK +76%。'), ('abyss_bow', '深淵之弓', 'bow', 'bow', 245, None, ["archer", "ranger", "sniper"], {"dex": 7}, '沒有弦，射出的是影子。'), ('abyss_lance', '深淵長槍', 'sword', 'spear', 320, None, ["paladin", "templar"], {"str": 7}, '槍尖在黑暗中看不見。')],
       color='#a040ff', title='深淵',
@@ -59,7 +59,7 @@ def main():
     for bid, b in MVPS.items():
         mid, mn, md, ik, ic = b['mat']; cid, cn, cd, cb = b['card']
         look = b['look']
-        upsert(mo, {"id": bid, "name": b['name'], "lv": b['lv'], "hp": b['hp'], "atk": b['atk'], "def": b['df'], "mdef": b['mdf'], "str": 150, "agi": 40, "vit": 140, "int": 20, "dex": 150, "luk": 15,
+        upsert(mo, {"id": bid, "name": b['name'], "lv": b['lv'], "hp": b['hp'], "atk": b['atk'], "def": b['df'], "mdef": b['mdf'], "str": 150, "agi": 40, "vit": b['vit'], "int": 20, "dex": 150, "luk": 15,
                     "exp": b['exp'], "jexp": b['exp'] // 2, "range": 1, "adelay": 1500, "speed": 2.3, "aggro": True, "frame": 320, "look": look,
                     "drops": [{"item": mid, "rate": 0.6}, {"item": 'white_potion', "rate": 0.8}, {"item": cid, "rate": 0.05}], "mvp": True, "skills": [{"id": "stomp", "chance": 0.25}, {"id": "summon", "chance": 0.2}]})
         upsert(it, {"id": mid, "name": mn, "type": "etc", "price": 20000, "weight": 1, "desc": md, "icon": {"k": ik, "c": ic}})

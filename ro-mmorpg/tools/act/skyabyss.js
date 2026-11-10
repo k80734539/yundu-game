@@ -1,4 +1,4 @@
-// 天空神殿／深淵迴廊：傳送雙向可走、出怪、怪物位置可走、MVP 在房間內、任務鏈
+// 天空神殿／深淵迴廊（現在熔岩谷與天空神殿之間隔著星落鎮，所以 volToSky／skyToVol 會落在 starfall）：傳送雙向可走、出怪、怪物位置可走、MVP 在房間內、任務鏈
 const R = await page.evaluate(() => {
   const G = window.__game, out = {}; G.loop.running = false; const step = 1 / 60, p = G.player;
   const go = (id, x, y, tx, ty) => { G.loadMap(id, x, y); for (const m of G.monsters) m.hp = 1e9; p.hp = p.maxHp = 1e9; const pa = G.pf.find(p.x, p.y, tx, ty, 20000, 0); if (!pa) return { path: false }; p.setPath(pa); let n = 0; while (G.map.def.id === id && n++ < 60 * 120) { G.update(step); p.hp = p.maxHp; } return { now: G.map.def.id, at: [Math.round(p.x), Math.round(p.y)], secs: +(n / 60).toFixed(1) }; };

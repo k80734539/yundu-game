@@ -585,7 +585,7 @@
  {
   "id": "q_cap8",
   "name": "天空神殿的先遣",
-  "npc": "captain",
+  "npc": "captain2",
   "type": "kill",
   "target": "temple_guardian",
   "count": 20,
@@ -602,7 +602,7 @@
  {
   "id": "q_mvp_sky",
   "name": "討伐蒼雷守護者",
-  "npc": "captain",
+  "npc": "captain2",
   "type": "kill",
   "target": "sky_guardian",
   "count": 1,
@@ -629,7 +629,7 @@
  {
   "id": "q_cap9",
   "name": "深淵迴廊的先遣",
-  "npc": "captain",
+  "npc": "captain2",
   "type": "kill",
   "target": "fallen_knight",
   "count": 15,
@@ -646,7 +646,7 @@
  {
   "id": "q_mvp_abyss",
   "name": "討伐深淵領主",
-  "npc": "captain",
+  "npc": "captain2",
   "type": "kill",
   "target": "abyss_lord",
   "count": 1,

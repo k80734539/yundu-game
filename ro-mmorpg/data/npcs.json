@@ -492,5 +492,248 @@
     ]
    }
   }
+ },
+ {
+  "id": "kafra2",
+  "name": "傳送員 瑟拉",
+  "title": "服務處",
+  "look": {
+   "skin": "#f8e0c8",
+   "hair": "#d0d0ff",
+   "cloth": "#6a5ac0",
+   "cloth2": "#ffffff",
+   "pants": "#3a2a7a",
+   "hairStyle": 1,
+   "hat": "ribbon",
+   "body": "robe"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "歡迎來到星落鎮。這裡是遠征隊的最後一個補給站。",
+     "傳送、儲存點、重新配點都找我。"
+    ],
+    "opts": [
+     {
+      "label": "傳送服務",
+      "act": "warpmenu"
+     },
+     {
+      "label": "設定儲存點",
+      "act": "save"
+     },
+     {
+      "label": "重新配點",
+      "act": "reset"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "id": "inn2",
+  "name": "旅館老闆 銀",
+  "title": "旅館",
+  "look": {
+   "skin": "#e8c8a8",
+   "hair": "#c8c8d8",
+   "cloth": "#7a6aa0",
+   "cloth2": "#ffffff",
+   "pants": "#4a3a6a",
+   "hairStyle": 0,
+   "body": "robe"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "遠征的人都在我這裡過夜。住一晚 200 Zeny，完全恢復。",
+     "也可以把這裡設為儲存點，倒下時就回到星落鎮。"
+    ],
+    "opts": [
+     {
+      "label": "休息（200 Zeny）",
+      "act": "heal",
+      "arg": "200"
+     },
+     {
+      "label": "設定儲存點",
+      "act": "save"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "id": "tool2",
+  "name": "補給商 奧圖",
+  "title": "補給店",
+  "shop": "tool",
+  "look": {
+   "skin": "#d8b088",
+   "hair": "#4a3a5a",
+   "cloth": "#5a6a9a",
+   "cloth2": "#e8d8a0",
+   "pants": "#3a3a5a",
+   "hairStyle": 2,
+   "hat": "band"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "藥水、翅膀、背包，要走遠就多帶一點。"
+    ],
+    "opts": [
+     {
+      "label": "購買",
+      "act": "shop",
+      "arg": "tool"
+     },
+     {
+      "label": "出售",
+      "act": "sell",
+      "arg": "tool"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "id": "gear2",
+  "name": "軍需官 索菲亞",
+  "title": "星落軍需處",
+  "shop": "starfall",
+  "look": {
+   "skin": "#e0b898",
+   "hair": "#d8d8e8",
+   "cloth": "#5a3a8a",
+   "cloth2": "#ffe080",
+   "pants": "#2a2a4a",
+   "hairStyle": 2,
+   "body": "armor",
+   "hat": "helm"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "星落軍需處只賣給走過熔岩谷的人。",
+     "天穹系列要 Lv85 才穿得動。想變強，就多去天空神殿和深淵迴廊走走。"
+    ],
+    "opts": [
+     {
+      "label": "購買",
+      "act": "shop",
+      "arg": "starfall"
+     },
+     {
+      "label": "出售",
+      "act": "sell",
+      "arg": "starfall"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "id": "refiner2",
+  "name": "鍛造師 岩",
+  "title": "精煉與鍛造",
+  "shop": "refine",
+  "look": {
+   "skin": "#c89870",
+   "hair": "#2a2a2a",
+   "cloth": "#4a3a5a",
+   "cloth2": "#e0a050",
+   "pants": "#2a2a3a",
+   "hairStyle": 0,
+   "hat": "band"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "我在這裡等你把 MVP 的核心帶來。",
+     "天空神殿和深淵迴廊的武器，都能在這裡換。"
+    ],
+    "opts": [
+     {
+      "label": "精煉裝備",
+      "act": "refine"
+     },
+     {
+      "label": "購買礦石",
+      "act": "shop",
+      "arg": "refine"
+     },
+     {
+      "label": "分解裝備",
+      "act": "forge",
+      "arg": "dismantle"
+     },
+     {
+      "label": "用 Boss 素材兌換裝備",
+      "act": "forge",
+      "arg": "exchange"
+     },
+     {
+      "label": "插入卡片",
+      "act": "cards"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "id": "captain2",
+  "name": "遠征隊長 凱恩",
+  "title": "討伐任務",
+  "look": {
+   "skin": "#e8c0a0",
+   "hair": "#c8c8d8",
+   "cloth": "#4a2a8a",
+   "cloth2": "#ffe080",
+   "pants": "#2a2a4a",
+   "hairStyle": 2,
+   "body": "armor",
+   "hat": "helm",
+   "weapon": "sword",
+   "cape": "#6a4ab0"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "熔岩谷之後就是天空神殿，再往下是深淵迴廊。",
+     "能走到這裡的人不多。有事交給我。"
+    ],
+    "opts": [
+     {
+      "label": "任務",
+      "act": "quests"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
  }
 ]
