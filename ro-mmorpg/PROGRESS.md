@@ -484,3 +484,4 @@
 - 待補：側面與斜前方的跑步圖、真正的攻擊動畫。截圖 `screenshots/八方向跑步.png`，測試 `tools/act/walk8.js`、`sheet8.js`。
 - 追加左下（novice_run_SW.gif）與右下（novice_run_SE.gif）跑步圖；目前只剩左、右純側面仍是靜態圖＋晃動。
 - 追加左（novice_run_W.gif）、右（novice_run_E.gif）跑步圖：八方向跑步全部是真動畫。仍缺攻擊動畫。
+- 追加攻擊動畫：正面（novice_atk_S.gif）、背面（novice_atk_N.gif）各 13 格 84×84，挑 [1,2,3,12] 四格放到攻擊格（`ATK`／`ATK_PICK`）。其他方向的攻擊仍是衝刺。

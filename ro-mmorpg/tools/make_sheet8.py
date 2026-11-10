@@ -11,6 +11,16 @@ FWD = [(0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1)]  # 
 # 真正的跑步動畫：方向 → (檔案, 是否鏡像)。列：S=0 NW=3 N=4 NE=5（NE 由 NW 鏡像）
 RUN = {2: ('assets/sprites/src/novice_run_W.gif', False), 6: ('assets/sprites/src/novice_run_E.gif', False), 1: ('assets/sprites/src/novice_run_SW.gif', False), 7: ('assets/sprites/src/novice_run_SE.gif', False), 0: ('assets/sprites/src/novice_run_S.gif', False), 3: ('assets/sprites/src/novice_run_NW.gif', False),
        4: ('assets/sprites/src/novice_run_N.gif', False), 5: ('assets/sprites/src/novice_run_NW.gif', True)}
+# 真正的攻擊動畫（13 格、84×84）：列 → 檔案；挑 4 格放在 6~9 格（起手、出手、揮擊、收招）
+ATK = {0: 'assets/sprites/src/novice_atk_S.gif', 4: 'assets/sprites/src/novice_atk_N.gif'}
+ATK_PICK = [1, 2, 3, 12]
+def atk_frames(path, scale):
+    im = Image.open(path); fr = [f.convert('RGBA').copy() for f in ImageSequence.Iterator(im)]
+    out = []
+    for i in ATK_PICK:
+        f = fr[i]; b = f.split()[3].getbbox()
+        out.append((f.resize((f.width * scale, f.height * scale), Image.NEAREST), b[3] * scale))   # 整張畫布放大，腳底 y = bbox 底
+    return out
 def run_frames(path, mirror, scale):
     """跑步 GIF → 挑 4 格（平均取樣），裁切後放大；回傳 [(影像, 腳底相對偏移)]，水平中心固定、腳底以最低點為基準"""
     fr = [f.convert('RGBA').copy() for f in ImageSequence.Iterator(Image.open(path))]
@@ -30,6 +40,7 @@ def main():
     frames = [f.convert('RGBA').copy() for f in ImageSequence.Iterator(Image.open(src))]
     assert len(frames) == 8, '需要 8 格轉身圖'
     runs = {r: run_frames(p, m, scale) for r, (p, m) in RUN.items()}
+    atks = {r: atk_frames(p, scale) for r, p in ATK.items()}
     sheet = Image.new('RGBA', (192 * 10, 192 * 8), (0, 0, 0, 0))
     for row, fi in enumerate(FRAME_ORDER):
         fr = frames[fi]; fr = fr.crop(fr.split()[3].getbbox()); fr = fr.resize((fr.width * scale, fr.height * scale), Image.NEAREST)
@@ -43,6 +54,9 @@ def main():
             if row in RUN and 2 <= f < 6:
                 c, ox, oy = runs[row][f - 2]
                 cell.alpha_composite(c, (96 - c.width // 2 + ox, 186 - c.height + oy))
+            elif row in ATK and f >= 6:
+                c, foot = atks[row][f - 6]
+                cell.alpha_composite(c, (96 - c.width // 2, 186 - foot))
             else:
                 cell.alpha_composite(fr, ((192 - fr.width) // 2 + dx, 186 - fr.height + dy))
             sheet.alpha_composite(cell, (f * 192, row * 192))
