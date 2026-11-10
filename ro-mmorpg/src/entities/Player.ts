@@ -2,6 +2,7 @@ import { Actor } from './Actor';
 import type { Look } from '../data';
 import { DB } from '../data';
 import { humanSheet } from '../render/SpriteFactory';
+import { CHAR_SHEETS } from '../render/CharSheets';
 import { CharData, Derived, derive, EquipInfo } from '../systems/Stats';
 
 export function newChar(name = '冒險者'): CharData {
@@ -27,7 +28,8 @@ export class Player extends Actor {
   }
   get job() { return DB.job[this.ch.job]; }
   refreshLook(weapon?: string) {
-    const L = { ...this.job.look, weapon: weapon ?? this.weaponType() };
+    const L: Look = { ...this.job.look, weapon: weapon ?? this.weaponType() };
+    if (CHAR_SHEETS[this.job.id]) L.sheet = CHAR_SHEETS[this.job.id]; // 有美術圖的職業用圖片精靈圖
     if (JSON.stringify(L) !== JSON.stringify(this.look)) { this.look = L; this.sheet = humanSheet(L); }
   }
   weaponType(): string { const w = this.equipsFn().find((e) => e.item.slot === 'weapon'); return w?.item.wtype || 'none'; }

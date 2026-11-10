@@ -2,7 +2,7 @@ import { RGB, hex, css, shade, makeCanvas, ctx2d, crisp, pxEllipse } from './pix
 import type { Look } from '../data';
 
 /** Sprite sheet 規格：4 列（下、左、右、上）× 10 格（0~1 待機、2~5 走路、6~9 攻擊） */
-export interface Sheet { c: HTMLCanvasElement; fw: number; fh: number; ax: number; ay: number; white?: HTMLCanvasElement; img?: HTMLImageElement }
+export interface Sheet { c: HTMLCanvasElement; fw: number; fh: number; ax: number; ay: number; white?: HTMLCanvasElement; img?: HTMLImageElement; rows?: number }
 export const FRAMES = 10, ROWS = 4;
 const OUT: RGB = [34, 22, 38];
 const OUTC = css(OUT);
@@ -628,7 +628,9 @@ function useImage(s: Sheet, url?: string) {
   if (!url) return;
   const img = new Image();
   img.onload = () => {
-    if (img.width !== s.fw * FRAMES || img.height !== s.fh * ROWS) { console.warn('sprite sheet 尺寸不符', url, img.width, img.height); return; }
+    const eight = img.width === s.fw * FRAMES && img.height === s.fh * 8; // 8 方向圖片精靈圖（8 列）
+    if (!eight && (img.width !== s.fw * FRAMES || img.height !== s.fh * ROWS)) { console.warn('sprite sheet 尺寸不符', url, img.width, img.height); return; }
+    if (eight) { s.c.height = s.fh * 8; s.rows = 8; }
     const c = s.c.getContext('2d')!; c.clearRect(0, 0, s.c.width, s.c.height); c.drawImage(img, 0, 0); s.white = undefined; s.img = img;
   };
   img.src = url;

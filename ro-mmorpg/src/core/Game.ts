@@ -1246,7 +1246,7 @@ export class Game {
     const f = e.frameIndex();
     let x = Math.round(isoX(e.ix(a), e.iy(a)) - L - s.ax), y = Math.round(isoY(e.ix(a), e.iy(a)) - T - s.ay);
     if (e.hurtT > 0 && !e.dead) { x += e.dir === 1 ? 2 : e.dir === 2 ? -2 : 0; y += e.dir === 3 ? 1 : e.dir === 0 ? -1 : 0; }
-    const sx = f * s.fw, sy = e.dir * s.fh;
+    const sx = f * s.fw, sy = (s.rows === 8 ? e.dir8 : e.dir) * s.fh;
     if (e.state === 'sit') { // 坐姿：裁掉腿部、身體下移（sheet 規格維持 10 格）
       const cut = 28;
       c.drawImage(s.c, sx, sy, s.fw, s.fh - cut, x, y + cut - 6, s.fw, s.fh - cut);

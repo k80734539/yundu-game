@@ -1,7 +1,7 @@
 import { Entity } from './Entity';
 import type { Sheet } from '../render/SpriteFactory';
 import type { XY } from '../data';
-import { dirFromWorldDelta } from '../render/iso';
+import { dirFromWorldDelta, dir8FromWorldDelta } from '../render/iso';
 
 export type ActorState = 'idle' | 'walk' | 'attack' | 'cast' | 'sit' | 'dead';
 export interface BBox { x0: number; y0: number; x1: number; y1: number }
@@ -24,6 +24,7 @@ export abstract class Actor extends Entity {
   name = '';
   sheet!: Sheet;
   dir = 0;
+  dir8 = 0;             // 8 方向圖片精靈圖用的朝向列（0=下，順時針看是 下、左下、左、左上、上、右上、右、右下）
   state: ActorState = 'idle';
   animT = 0;
   path: XY[] = [];
@@ -40,7 +41,7 @@ export abstract class Actor extends Entity {
 
   setPath(p: XY[] | null) { this.path = p || []; }
   stop() { this.path = []; if (this.state === 'walk') this.state = 'idle'; }
-  face(tx: number, ty: number) { this.dir = dirFromWorldDelta(tx - this.x, ty - this.y, this.dir); }
+  face(tx: number, ty: number) { this.dir = dirFromWorldDelta(tx - this.x, ty - this.y, this.dir); this.dir8 = dir8FromWorldDelta(tx - this.x, ty - this.y, this.dir8); }
 
   /** 沿路徑移動，回傳是否還在移動 */
   stepPath(dt: number): boolean {
@@ -49,7 +50,7 @@ export abstract class Actor extends Entity {
     while (move > 0 && this.path.length) {
       const [tx, ty] = this.path[0];
       const dx = tx - this.x, dy = ty - this.y, d = Math.hypot(dx, dy);
-      if (d > 1e-4) this.dir = dirFromWorldDelta(dx, dy, this.dir);
+      if (d > 1e-4) { this.dir = dirFromWorldDelta(dx, dy, this.dir); this.dir8 = dir8FromWorldDelta(dx, dy, this.dir8); }
       if (d <= move) { this.x = tx; this.y = ty; move -= d; this.path.shift(); }
       else { this.x += (dx / d) * move; this.y += (dy / d) * move; move = 0; }
     }
