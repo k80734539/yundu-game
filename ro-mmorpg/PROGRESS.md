@@ -485,3 +485,7 @@
 - 追加左下（novice_run_SW.gif）與右下（novice_run_SE.gif）跑步圖；目前只剩左、右純側面仍是靜態圖＋晃動。
 - 追加左（novice_run_W.gif）、右（novice_run_E.gif）跑步圖：八方向跑步全部是真動畫。仍缺攻擊動畫。
 - 追加攻擊動畫：正面（novice_atk_S.gif）、背面（novice_atk_N.gif）各 13 格 84×84，挑 [1,2,3,12] 四格放到攻擊格（`ATK`／`ATK_PICK`）。其他方向的攻擊仍是衝刺。
+
+## 新玩家進階提示（`Tutorial.TIPS`）
+- 新手教學 10 步完成後，依條件顯示一條提示（頂端黃色提示框，沿用教學的 ×／縮小／導覽員重開）：任務提示📍（Lv5~13 有任務、沒點過📍）、傭兵（轉職後 Lv15、沒雇過）、軍需處（Lv30、沒進過商店）、二轉（職業等級 40）、三轉（職業等級 50＋基本 60）。做過或條件達成就換下一條，不用照順序。
+- 旗標：`flags.guideSeen / hiredMerc / quarterSeen`（舊存檔沒有就視為還沒做過，不改存檔格式）。測試 `tools/act/tips.js`、`tips2.js`；截圖 `screenshots/新手進階提示.png`。

@@ -21,7 +21,7 @@ export class MercSystem {
     if (this.merc) return '你已經雇用了一位傭兵。';
     if (ch.zeny < price) return `Zeny 不足（需要 ${price.toLocaleString()}）。`;
     ch.zeny -= price; g.ev.emit('stats');
-    this.start(t, MERCS.contractSec);
+    this.start(t, MERCS.contractSec); g.flags.hiredMerc = true;
     g.msg(`雇用了${t.name}，契約 ${Math.round(MERCS.contractSec / 60)} 分鐘。`, 'quest');
     return null;
   }

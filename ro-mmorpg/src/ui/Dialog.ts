@@ -85,7 +85,7 @@ export class Dialog {
     const g = this.ui.g, npc = this.npc!;
     switch (a) {
       case 'close': this.close(); break;
-      case 'shop': this.close(); this.ui.shop.openShop(arg || npc.def.shop || 'tool', 'buy'); break;
+      case 'shop': if ((arg || npc.def.shop) === 'quarter') this.ui.g.flags.quarterSeen = true; this.close(); this.ui.shop.openShop(arg || npc.def.shop || 'tool', 'buy'); break;
       case 'sell': this.close(); this.ui.shop.openShop(arg || npc.def.shop || 'tool', 'sell'); break;
       case 'heal': {
         const cost = +(arg || 0);

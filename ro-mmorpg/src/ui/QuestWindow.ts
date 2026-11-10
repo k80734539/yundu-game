@@ -54,7 +54,7 @@ export class QuestTracker {
       const off = !!this.ui.g.flags.guideOff;
       const b = h('div', 'qt-guide' + (off ? ' off' : '')); b.title = '點一下開關畫面上的方向箭頭';
       b.innerHTML = `<div class="qt-gt">📍 ${gd.text}</div>${gd.sub ? `<div class="qt-sub">${gd.sub}</div>` : ''}<div class="qt-sub">${gd.arrow ? (off ? '箭頭：關' : '箭頭：開') : ''}</div>`;
-      b.addEventListener('click', () => { this.ui.g.flags.guideOff = !this.ui.g.flags.guideOff; this.render(); });
+      b.addEventListener('click', () => { this.ui.g.flags.guideSeen = true; this.ui.g.flags.guideOff = !this.ui.g.flags.guideOff; this.render(); });
       this.el.appendChild(b);
     }
   }
