@@ -44,10 +44,11 @@ function limb(c: CanvasRenderingContext2D, x0: number, y0: number, x1: number, y
     // 袖口
     const cx = x0 + (x1 - x0) * 0.78, cy = y0 + (y1 - y0) * 0.78;
     c.fillStyle = OUTC; pxEllipse(c, cx, cy, w / 2 + 1.5, 3); c.fillStyle = css(shade(col, -0.25)); pxEllipse(c, cx, cy, w / 2 + 0.5, 2);
-    c.fillStyle = OUTC; pxEllipse(c, x1, y1, 4.5, 4.5); c.fillStyle = css(end); pxEllipse(c, x1, y1, 3.5, 3.5);
+    c.fillStyle = OUTC; pxEllipse(c, x1, y1, 5.5, 5.5); c.fillStyle = css(end); pxEllipse(c, x1, y1, 4.5, 4.5);
     c.fillStyle = css(shade(end, 0.35)); c.fillRect(Math.round(x1 - 2), Math.round(y1 - 2), 2, 1);
   }
 }
+function oTri(c: CanvasRenderingContext2D, x0: number, y0: number, x1: number, y1: number, x2: number, y2: number) { c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.lineTo(x2, y2); c.closePath(); c.fill(); }
 function line(c: CanvasRenderingContext2D, x0: number, y0: number, x1: number, y1: number, w: number, col: string) {
   c.lineCap = 'round'; c.strokeStyle = col; c.lineWidth = w; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.stroke();
 }
@@ -227,6 +228,7 @@ function drawHuman(c: CanvasRenderingContext2D, dir: number, f: number, L: Look)
     // 衣褶、下擺
     c.fillStyle = css(shade(cloth, -0.18)); c.fillRect(tx + Math.round(tw * 0.32), ty + 8, 1, 14); c.fillRect(tx + Math.round(tw * 0.7), ty + 10, 1, 12);
     c.fillStyle = css(shade(cloth, -0.3)); c.fillRect(tx, ty + 32, tw, 2);
+    if (!side && !back) { c.fillStyle = css(shade(cloth, -0.28)); oTri(c, tx, ty + 12, tx + 4, ty + 32, tx, ty + 32); oTri(c, tx + tw, ty + 12, tx + tw - 4, ty + 32, tx + tw, ty + 32); }
     c.fillStyle = css(cloth2); c.fillRect(tx, ty + 23, tw, 5); // 腰帶
     c.fillStyle = css(shade(cloth2, 0.3)); c.fillRect(tx, ty + 23, tw, 1);
     if (!back) { c.fillStyle = OUTC; c.fillRect(side ? tx + 1 : ax - 4, ty + 22, 8, 7); c.fillStyle = '#e8c050'; c.fillRect(side ? tx + 2 : ax - 3, ty + 23, 6, 5); c.fillStyle = '#fff4b0'; c.fillRect(side ? tx + 2 : ax - 3, ty + 23, 2, 2); c.fillStyle = css(cloth2); c.fillRect(side ? tx + 4 : ax - 1, ty + 25, 2, 1); }
@@ -296,6 +298,9 @@ function drawHuman(c: CanvasRenderingContext2D, dir: number, f: number, L: Look)
     c.fillStyle = css(shade(hair, -0.3)); for (let i = -1; i <= 1; i++) c.fillRect(hx + i * 11 + 5, hy - 8, 1, 6);
     if (hs === 2) for (let i = -1; i <= 1; i++) oPoly(c, [[hx + i * 14 - 7, hy - 24], [hx + i * 16, hy - 40], [hx + i * 14 + 7, hy - 24]], hair);
     if (hs === 3) { oEllipse(c, hx - 30, hy - 14, 8, 8, shade(hair, 0.1)); oEllipse(c, hx + 30, hy - 14, 8, 8, shade(hair, 0.1)); }
+    // 瀏海髮梢：沿原本瀏海下緣加幾個短尖角（長短交錯），並在額頭留一道陰影
+    c.fillStyle = css(shade(skin, -0.2)); c.fillRect(hx - 20, hy - 1, 40, 2);
+    for (let i = -2; i <= 2; i++) { const bx = hx + i * 11, tip = hy + 1 + ((i + 2) % 2) * 3 - (Math.abs(i) === 2 ? 2 : 0); c.fillStyle = css(hair); oTri(c, bx - 4, hy - 5, bx + 4, hy - 5, bx + (i <= 0 ? -1 : 1), tip); c.fillStyle = OUTC; c.fillRect(bx + (i <= 0 ? -1 : 1), tip, 1, 1); }
   }
   // 髮絲與光澤帶（天使光環）
   {
@@ -316,8 +321,11 @@ function drawHuman(c: CanvasRenderingContext2D, dir: number, f: number, L: Look)
   } else if (L.hat === 'band') {
     c.fillStyle = OUTC; c.fillRect(hx - 31, hy - 16, 62, 7); c.fillStyle = css(hex(L.cloth2 || '#c03a3a')); c.fillRect(hx - 30, hy - 15, 60, 5);
   } else if (L.hat === 'helm') {
-    oEllipse(c, hx, hy - 12, 33, 20, hex('#b8c0d0'));
-    c.fillStyle = OUTC; c.fillRect(hx - 32, hy - 2, 64, 4); c.fillStyle = '#d0d8e8'; c.fillRect(hx - 31, hy - 1, 62, 2);
+    oEllipse(c, hx, hy - 15, 32, 23, hex('#b8c0d0'));
+    c.fillStyle = css(hex('#e8eef8')); c.fillRect(hx - 2, hy - 36, 4, 22); c.fillRect(hx - 20, hy - 26, 8, 2); // 中脊與高光
+    c.fillStyle = css(hex('#7a86a0')); c.fillRect(hx + 12, hy - 28, 3, 24);
+    c.fillStyle = OUTC; c.fillRect(hx - 33, hy - 3, 66, 6); c.fillStyle = '#d0d8e8'; c.fillRect(hx - 32, hy - 2, 64, 4); c.fillStyle = '#e8c050'; for (const k of [-24, -8, 8, 24]) c.fillRect(hx + k, hy - 1, 2, 2);
+    if (!side && !back) { c.fillStyle = OUTC; c.fillRect(hx - 3, hy + 3, 6, 12); c.fillStyle = '#c0c8d8'; c.fillRect(hx - 2, hy + 3, 4, 11); }
   } else if (L.hat === 'feather') {
     oEllipse(c, hx, hy - 16, 31, 13, hex('#3a7a3a'));
     oPoly(c, [[hx + 12, hy - 26], [hx + 34, hy - 52], [hx + 20, hy - 22]], hex('#e84a3a'));
