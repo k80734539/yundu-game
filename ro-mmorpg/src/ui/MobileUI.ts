@@ -37,6 +37,7 @@ export class MobileUI {
       ['技能', img('sk_magnum', '#ff5a20'), () => ui.open('skills')],
       ['任務', img('card', '#e8c050'), () => ui.open('quests')],
       ['世界地圖', img('crystal', '#6ad0f0'), () => ui.open('worldmap')],
+      ['怪物圖鑑', img('claw', '#e8c050'), () => ui.open('bestiary')],
       ['聊天', '<span class="mbtn-glyph">…</span>', () => { ui.setFold('chat', false); ui.chat.focus(); }],
       ['設定', img('ring', '#c8c8d0'), () => ui.open('options')],
       ['存檔', img('crown', '#f0c040'), () => ui.g.save.save(true)],

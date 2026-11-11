@@ -8,6 +8,7 @@ import questsJson from '../../data/quests.json';
 import npcsJson from '../../data/npcs.json';
 import mercsJson from '../../data/mercs.json';
 import storageJson from '../../data/storage.json';
+import bestiaryJson from '../../data/bestiary.json';
 import shopsJson from '../../data/shops.json';
 import lootJson from '../../data/loot.json';
 import bossJson from '../../data/bossfights.json';
@@ -138,4 +139,6 @@ export interface MercType {
 }
 export interface MercConfig { contractSec: number; costBase: number; costPerLv: number; bossFactor: number; followDist: number; teleportDist: number; types: MercType[] }
 export const MERCS = mercsJson as unknown as MercConfig;
+export interface DexMilestone { id: string; kind: 'seen' | 'mastered'; need: number | 'all'; reward: { statPts?: number; zeny?: number; items?: [string, number][] } }
+export const BESTIARY = bestiaryJson as unknown as { stats: number; drops: number; mastered: number; milestones: DexMilestone[] };
 export const STORAGE = storageJson as unknown as { slots: number; fee: number };

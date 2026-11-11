@@ -23,7 +23,7 @@ import { playerVsMonster, monsterVsPlayer } from '../systems/Combat';
 import { StatKey, statCost, MAX_STAT } from '../systems/Stats';
 import { updateAI, onHurt, giveUp } from '../systems/AI';
 import { Telegraph, bossDamage, hasBossFight, fightTime, fmtTime } from '../systems/BossFight';
-import { BOSSFIGHT } from '../data';
+import { BOSSFIGHT, BESTIARY } from '../data';
 import { Spawner } from '../systems/Spawner';
 import { Inventory } from '../systems/Inventory';
 import { GroundItem } from '../entities/GroundItem';
@@ -48,6 +48,7 @@ import debugJson from '../../data/debug.json';
 import { Audio } from '../systems/Audio';
 import { Tutorial } from '../systems/Tutorial';
 import { Warehouse } from '../systems/Warehouse';
+import { Bestiary } from '../systems/Bestiary';
 import { refineRate, refineMaterial, refineFee } from '../systems/Refine';
 import { expNeed, jobExpNeed } from '../systems/Stats';
 import { cellDist, mulberry32 } from './math';
@@ -78,7 +79,7 @@ export class Game {
   ui!: UI;
   audio: Audio = new Audio();
   save!: Save;
-  inv: Inventory; storage = new Warehouse();
+  inv: Inventory; storage = new Warehouse(); bestiary!: Bestiary;
   spawner: Spawner;
   items: GroundItem[] = [];
   pickTarget: GroundItem | null = null;
@@ -118,7 +119,7 @@ export class Game {
     this.spawner = new Spawner(this);
     this.quests = new Quests(this);
     this.skills = new SkillSystem(this);
-    this.mercs = new MercSystem(this);
+    this.mercs = new MercSystem(this); this.bestiary = new Bestiary(this);
     this.guide = new Guide(this);
     this.loot = new Loot(this);
     this.save = new Save(this);
@@ -132,7 +133,7 @@ export class Game {
     try { const v = localStorage.getItem('rom.perf'); this.perf = v === 'smooth' || v === 'auto' || v === 'saver' ? v : (window.matchMedia?.('(pointer: coarse)').matches ? 'auto' : 'smooth'); } catch { /* */ }
     try { const v = localStorage.getItem('rom.res'); this.r.low = v === 'low' || (v !== 'high' && !!window.matchMedia?.('(pointer: coarse)').matches); if (this.r.low) this.r.resize(); } catch { /* */ }
     this.loop = new Loop((dt) => this.update(dt), (a, dt) => this.render(a, dt));
-    (window as any).__game = this; (window as any).__DB = DB; (window as any).__LOOT = LOOT; (window as any).__GI = GroundItem; (window as any).__BOSSCFG = BOSSFIGHT;
+    (window as any).__game = this; (window as any).__DB = DB; (window as any).__LOOT = LOOT; (window as any).__GI = GroundItem; (window as any).__BOSSCFG = BOSSFIGHT; (window as any).__BESTIARY = BESTIARY;
   }
 
   /** 開機：先載入城鎮當標題背景 */
@@ -956,7 +957,7 @@ export class Game {
       if (by === this.player && !d.summoned) {
         gainExp(this, d.def.exp, d.def.jexp);
         for (const id of ['battle_spirit', 'eagle_focus', 'mana_focus']) { const lv = this.player.ch.skills[id] || 0; if (lv) this.player.sp = Math.min(this.player.maxSp, this.player.sp + (DB.skill[id].value?.[lv - 1] || 0)); } // 擊倒回復 SP 的被動
-        this.dropLoot(d);
+        this.dropLoot(d); this.bestiary.record(d.def.id);
         if (d.isMvp) { this.mvpReward(d); this.bossVictory(d); }
         this.ev.emit('kill', d.def.id);
       }
@@ -973,6 +974,7 @@ export class Game {
     if (zd && !m.isMvp && this.rnd() < zd.chance) list.push({ id: 'zeny', n: Math.max(1, Math.round(m.def.lv * zd.perLevel * (zd.spread[0] + this.rnd() * (zd.spread[1] - zd.spread[0])))) });
     for (const e of list) {
       const def = DB.item[e.id]; if (!def) continue;
+      this.bestiary.recordDrop(m.def.id, e.id);
       const a = k * 2.1 + this.rnd(), rr = k === 0 ? 0.2 : 0.6 + this.rnd() * 0.6;
       let tx = m.x + Math.cos(a) * rr, ty = m.y + Math.sin(a) * rr;
       if (!this.map.canWalk(tx, ty)) { tx = m.x; ty = m.y; }

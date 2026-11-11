@@ -1,0 +1,17 @@
+{
+ "_說明": "怪物圖鑑：打倒 1 隻就解鎖名稱與出沒地點；累計 stats 隻解鎖能力值；累計 drops 隻解鎖掉落率（掉落物本身要實際掉過才顯示名稱）。累計 mastered 隻算『熟練』。milestones 是收集獎勵：kind seen＝發現的種類數、mastered＝熟練的種類數，need 填 \"all\" 代表全部。reward 可含 statPts（能力點數）、zeny、items。",
+ "stats": 10,
+ "drops": 25,
+ "mastered": 100,
+ "milestones": [
+  { "id": "s5", "kind": "seen", "need": 5, "reward": { "zeny": 10000 } },
+  { "id": "s15", "kind": "seen", "need": 15, "reward": { "statPts": 3 } },
+  { "id": "s30", "kind": "seen", "need": 30, "reward": { "statPts": 5, "zeny": 50000 } },
+  { "id": "s45", "kind": "seen", "need": 45, "reward": { "items": [["elunium", 5], ["oridecon", 5]] } },
+  { "id": "sall", "kind": "seen", "need": "all", "reward": { "statPts": 10, "zeny": 500000 } },
+  { "id": "m3", "kind": "mastered", "need": 3, "reward": { "statPts": 3 } },
+  { "id": "m10", "kind": "mastered", "need": 10, "reward": { "statPts": 5, "zeny": 30000 } },
+  { "id": "m20", "kind": "mastered", "need": 20, "reward": { "statPts": 8 } },
+  { "id": "mall", "kind": "mastered", "need": "all", "reward": { "statPts": 15, "zeny": 1000000 } }
+ ]
+}

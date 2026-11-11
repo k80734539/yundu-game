@@ -22,6 +22,7 @@ import { QuestWindow, QuestTracker } from './QuestWindow';
 import { RefineWindow, CardWindow } from './RefineWindow';
 import { ForgeWindow } from './ForgeWindow';
 import { StorageWindow } from './StorageWindow';
+import { BestiaryWindow } from './BestiaryWindow';
 import { BossBar } from './BossBar';
 
 /** UI 管理器：DOM 視窗、快捷鍵、訊息、橫幅 */
@@ -71,6 +72,7 @@ export class UI {
     this.bossbar = new BossBar(this);
     this.forge = this.add(new ForgeWindow(this)) as ForgeWindow;
     this.storage = this.add(new StorageWindow(this)) as StorageWindow;
+    this.add(new BestiaryWindow(this));
     this.death = h('div'); this.death.id = 'death';
     const box = h('div', 'win box'); box.style.position = 'static'; this.death.appendChild(box); root.appendChild(this.death);
     this.buffEl = h('div'); this.buffEl.id = 'buffs'; root.appendChild(this.buffEl);
@@ -135,7 +137,7 @@ export class UI {
     if (this.dialog.onKey(k.key)) return true;
     const key = k.key.toLowerCase();
     if (k.alt) {
-      const map: Record<string, string> = { a: 'status', e: 'inventory', q: 'equip', s: 'skills', u: 'quests' };
+      const map: Record<string, string> = { a: 'status', e: 'inventory', q: 'equip', s: 'skills', u: 'quests', b: 'bestiary' };
       if (map[key]) { this.toggle(map[key]); return true; }
     }
     if (k.key === 'Enter') { if (this.fold.chat) this.setFold('chat', false); this.chat.focus(); return true; }

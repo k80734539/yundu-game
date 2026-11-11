@@ -31,7 +31,7 @@ export class Hud extends Win {
     b.appendChild(g);
     const info = h('div', 'row'); this.els.zeny = h('span', 'val'); this.els.weight = h('span', 'dim'); this.els.pts = h('span'); info.append(h('span', 'lbl', 'Zeny'), this.els.zeny, this.els.weight, this.els.pts); b.appendChild(info);
     const mb = h('div', 'menubar');
-    const items: [string, string, string][] = [['能力', 'status', 'Alt+A'], ['道具', 'inventory', 'Alt+E'], ['裝備', 'equip', 'Alt+Q'], ['技能', 'skills', 'Alt+S'], ['任務', 'quests', 'Alt+U'], ['地圖', 'worldmap', 'M'], ['設定', 'options', 'Esc']];
+    const items: [string, string, string][] = [['能力', 'status', 'Alt+A'], ['道具', 'inventory', 'Alt+E'], ['裝備', 'equip', 'Alt+Q'], ['技能', 'skills', 'Alt+S'], ['任務', 'quests', 'Alt+U'], ['地圖', 'worldmap', 'M'], ['圖鑑', 'bestiary', 'Alt+B'], ['設定', 'options', 'Esc']];
     for (const [l, w, k] of items) { const bb = btn(l, () => ui.toggle(w)); bb.title = `${l}（${k}）`; bb.dataset.win = w; mb.appendChild(bb); }
     b.appendChild(mb);
     this.el.classList.remove('hidden');

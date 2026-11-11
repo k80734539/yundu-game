@@ -411,3 +411,15 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 .st-filter .chip { padding: 1px 8px; border: 1px solid #8a9ac0; border-radius: 10px; background: #eef1f8; cursor: pointer; font-size: 11px; }
 .st-filter .chip.on { background: #2a4a8a; color: #fff; border-color: #2a4a8a; }
 #ui.mobile .st-filter .chip { padding: 5px 12px; font-size: 13px; }
+/* 怪物圖鑑 */
+.dex-sec { font-weight: bold; color: #2a4a8a; cursor: pointer; padding: 2px 2px 4px; }
+.dex-ms { display: flex; gap: 8px; align-items: center; padding: 3px 2px; border-bottom: 1px dotted #c8d0e0; flex-wrap: wrap; }
+.dex-ms .dex-ms-t { font-weight: bold; min-width: 130px; } .dex-ms .dim { flex: 1; min-width: 90px; } .dex-ms.got { opacity: .55; }
+.dex-list { max-height: 360px; overflow-y: auto; }
+.dex-row { display: flex; gap: 8px; padding: 5px 2px; border-bottom: 1px solid #dfe5f2; }
+.dex-row.unk { opacity: .7; }
+.dex-thumb { width: 52px; height: 52px; flex: none; image-rendering: pixelated; background: #eef1f8; border-radius: 4px; }
+.dex-info { flex: 1; min-width: 0; font-size: 11px; line-height: 1.5; } .dex-name { font-size: 13px; font-weight: bold; }
+.dex-drops { display: flex; flex-wrap: wrap; gap: 3px 8px; margin-top: 2px; }
+.dex-drop { display: inline-flex; align-items: center; gap: 2px; padding: 0 5px; background: #eef1f8; border-radius: 8px; } .dex-drop img { width: 16px; height: 16px; image-rendering: pixelated; } .dex-drop.unk { color: #8a93a8; }
+#win-bestiary .win-body { max-height: calc(100vh - 150px); overflow-y: auto; } #ui.mobile .dex-list { max-height: none; overflow: visible; } #ui.mobile .dex-info { font-size: 12px; }
