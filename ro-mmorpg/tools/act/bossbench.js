@@ -28,7 +28,7 @@ const res = await page.evaluate(() => {
     if (p.dead) { outcome = 'died@' + Math.round(t); break; }
     if (boss.dead) { outcome = 'win@' + Math.round(t); break; }
     if (potCd <= 0 && p.hp < p.maxHp * 0.5) { const it = G.inv.items.find((i) => i.id === 'white_potion'); if (it) { G.useItem(it.uid); pots++; potCd = 1; } else G.inv.add('white_potion', 1); }
-    if (potCd <= 0 && p.sp < p.maxSp * 0.15) { const it = G.inv.items.find((i) => i.id === 'blue_potion'); if (it) { G.useItem(it.uid); bp++; potCd = 1; } }
+    if (potCd <= 0 && p.sp < p.maxSp * 0.15) { const it = G.inv.items.find((i) => i.id === 'blue_potion'); if (it) { G.useItem(it.uid); bp++; potCd = 1; } else G.inv.add('blue_potion', 1); }
     if (!(p.chase && !p.chase.dead)) p.chase = boss;
     if (buffT <= 0) { for (const id of buffIds) if ((G.skillCd[id] || 0) <= 0 && p.sp > 60) G.useSkill(id); buffT = 5; }
     if (skT <= 0 && !G.skills.cast && p.chase && !p.chase.dead) { for (const id of atkIds) { if ((G.skillCd[id] || 0) <= 0 && p.sp >= DB.skill[id].sp[ch.skills[id] - 1]) { const c0 = G.skillCd[id] || 0; G.useSkill(id); if ((G.skillCd[id] || 0) > c0 || G.skills.cast) { used[id] = (used[id] || 0) + 1; break; } } } skT = 0.1; }
