@@ -1298,17 +1298,30 @@ export class Game {
         if (pr.pk === 'charge') this.fx.glow(pr.x, pr.y, pr.z, '#ffb060', 0.25, 2, 0);
         break;
       }
-      case 'orb': case 'soul': {
-        const col = pr.pk === 'soul' ? '#d8a0ff' : '#a0c8ff';
-        c.globalAlpha = 0.4; c.fillStyle = col; c.fillRect(x - 7, y - 7, 14, 14); c.globalAlpha = 1;
-        c.fillStyle = col; c.fillRect(x - 4, y - 4, 8, 8); c.fillStyle = '#ffffff'; c.fillRect(x - 2, y - 2, 4, 4);
-        if (Math.random() < 0.6) this.fx.glow(pr.x, pr.y, pr.z, col, 0.3, 1, 0);
+      case 'orb': case 'soul': { // 魔力彈／靈魂衝擊：有拖尾的光球
+        const col = pr.pk === 'soul' ? ['#7a3ad0', '#d8a0ff'] : ['#3a6ad8', '#a0d0ff'];
+        const px0 = isoX(pr.px, pr.py) - L, py0 = isoY(pr.px, pr.py) - T - pr.pz;
+        let dx = x - px0, dy = y - py0; const dl = Math.hypot(dx, dy) || 1; dx /= dl; dy /= dl;
+        for (let i = 4; i >= 1; i--) { c.globalAlpha = 0.16 * (5 - i); c.fillStyle = col[1]; c.beginPath(); c.arc(x - dx * i * 6, y - dy * i * 6, 6 - i, 0, Math.PI * 2); c.fill(); }
+        c.globalAlpha = 0.45; c.fillStyle = col[0]; c.beginPath(); c.arc(x, y, 9, 0, Math.PI * 2); c.fill();
+        c.globalAlpha = 1; c.fillStyle = col[1]; c.beginPath(); c.arc(x, y, 6, 0, Math.PI * 2); c.fill();
+        c.fillStyle = '#ffffff'; c.beginPath(); c.arc(x - 1, y - 1, 3, 0, Math.PI * 2); c.fill();
+        if (Math.random() < 0.6) this.fx.glow(pr.x, pr.y, pr.z, col[1], 0.3, 1, 0);
         break;
       }
-      case 'fire': case 'ice': {
-        const col = pr.pk === 'fire' ? ['#e03a10', '#ff9a30', '#fff0a0'] : ['#3a8ae0', '#a0e0ff', '#ffffff'];
-        c.fillStyle = col[0]; c.fillRect(x - 5, y - 22, 10, 26); c.fillStyle = col[1]; c.fillRect(x - 3, y - 14, 6, 16); c.fillStyle = col[2]; c.fillRect(x - 2, y - 4, 4, 6);
-        this.fx.glow(pr.x, pr.y, pr.z + 20, col[1], 0.3, 2, 30);
+      case 'fire': { // 火焰彈：從天而降的火舌（外紅、中橘、內黃）
+        const fl = Math.sin(this.time * 40 + pr.x * 7) * 2;
+        for (const [w, h, col] of [[8, 34, '#d8300c'], [5.5, 24, '#ff9a28'], [3, 13, '#fff0a0']] as [number, number, string][]) {
+          c.fillStyle = col; c.beginPath(); c.moveTo(x - w, y - 4); c.quadraticCurveTo(x - w * 0.6 + fl * 0.4, y - h * 0.6, x + fl, y - h); c.quadraticCurveTo(x + w * 0.6 + fl * 0.4, y - h * 0.6, x + w, y - 4); c.arc(x, y - 4, w, 0, Math.PI); c.closePath(); c.fill();
+        }
+        this.fx.glow(pr.x, pr.y, pr.z + 26, '#ff9a30', 0.3, 2, 30);
+        break;
+      }
+      case 'ice': { // 冰凍彈：尖端朝下的冰錐
+        c.fillStyle = '#2a68b8'; c.beginPath(); c.moveTo(x, y + 6); c.lineTo(x - 7, y - 10); c.lineTo(x - 4, y - 30); c.lineTo(x + 4, y - 30); c.lineTo(x + 7, y - 10); c.closePath(); c.fill();
+        c.fillStyle = '#a8dcff'; c.beginPath(); c.moveTo(x, y + 4); c.lineTo(x - 5, y - 10); c.lineTo(x - 3, y - 28); c.lineTo(x + 3, y - 28); c.lineTo(x + 5, y - 10); c.closePath(); c.fill();
+        c.fillStyle = '#ffffff'; c.beginPath(); c.moveTo(x, y + 4); c.lineTo(x - 5, y - 10); c.lineTo(x - 3, y - 28); c.lineTo(x - 1, y - 10); c.closePath(); c.fill();
+        if (Math.random() < 0.7) this.fx.glow(pr.x, pr.y, pr.z + 24, '#dff4ff', 0.35, 1, 10);
         break;
       }
     }

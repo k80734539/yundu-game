@@ -340,14 +340,14 @@
    "attack": "magic",
    "range": 6,
    "look": {
+    "style": "mage",
     "skin": "#f8e0c8",
-    "hair": "#c87ad0",
+    "hair": "#e88ac8",
     "cloth": "#6a4ab0",
     "cloth2": "#e8c050",
-    "pants": "#3a2a5a",
-    "hairStyle": 1,
-    "body": "robe",
-    "hat": "wizard"
+    "hat": "wizard",
+    "gem": "#ff6ab0",
+    "eye": "#7a4ab8"
    },
    "bonus": [
     [
@@ -659,15 +659,15 @@
    "attack": "magic",
    "range": 7,
    "look": {
+    "style": "mage",
     "skin": "#f8e0c8",
-    "hair": "#c87ad0",
+    "hair": "#e88ac8",
     "cloth": "#2a5a9a",
     "cloth2": "#f0d060",
-    "pants": "#1a2a5a",
-    "hairStyle": 1,
-    "body": "robe",
     "hat": "wizard",
-    "cape": "#b8343a"
+    "cape": "#b8343a",
+    "gem": "#5ad8ff",
+    "eye": "#3a7ab8"
    },
    "bonus": [
     [
@@ -975,16 +975,15 @@
    "attack": "magic",
    "range": 8,
    "look": {
+    "style": "mage",
     "skin": "#f8e0c8",
     "hair": "#e8e8ff",
     "cloth": "#3a2a8a",
     "cloth2": "#ffd060",
-    "pants": "#1a1a4a",
-    "hairStyle": 1,
-    "body": "robe",
     "hat": "archwizard",
     "cape": "#6a3ad0",
-    "pauldron": "#ffd060",
+    "gem": "#c08aff",
+    "eye": "#8a5ad8",
     "aura": "#b080ff"
    },
    "bonus": [

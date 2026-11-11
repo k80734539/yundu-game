@@ -5,7 +5,7 @@ import { isoX, isoY } from './iso';
 export type DmgKind = 'deal' | 'take' | 'crit' | 'miss' | 'heal' | 'sp' | 'skill';
 export class DmgText { alive = false; x = 0; y = 0; t = 0; img: HTMLCanvasElement | null = null; vx = 0; kind: DmgKind = 'deal'; big = false; }
 export class Particle {
-  alive = false; x = 0; y = 0; z = 0; vx = 0; vy = 0; vz = 0; g = 0; life = 0; max = 1; color = '#fff'; size = 2; kind: 'dot' | 'ring' | 'spark' | 'glow' | 'text' | 'bolt' | 'arrow' | 'slash' | 'star' | 'flame' | 'pillar' | 'anger' | 'wave' = 'dot'; r = 0;
+  alive = false; x = 0; y = 0; z = 0; vx = 0; vy = 0; vz = 0; g = 0; life = 0; max = 1; color = '#fff'; size = 2; kind: 'dot' | 'ring' | 'spark' | 'glow' | 'text' | 'bolt' | 'arrow' | 'slash' | 'star' | 'flame' | 'pillar' | 'anger' | 'wave' | 'circle' | 'shard' | 'ice' | 'bubble' | 'meteor' = 'dot'; r = 0;
   a = 0; span = 0; flat = 1; sgn = 1; color2 = '#ffffff'; // 刀光／衝擊波用：中心角度、張開角度、壓扁比例（地面上的圓＝0.5）、揮動方向、亮芯顏色
 }
 /** 特效：傷害數字、粒子、地面圓環。座標用等角像素（iso），z 為離地高度 */
@@ -61,19 +61,22 @@ export class Effects {
   anger(wx: number, wy: number, z: number) { this.fxp(wx, wy, z, 'anger', 0.9); }
   /** 聲波：往 ang 方向推出去的弧線 */
   wave(wx: number, wy: number, z: number, ang: number, color: string, r0 = 14, r1 = 70, life = 0.4) { const p = this.fxp(wx, wy, z, 'wave', life); p.a = ang; p.color = color; p.size = r0; p.r = r1; }
-  /** 閃電：從天上劈下的鋸齒線 */
-  lightning(wx: number, wy: number) {
+  /** 魔法陣：詠唱時腳下旋轉的圓陣（兩圈圓＋六芒星＋符文刻度） */
+  magicCircle(wx: number, wy: number, color: string, life: number, r = 44) { const p = this.fxp(wx, wy, 0, 'circle', life); p.color = color; p.r = r; }
+  /** 冰刺：一圈從地面竄出的冰晶（冰封大地） */
+  iceSpikes(wx: number, wy: number, r: number, life = 0.9) { const p = this.fxp(wx, wy, 0, 'ice', life); p.r = r; p.a = Math.random() * 6.28; }
+  /** 魔力屏障：罩住身體的半透明光罩 */
+  bubble(wx: number, wy: number, color: string, life = 1.1) { const p = this.fxp(wx, wy, 44, 'bubble', life); p.color = color; }
+  /** 碎冰：往外飛散的小三角形 */
+  shards(wx: number, wy: number, z: number, color: string, n = 8) { this.burst(wx, wy, z, color, n, 110, 'shard', 0.5, 3); }
+  /** 隕石：帶火尾的火球斜斜砸下來（命中時間＝life） */
+  meteor(wx: number, wy: number, life = 0.32) { const p = this.fxp(wx, wy, 0, 'meteor', life); p.a = Math.random() * 6.28; }
+  /** 閃電：從天上劈下的鋸齒線（color 可換成紫色等） */
+  lightning(wx: number, wy: number, color = '#fff8a0') {
     const p = this.parts.get();
-    p.x = isoX(wx, wy); p.y = isoY(wx, wy); p.z = 0; p.vx = p.vy = p.vz = 0; p.g = 0; p.life = p.max = 0.22; p.kind = 'bolt'; p.color = '#fff8a0'; p.size = 3; p.r = Math.random() * 1000;
-    this.burst(wx, wy, 0, '#fff8a0', 10, 120, 'spark', 0.4, 2);
-    this.ring(wx, wy, '#f0e060', 0.35, 40);
-  }
-  /** 隕石：從天而降的火球 */
-  meteor(wx: number, wy: number) {
-    for (let i = 0; i < 10; i++) {
-      const p = this.parts.get();
-      p.x = isoX(wx, wy) - 60 + i * 2; p.y = isoY(wx, wy); p.z = 300 + i * 6; p.vx = 200; p.vy = 0; p.vz = -900; p.g = 0; p.life = p.max = 0.32; p.kind = 'glow'; p.color = i < 3 ? '#fff0a0' : i < 6 ? '#ff9030' : '#c03010'; p.size = 6 - Math.floor(i / 3); p.r = 0;
-    }
+    p.x = isoX(wx, wy); p.y = isoY(wx, wy); p.z = 0; p.vx = p.vy = p.vz = 0; p.g = 0; p.life = p.max = 0.26; p.kind = 'bolt'; p.color = color; p.size = 3; p.r = Math.random() * 1000;
+    this.burst(wx, wy, 0, color, 12, 130, 'spark', 0.4, 2);
+    this.ring(wx, wy, color, 0.35, 40); this.star(wx, wy, 6, color, 26, 0.22);
   }
   /** 箭雨：一支從天而降的箭 */
   arrowRain(wx: number, wy: number) {
@@ -162,12 +165,78 @@ export class Effects {
         c.globalAlpha = 1; c.lineCap = 'butt';
         return;
       }
-      if (p.kind === 'bolt') {
-        c.strokeStyle = k > 0.5 ? '#ffffff' : p.color; c.lineWidth = p.size; c.beginPath();
-        let yy = y - 400, xx = x; c.moveTo(xx, yy);
-        for (let i = 0; i < 8; i++) { yy += 50; xx = x + Math.sin(p.r + i * 2.3) * 14 * (1 - i / 8); c.lineTo(Math.round(xx), Math.round(yy)); }
-        c.lineTo(x, y); c.stroke();
-        c.globalAlpha = k * 0.5; c.fillStyle = '#fff8c0'; c.beginPath(); c.ellipse(x, y, 30, 14, 0, 0, Math.PI * 2); c.fill(); c.globalAlpha = 1;
+      if (p.kind === 'bolt') { // 閃電：寬的光暈＋亮芯＋兩條分岔
+        const pts: [number, number][] = [[x + Math.sin(p.r) * 20, y - 420]];
+        for (let i = 1; i <= 8; i++) pts.push([Math.round(x + Math.sin(p.r + i * 2.3) * 16 * (1 - i / 8)), y - 420 + i * 52]);
+        pts[8] = [x, y];
+        const path = (q: [number, number][]) => { c.beginPath(); c.moveTo(q[0][0], q[0][1]); for (let i = 1; i < q.length; i++) c.lineTo(q[i][0], q[i][1]); c.stroke(); };
+        c.lineJoin = 'miter'; c.lineCap = 'butt';
+        c.globalAlpha = k * 0.45; c.strokeStyle = p.color; c.lineWidth = 9; path(pts);
+        c.globalAlpha = Math.min(1, k * 1.8); c.strokeStyle = p.color; c.lineWidth = 4; path(pts);
+        c.strokeStyle = '#ffffff'; c.lineWidth = 2; path(pts);
+        c.strokeStyle = p.color; c.lineWidth = 2;
+        for (const j of [3, 5]) { const b = pts[j], dir = Math.sin(p.r + j) > 0 ? 1 : -1; path([b, [b[0] + dir * 14, b[1] + 22], [b[0] + dir * 10, b[1] + 40], [b[0] + dir * 24, b[1] + 58]]); }
+        c.globalAlpha = k * 0.6; c.fillStyle = '#ffffff'; c.beginPath(); c.ellipse(x, y, 34, 15, 0, 0, Math.PI * 2); c.fill(); c.globalAlpha = 1;
+        return;
+      }
+      if (p.kind === 'circle') {
+        const t = 1 - k, al = Math.min(1, t / 0.12, k / 0.18), R = p.r * Math.min(1, 0.5 + t * 6), rot = t * p.max * 2.2;
+        const E = (rr: number, lw: number) => { c.lineWidth = lw; c.beginPath(); c.ellipse(x, y, rr, rr * 0.5, 0, 0, Math.PI * 2); c.stroke(); };
+        const V = (an: number, rr: number): [number, number] => [x + Math.cos(an) * rr, y + Math.sin(an) * rr * 0.5];
+        c.globalAlpha = al * 0.22; c.fillStyle = p.color; c.beginPath(); c.ellipse(x, y, R, R * 0.5, 0, 0, Math.PI * 2); c.fill();
+        c.globalAlpha = al * 0.95; c.strokeStyle = p.color; E(R, 2.5); E(R * 0.74, 1.5);
+        c.strokeStyle = '#ffffff'; E(R * 0.97, 1);
+        c.strokeStyle = p.color; c.lineWidth = 1.5;
+        for (const off of [0, Math.PI]) { c.beginPath(); for (let i = 0; i <= 3; i++) { const q = V(rot + off + (i * Math.PI * 2) / 3, R * 0.72); if (i) c.lineTo(q[0], q[1]); else c.moveTo(q[0], q[1]); } c.stroke(); }
+        c.strokeStyle = '#ffffff'; c.lineWidth = 2;
+        for (let i = 0; i < 8; i++) { const an = -rot * 1.4 + (i * Math.PI) / 4, q0 = V(an, R * 0.8), q1 = V(an, R * 0.93); c.beginPath(); c.moveTo(q0[0], q0[1]); c.lineTo(q1[0], q1[1]); c.stroke(); }
+        c.globalAlpha = 1;
+        return;
+      }
+      if (p.kind === 'shard') {
+        const s2 = p.size * (0.6 + k), an = p.r + (1 - k) * 9 + p.vx * 0.05;
+        c.globalAlpha = Math.min(1, k * 2); c.fillStyle = p.color;
+        c.beginPath(); for (let i = 0; i < 3; i++) { const q = an + (i * Math.PI * 2) / 3; c.lineTo(x + Math.cos(q) * s2 * (i ? 1 : 2), y + Math.sin(q) * s2 * (i ? 1 : 2)); } c.closePath(); c.fill();
+        c.fillStyle = '#ffffff'; c.fillRect(x - 1, y - 1, 2, 2); c.globalAlpha = 1;
+        return;
+      }
+      if (p.kind === 'ice') {
+        const t = 1 - k, grow = 1 - (1 - Math.min(1, t / 0.16)) ** 3, al = Math.min(1, k / 0.3), n = 14;
+        c.globalAlpha = al * 0.4; c.fillStyle = '#c8f0ff'; c.beginPath(); c.ellipse(x, y, p.r, p.r * 0.5, 0, 0, Math.PI * 2); c.fill();
+        c.globalAlpha = al * 0.9; c.strokeStyle = '#ffffff'; c.lineWidth = 2; c.beginPath(); c.ellipse(x, y, p.r, p.r * 0.5, 0, 0, Math.PI * 2); c.stroke();
+        const spike = (bx: number, by: number, h: number, w: number, lean: number) => {
+          c.globalAlpha = al;
+          c.fillStyle = '#3a78c0'; c.beginPath(); c.moveTo(bx - w - 1, by + 1); c.lineTo(bx + lean, by - h - 2); c.lineTo(bx + w + 1, by + 1); c.closePath(); c.fill();
+          c.fillStyle = '#a8dcff'; c.beginPath(); c.moveTo(bx - w, by); c.lineTo(bx + lean, by - h); c.lineTo(bx + w, by); c.closePath(); c.fill();
+          c.fillStyle = '#ffffff'; c.beginPath(); c.moveTo(bx - w, by); c.lineTo(bx + lean, by - h); c.lineTo(bx - w * 0.2, by); c.closePath(); c.fill();
+        };
+        for (const pass of [0, 1]) for (let i = 0; i < n + 5; i++) {
+          const inner = i >= n, an = p.a + (i / (inner ? 5 : n)) * Math.PI * 2, rr = p.r * (inner ? 0.45 : 0.92), sn = Math.sin(an); if ((pass === 0) !== (sn < 0)) continue;
+          spike(x + Math.cos(an) * rr, y + sn * rr * 0.5, (16 + ((i * 7) % 5) * 5 + (inner ? 10 : 0)) * grow, 5 + (i % 3), Math.cos(an) * 5);
+        }
+        c.globalAlpha = 1;
+        return;
+      }
+      if (p.kind === 'bubble') {
+        const t = 1 - k, al = Math.min(1, t / 0.15, k / 0.4), pul = 1 + Math.sin(t * 20) * 0.03 + Math.max(0, 0.25 - t) * 0.8;
+        const rx = 36 * pul, ry = 50 * pul;
+        c.globalAlpha = al * 0.22; c.fillStyle = p.color; c.beginPath(); c.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); c.fill();
+        c.globalAlpha = al * 0.9; c.strokeStyle = p.color; c.lineWidth = 2.5; c.beginPath(); c.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); c.stroke();
+        c.strokeStyle = '#ffffff'; c.lineWidth = 1; c.beginPath(); c.ellipse(x, y, rx - 3, ry - 3, 0, Math.PI * 1.05, Math.PI * 1.6); c.stroke();
+        c.globalAlpha = al * 0.5; c.strokeStyle = p.color; c.lineWidth = 1;
+        for (let i = -1; i <= 1; i++) { c.beginPath(); c.ellipse(x, y, rx * (0.35 + Math.abs(i) * 0.4), ry, 0, 0, Math.PI * 2); c.stroke(); c.beginPath(); c.ellipse(x, y + i * ry * 0.4, rx * Math.sqrt(1 - (i * 0.4) ** 2), ry * 0.12, 0, 0, Math.PI * 2); c.stroke(); }
+        c.globalAlpha = 1;
+        return;
+      }
+      if (p.kind === 'meteor') { // 火球從右上斜斜砸下，後面拖著火尾
+        const t = 1 - k, hx2 = x + (1 - t) * 90, hy2 = y - (1 - t) * 330, dx = -90 / 342, dy = 330 / 342, nx = -dy, ny = dx;
+        for (const [len, w, col] of [[70, 13, '#c82a0c'], [52, 9, '#ff8a20'], [30, 5, '#fff0a0']] as [number, number, string][]) {
+          const wob = Math.sin(p.a + t * 40 + len) * 2;
+          c.fillStyle = col; c.beginPath(); c.moveTo(hx2 + nx * w, hy2 + ny * w); c.lineTo(hx2 - dx * len + nx * wob, hy2 - dy * len + ny * wob); c.lineTo(hx2 - nx * w, hy2 - ny * w); c.closePath(); c.fill();
+          c.beginPath(); c.arc(hx2, hy2, w, 0, Math.PI * 2); c.fill();
+        }
+        c.fillStyle = '#5a2a1a'; c.beginPath(); c.arc(hx2 + dx * 2, hy2 + dy * 2, 5, 0, Math.PI * 2); c.fill();
+        c.globalAlpha = 0.25 + t * 0.4; c.fillStyle = '#1a0a0a'; c.beginPath(); c.ellipse(x, y, 10 + t * 18, 5 + t * 9, 0, 0, Math.PI * 2); c.fill(); c.globalAlpha = 1;   // 落點的影子
         return;
       }
       if (p.kind === 'arrow') {

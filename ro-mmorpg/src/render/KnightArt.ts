@@ -6,34 +6,34 @@ import type { Look } from '../data';
  * 規格與一般人形相同：格子 192×192、腳底錨點 (96,186)、三個方向（下、左、上；右由左鏡像）、10 格（0~1 待機、2~5 走路、6~9 攻擊）。
  * 攻擊四格：蓄力（劍往後拉）→ 舉到最高 → 揮下（身體前衝）→ 收招。揮砍的刀光不畫在圖裡，由遊戲內特效（Effects.slash）負責。
  */
-type P = [number, number];
-const OUT = 'rgb(34,22,38)';
-const AX = 96, FOOT = 184;
+export type P = [number, number];
+export const OUT = 'rgb(34,22,38)';
+export const AX = 96, FOOT = 184;
 
 // ---------- 繪圖工具（每個形狀都有深色外框，之後 celLight 會自動打出立體感） ----------
-function trace(c: CanvasRenderingContext2D, pts: P[]) { c.beginPath(); c.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) c.lineTo(pts[i][0], pts[i][1]); c.closePath(); }
-function poly(c: CanvasRenderingContext2D, pts: P[], col: RGB, lw = 2) { trace(c, pts); c.lineJoin = 'round'; c.strokeStyle = OUT; c.lineWidth = lw; c.stroke(); c.fillStyle = css(col); c.fill(); }
-function fillPoly(c: CanvasRenderingContext2D, pts: P[], col: RGB) { trace(c, pts); c.fillStyle = css(col); c.fill(); }
+export function trace(c: CanvasRenderingContext2D, pts: P[]) { c.beginPath(); c.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) c.lineTo(pts[i][0], pts[i][1]); c.closePath(); }
+export function poly(c: CanvasRenderingContext2D, pts: P[], col: RGB, lw = 2) { trace(c, pts); c.lineJoin = 'round'; c.strokeStyle = OUT; c.lineWidth = lw; c.stroke(); c.fillStyle = css(col); c.fill(); }
+export function fillPoly(c: CanvasRenderingContext2D, pts: P[], col: RGB) { trace(c, pts); c.fillStyle = css(col); c.fill(); }
 /** 多個多邊形合成一個輪廓（先全部描邊、再全部填色，內部不會有分隔線） */
-function merged(c: CanvasRenderingContext2D, polys: P[][], col: RGB) {
+export function merged(c: CanvasRenderingContext2D, polys: P[][], col: RGB) {
   c.lineJoin = 'round'; c.strokeStyle = OUT; c.lineWidth = 2;
   for (const p of polys) { trace(c, p); c.stroke(); }
   c.fillStyle = css(col); for (const p of polys) { trace(c, p); c.fill(); }
 }
-function ell(c: CanvasRenderingContext2D, cx: number, cy: number, rx: number, ry: number, col: RGB, rot = 0) {
+export function ell(c: CanvasRenderingContext2D, cx: number, cy: number, rx: number, ry: number, col: RGB, rot = 0) {
   c.fillStyle = OUT; c.beginPath(); c.ellipse(cx, cy, rx + 1, ry + 1, rot, 0, Math.PI * 2); c.fill();
   c.fillStyle = css(col); c.beginPath(); c.ellipse(cx, cy, rx, ry, rot, 0, Math.PI * 2); c.fill();
 }
-function seg(c: CanvasRenderingContext2D, a: P, b: P, w: number, col: RGB) {
+export function seg(c: CanvasRenderingContext2D, a: P, b: P, w: number, col: RGB) {
   c.lineCap = 'round';
   c.strokeStyle = OUT; c.lineWidth = w + 2; c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke();
   c.strokeStyle = css(col); c.lineWidth = w; c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke();
 }
-function ln(c: CanvasRenderingContext2D, a: P, b: P, w: number, col: RGB | string) {
+export function ln(c: CanvasRenderingContext2D, a: P, b: P, w: number, col: RGB | string) {
   c.lineCap = 'butt'; c.strokeStyle = typeof col === 'string' ? col : css(col); c.lineWidth = w; c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke();
 }
-function px(c: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, col: RGB | string) { c.fillStyle = typeof col === 'string' ? col : css(col); c.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); }
-const lerp = (a: P, b: P, t: number): P => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+export function px(c: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, col: RGB | string) { c.fillStyle = typeof col === 'string' ? col : css(col); c.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); }
+export const lerp = (a: P, b: P, t: number): P => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
 
 // ---------- 姿勢 ----------
 interface Pose {
@@ -47,7 +47,7 @@ interface Pose {
   sway: number; flare: number; // 披風擺動（−1~1）與揚起（0~1）
   hy: number;                  // 頭的額外上下位移
 }
-const WALK = [
+export const WALK = [
   { a: 1, liftL: 0, liftR: 1, bob: 0 },    // 左腳在前
   { a: 0, liftL: 0, liftR: 5, bob: -2 },   // 右腳抬起經過
   { a: -1, liftL: 1, liftR: 0, bob: 0 },   // 右腳在前
@@ -102,8 +102,8 @@ function poseOf(dir: number, f: number): Pose {
 }
 
 // ---------- 顏色 ----------
-interface Pal { skin: RGB; hair: RGB; cloth: RGB; pants: RGB; steel: RGB; gold: RGB; cape: RGB | null; band: RGB; leather: RGB; pauldron: RGB; eye: RGB }
-function palette(L: Look): Pal {
+export interface Pal { skin: RGB; hair: RGB; cloth: RGB; pants: RGB; steel: RGB; gold: RGB; cape: RGB | null; band: RGB; leather: RGB; pauldron: RGB; eye: RGB }
+export function palette(L: Look): Pal {
   const steel = hex(L.armor || '#c6cedd');
   return {
     skin: hex(L.skin || '#f8d8b8'), hair: hex(L.hair || '#7a4a28'), cloth: hex(L.cloth || '#3f62b8'), pants: hex(L.pants || '#3a3a5a'),
@@ -175,7 +175,7 @@ function leg(c: CanvasRenderingContext2D, hip: P, foot: P, C: Pal, toe: number, 
   px(c, foot[0] - (toe ? 8 : 5), y - 1, toe ? 12 : 11, 1, shade(steel, -0.5));
 }
 /** 眼睛（沿用一般人形的大眼畫法，加上往內壓的眉毛） */
-function eye(c: CanvasRenderingContext2D, x: number, y0: number, C: Pal, inner: number) {
+export function eye(c: CanvasRenderingContext2D, x: number, y0: number, C: Pal, inner: number) {
   px(c, x - 4, y0, 8, 12, OUT);
   px(c, x - 3, y0 + 2, 6, 9, '#ffffff');
   px(c, x - 3, y0 + 3, 5, 8, shade(C.eye, -0.35)); px(c, x - 3, y0 + 6, 5, 5, C.eye); px(c, x - 2, y0 + 9, 3, 2, shade(C.eye, 0.45));

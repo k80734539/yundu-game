@@ -51,7 +51,7 @@ export class SkillSystem {
       this.cast = { id, lv, t: 0, dur: castT, target };
       p.state = 'cast'; p.animT = 0;
       g.audio?.sfx('cast');
-      g.fx.ring(p.x, p.y, s.element === 'fire' ? '#ff8040' : s.element === 'water' ? '#60c0ff' : s.element === 'wind' ? '#f0e060' : '#c0a0ff', castT, 46);
+      g.fx.magicCircle(p.x, p.y, s.element === 'fire' ? '#ff8040' : s.element === 'water' ? '#60c0ff' : s.element === 'wind' ? '#f0e060' : '#c0a0ff', castT + 0.2, 46); // 腳下的魔法陣，顏色看屬性
     } else this.execute(id, lv, target);
   }
   interrupt() { if (this.cast) { this.cast = null; this.g.player.state = 'idle'; this.g.msg('詠唱被中斷了。', 'warn'); } this.pending = null; }
@@ -116,6 +116,7 @@ export class SkillSystem {
         const col = id === 'endure' || id === 'guard' ? '#ffd860' : id === 'barrier' ? '#b0a0ff' : '#80ff90';
         for (let i = 0; i < 26; i++) g.fx.glow(p.x, p.y, Math.random() * 40, col, 1.0, 2, 60 + Math.random() * 50);
         g.fx.ring(p.x, p.y, col, 0.6, 44);
+        if (id === 'barrier' || id === 'mana_surge') { g.fx.bubble(p.x, p.y, id === 'barrier' ? '#b0a0ff' : '#80e8ff', 1.2); g.fx.magicCircle(p.x, p.y, col, 0.8, 40); } // 魔力屏障／魔力奔流：光罩＋魔法陣
         if (id === 'endure' || id === 'guard' || id === 'divine_aegis') { // 霸體／守護：金色光柱＋兩道往外的光環
           g.fx.pillar(p.x, p.y, col, 0.75, 24, 130); g.after(0.12, () => g.fx.ring(p.x, p.y, '#ffffff', 0.45, 60)); g.fx.star(p.x, p.y, 70, col, 30, 0.3); g.cam.shake(2, 0.12);
         }
@@ -132,7 +133,10 @@ export class SkillSystem {
             if (s.element === 'ghost' && GHOSTLY.has(target.def.id)) mult *= 1 + 0.05 * lv;
             const r = this.magic(target, mult, s);
             if (r && id === 'coldbolt' && g.rnd() * 100 < (s.value?.[lv - 1] ?? 0)) { target.frozenT = 3; g.fx.dmg(target.x, target.y, 'FREEZE', 'sp', -target.bbox.y0 + 30); }
-            g.fx.burst(target.x, target.y, -target.bbox.y0 * 0.5, kind === 'fire' ? '#ff8030' : kind === 'ice' ? '#a0e0ff' : '#d0a0ff', 10, 90, 'spark', 0.4, 2);
+            const tz = -target.bbox.y0 * 0.5, last = i === hits - 1;
+            if (kind === 'fire') { g.fx.burst(target.x, target.y, tz, '#ff8030', 10, 100, 'spark', 0.4, 2); g.fx.star(target.x, target.y, tz, '#ffb040', 20, 0.18); if (last) { g.fx.flameRing(target.x, target.y, 30, 0.4); g.cam.shake(3, 0.15); } }
+            else if (kind === 'ice') { g.fx.shards(target.x, target.y, tz, '#bfe8ff', 7); g.fx.star(target.x, target.y, tz, '#dff4ff', 20, 0.18); if (last) { g.fx.ring(target.x, target.y, '#bfe8ff', 0.4, 36); g.fx.shards(target.x, target.y, tz, '#ffffff', 8); } }
+            else { g.fx.burst(target.x, target.y, tz, '#d0a0ff', 10, 90, 'spark', 0.4, 2); g.fx.star(target.x, target.y, tz, '#d8a8ff', 22, 0.2); g.fx.ring(target.x, target.y, '#c090ff', 0.3, 26, tz); }
           }, 11, kind !== 'soul', i * (kind === 'soul' ? 0.14 : 0.16));
           g.addProjectile(pr);
         }
@@ -146,10 +150,11 @@ export class SkillSystem {
           for (let i = 0; i < hits; i++) g.after(i * 0.35, () => {
             const sx = cx + (g.rnd() - 0.5) * r, sy = cy + (g.rnd() - 0.5) * r;
             g.fx.meteor(sx, sy);
-            g.after(0.3, () => { g.fx.ring(sx, sy, '#ff8030', 0.5, r * 45); g.fx.burst(sx, sy, 0, '#ff7020', 30, 160, 'spark', 0.6, 3); g.cam.shake(7, 0.3); g.audio.sfx('skill_fire_burst'); for (const m of g.monstersNear(sx, sy, r + 0.5)) this.magic(m, pw, s); });
+            g.after(0.3, () => { g.fx.flameRing(sx, sy, r * 30, 0.55); g.fx.star(sx, sy, 8, '#ffd060', 44, 0.26); g.fx.ring(sx, sy, '#ff8030', 0.5, r * 45); g.fx.burst(sx, sy, 0, '#ff7020', 30, 160, 'spark', 0.6, 3); g.cam.shake(7, 0.3); g.audio.sfx('skill_fire_burst'); for (const m of g.monstersNear(sx, sy, r + 0.5)) this.magic(m, pw, s); });
           });
         } else if (s.fx === 'frost') {
           p.startAttack(0.4);
+          g.fx.iceSpikes(cx, cy, r * 40, 1.0); g.fx.shards(cx, cy, 10, '#ffffff', 14); g.cam.shake(4, 0.2);
           g.fx.ring(cx, cy, '#a0e8ff', 0.6, r * 48); g.fx.ring(cx, cy, '#ffffff', 0.4, r * 30); g.fx.burst(cx, cy, 0, '#c8f0ff', 30, 130, 'spark', 0.6, 2); g.audio.sfx('skill_cold_bolt');
           for (const m of g.monstersNear(cx, cy, r + 0.5)) { const res = this.magic(m, pw, s); if (res && g.rnd() * 100 < (s.value?.[lv - 1] ?? 30)) { m.frozenT = 3; g.fx.dmg(m.x, m.y, 'FREEZE', 'sp', -m.bbox.y0 + 30); } }
         } else if (s.fx === 'trap') {
@@ -177,7 +182,7 @@ export class SkillSystem {
         let cur: Monster | undefined = target;
         for (let i = 0; i < n && cur; i++) {
           const m: Monster = cur; hitList.push(m);
-          g.after(i * 0.15, () => { if (m.dead) return; g.fx.lightning(m.x, m.y); g.audio.sfx('thunder'); this.magic(m, pw, s); });
+          g.after(i * 0.15, () => { if (m.dead) return; g.fx.lightning(m.x, m.y, id === 'void_lance' ? '#c090ff' : '#fff8a0'); g.audio.sfx('thunder'); this.magic(m, pw, s); });
           cur = g.monstersNear(m.x, m.y, 4).filter((o) => !hitList.includes(o)).sort((a, b) => Math.hypot(a.x - m.x, a.y - m.y) - Math.hypot(b.x - m.x, b.y - m.y))[0];
         }
         break;
