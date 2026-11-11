@@ -625,16 +625,19 @@ export class Game {
   pick(sx: number, sy: number): Entity | null {
     const L = this.cam.left(this.r.w), T = this.cam.top(this.r.h);
     let best: Entity | null = null, bd = -1e9;
+    const touch = this.ui.mobile;                          // 手指比滑鼠粗：掉落物與怪物的點擊範圍放大，並選最靠近手指的那個
+    const hx = touch ? 26 : 14, hy0 = touch ? 40 : 22, hy1 = touch ? 16 : 6;
+    let bestD = 1e9;
     for (const it of this.items) {
-      const fx = isoX(it.x, it.y) - L, fy = isoY(it.x, it.y) - T;
-      if (sx >= fx - 14 && sx <= fx + 14 && sy >= fy - 22 && sy <= fy + 6 && it.depth + 0.5 > bd) { bd = it.depth + 0.5; best = it; }
+      const fx = isoX(it.ox, it.oy) - L, fy = isoY(it.ox, it.oy) - T - (it.z || 0);
+      if (sx >= fx - hx && sx <= fx + hx && sy >= fy - hy0 && sy <= fy + hy1) { const d = Math.hypot(sx - fx, sy - (fy - 10)); if (d < bestD) { bestD = d; best = it; } }
     }
     if (best) return best;
     for (const e of this.entities) {
       if (!(e instanceof Actor) || e === this.player || e.dead) continue;
       const b = e.bbox;
       const fx = isoX(e.x, e.y) - L, fy = isoY(e.x, e.y) - T;
-      const pad = 4;
+      const pad = touch ? 9 : 4;
       if (sx >= fx + b.x0 - pad && sx <= fx + b.x1 + pad && sy >= fy + b.y0 - pad && sy <= fy + b.y1 + pad) {
         if (e.depth > bd) { bd = e.depth; best = e; }
       }
@@ -1326,7 +1329,7 @@ export class Game {
     c.drawImage(ic, x, y);
     c.globalAlpha = 1;
     // 名稱：精良以上一直顯示且用稀有度色；普通只在滑鼠移上時顯示（低調）
-    if (rk >= 1 || this.hover === it) this.label(c, (rk >= 1 ? `【${RAR[rar].name}】` : '') + it.def.name + (it.n > 1 ? ' ×' + it.n : ''), x + 12, y - 18, col);
+    if (rk >= 1 || this.hover === it || Math.hypot(it.x - this.player.x, it.y - this.player.y) <= 3) this.label(c, (rk >= 1 ? `【${RAR[rar].name}】` : '') + it.def.name + (it.n > 1 ? ' ×' + it.n : ''), x + 12, y - 18, col);
   }
   drawOverhead(c: CanvasRenderingContext2D, e: Actor, L: number, T: number) {
     if (e.dead) return;
@@ -1363,7 +1366,14 @@ export class Game {
       if (mk) { const img = textImage(mk, mk === '?' ? '#60ff80' : '#ffe040', 3); c.drawImage(img, Math.round(x - img.width / 2), Math.round(y + e.bbox.y0 - 30 + Math.sin(this.time * 4) * 3)); }
       return;
     }
-    if (this.hover === e && !mvp) this.label(c, e instanceof Monster ? `${e.name} Lv${e.def.lv}` : e.name, x, y + 22, e instanceof Monster ? '#ffffff' : '#a0e0ff');
+    if (e instanceof Monster && !mvp) { // 怪物名字：滑鼠移上、正在打的、或在附近（手機沒有滑鼠，所以靠近就會顯示）；顏色表示強弱
+      const near = Math.hypot(e.x - this.player.x, e.y - this.player.y) <= 8;
+      if (this.hover === e || this.player.chase === e || near) {
+        const diff = e.def.lv - this.player.ch.baseLv;
+        const col = diff >= 5 ? '#ff7a6a' : diff >= 2 ? '#ffc070' : diff <= -6 ? '#9ce89c' : '#ffffff';
+        this.label(c, `${e.name} Lv${e.def.lv}`, x, y + (showBar ? 16 : 10), col);
+      }
+    } else if (this.hover === e && !mvp) this.label(c, e.name, x, y + 22, '#a0e0ff');
   }
   label(c: CanvasRenderingContext2D, text: string, x: number, y: number, color = '#fff') {
     c.font = '12px "Noto Sans TC", "Microsoft JhengHei", sans-serif';
