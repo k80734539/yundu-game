@@ -99,6 +99,7 @@ export class Dialog {
       case 'jobmenu': g.jobMenu(this); break;
       case 'refine': this.close(); this.ui.open('refine'); break;
       case 'cards': this.close(); this.ui.open('cards'); break;
+      case 'storage': this.close(); this.ui.storage.open(); break;
       case 'forge': this.close(); this.ui.forge.openTab(arg === 'exchange' ? 'exchange' : 'dismantle'); break;
       case 'reset': {
         const cost = g.resetCost();

@@ -21,6 +21,8 @@ const tier = (g: Game) => DB.job[g.player.ch.job]?.tier ?? 0;
 export const TIPS: Tip[] = [
   { id: 'guide', when: (g) => g.quests.activeList().length > 0 && g.player.ch.baseLv >= 5 && g.player.ch.baseLv < 14, done: (g) => !!g.flags.guideSeen,
     text: '不知道任務怎麼做？看畫面右側任務欄的「📍」：它會告訴你下一步去哪、找誰，並在畫面上畫出方向箭頭（點一下可開關）。' },
+  { id: 'storage', when: (g) => g.inv.weight() >= Math.floor(g.player.d.weight / 10) * 0.8, done: (g) => !!g.flags.storageSeen,
+    text: '背包快滿了！晨曦鎮和星落鎮的倉庫管理員可以幫你存放裝備與材料（倉庫不算負重，兩個城鎮共用）。' },
   { id: 'merc', when: (g) => tier(g) >= 1 && g.player.ch.baseLv >= 15, done: (g) => !!g.flags.hiredMerc,
     text: '到晨曦鎮東南邊找傭兵團長巴頓：花 Zeny 雇一位輔助傭兵（牧師補血、樂師增益、煉金術士丟炸彈、馴獸師帶戰獸），契約 30 分鐘，不吃經驗。' },
   { id: 'quarter', when: (g) => g.player.ch.baseLv >= 30, done: (g) => !!g.flags.quarterSeen,

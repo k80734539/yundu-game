@@ -47,6 +47,7 @@ import { Save } from '../systems/Save';
 import debugJson from '../../data/debug.json';
 import { Audio } from '../systems/Audio';
 import { Tutorial } from '../systems/Tutorial';
+import { Warehouse } from '../systems/Warehouse';
 import { refineRate, refineMaterial, refineFee } from '../systems/Refine';
 import { expNeed, jobExpNeed } from '../systems/Stats';
 import { cellDist, mulberry32 } from './math';
@@ -77,7 +78,7 @@ export class Game {
   ui!: UI;
   audio: Audio = new Audio();
   save!: Save;
-  inv: Inventory;
+  inv: Inventory; storage = new Warehouse();
   spawner: Spawner;
   items: GroundItem[] = [];
   pickTarget: GroundItem | null = null;

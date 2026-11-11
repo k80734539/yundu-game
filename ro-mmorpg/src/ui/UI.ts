@@ -21,6 +21,7 @@ import { iconURL } from '../render/IconArt';
 import { QuestWindow, QuestTracker } from './QuestWindow';
 import { RefineWindow, CardWindow } from './RefineWindow';
 import { ForgeWindow } from './ForgeWindow';
+import { StorageWindow } from './StorageWindow';
 import { BossBar } from './BossBar';
 
 /** UI 管理器：DOM 視窗、快捷鍵、訊息、橫幅 */
@@ -36,7 +37,7 @@ export class UI {
   private bannerT = 0;
   buffEl!: HTMLDivElement;
   death!: HTMLDivElement;
-  forge!: ForgeWindow;
+  forge!: ForgeWindow; storage!: StorageWindow;
   bossbar!: BossBar;
   tut!: HTMLDivElement;
   private buffKey = '';
@@ -69,6 +70,7 @@ export class UI {
     this.add(new CardWindow(this));
     this.bossbar = new BossBar(this);
     this.forge = this.add(new ForgeWindow(this)) as ForgeWindow;
+    this.storage = this.add(new StorageWindow(this)) as StorageWindow;
     this.death = h('div'); this.death.id = 'death';
     const box = h('div', 'win box'); box.style.position = 'static'; this.death.appendChild(box); root.appendChild(this.death);
     this.buffEl = h('div'); this.buffEl.id = 'buffs'; root.appendChild(this.buffEl);

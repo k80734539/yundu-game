@@ -406,3 +406,8 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 #qtrack .qt-guide .qt-sub { font-size: 11px; color: #cfd8f0; opacity: .85; }
 #qtrack .qt-guide.off { opacity: .6; }
 #qtrack.folded .qt-guide { display: none; }
+/* 倉庫：分類篩選 */
+.st-filter { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px 2px 6px; }
+.st-filter .chip { padding: 1px 8px; border: 1px solid #8a9ac0; border-radius: 10px; background: #eef1f8; cursor: pointer; font-size: 11px; }
+.st-filter .chip.on { background: #2a4a8a; color: #fff; border-color: #2a4a8a; }
+#ui.mobile .st-filter .chip { padding: 5px 12px; font-size: 13px; }

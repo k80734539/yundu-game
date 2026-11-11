@@ -7,6 +7,7 @@ import jobsJson from '../../data/jobs.json';
 import questsJson from '../../data/quests.json';
 import npcsJson from '../../data/npcs.json';
 import mercsJson from '../../data/mercs.json';
+import storageJson from '../../data/storage.json';
 import shopsJson from '../../data/shops.json';
 import lootJson from '../../data/loot.json';
 import bossJson from '../../data/bossfights.json';
@@ -137,3 +138,4 @@ export interface MercType {
 }
 export interface MercConfig { contractSec: number; costBase: number; costPerLv: number; bossFactor: number; followDist: number; teleportDist: number; types: MercType[] }
 export const MERCS = mercsJson as unknown as MercConfig;
+export const STORAGE = storageJson as unknown as { slots: number; fee: number };

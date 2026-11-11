@@ -183,7 +183,7 @@ export class Save {
   snapshot(): Data {
     const g = this.g, p = g.player;
     return {
-      ch: p.ch, hp: Math.ceil(p.hp), sp: Math.ceil(p.sp), inv: g.inv.toJSON(), hotbar: g.hotbar,
+      ch: p.ch, hp: Math.ceil(p.hp), sp: Math.ceil(p.sp), inv: g.inv.toJSON(), storage: g.storage.toJSON(), hotbar: g.hotbar,
       map: g.map.def.id, x: Math.floor(p.x), y: Math.floor(p.y), savePoint: g.savePoint,
       quests: g.quests.s, flags: g.flags, mvp: g.spawner.mvp, audio: g.audio?.vol || null, merc: g.mercs.toJSON(),
     };
@@ -215,7 +215,7 @@ export class Save {
   apply(d: Data) {
     const g = this.g, p = g.player;
     p.ch = { ...p.ch, ...d.ch, stats: { ...p.ch.stats, ...d.ch.stats }, skills: { ...(d.ch.skills || {}) } };
-    g.inv.load(d.inv || { items: [], equip: {} });
+    g.inv.load(d.inv || { items: [], equip: {} }); g.storage.load(d.storage);
     g.hotbar = (d.hotbar || []).slice(0, 9); while (g.hotbar.length < 9) g.hotbar.push(null);
     g.savePoint = d.savePoint || g.savePoint;
     g.quests.s = d.quests || {};

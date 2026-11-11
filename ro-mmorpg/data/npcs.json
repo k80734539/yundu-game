@@ -735,5 +735,69 @@
     ]
    }
   }
+ },
+ {
+  "id": "store",
+  "name": "倉庫管理員 魯伯",
+  "title": "倉庫",
+  "look": {
+   "skin": "#e8c8a0",
+   "hair": "#7a5a3a",
+   "cloth": "#6a5a3a",
+   "cloth2": "#d8c890",
+   "pants": "#4a3a2a",
+   "hairStyle": 0,
+   "hat": "band"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "冒險者的行李都可以放在我這裡。",
+     "晨曦鎮和星落鎮的倉庫是通的，放在這邊，到那邊也拿得到。"
+    ],
+    "opts": [
+     {
+      "label": "使用倉庫",
+      "act": "storage"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "id": "store2",
+  "name": "倉庫管理員 諾亞",
+  "title": "倉庫",
+  "look": {
+   "skin": "#d8b898",
+   "hair": "#c8c8d8",
+   "cloth": "#5a4a7a",
+   "cloth2": "#e0d0a0",
+   "pants": "#3a2a4a",
+   "hairStyle": 1,
+   "hat": "band"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "遠征帶回來的戰利品，先放我這裡吧。",
+     "這裡和晨曦鎮的倉庫是同一個，東西都在。"
+    ],
+    "opts": [
+     {
+      "label": "使用倉庫",
+      "act": "storage"
+     },
+     {
+      "label": "再見",
+      "act": "close"
+     }
+    ]
+   }
+  }
  }
 ]
