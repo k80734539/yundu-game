@@ -29,6 +29,7 @@ export class Player extends Actor {
   get job() { return DB.job[this.ch.job]; }
   refreshLook(weapon?: string) {
     const L: Look = { ...this.job.look, weapon: weapon ?? this.weaponType() };
+    if (L.style === 'knight' && this.equipsFn().some((e) => e.item.slot === 'shield')) L.shield = true; // 劍士系：有裝盾就畫出來
     if (CHAR_SHEETS[this.job.id]) L.sheet = CHAR_SHEETS[this.job.id]; // 有美術圖的職業用圖片精靈圖
     if (JSON.stringify(L) !== JSON.stringify(this.look)) { this.look = L; this.sheet = humanSheet(L); }
   }

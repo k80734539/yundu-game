@@ -1,5 +1,6 @@
 import { RGB, hex, css, shade, makeCanvas, ctx2d, crisp, pxEllipse } from './pixel';
 import type { Look } from '../data';
+import { drawKnight } from './KnightArt';
 
 /** Sprite sheet 規格：4 列（下、左、右、上）× 10 格（0~1 待機、2~5 走路、6~9 攻擊） */
 export interface Sheet { c: HTMLCanvasElement; fw: number; fh: number; ax: number; ay: number; white?: HTMLCanvasElement; img?: HTMLImageElement; rows?: number }
@@ -638,7 +639,7 @@ function useImage(s: Sheet, url?: string) {
 export function humanSheet(L: Look): Sheet {
   const k = 'h:' + JSON.stringify(L);
   let s = sheetCache.get(k);
-  if (!s) { s = buildSheet(192, (c, dir, f) => drawHuman(c, dir, f, L)); sheetCache.set(k, s); useImage(s, L.sheet); }
+  if (!s) { s = buildSheet(192, (c, dir, f) => (L.style === 'knight' ? drawKnight(c, dir, f, L, weapon) : drawHuman(c, dir, f, L))); sheetCache.set(k, s); useImage(s, L.sheet); }
   return s;
 }
 export function monsterSheet(L: Look, fw: number): Sheet {

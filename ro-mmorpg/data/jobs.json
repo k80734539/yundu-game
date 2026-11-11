@@ -229,15 +229,14 @@
    "attack": "melee",
    "range": 1,
    "look": {
+    "style": "knight",
     "skin": "#f8d8b8",
-    "hair": "#5a3a2a",
-    "cloth": "#4a6ab0",
-    "cloth2": "#c0c8d8",
+    "hair": "#7a4a28",
+    "cloth": "#3f62b8",
+    "cloth2": "#f2f2f8",
     "pants": "#3a3a5a",
-    "hairStyle": 2,
-    "body": "armor",
-    "hat": "band",
-    "cape": "#b8343a"
+    "cape": "#c2323a",
+    "hat": "band"
    },
    "bonus": [
     [
@@ -553,15 +552,16 @@
    "attack": "melee",
    "range": 1,
    "look": {
+    "style": "knight",
     "skin": "#f8d8b8",
-    "hair": "#5a3a2a",
-    "cloth": "#dfe4ee",
-    "cloth2": "#d0a030",
+    "hair": "#7a4a28",
+    "cloth": "#3a4a8a",
+    "cloth2": "#f2f2f8",
     "pants": "#3a3a5a",
-    "hairStyle": 2,
-    "body": "armor",
+    "cape": "#f2f2f8",
     "hat": "helm",
-    "cape": "#f2f2f8"
+    "armor": "#e2e6f0",
+    "trim": "#d8a830"
    },
    "bonus": [
     [
@@ -869,17 +869,18 @@
    "attack": "melee",
    "range": 1,
    "look": {
+    "style": "knight",
     "skin": "#f8d8b8",
     "hair": "#f0e0a0",
-    "cloth": "#f4f4fa",
-    "cloth2": "#e0b030",
+    "cloth": "#8a2030",
+    "cloth2": "#f2f2f8",
     "pants": "#c8c8d8",
-    "hairStyle": 2,
-    "body": "armor",
-    "hat": "crownhelm",
     "cape": "#c02030",
+    "hat": "crownhelm",
+    "armor": "#f4f4fa",
+    "trim": "#e8b838",
+    "pauldron": "#e8b838",
     "wings": "#fff2b8",
-    "pauldron": "#e0b030",
     "aura": "#ffe080"
    },
    "bonus": [

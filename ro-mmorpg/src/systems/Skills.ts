@@ -1,3 +1,4 @@
+import { Effects } from '../render/Effects';
 import type { Game } from '../core/Game';
 import { Monster } from '../entities/Monster';
 import { Projectile, ProjKind } from '../entities/Projectile';
@@ -91,8 +92,7 @@ export class SkillSystem {
       }
       case 'aoe_self': {
         p.startAttack(0.4);
-        g.fx.ring(p.x, p.y, '#ff6020', 0.5, (s.aoe || 2) * 50); g.fx.ring(p.x, p.y, '#ffd040', 0.35, (s.aoe || 2) * 34);
-        g.fx.burst(p.x, p.y, 10, '#ff7a20', 40, 160, 'spark', 0.6, 3); g.fx.burst(p.x, p.y, 10, '#ffe080', 20, 120, 'spark', 0.5, 2);
+        this.aoeSelfFx(id, s.aoe || 2);
         g.cam.shake(6, 0.3);
         for (const m of g.monstersNear(p.x, p.y, (s.aoe || 2) + 0.5)) { this.phys(m, pw, s, true); g.knockback(m, p.x, p.y, s.knock || 2); }
         break;
@@ -101,8 +101,12 @@ export class SkillSystem {
         if (!target) break;
         target.provokeT = s.dur?.[0] ?? 30; target.provokeDef = s.value?.[lv - 1] ?? 5;
         g.engage(target);
-        g.fx.dmg(target.x, target.y, '!', 'take', -target.bbox.y0 + 20);
-        g.fx.burst(target.x, target.y, -target.bbox.y0 * 0.6, '#ff4040', 12, 60, 'spark', 0.5, 2);
+        { // 挑釁：朝目標喊出三道聲波，目標頭上冒出怒氣符號
+          const ang = Effects.screenAngle(target.x - p.x, target.y - p.y), tz = -target.bbox.y0;
+          p.face(target.x, target.y);
+          for (let i = 0; i < 3; i++) g.after(i * 0.07, () => g.fx.wave(p.x, p.y, 70, ang, i === 1 ? '#ffffff' : '#ff5040', 12, 60 + i * 26, 0.38));
+          g.after(0.18, () => { g.fx.anger(target.x, target.y, tz + 26); g.fx.ring(target.x, target.y, '#ff4040', 0.45, 34); g.fx.burst(target.x, target.y, tz * 0.6, '#ff4040', 12, 70, 'spark', 0.5, 2); });
+        }
         break;
       }
       case 'buff': {
@@ -112,6 +116,9 @@ export class SkillSystem {
         const col = id === 'endure' || id === 'guard' ? '#ffd860' : id === 'barrier' ? '#b0a0ff' : '#80ff90';
         for (let i = 0; i < 26; i++) g.fx.glow(p.x, p.y, Math.random() * 40, col, 1.0, 2, 60 + Math.random() * 50);
         g.fx.ring(p.x, p.y, col, 0.6, 44);
+        if (id === 'endure' || id === 'guard' || id === 'divine_aegis') { // 霸體／守護：金色光柱＋兩道往外的光環
+          g.fx.pillar(p.x, p.y, col, 0.75, 24, 130); g.after(0.12, () => g.fx.ring(p.x, p.y, '#ffffff', 0.45, 60)); g.fx.star(p.x, p.y, 70, col, 30, 0.3); g.cam.shake(2, 0.12);
+        }
         g.ev.emit('stats');
         break;
       }
@@ -208,13 +215,57 @@ export class SkillSystem {
     g.applyDamage(g.player, m, r.dmg, 'skill');
     return r;
   }
+  /** 近戰技能命中時的特效（依技能分別設計） */
+  meleeFx(id: string, t: Monster) {
+    const g = this.g, p = g.player, tz = -t.bbox.y0 * 0.5;
+    const ang = Effects.screenAngle(t.x - p.x, t.y - p.y);
+    if (id === 'bash') { // 重擊：兩道交叉的橘金色大刀光＋目標身上的星芒與衝擊環
+      g.fx.slash(p.x, p.y, 48, ang, { r: 58, th: 22, span: 2.7, color: '#ff9a20', color2: '#fff6c8', life: 0.3, sgn: 1 });
+      g.after(0.05, () => g.fx.slash(p.x, p.y, 44, ang, { r: 46, th: 14, span: 2.2, color: '#ffd040', color2: '#ffffff', life: 0.24, sgn: -1 }));
+      g.fx.star(t.x, t.y, tz, '#ffc030', 40, 0.28);
+      g.fx.ring(t.x, t.y, '#ffe080', 0.32, 44, tz); g.fx.ring(t.x, t.y, '#ffffff', 0.22, 26, tz);
+      g.fx.burst(t.x, t.y, tz, '#ffb040', 22, 150, 'spark', 0.45, 3); g.fx.burst(t.x, t.y, tz, '#fff0b0', 10, 90, 'spark', 0.35, 2);
+      g.cam.shake(5, 0.2);
+    } else if (id === 'pierce') { // 穿刺突擊：往前的突刺氣流
+      for (let i = 0; i < 3; i++) g.after(i * 0.12, () => { g.fx.wave(p.x, p.y, 46, ang, i % 2 ? '#ffffff' : '#bfe8ff', 20, 78, 0.22); g.fx.star(t.x, t.y, tz, '#dff4ff', 20, 0.16); });
+      g.fx.burst(t.x, t.y, tz, '#dff4ff', 12, 120, 'spark', 0.35, 2);
+    } else if (id === 'holy_smite') { // 聖光斬：金白刀光＋目標腳下的光柱
+      g.fx.slash(p.x, p.y, 48, ang, { r: 54, th: 18, span: 2.6, color: '#ffe890', color2: '#ffffff', life: 0.28 });
+      g.fx.pillar(t.x, t.y, '#ffe890', 0.5, 14, 110); g.fx.star(t.x, t.y, tz, '#fff0a0', 34, 0.26);
+      g.fx.burst(t.x, t.y, tz, '#fff0a0', 16, 120, 'spark', 0.4, 2);
+    } else {
+      g.fx.slash(p.x, p.y, 46, ang, { r: 48, th: 15, span: 2.4, color: '#ffe080', color2: '#ffffff', life: 0.24 });
+      g.fx.star(t.x, t.y, tz, '#ffe080', 26, 0.22);
+      g.fx.burst(t.x, t.y, tz, '#ffb040', 16, 120, 'spark', 0.4, 3);
+      g.fx.ring(t.x, t.y, '#ffe080', 0.3, 30, tz);
+    }
+  }
+  /** 以自己為中心的範圍技特效；R 是世界座標的半徑（格），畫面上橫向約 45px／格 */
+  aoeSelfFx(id: string, R: number) {
+    const g = this.g, p = g.player, r = R * 45;
+    if (id === 'magnum') { // 爆裂斬：貼地轉一圈的火刀光＋往外擴散的火焰環＋飛濺的火星
+      g.fx.slash(p.x, p.y, 26, 0, { r: r * 0.62, th: 20, span: 6.1, flat: 0.5, color: '#ff7a20', color2: '#fff0a0', life: 0.34 });
+      g.fx.flameRing(p.x, p.y, r, 0.6);
+      g.fx.ring(p.x, p.y, '#ffd040', 0.4, r * 0.8);
+      g.fx.burst(p.x, p.y, 10, '#ff7a20', 36, 170, 'spark', 0.6, 3); g.fx.burst(p.x, p.y, 10, '#ffe080', 18, 120, 'spark', 0.5, 2);
+      for (let i = 0; i < 14; i++) g.after(0.05 + i * 0.02, () => { const a = g.rnd() * 6.28, d = R * (0.4 + g.rnd() * 0.6); g.fx.glow(p.x + Math.cos(a) * d, p.y + Math.sin(a) * d, 4, i % 3 ? '#ff9a30' : '#fff0a0', 0.7, 2, 50 + g.rnd() * 40); });
+    } else if (id === 'whirlwind') { // 旋風斬：兩道反向的貼地刀光
+      g.fx.slash(p.x, p.y, 30, 0, { r: r * 0.7, th: 18, span: 6.1, flat: 0.5, color: '#bfe8ff', color2: '#ffffff', life: 0.32 });
+      g.after(0.1, () => g.fx.slash(p.x, p.y, 44, 3.1, { r: r * 0.55, th: 14, span: 6.1, flat: 0.5, color: '#e8f6ff', color2: '#ffffff', life: 0.3, sgn: -1 }));
+      g.fx.ring(p.x, p.y, '#dff4ff', 0.4, r * 0.8); g.fx.burst(p.x, p.y, 10, '#dff4ff', 26, 150, 'spark', 0.5, 2);
+    } else { // 審判之錘、天罰等：金色衝擊
+      g.fx.pillar(p.x, p.y, '#ffe890', 0.6, 20 + R * 3, 150); g.fx.star(p.x, p.y, 10, '#ffe890', 30 + R * 6, 0.3);
+      g.fx.ring(p.x, p.y, '#ffd040', 0.5, r); g.fx.ring(p.x, p.y, '#ffffff', 0.35, r * 0.66);
+      g.fx.burst(p.x, p.y, 10, '#ffe080', 36, 170, 'spark', 0.6, 3);
+      if (id === 'heaven_wrath') for (let i = 0; i < 8; i++) g.after(0.08 + i * 0.05, () => { const a = (i / 8) * 6.28, d = R * 0.7; g.fx.pillar(p.x + Math.cos(a) * d, p.y + Math.sin(a) * d, '#fff0a0', 0.45, 10, 130); });
+    }
+  }
   /** 近戰技能在攻擊動畫命中點結算 */
   resolveMelee() {
     const h = this.meleeHit; this.meleeHit = null; if (!h || h.target.dead) return;
     const s = this.def(h.id), pw = (s.power?.[h.lv - 1] ?? 100) / 100;
     const g = this.g;
-    g.fx.burst(h.target.x, h.target.y, -h.target.bbox.y0 * 0.5, '#ffb040', 16, 120, 'spark', 0.4, 3);
-    g.fx.ring(h.target.x, h.target.y, '#ffe080', 0.3, 30, -h.target.bbox.y0 * 0.5);
+    this.meleeFx(h.id, h.target);
     const n = typeof s.hits === 'number' ? s.hits : 1;
     for (let i = 0; i < n; i++) { if (i === 0) this.phys(h.target, pw, s, true); else g.after(i * 0.12, () => { if (!h.target.dead) { g.fx.burst(h.target.x, h.target.y, -h.target.bbox.y0 * 0.5, '#ffe080', 8, 90, 'spark', 0.3, 2); this.phys(h.target, pw, s, true); } }); }
   }

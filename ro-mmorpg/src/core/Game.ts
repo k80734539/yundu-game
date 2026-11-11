@@ -647,7 +647,7 @@ export class Game {
     this.updateWarp(dt);
     if (this.warp) return;
     this.handleInput(dt);
-    if (this.hitStop > 0) { this.hitStop -= dt; this.cam.updateShake(dt); return; } // 打擊停頓：邏輯暫停
+    if (this.hitStop > 0) { this.hitStop -= dt; this.cam.updateShake(dt); this.fx.update(dt); return; } // 打擊停頓：邏輯暫停，但特效照常播放（刀光要在停頓的那一瞬間看得到）
     if (this.slowT > 0) { this.slowT -= dt; dt *= this.slowScale; if (this.slowT <= 0) this.slowScale = 1; } // 慢動作（只在擊敗 Boss 時）
     this.time += dt;
     for (const e of this.entities) e.savePrev();
@@ -883,9 +883,19 @@ export class Game {
     this.save.saveSoon();
   }
   /** 玩家普通攻擊：近戰直接結算；法師發出魔力彈；弓箭手射箭 */
+  /** 近戰普通攻擊的刀光：朝目標方向掃一道弧（左右手交替方向） */
+  swingFx(t: Actor) {
+    const p = this.player, wt = p.weaponType();
+    const ang = Effects.screenAngle(t.x - p.x, t.y - p.y);
+    this.swingSide = -this.swingSide;
+    if (wt === 'spear') { for (const k of [0, 1]) this.fx.wave(p.x, p.y, 44, ang, k ? '#ffffff' : '#bfe8ff', 18 + k * 8, 52 + k * 10, 0.2); return; }
+    const small = wt === 'none' || wt === 'dagger';
+    this.fx.slash(p.x, p.y, 44, ang, { r: small ? 34 : 50, th: small ? 10 : 16, span: small ? 1.8 : 2.4, sgn: this.swingSide, life: 0.22 });
+  }
+  swingSide = 1;
   playerAttackHit(t: Actor) {
     const mode = this.attackMode(), p = this.player;
-    if (mode === 'melee' || !(t instanceof Monster)) { this.resolveAttack(p, t); return; }
+    if (mode === 'melee' || !(t instanceof Monster)) { this.swingFx(t); this.resolveAttack(p, t); return; }
     if (mode === 'arrow') {
       this.addProjectile(new Projectile('arrow', p.x, p.y, 70, t, () => {
         this.resolveAttack(p, t);
