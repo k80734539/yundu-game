@@ -6,6 +6,8 @@ import { DB, SkillDef } from '../data';
 import { cellDist } from '../core/math';
 import { playerVsMonster, magicVsMonster } from './Combat';
 
+/** 技能箭的殘影顏色 */
+const ARROW_COLOR: Record<string, string> = { double_strafe: '#bfe8ff', multi_shot: '#d8f08a', seeker_arrow: '#70ff90', snipe: '#60ffc0', phantom_volley: '#c8a0ff' };
 const GHOSTLY = new Set(['zombie', 'skeleton', 'skeleton2', 'wisp', 'wraith']);
 export const ELEM: Record<string, string[]> = { fire: ['plant', 'bug', 'mushroom', 'flower', 'bee'], water: ['crab', 'golem'], wind: ['bird', 'bat', 'bee'], ghost: ['ghost'] };
 export interface CastState { id: string; lv: number; t: number; dur: number; target: Monster | null }
@@ -116,6 +118,9 @@ export class SkillSystem {
         const col = id === 'endure' || id === 'guard' ? '#ffd860' : id === 'barrier' ? '#b0a0ff' : '#80ff90';
         for (let i = 0; i < 26; i++) g.fx.glow(p.x, p.y, Math.random() * 40, col, 1.0, 2, 60 + Math.random() * 50);
         g.fx.ring(p.x, p.y, col, 0.6, 44);
+        if (id === 'concentration') { g.fx.reticle(p.x, p.y, 96, '#80ff90', 26, 0.6); g.fx.star(p.x, p.y, 96, '#c8ffd0', 18, 0.3); }                                                            // 集中：準星收束在眼前
+        if (id === 'hunters_mark') { g.fx.reticle(p.x, p.y, 60, '#ff5a50', 46, 0.7); g.fx.reticle(p.x, p.y, 60, '#ffffff', 30, 0.5); g.fx.pillar(p.x, p.y, '#ff8070', 0.5, 12, 110); }   // 獵魔印記：紅色準星
+        if (id === 'wind_step') { g.fx.slash(p.x, p.y, 20, 0, { r: 40, th: 12, span: 6.1, flat: 0.5, color: '#b8ffd8', color2: '#ffffff', life: 0.4 }); g.after(0.12, () => g.fx.slash(p.x, p.y, 50, 3.1, { r: 30, th: 9, span: 6.1, flat: 0.5, color: '#e0fff0', color2: '#ffffff', life: 0.36, sgn: -1 })); }   // 疾風步：繞著身體的兩道風
         if (id === 'barrier' || id === 'mana_surge') { g.fx.bubble(p.x, p.y, id === 'barrier' ? '#b0a0ff' : '#80e8ff', 1.2); g.fx.magicCircle(p.x, p.y, col, 0.8, 40); } // 魔力屏障／魔力奔流：光罩＋魔法陣
         if (id === 'endure' || id === 'guard' || id === 'divine_aegis') { // 霸體／守護：金色光柱＋兩道往外的光環
           g.fx.pillar(p.x, p.y, col, 0.75, 24, 130); g.after(0.12, () => g.fx.ring(p.x, p.y, '#ffffff', 0.45, 60)); g.fx.star(p.x, p.y, 70, col, 30, 0.3); g.cam.shake(2, 0.12);
@@ -159,6 +164,7 @@ export class SkillSystem {
           for (const m of g.monstersNear(cx, cy, r + 0.5)) { const res = this.magic(m, pw, s); if (res && g.rnd() * 100 < (s.value?.[lv - 1] ?? 30)) { m.frozenT = 3; g.fx.dmg(m.x, m.y, 'FREEZE', 'sp', -m.bbox.y0 + 30); } }
         } else if (s.fx === 'trap') {
           p.startAttack(0.35);
+          g.fx.trapSnap(cx, cy, r * 22, 0.8); g.fx.star(cx, cy, 14, '#e8eef8', 26, 0.2); g.cam.shake(3, 0.14);
           g.fx.ring(cx, cy, '#c8a060', 0.5, r * 40); g.fx.burst(cx, cy, 4, '#a08060', 18, 90, 'dot', 0.5, 3);
           for (const m of g.monstersNear(cx, cy, r + 0.5)) { const res = this.phys(m, pw, s, true); if (res) { m.frozenT = Math.max(m.frozenT, s.value?.[lv - 1] ?? 2); g.fx.dmg(m.x, m.y, 'TRAP', 'skill', -m.bbox.y0 + 30); } }
         } else if (id === 'thunderstorm') {
@@ -170,7 +176,12 @@ export class SkillSystem {
           });
         } else {
           p.startAttack(0.35);
-          for (let i = 0; i < 14; i++) g.after(i * 0.02, () => g.fx.arrowRain(cx + (g.rnd() - 0.5) * r * 2, cy + (g.rnd() - 0.5) * r * 2));
+          { // 箭雨／滅絕箭雨：先在地上標出範圍，再落下一陣箭；範圍越大箭越多
+            const big = id === 'rain_of_death', col = big ? '#60ffc0' : '#e8d8b0', n = Math.round(10 + r * r * 3);
+            g.fx.reticle(cx, cy, 0, big ? '#60ffc0' : '#ffffff', r * 22, 0.5); g.fx.ring(cx, cy, col, 0.5, r * 45);
+            for (let i = 0; i < n; i++) g.after(i * (0.3 / n) + (big ? g.rnd() * 0.25 : 0), () => { const a = g.rnd() * 6.28, d = Math.sqrt(g.rnd()) * r; g.fx.arrowRain(cx + Math.cos(a) * d, cy + Math.sin(a) * d, col); });
+            g.after(0.3, () => { g.fx.burst(cx, cy, 2, '#c8b890', 16 + r * 4, 90, 'dot', 0.4, 2); if (big) { g.fx.ring(cx, cy, '#ffffff', 0.4, r * 40); g.cam.shake(5, 0.25); } });
+          }
           g.after(0.3, () => { for (const m of g.monstersNear(cx, cy, r + 0.5)) { this.phys(m, pw, s, true); g.knockback(m, p.x, p.y, s.knock || 2); } });
         }
         break;
@@ -193,10 +204,17 @@ export class SkillSystem {
         const n = hits;
         for (let i = 0; i < n; i++) {
           const pr = new Projectile(id === 'charge_arrow' ? 'charge' : 'arrow', p.x, p.y, 70, target, () => {
+            this.arrowHitFx(id, target, i === n - 1);
             this.phys(target, pw, s, false);
             if (s.knock) g.knockback(target, p.x, p.y, Math.floor(2 + lv / 2));
           }, 18, false, i * 0.13);
+          pr.color = ARROW_COLOR[id] || ''; pr.big = id === 'snipe';
           g.addProjectile(pr);
+        }
+        { // 放箭瞬間：弦震；狙擊另外有一道彈道光
+          const ang = Effects.screenAngle(target.x - p.x, target.y - p.y);
+          g.fx.wave(p.x, p.y, 60, ang, ARROW_COLOR[id] || '#ffffff', 10, id === 'snipe' ? 54 : 36, 0.2);
+          if (id === 'snipe') { g.fx.beam(p.x, p.y, 62, target.x, target.y, -target.bbox.y0 * 0.5, '#60ffc0', 0.3, 8); g.fx.reticle(target.x, target.y, -target.bbox.y0 * 0.5, '#60ffc0', 22, 0.35); g.cam.shake(3, 0.12); }
         }
         break;
       }
@@ -219,6 +237,16 @@ export class SkillSystem {
     const r = magicVsMonster(g.player.d, m.def, g.rnd, mult * this.elemMult(m, s));
     g.applyDamage(g.player, m, r.dmg, 'skill');
     return r;
+  }
+  /** 技能箭命中時的特效 */
+  arrowHitFx(id: string, t: Monster, last: boolean) {
+    const g = this.g, tz = -t.bbox.y0 * 0.5, col = id === 'charge_arrow' ? '#ffb060' : ARROW_COLOR[id] || '#ffffff';
+    g.fx.star(t.x, t.y, tz, col, id === 'snipe' ? 40 : id === 'charge_arrow' ? 30 : 20, 0.2);
+    g.fx.burst(t.x, t.y, tz, col, id === 'snipe' ? 20 : 8, 110, 'spark', 0.35, 2);
+    if (id === 'snipe') { g.fx.ring(t.x, t.y, col, 0.35, 46, tz); g.fx.ring(t.x, t.y, '#ffffff', 0.25, 28, tz); g.cam.shake(5, 0.2); }
+    else if (id === 'charge_arrow') { g.fx.ring(t.x, t.y, col, 0.3, 36, tz); g.cam.shake(3, 0.14); }
+    else if (id === 'seeker_arrow') g.fx.reticle(t.x, t.y, tz, col, 16, 0.3);
+    else if (last && (id === 'multi_shot' || id === 'phantom_volley')) g.fx.ring(t.x, t.y, col, 0.3, 32, tz);
   }
   /** 近戰技能命中時的特效（依技能分別設計） */
   meleeFx(id: string, t: Monster) {

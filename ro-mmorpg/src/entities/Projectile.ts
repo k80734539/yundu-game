@@ -5,6 +5,8 @@ export type ProjKind = 'arrow' | 'orb' | 'fire' | 'ice' | 'soul' | 'charge';
 export class Projectile extends Entity {
   kind = 'projectile' as const;
   z: number; pz: number; t = 0; dur: number;
+  color = '';       // 箭的殘影顏色（技能箭用；空字串＝一般的箭）
+  big = false;      // 比較粗的箭（狙擊）
   sx: number; sy: number; sz: number; tz: number;
   constructor(public pk: ProjKind, x: number, y: number, z: number, public target: Actor, public onHit: (p: Projectile) => void, speed = 14, public fromSky = false, delay = 0) {
     super(x, y);

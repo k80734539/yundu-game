@@ -444,14 +444,15 @@
    "attack": "arrow",
    "range": 9,
    "look": {
+    "style": "archer",
     "skin": "#f8d8b8",
-    "hair": "#e0b050",
+    "hair": "#e8b850",
     "cloth": "#4a8a4a",
-    "cloth2": "#8a6a3a",
+    "cloth2": "#e84a3a",
     "pants": "#5a4a3a",
-    "hairStyle": 3,
     "hat": "feather",
-    "cape": "#7a5a34"
+    "cape": "#7a5a34",
+    "eye": "#3a8a5a"
    },
    "bonus": [
     [
@@ -762,14 +763,15 @@
    "attack": "arrow",
    "range": 9,
    "look": {
+    "style": "archer",
     "skin": "#f8d8b8",
-    "hair": "#e0b050",
+    "hair": "#e8b850",
     "cloth": "#5a6a3a",
-    "cloth2": "#7a9a4a",
+    "cloth2": "#c8e060",
     "pants": "#4a3a2a",
-    "hairStyle": 3,
     "hat": "band",
-    "cape": "#3a4a2a"
+    "cape": "#3a4a2a",
+    "eye": "#3a8a5a"
    },
    "bonus": [
     [
@@ -1070,15 +1072,16 @@
    "attack": "arrow",
    "range": 10,
    "look": {
+    "style": "archer",
     "skin": "#f8d8b8",
     "hair": "#2a2a30",
     "cloth": "#2a3a3a",
-    "cloth2": "#60c0a0",
+    "cloth2": "#60e0b0",
     "pants": "#1a2a2a",
-    "hairStyle": 3,
     "hat": "huntmask",
     "cape": "#1a2a2a",
     "scarf": "#60c0a0",
+    "eye": "#40c0a0",
     "aura": "#60ffc0"
    },
    "bonus": [

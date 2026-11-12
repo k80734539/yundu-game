@@ -5,7 +5,7 @@ import { isoX, isoY } from './iso';
 export type DmgKind = 'deal' | 'take' | 'crit' | 'miss' | 'heal' | 'sp' | 'skill';
 export class DmgText { alive = false; x = 0; y = 0; t = 0; img: HTMLCanvasElement | null = null; vx = 0; kind: DmgKind = 'deal'; big = false; }
 export class Particle {
-  alive = false; x = 0; y = 0; z = 0; vx = 0; vy = 0; vz = 0; g = 0; life = 0; max = 1; color = '#fff'; size = 2; kind: 'dot' | 'ring' | 'spark' | 'glow' | 'text' | 'bolt' | 'arrow' | 'slash' | 'star' | 'flame' | 'pillar' | 'anger' | 'wave' | 'circle' | 'shard' | 'ice' | 'bubble' | 'meteor' = 'dot'; r = 0;
+  alive = false; x = 0; y = 0; z = 0; vx = 0; vy = 0; vz = 0; g = 0; life = 0; max = 1; color = '#fff'; size = 2; kind: 'dot' | 'ring' | 'spark' | 'glow' | 'text' | 'bolt' | 'arrow' | 'slash' | 'star' | 'flame' | 'pillar' | 'anger' | 'wave' | 'circle' | 'shard' | 'ice' | 'bubble' | 'meteor' | 'beam' | 'reticle' | 'trap' | 'stuck' = 'dot'; r = 0;
   a = 0; span = 0; flat = 1; sgn = 1; color2 = '#ffffff'; // 刀光／衝擊波用：中心角度、張開角度、壓扁比例（地面上的圓＝0.5）、揮動方向、亮芯顏色
 }
 /** 特效：傷害數字、粒子、地面圓環。座標用等角像素（iso），z 為離地高度 */
@@ -78,11 +78,20 @@ export class Effects {
     this.burst(wx, wy, 0, color, 12, 130, 'spark', 0.4, 2);
     this.ring(wx, wy, color, 0.35, 40); this.star(wx, wy, 6, color, 26, 0.22);
   }
-  /** 箭雨：一支從天而降的箭 */
-  arrowRain(wx: number, wy: number) {
+  /** 箭雨：一支斜斜射下來的箭（帶殘影），落地後插在地上一下子 */
+  arrowRain(wx: number, wy: number, color = '#e8d8b0') {
     const p = this.parts.get();
-    p.x = isoX(wx, wy); p.y = isoY(wx, wy); p.z = 220; p.vx = 0; p.vy = 0; p.vz = -900; p.g = 0; p.life = p.max = 0.26; p.kind = 'arrow'; p.color = '#d8c8a0'; p.size = 2; p.r = 0;
+    p.x = isoX(wx, wy) + 40; p.y = isoY(wx, wy); p.z = 240; p.vx = -150; p.vy = 0; p.vz = -900; p.g = 0; p.life = p.max = 0.266; p.kind = 'arrow'; p.color = color; p.size = 2; p.r = 0;
+    const q = this.fxp(wx, wy, 0, 'stuck', 0.75); q.color = color; q.a = 0.266;
   }
+  /** 狙擊的彈道：從 (x0,y0) 到 (x1,y1) 的一道光，很快變細消失 */
+  beam(x0: number, y0: number, z0: number, x1: number, y1: number, z1: number, color: string, life = 0.28, w = 7) {
+    const p = this.fxp(x0, y0, z0, 'beam', life); p.color = color; p.size = w; p.vx = 0; p.a = isoX(x1, y1); p.span = isoY(x1, y1) - z1;
+  }
+  /** 準星：往內縮的十字瞄準圈（獵魔印記、集中） */
+  reticle(wx: number, wy: number, z: number, color: string, r = 40, life = 0.6) { const p = this.fxp(wx, wy, z, 'reticle', life); p.color = color; p.r = r; }
+  /** 捕獸夾：兩排鋸齒從兩側合起來 */
+  trapSnap(wx: number, wy: number, r: number, life = 0.7) { const p = this.fxp(wx, wy, 0, 'trap', life); p.r = r; }
   update(dt: number) {
     this.texts.each((d) => { d.t += dt; d.x += d.vx * dt; if (d.t > 1.1) d.alive = false; });
     this.parts.each((p) => {
@@ -239,9 +248,55 @@ export class Effects {
         c.globalAlpha = 0.25 + t * 0.4; c.fillStyle = '#1a0a0a'; c.beginPath(); c.ellipse(x, y, 10 + t * 18, 5 + t * 9, 0, 0, Math.PI * 2); c.fill(); c.globalAlpha = 1;   // 落點的影子
         return;
       }
-      if (p.kind === 'arrow') {
-        if (p.z <= 0) { p.z = 0; p.vz = 0; }
-        c.fillStyle = '#5a3a20'; c.fillRect(x, y - 16, 2, 16); c.fillStyle = p.color; c.fillRect(x, y - 2, 2, 3); c.fillStyle = '#ffffff'; c.fillRect(x - 1, y - 18, 4, 3);
+      if (p.kind === 'arrow') { // 箭雨的箭：斜斜落下，後面拖一道殘影
+        const dx = -150 / 912, dy = 900 / 912;
+        c.globalAlpha = 0.35; c.strokeStyle = '#ffffff'; c.lineWidth = 2; c.beginPath(); c.moveTo(x - dx * 46, y - dy * 46); c.lineTo(x, y); c.stroke(); c.globalAlpha = 1;
+        c.strokeStyle = '#2a1a10'; c.lineWidth = 3; c.beginPath(); c.moveTo(x - dx * 20, y - dy * 20); c.lineTo(x, y); c.stroke();
+        c.strokeStyle = p.color; c.lineWidth = 1.4; c.beginPath(); c.moveTo(x - dx * 20, y - dy * 20); c.lineTo(x, y); c.stroke();
+        c.fillStyle = '#e8eef8'; c.fillRect(x - 1, y - 2, 3, 4); c.fillStyle = '#e84a3a'; c.fillRect(Math.round(x - dx * 20) - 1, Math.round(y - dy * 20) - 2, 3, 4);
+        return;
+      }
+      if (p.kind === 'stuck') { // 落地後插在地上的箭（先等箭飛到）
+        const t = p.max - p.life; if (t < p.a) return;
+        const al = Math.min(1, p.life / 0.25), dx = 150 / 912 * 16, dy = 14;
+        c.globalAlpha = al; c.strokeStyle = '#2a1a10'; c.lineWidth = 3; c.beginPath(); c.moveTo(x, y); c.lineTo(x + dx, y - dy); c.stroke();
+        c.strokeStyle = p.color; c.lineWidth = 1.4; c.beginPath(); c.moveTo(x, y); c.lineTo(x + dx, y - dy); c.stroke();
+        c.fillStyle = '#e84a3a'; c.fillRect(Math.round(x + dx) - 1, Math.round(y - dy) - 2, 3, 4);
+        if (t - p.a < 0.1) { c.globalAlpha = (1 - (t - p.a) / 0.1) * 0.7; c.strokeStyle = '#ffffff'; c.lineWidth = 2; c.beginPath(); c.ellipse(x, y, 4 + (t - p.a) * 120, 2 + (t - p.a) * 60, 0, 0, Math.PI * 2); c.stroke(); }
+        c.globalAlpha = 1;
+        return;
+      }
+      if (p.kind === 'beam') {
+        const x1 = Math.round(p.a - L), y1 = Math.round(p.span - Tp);
+        c.lineCap = 'round';
+        c.globalAlpha = k * 0.4; c.strokeStyle = p.color; c.lineWidth = p.size * 2.2 * k + 2; c.beginPath(); c.moveTo(x, y); c.lineTo(x1, y1); c.stroke();
+        c.globalAlpha = Math.min(1, k * 1.6); c.lineWidth = p.size * k + 1; c.beginPath(); c.moveTo(x, y); c.lineTo(x1, y1); c.stroke();
+        c.strokeStyle = '#ffffff'; c.lineWidth = Math.max(1, p.size * 0.4 * k); c.beginPath(); c.moveTo(x, y); c.lineTo(x1, y1); c.stroke();
+        c.globalAlpha = 1; c.lineCap = 'butt';
+        return;
+      }
+      if (p.kind === 'reticle') {
+        const t = 1 - k, rr = p.r * (1.9 - 0.9 * (1 - (1 - Math.min(1, t / 0.45)) ** 2)), al = Math.min(1, t / 0.1, k / 0.3), rot = (1 - Math.min(1, t / 0.45)) * 1.2;
+        c.globalAlpha = al; c.strokeStyle = p.color; c.lineWidth = 2;
+        c.beginPath(); c.arc(x, y, rr, 0, Math.PI * 2); c.stroke();
+        c.lineWidth = 1; c.beginPath(); c.arc(x, y, rr * 0.55, 0, Math.PI * 2); c.stroke();
+        c.lineWidth = 2.5;
+        for (let i = 0; i < 4; i++) { const an = rot + (i * Math.PI) / 2; c.beginPath(); c.moveTo(x + Math.cos(an) * rr * 0.7, y + Math.sin(an) * rr * 0.7); c.lineTo(x + Math.cos(an) * rr * 1.25, y + Math.sin(an) * rr * 1.25); c.stroke(); }
+        c.fillStyle = '#ffffff'; c.fillRect(x - 1, y - 1, 3, 3); c.globalAlpha = 1;
+        return;
+      }
+      if (p.kind === 'trap') {
+        const t = 1 - k, close = 1 - (1 - Math.min(1, t / 0.14)) ** 2, al = Math.min(1, k / 0.3), R = p.r;
+        c.globalAlpha = al * 0.5; c.fillStyle = '#3a2a1a'; c.beginPath(); c.ellipse(x, y, R, R * 0.5, 0, 0, Math.PI * 2); c.fill();
+        c.globalAlpha = al;
+        for (const sgn of [-1, 1]) { // 兩排鋸齒：從攤平到豎起來合上
+          const lift = close * R * 0.9, n = 6;
+          c.fillStyle = '#5a6068'; c.beginPath(); c.moveTo(x - R, y);
+          for (let i = 0; i <= n; i++) { const u = i / n, bx = x - R + u * R * 2, by = y + sgn * Math.sqrt(Math.max(0, 1 - (u * 2 - 1) ** 2)) * R * 0.5 * (1 - close); c.lineTo(bx, by - (i % 2 ? lift : lift * 0.55) * Math.sin(u * Math.PI)); }
+          c.lineTo(x + R, y); c.closePath(); c.fill();
+          c.strokeStyle = '#e8eef8'; c.lineWidth = 1.5; c.stroke();
+        }
+        c.globalAlpha = 1;
         return;
       }
       if (p.kind === 'ring') {

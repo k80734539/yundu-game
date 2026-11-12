@@ -900,12 +900,15 @@ export class Game {
     const mode = this.attackMode(), p = this.player;
     if (mode === 'melee' || !(t instanceof Monster)) { this.swingFx(t); this.resolveAttack(p, t); return; }
     if (mode === 'arrow') {
+      this.fx.wave(p.x, p.y, 60, Effects.screenAngle(t.x - p.x, t.y - p.y), '#ffffff', 10, 30, 0.16);   // 放箭的弦震
       this.addProjectile(new Projectile('arrow', p.x, p.y, 70, t, () => {
+        this.fx.star(t.x, t.y, -t.bbox.y0 * 0.5, '#ffffff', 14, 0.14);
         this.resolveAttack(p, t);
         const fl = p.ch.skills.falcon || 0; // 獵鷹追加攻擊
         if (fl && !t.dead && this.rnd() * 100 < 3 * fl) this.after(0.18, () => {
           if (t.dead) return;
           this.fx.burst(t.x, t.y, -t.bbox.y0 * 0.7, '#c8a070', 12, 100, 'spark', 0.4, 2);
+          this.fx.slash(t.x, t.y, -t.bbox.y0 * 0.6, 0.6, { r: 34, th: 12, span: 3.4, flat: 0.6, color: '#c8a070', color2: '#ffffff', life: 0.26 });   // 獵鷹俯衝的弧線
           this.fx.dmg(t.x, t.y, 'FALCON', 'skill', -t.bbox.y0 + 34);
           const r = playerVsMonster(p.d, t.def, this.rnd, 1 + 0.1 * fl, true, true);
           this.applyDamage(p, t, r.dmg, 'skill');
@@ -1289,13 +1292,19 @@ export class Game {
     const a = this.alpha;
     const x = Math.round(isoX(pr.ix(a), pr.iy(a)) - L), y = Math.round(isoY(pr.ix(a), pr.iy(a)) - T - (pr.pz + (pr.z - pr.pz) * a));
     switch (pr.pk) {
-      case 'arrow': case 'charge': {
+      case 'arrow': case 'charge': { // 箭：箭桿＋箭頭＋箭羽，後面拖一道殘影（技能箭有顏色）
         const tx = isoX(pr.target.x, pr.target.y) - L, ty = isoY(pr.target.x, pr.target.y) - T - pr.tz;
-        const ang = Math.atan2(ty - y, tx - x), len = pr.pk === 'charge' ? 22 : 16;
-        c.strokeStyle = '#2a1a10'; c.lineWidth = 3; c.beginPath(); c.moveTo(x - Math.cos(ang) * len, y - Math.sin(ang) * len); c.lineTo(x, y); c.stroke();
-        c.strokeStyle = pr.pk === 'charge' ? '#ffb060' : '#d8c8a0'; c.lineWidth = 1; c.beginPath(); c.moveTo(x - Math.cos(ang) * len, y - Math.sin(ang) * len); c.lineTo(x, y); c.stroke();
-        c.fillStyle = '#ffffff'; c.fillRect(x - 1, y - 1, 3, 3);
-        if (pr.pk === 'charge') this.fx.glow(pr.x, pr.y, pr.z, '#ffb060', 0.25, 2, 0);
+        const ang = Math.atan2(ty - y, tx - x), dx = Math.cos(ang), dy = Math.sin(ang), len = pr.big ? 26 : pr.pk === 'charge' ? 22 : 18;
+        const col = pr.color || (pr.pk === 'charge' ? '#ffb060' : '');
+        c.lineCap = 'round';
+        c.globalAlpha = col ? 0.55 : 0.3; c.strokeStyle = col || '#ffffff'; c.lineWidth = pr.big ? 5 : col ? 3.5 : 2; c.beginPath(); c.moveTo(x - dx * (len + (col ? 44 : 26)), y - dy * (len + (col ? 44 : 26))); c.lineTo(x - dx * 4, y - dy * 4); c.stroke();
+        c.globalAlpha = 1; c.lineCap = 'butt';
+        c.strokeStyle = '#2a1a10'; c.lineWidth = pr.big ? 4 : 3; c.beginPath(); c.moveTo(x - dx * len, y - dy * len); c.lineTo(x, y); c.stroke();
+        c.strokeStyle = col || '#e8d8b0'; c.lineWidth = pr.big ? 2 : 1.4; c.beginPath(); c.moveTo(x - dx * len, y - dy * len); c.lineTo(x, y); c.stroke();
+        c.fillStyle = '#2a1a10'; c.beginPath(); c.moveTo(x + dx * 5, y + dy * 5); c.lineTo(x - dx * 3 - dy * 4, y - dy * 3 + dx * 4); c.lineTo(x - dx * 3 + dy * 4, y - dy * 3 - dx * 4); c.closePath(); c.fill();
+        c.fillStyle = '#eef2fa'; c.beginPath(); c.moveTo(x + dx * 4, y + dy * 4); c.lineTo(x - dx * 2 - dy * 2.6, y - dy * 2 + dx * 2.6); c.lineTo(x - dx * 2 + dy * 2.6, y - dy * 2 - dx * 2.6); c.closePath(); c.fill();
+        c.fillStyle = '#e84a3a'; const fx0 = x - dx * len, fy0 = y - dy * len; c.beginPath(); c.moveTo(fx0 + dx * 5, fy0 + dy * 5); c.lineTo(fx0 - dy * 3.5, fy0 + dx * 3.5); c.lineTo(fx0 + dy * 3.5, fy0 - dx * 3.5); c.closePath(); c.fill();
+        if (col && Math.random() < 0.7) this.fx.glow(pr.x, pr.y, pr.z, col, 0.25, pr.big ? 2 : 1, 0);
         break;
       }
       case 'orb': case 'soul': { // 魔力彈／靈魂衝擊：有拖尾的光球
