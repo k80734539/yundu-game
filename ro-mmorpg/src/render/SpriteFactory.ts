@@ -580,7 +580,7 @@ function drawMonster(c: CanvasRenderingContext2D, dir: number, f: number, L: Loo
   if (L.body === 'humanoid') {
     // 人形怪物：直接用縮放後的座標系繪製（向量形狀，不是點陣縮圖），之後一樣做二值化與打光
     c.save(); c.setTransform(s, 0, 0, s, ax - 96 * s, ay - 186 * s);
-    drawHuman(c, dir, f, L);
+    if (L.style === 'knight') drawKnight(c, dir, f, L, weapon); else drawHuman(c, dir, f, L);
     c.restore();
     return;
   }

@@ -245,15 +245,16 @@ function front(c: CanvasRenderingContext2D, f: number, L: Look, C: Pal, old: Old
     [[hx - 14, hy - 30], [hx - 23, hy - 50], [hx - 3, hy - 36]], [[hx - 2, hy - 36], [hx + 5, hy - 56], [hx + 15, hy - 34]], [[hx + 12, hy - 34], [hx + 29, hy - 49], [hx + 27, hy - 24]],
     [[hx - 26, hy - 22], [hx - 41, hy - 33], [hx - 31, hy - 8]], [[hx + 27, hy - 20], [hx + 42, hy - 26], [hx + 33, hy - 6]],
     [[hx - 33, hy - 10], [hx - 28, hy - 28], [hx - 12, hy - 36], [hx + 12, hy - 36], [hx + 28, hy - 28], [hx + 33, hy - 10], [hx + 34, hy + 8], [hx - 34, hy + 8]],
-  ] as P[][]).slice(helmed(L) ? 5 : 0), shade(C.hair, -0.12));
+  ] as P[][]).slice(helmed(L) || L.bald ? 5 : 0), shade(C.hair, -0.12));
   ell(c, hx, hy + 2, 29.5, 26.5, C.skin);
   px(c, hx - 21, hy + 4, 4, 2, shade(C.skin, 0.4));
   eye(c, hx - 12, hy + 3, C, 1); eye(c, hx + 12, hy + 3, C, -1);
   px(c, hx - 18, hy + 18, 6, 2, 'rgba(240,110,120,0.45)'); px(c, hx + 12, hy + 18, 6, 2, 'rgba(240,110,120,0.45)');
   px(c, hx, hy + 15, 1, 2, shade(C.skin, -0.25));
   px(c, hx - 3, hy + 21, 6, 1, shade(C.skin, -0.55)); px(c, hx + 2, hy + 20, 2, 1, shade(C.skin, -0.55));   // 微微上揚的嘴角
+  if (L.face) monsterFace(c, L, C, hx, hy, 0);
   // 前髮：一整片髮帽＋長短不一的瀏海
-  merged(c, [[
+  if (!L.bald) merged(c, [[
     [hx - 31, hy + 6], [hx - 34, hy - 10], [hx - 28, hy - 27], [hx - 13, hy - 36], [hx + 2, hy - 38], [hx + 18, hy - 34], [hx + 29, hy - 24], [hx + 34, hy - 8], [hx + 31, hy + 6],
     [hx + 27, hy - 4], [hx + 23, hy + 5], [hx + 17, hy - 7], [hx + 11, hy + 2], [hx + 5, hy - 8], [hx - 3, hy + 6], [hx - 9, hy - 7], [hx - 16, hy + 3], [hx - 22, hy - 6], [hx - 27, hy + 3],
   ]], C.hair);
@@ -318,14 +319,15 @@ function sideView(c: CanvasRenderingContext2D, f: number, L: Look, C: Pal, old: 
     [[hx - 2, hy - 34], [hx + 6, hy - 54], [hx + 18, hy - 30]], [[hx - 16, hy - 30], [hx - 14, hy - 48], [hx + 2, hy - 34]], [[hx + 14, hy - 26], [hx + 31, hy - 44], [hx + 30, hy - 16]],
     [[hx + 26, hy - 12], [hx + 46, hy - 20], [hx + 34, hy + 2]], [[hx + 28, hy + 2], [hx + 43, hy + 6], [hx + 27, hy + 18]],
     [[hx - 22, hy - 22], [hx - 8, hy - 35], [hx + 14, hy - 34], [hx + 30, hy - 18], [hx + 33, hy + 4], [hx + 24, hy + 22], [hx + 10, hy + 24], [hx + 4, hy + 6], [hx - 20, hy + 2]],
-  ] as P[][]).slice(helmed(L) ? 3 : 0), shade(C.hair, -0.12));
+  ] as P[][]).slice(helmed(L) || L.bald ? 3 : 0), shade(C.hair, -0.12));
   ell(c, hx - 2, hy + 2, 26, 26, C.skin);
   px(c, hx - 30, hy + 12, 3, 4, OUT); px(c, hx - 29, hy + 13, 3, 2, C.skin);                 // 鼻尖
   eye(c, hx - 16, hy + 3, C, 1);
   px(c, hx - 21, hy + 18, 6, 2, 'rgba(240,110,120,0.45)');
   px(c, hx - 25, hy + 21, 4, 1, shade(C.skin, -0.55));
+  if (L.face) monsterFace(c, L, C, hx, hy, 1);
   // 前髮：髮帽＋往前的瀏海＋鬢角
-  merged(c, [[
+  if (!L.bald) merged(c, [[
     [hx - 26, hy - 5], [hx - 28, hy - 14], [hx - 20, hy - 28], [hx - 6, hy - 36], [hx + 12, hy - 36], [hx + 26, hy - 24], [hx + 32, hy - 6], [hx + 30, hy + 12], [hx + 20, hy + 22],
     [hx + 10, hy + 20], [hx + 8, hy + 4], [hx + 4, hy + 15], [hx, hy - 1], [hx - 5, hy - 9], [hx - 10, hy - 1], [hx - 15, hy - 10], [hx - 21, hy - 2],
   ]], C.hair);
@@ -381,7 +383,7 @@ function backView(c: CanvasRenderingContext2D, f: number, L: Look, C: Pal, old: 
     [[hx - 26, hy - 22], [hx - 41, hy - 33], [hx - 31, hy - 8]], [[hx + 27, hy - 20], [hx + 42, hy - 26], [hx + 33, hy - 6]],
     [[hx - 33, hy - 8], [hx - 28, hy - 27], [hx - 12, hy - 36], [hx + 12, hy - 36], [hx + 28, hy - 27], [hx + 33, hy - 8], [hx + 33, hy + 12],
       [hx + 26, hy + 30], [hx + 20, hy + 20], [hx + 13, hy + 33], [hx + 6, hy + 22], [hx, hy + 35], [hx - 6, hy + 22], [hx - 13, hy + 33], [hx - 20, hy + 20], [hx - 26, hy + 30], [hx - 33, hy + 12]],
-  ] as P[][]).slice(helmed(L) ? 5 : 0), C.hair);
+  ] as P[][]).slice(helmed(L) || L.bald ? 5 : 0), L.bald ? C.skin : C.hair);
   const dk = shade(C.hair, -0.4), lt = shade(C.hair, 0.45);
   ln(c, [hx, hy - 8], [hx, hy + 30], 1, dk); ln(c, [hx - 13, hy - 4], [hx - 13, hy + 28], 1, dk); ln(c, [hx + 13, hy - 4], [hx + 13, hy + 28], 1, dk);
   if (L.hat === 'band' || !L.hat) {
@@ -396,14 +398,84 @@ function backView(c: CanvasRenderingContext2D, f: number, L: Look, C: Pal, old: 
 /** 頭盔類（聖騎士、聖殿守護者）；頭帶已經在各方向畫好 */
 function hat(c: CanvasRenderingContext2D, L: Look, hx: number, hy: number, dir: number) {
   if (L.hat !== 'helm' && L.hat !== 'crownhelm') return;
-  const st = hex('#d4dae6'), gold = hex('#e8b838');
+  const st = L.armor ? shade(hex(L.armor), 0.12) : hex('#d4dae6'), gold = L.trim ? hex(L.trim) : hex('#e8b838');
   if (L.hat === 'crownhelm') { poly(c, [[hx - 28, hy - 14], [hx - 52, hy - 40], [hx - 42, hy - 10]], gold); if (dir !== 1) poly(c, [[hx + 28, hy - 14], [hx + 52, hy - 40], [hx + 42, hy - 10]], gold); }
   poly(c, [[hx - 33, hy - 4], [hx - 31, hy - 24], [hx - 16, hy - 38], [hx, hy - 41], [hx + 16, hy - 38], [hx + 31, hy - 24], [hx + 33, hy - 4]], st);
   fillPoly(c, [[hx - 27, hy - 8], [hx - 25, hy - 24], [hx - 14, hy - 34], [hx - 9, hy - 33], [hx - 20, hy - 22], [hx - 22, hy - 8]], shade(st, 0.5));
   px(c, hx - 1, hy - 40, 2, 34, shade(st, -0.35));
   px(c, hx - 34, hy - 6, 68, 6, OUT); px(c, hx - 33, hy - 5, 66, 4, gold); px(c, hx - 33, hy - 5, 66, 1, shade(gold, 0.5));
   if (L.hat === 'crownhelm') { poly(c, [[hx - 5, hy - 26], [hx + 5, hy - 26], [hx + 6, hy - 42], [hx, hy - 50], [hx - 6, hy - 42]], gold); px(c, hx - 2, hy - 36, 4, 5, '#ff4060'); }
-  else if (dir === 0) { px(c, hx - 3, hy - 1, 6, 12, OUT); px(c, hx - 2, hy - 1, 4, 11, st); }   // 鼻樑護條
+  else if (dir === 0 && L.face !== 'visor') { px(c, hx - 3, hy - 1, 6, 12, OUT); px(c, hx - 2, hy - 1, 4, 11, st); }   // 鼻樑護條
+  if (L.face === 'visor') { // 全罩式面甲：蓋住整張臉，只露出一條發光的眼縫
+    const vc = L.armor ? hex(L.armor) : st, eyeC = hex(L.eye || '#60c0ff');
+    if (dir === 1) {
+      poly(c, [[hx - 30, hy - 2], [hx - 26, hy + 22], [hx - 10, hy + 28], [hx + 8, hy + 24], [hx + 10, hy - 2]], vc);
+      px(c, hx - 30, hy + 6, 22, 5, OUT); px(c, hx - 29, hy + 7, 18, 3, eyeC); px(c, hx - 28, hy + 7, 5, 1, '#ffffff');
+      for (const y of [16, 21]) ln(c, [hx - 27, hy + y], [hx - 14, hy + y], 1.5, shade(vc, -0.45));
+    } else if (dir === 0) {
+      poly(c, [[hx - 28, hy - 2], [hx + 28, hy - 2], [hx + 26, hy + 18], [hx + 12, hy + 28], [hx - 12, hy + 28], [hx - 26, hy + 18]], vc);
+      fillPoly(c, [[hx - 24, hy + 1], [hx - 16, hy + 1], [hx - 18, hy + 18], [hx - 22, hy + 16]], shade(vc, 0.45));
+      px(c, hx - 22, hy + 5, 44, 6, OUT); px(c, hx - 21, hy + 6, 42, 4, eyeC); px(c, hx - 20, hy + 6, 8, 1, '#ffffff'); px(c, hx + 8, hy + 6, 6, 1, '#ffffff');
+      px(c, hx - 1, hy + 11, 2, 15, shade(vc, -0.45));
+      for (const k of [-1, 1]) for (const y of [15, 19, 23]) px(c, hx + k * 6 - 1, hy + y, 3, 2, OUT);
+    }
+  }
+}
+/** 怪物用的臉（look.face）：畫在一般的臉上面、瀏海下面。dir：0 正面、1 側面（朝左） */
+function monsterFace(c: CanvasRenderingContext2D, L: Look, C: Pal, hx: number, hy: number, dir: number) {
+  const f = L.face, eyeC = hex(L.eye || '#ff3030'), sk = C.skin, dk = shade(sk, -0.5), side = dir === 1;
+  if (f === 'visor') return;                                                     // 面甲在 hat() 畫
+  // 先用皮膚色把原本的大眼睛、腮紅、嘴巴蓋掉
+  if (side) ell(c, hx - 2, hy + 2, 26, 26, sk); else ell(c, hx, hy + 2, 29.5, 26.5, sk);
+  const xs = side ? [hx - 16] : [hx - 11, hx + 11];
+  const ear = (x: number, d: number, len: number) => poly(c, [[x, hy - 2], [x + d * len, hy - 10], [x + d * 4, hy + 12]], shade(sk, -0.08));
+  if (f === 'skull') {
+    for (const x of xs) { ell(c, x, hy + 6, 7, 8, hex('#1a1018')); px(c, x - 1.5, hy + 5, 3, 3, eyeC); px(c, x - 1, hy + 5, 1, 1, '#ffffff'); }
+    if (side) { poly(c, [[hx - 28, hy + 12], [hx - 24, hy + 12], [hx - 26, hy + 17]], hex('#1a1018')); px(c, hx - 27, hy + 20, 14, 7, OUT); px(c, hx - 26, hy + 21, 12, 5, shade(sk, 0.2)); for (let i = 0; i < 4; i++) px(c, hx - 24 + i * 3, hy + 21, 1, 5, OUT); }
+    else {
+      poly(c, [[hx - 3, hy + 13], [hx + 3, hy + 13], [hx, hy + 18]], hex('#1a1018'));
+      px(c, hx - 10, hy + 20, 20, 7, OUT); px(c, hx - 9, hy + 21, 18, 5, shade(sk, 0.2)); for (let i = -2; i <= 2; i++) px(c, hx + i * 4, hy + 21, 1, 5, OUT);
+      ln(c, [hx - 24, hy + 12], [hx - 16, hy + 17], 1, dk); ln(c, [hx + 24, hy + 12], [hx + 16, hy + 17], 1, dk);
+    }
+    return;
+  }
+  if (f === 'goblin' || f === 'orc') {
+    const big = f === 'goblin';
+    if (side) ear(hx + 18, 1, big ? 22 : 14); else { ear(hx - 26, -1, big ? 22 : 14); ear(hx + 26, 1, big ? 22 : 14); }
+    for (const x of xs) { const inner = side ? 1 : x < hx ? 1 : -1; px(c, x - 4, hy + 4, 8, 6, OUT); px(c, x - 3, hy + 5, 6, 4, eyeC); px(c, x - 1, hy + 5, 2, 4, '#1a0a0a'); c.strokeStyle = css(shade(sk, -0.6)); c.lineWidth = 3; c.beginPath(); c.moveTo(x - inner * 6, hy - 1); c.lineTo(x + inner * 5, hy + 4); c.stroke(); }
+    if (big) { // 哥布林：大鼻子＋咧嘴笑＋兩顆小尖牙
+      if (side) { poly(c, [[hx - 26, hy + 8], [hx - 36, hy + 16], [hx - 26, hy + 17]], shade(sk, -0.1)); px(c, hx - 26, hy + 21, 12, 4, OUT); px(c, hx - 25, hy + 22, 10, 2, hex('#5a1a1a')); px(c, hx - 23, hy + 22, 2, 3, '#ffffff'); }
+      else { ell(c, hx, hy + 14, 4, 3.5, shade(sk, -0.1)); c.fillStyle = OUT; c.beginPath(); c.ellipse(hx, hy + 21, 11, 4, 0, 0, Math.PI); c.fill(); c.fillStyle = '#5a1a1a'; c.beginPath(); c.ellipse(hx, hy + 21, 9.5, 3, 0, 0, Math.PI); c.fill(); px(c, hx - 6, hy + 21, 2, 3, '#ffffff'); px(c, hx + 4, hy + 21, 2, 3, '#ffffff'); }
+    } else { // 獸人：粗眉＋寬下巴＋往上翹的獠牙
+      if (side) { px(c, hx - 28, hy + 18, 16, 6, shade(sk, -0.15)); poly(c, [[hx - 24, hy + 19], [hx - 21, hy + 10], [hx - 19, hy + 19]], hex('#f4ecd8')); }
+      else { px(c, hx - 14, hy + 17, 28, 7, OUT); px(c, hx - 13, hy + 18, 26, 5, shade(sk, -0.15)); px(c, hx - 8, hy + 20, 16, 1, OUT); for (const k of [-1, 1]) poly(c, [[hx + k * 9 - 2, hy + 20], [hx + k * 10, hy + 9], [hx + k * 9 + 2, hy + 20]], hex('#f4ecd8')); px(c, hx - 3, hy + 13, 2, 2, dk); px(c, hx + 1, hy + 13, 2, 2, dk); }
+    }
+    return;
+  }
+  if (f === 'zombie') {
+    if (side) { ell(c, hx - 16, hy + 6, 5, 5, hex('#f4f0c0')); px(c, hx - 17, hy + 5, 3, 3, '#1a1a0a'); ln(c, [hx - 24, hy + 20], [hx - 14, hy + 22], 2, dk); }
+    else {
+      ell(c, hx - 11, hy + 6, 6, 6, hex('#f4f0c0')); px(c, hx - 12, hy + 5, 3, 3, '#1a1a0a');                  // 一隻眼睛睜大
+      ln(c, [hx + 7, hy + 5], [hx + 15, hy + 7], 2.5, OUT);                                                        // 另一隻瞇著
+      px(c, hx - 7, hy + 19, 14, 6, OUT); px(c, hx - 6, hy + 20, 12, 4, hex('#3a1a1a')); px(c, hx - 4, hy + 20, 2, 2, '#e8e0c0'); px(c, hx + 2, hy + 20, 2, 2, '#e8e0c0');
+      for (let i = 0; i < 4; i++) ln(c, [hx + 14 + i * 3, hy + 13], [hx + 14 + i * 3, hy + 18], 1, OUT);         // 臉頰的縫線
+      ln(c, [hx + 13, hy + 15.5], [hx + 24, hy + 15.5], 1, OUT);
+    }
+    return;
+  }
+  if (f === 'bandit' || f === 'mask') {
+    for (const x of xs) { const inner = side ? 1 : x < hx ? 1 : -1; px(c, x - 4, hy + 5, 8, 5, OUT); px(c, x - 3, hy + 6, 6, 3, f === 'mask' ? eyeC : hex('#ffffff')); px(c, x - 1, hy + 6, 2, 3, f === 'mask' ? '#ffffff' : '#1a0a0a'); c.strokeStyle = css(shade(C.hair, -0.4)); c.lineWidth = 2.5; c.beginPath(); c.moveTo(x - inner * 6, hy); c.lineTo(x + inner * 5, hy + 4); c.stroke(); }
+    if (f === 'mask') { // 遮住下半臉的面巾
+      const mc = C.band;
+      if (side) poly(c, [[hx - 29, hy + 12], [hx + 6, hy + 12], [hx + 8, hy + 24], [hx - 10, hy + 28], [hx - 27, hy + 24]], mc);
+      else poly(c, [[hx - 28, hy + 12], [hx + 28, hy + 12], [hx + 24, hy + 24], [hx, hy + 30], [hx - 24, hy + 24]], mc);
+      return;
+    }
+    // 山賊：臉頰的刀疤、鬍渣；有 beard 就畫大鬍子
+    if (!side) { ln(c, [hx + 8, hy + 2], [hx + 18, hy + 16], 1.5, hex('#b04040')); for (const [dx, dy] of [[-8, 22], [-4, 24], [0, 25], [4, 24], [8, 22], [-6, 20], [6, 20]]) px(c, hx + dx, hy + dy, 1, 1, dk); px(c, hx - 4, hy + 19, 8, 1, dk); }
+    else { for (const [dx, dy] of [[-24, 22], [-20, 24], [-16, 23]]) px(c, hx + dx, hy + dy, 1, 1, dk); px(c, hx - 25, hy + 20, 5, 1, dk); }
+    if (L.beard) { const bc = C.hair; if (side) poly(c, [[hx - 26, hy + 14], [hx - 6, hy + 14], [hx - 2, hy + 26], [hx - 14, hy + 38], [hx - 24, hy + 28]], bc); else poly(c, [[hx - 22, hy + 12], [hx + 22, hy + 12], [hx + 20, hy + 26], [hx + 8, hy + 40], [hx, hy + 34], [hx - 8, hy + 40], [hx - 20, hy + 26]], bc); if (!side) { px(c, hx - 5, hy + 18, 10, 2, hex('#5a1a1a')); } }
+  }
 }
 
 /** 入口：依方向畫一格 */

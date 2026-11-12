@@ -37,6 +37,7 @@ export interface Look {
   color?: string; color2?: string; eye?: string;
   hair?: string; skin?: string; cloth?: string; cloth2?: string; pants?: string; hairStyle?: number;
   weapon?: string; hat?: string; scale?: number; sheet?: string; cape?: string; mouth?: string;
+  face?: string; bald?: boolean; beard?: boolean; // 怪物用的臉（skull／goblin／orc／zombie／bandit／mask／visor）、光頭、大鬍子（KnightArt）
   variant?: string; // 怪物外型的變化（rockgolem：rock／lava／crystal）
   gem?: string; // 法杖寶珠顏色（style 'mage'，render/MageArt.ts）
   style?: string; armor?: string; trim?: string; shield?: boolean; // style 'knight'＝劍士系專用畫法（render/KnightArt.ts）；armor／trim 是盔甲與金邊顏色；shield 由裝備決定
