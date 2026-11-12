@@ -714,10 +714,11 @@
   "aggro": false,
   "frame": 160,
   "look": {
-   "body": "golem",
+   "body": "rockgolem",
    "color": "#8a8072",
    "color2": "#ffb040",
-   "scale": 0.85
+   "scale": 0.85,
+   "variant": "rock"
   },
   "drops": [
    {
@@ -918,7 +919,7 @@
   "aggro": true,
   "frame": 128,
   "look": {
-   "body": "ghost",
+   "body": "wisp",
    "color": "#b8e8ff",
    "scale": 1.5
   },
@@ -1127,9 +1128,10 @@
   "aggro": true,
   "frame": 160,
   "look": {
-   "body": "ghost",
+   "body": "wraith",
    "color": "#c8a8f0",
-   "scale": 1.9
+   "scale": 1.9,
+   "color2": "#ff70c0"
   },
   "drops": [
    {
@@ -1243,10 +1245,11 @@
   "aggro": true,
   "frame": 256,
   "look": {
-   "body": "golem",
+   "body": "rockgolem",
    "color": "#7a7268",
    "color2": "#60e0ff",
-   "scale": 1.6
+   "scale": 1.6,
+   "variant": "rock"
   },
   "drops": [
    {
@@ -1416,9 +1419,10 @@
   "aggro": true,
   "frame": 160,
   "look": {
-   "body": "ghost",
+   "body": "wraith",
    "color": "#e8d090",
-   "scale": 1.8
+   "scale": 1.8,
+   "color2": "#ffd040"
   },
   "drops": [
    {
@@ -1464,10 +1468,11 @@
   "aggro": true,
   "frame": 192,
   "look": {
-   "body": "golem",
-   "color": "#6ac0e0",
-   "color2": "#ffffff",
-   "scale": 1.05
+   "body": "rockgolem",
+   "color": "#5a88b0",
+   "color2": "#9ae8ff",
+   "scale": 1.05,
+   "variant": "crystal"
   },
   "drops": [
    {
@@ -1727,10 +1732,11 @@
   "aggro": true,
   "frame": 224,
   "look": {
-   "body": "golem",
+   "body": "rockgolem",
    "color": "#b89060",
    "color2": "#ffb040",
-   "scale": 1.4
+   "scale": 1.4,
+   "variant": "rock"
   },
   "drops": [
    {
@@ -1900,7 +1906,7 @@
   "aggro": true,
   "frame": 224,
   "look": {
-   "body": "golem",
+   "body": "yeti",
    "color": "#e8f0f8",
    "color2": "#80c0ff",
    "scale": 1.5
@@ -1945,9 +1951,10 @@
   "aggro": true,
   "frame": 160,
   "look": {
-   "body": "ghost",
+   "body": "wraith",
    "color": "#a0d8ff",
-   "scale": 2.0
+   "scale": 2.0,
+   "color2": "#e0f8ff"
   },
   "drops": [
    {
@@ -2138,10 +2145,11 @@
   "aggro": true,
   "frame": 224,
   "look": {
-   "body": "golem",
+   "body": "rockgolem",
    "color": "#4a3a36",
    "color2": "#ff5020",
-   "scale": 1.5
+   "scale": 1.5,
+   "variant": "lava"
   },
   "drops": [
    {
@@ -2224,9 +2232,10 @@
   "aggro": true,
   "frame": 160,
   "look": {
-   "body": "ghost",
-   "color": "#ff9060",
-   "scale": 2.2
+   "body": "wraith",
+   "color": "#8a6a60",
+   "scale": 2.2,
+   "color2": "#ff7030"
   },
   "drops": [
    {
@@ -2268,10 +2277,10 @@
   "aggro": true,
   "frame": 320,
   "look": {
-   "body": "snake",
+   "body": "dragon",
    "color": "#d03018",
    "color2": "#ffb040",
-   "scale": 4.0
+   "scale": 3.2
   },
   "drops": [
    {
@@ -2379,9 +2388,10 @@
   "aggro": true,
   "frame": 288,
   "look": {
-   "body": "ghost",
+   "body": "lord",
    "color": "#9a70ff",
-   "scale": 3.0
+   "scale": 3.0,
+   "color2": "#80e0ff"
   },
   "drops": [
    {
@@ -2517,10 +2527,10 @@
   "aggro": true,
   "frame": 224,
   "look": {
-   "body": "golem",
+   "body": "statue",
    "color": "#e8e4d8",
    "color2": "#ffd860",
-   "scale": 1.9
+   "scale": 1.6
   },
   "drops": [
    {
@@ -2562,7 +2572,7 @@
   "aggro": true,
   "frame": 160,
   "look": {
-   "body": "ghost",
+   "body": "wisp",
    "color": "#a0e8ff",
    "scale": 2.3
   },
@@ -2747,9 +2757,10 @@
   "aggro": true,
   "frame": 160,
   "look": {
-   "body": "ghost",
+   "body": "wraith",
    "color": "#9040d0",
-   "scale": 2.5
+   "scale": 2.5,
+   "color2": "#ff60e0"
   },
   "drops": [
    {
@@ -2843,10 +2854,11 @@
   "aggro": true,
   "frame": 320,
   "look": {
-   "body": "golem",
+   "body": "statue",
    "color": "#f0ece0",
    "color2": "#60c8ff",
-   "scale": 4.2
+   "scale": 3.4,
+   "hat": "halo"
   },
   "drops": [
    {
@@ -2899,7 +2911,7 @@
   "aggro": true,
   "frame": 320,
   "look": {
-   "body": "ghost",
+   "body": "lord",
    "color": "#7030c0",
    "color2": "#ff40a0",
    "scale": 4.5

@@ -3,6 +3,7 @@ import type { Look } from '../data';
 import { drawKnight } from './KnightArt';
 import { drawMage } from './MageArt';
 import { drawArcher } from './ArcherArt';
+import { MONSTER_ART } from './MonsterArt';
 
 /** Sprite sheet 規格：4 列（下、左、右、上）× 10 格（0~1 待機、2~5 走路、6~9 攻擊） */
 export interface Sheet { c: HTMLCanvasElement; fw: number; fh: number; ax: number; ay: number; white?: HTMLCanvasElement; img?: HTMLImageElement; rows?: number }
@@ -583,7 +584,7 @@ function drawMonster(c: CanvasRenderingContext2D, dir: number, f: number, L: Loo
     c.restore();
     return;
   }
-  (MON[L.body || 'slime'] || MON.slime)(c, dir, f, L, s, ax, ay);
+  (MONSTER_ART[L.body || ''] || MON[L.body || 'slime'] || MON.slime)(c, dir, f, L, s, ax, ay);
 }
 
 // ---------- 左上光源的邊緣打光 ----------
