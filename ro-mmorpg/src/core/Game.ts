@@ -48,6 +48,7 @@ import debugJson from '../../data/debug.json';
 import { Audio } from '../systems/Audio';
 import { Tutorial } from '../systems/Tutorial';
 import { Warehouse } from '../systems/Warehouse';
+import { equipGlow, GLOW, type GlowInfo } from '../systems/Glow';
 import { Bestiary } from '../systems/Bestiary';
 import { refineRate, refineMaterial, refineFee } from '../systems/Refine';
 import { expNeed, jobExpNeed } from '../systems/Stats';
@@ -79,6 +80,7 @@ export class Game {
   ui!: UI;
   audio: Audio = new Audio();
   save!: Save;
+  glow: GlowInfo | null = null;   // 裝備發光（精煉／稀有度／高階裝備），裝備或背包變動時重算
   inv: Inventory; storage = new Warehouse(); bestiary!: Bestiary;
   spawner: Spawner;
   items: GroundItem[] = [];
@@ -116,6 +118,7 @@ export class Game {
     this.player = new Player(0, 0);
     this.inv = new Inventory(() => Math.floor(this.player.d.weight / 10), () => { this.player.recalc(); this.player.refreshLook(); this.ev.emit('inv'); this.ev.emit('stats'); });
     this.player.equipsFn = () => this.inv.equipInfos();
+    this.ev.on('inv', () => { this.glow = equipGlow(this.inv.equipInfos()); });
     this.spawner = new Spawner(this);
     this.quests = new Quests(this);
     this.skills = new SkillSystem(this);
@@ -1272,6 +1275,7 @@ export class Game {
       return;
     }
     if (e.dead) c.globalAlpha = e === this.player ? 0.45 : Math.max(0, 1 - e.deadT);
+    if (e === this.player && !e.dead) this.drawGlow(c, s, sx, sy, x, y);
     c.drawImage(s.c, sx, sy, s.fw, s.fh, x, y, s.fw, s.fh);
     if (e instanceof Monster && e.frozenT > 0) { c.globalAlpha = 0.45; c.drawImage(whiteOf(s), sx, sy, s.fw, s.fh, x, y, s.fw, s.fh); c.globalAlpha = 0.25; c.fillStyle = '#60b0ff'; c.fillRect(x + s.ax + e.bbox.x0, y + s.ay + e.bbox.y0, e.bbox.x1 - e.bbox.x0, e.bbox.y1 - e.bbox.y0); c.globalAlpha = 1; }
     if (e instanceof Monster && e.boss && !e.dead) { // Boss：狂暴時身體變紅；蓄力時閃白並微微顫動
@@ -1287,6 +1291,26 @@ export class Game {
     if (this.hover === e && !e.dead) { // 滑鼠移上：輕微描亮
       c.globalAlpha = 0.18; c.drawImage(whiteOf(s), sx, sy, s.fw, s.fh, x, y, s.fw, s.fh); c.globalAlpha = 1;
     }
+  }
+  /** 裝備發光：身體外圍一圈脈動的光（用同色剪影往四周偏移疊出外框）＋往上飄的光點；等級越高越亮、越寬，精煉 +10 會輪流換色 */
+  drawGlow(c: CanvasRenderingContext2D, s: import('../render/SpriteFactory').Sheet, sx: number, sy: number, x: number, y: number) {
+    const g = this.glow; if (!g) return;
+    const t = this.time, pulse = 0.6 + 0.4 * Math.sin(t * 3.2);
+    const col = g.rainbow ? GLOW.rainbow[Math.floor(t * 6) % GLOW.rainbow.length] : g.color;
+    const tint = tintOf(s, col), r = g.lv >= 3 ? 2 : 1;
+    const cx = x + s.ax, cy = y + s.ay - 56;
+    if (g.lv >= 2) { // 身體後面一團柔光
+      const gr = c.createRadialGradient(cx, cy, 6, cx, cy, 46 + g.lv * 6); gr.addColorStop(0, col + '66'); gr.addColorStop(0.6, col + '26'); gr.addColorStop(1, col + '00');
+      c.globalAlpha = pulse; c.fillStyle = gr; c.fillRect(cx - 80, cy - 80, 160, 160); c.globalAlpha = 1;
+    }
+    const a0 = [0.5, 0.65, 0.8, 0.9][Math.min(3, g.lv - 1)] * (0.7 + 0.3 * pulse);
+    c.globalAlpha = a0;
+    for (const [dx, dy] of [[-r, 0], [r, 0], [0, -r], [0, r], [-r, -r], [r, -r], [-r, r], [r, r]]) c.drawImage(tint, sx, sy, s.fw, s.fh, x + dx, y + dy, s.fw, s.fh);
+    if (g.lv >= 2) { c.globalAlpha = a0 * 0.55; for (const [dx, dy] of [[-r * 2, 0], [r * 2, 0], [0, -r * 2], [0, r * 2]]) c.drawImage(tint, sx, sy, s.fw, s.fh, x + dx, y + dy, s.fw, s.fh); }
+    c.globalAlpha = 1;
+    // 光點：等級越高越密，從身體周圍往上飄
+    if (Math.random() < 0.12 * g.lv) this.fx.glow(this.player.x + (this.rnd() - 0.5) * 0.8, this.player.y + (this.rnd() - 0.5) * 0.4, 8 + this.rnd() * 70, col, 0.9, g.lv >= 3 ? 2 : 1, 36 + this.rnd() * 30);
+    if (g.lv >= 4 && Math.random() < 0.08) this.fx.ring(this.player.x, this.player.y, col, 0.9, 38);
   }
   drawProjectile(c: CanvasRenderingContext2D, pr: Projectile, L: number, T: number) {
     const a = this.alpha;
