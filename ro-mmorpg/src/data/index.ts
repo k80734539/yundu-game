@@ -12,6 +12,7 @@ import bestiaryJson from '../../data/bestiary.json';
 import shopsJson from '../../data/shops.json';
 import lootJson from '../../data/loot.json';
 import bossJson from '../../data/bossfights.json';
+import storyJson from '../../data/story.json';
 
 export type XY = [number, number];
 export interface MapDef {
@@ -132,6 +133,26 @@ export interface BossFightConfig {
   bosses: Record<string, { moves: BossMove[]; enrageMoves: BossMove[]; firstKill: { exp: number; jexp: number; zeny: number; items: [string, number][] } }>;
 }
 export const BOSSFIGHT = bossJson as unknown as BossFightConfig;
+
+/** 主線劇情（data/story.json）。台詞：[說話者, 文字]；說話者是 NPC id 或 speakers 裡的 key */
+export type SceneLine = [string, string];
+export interface SceneChoice { label: string; lines: SceneItem[] }
+export type SceneItem = SceneLine | { choose: SceneChoice[] };
+export interface StoryStep {
+  type: 'talk' | 'spot' | 'kill' | 'auto';
+  hint?: string; npc?: string; map?: string; x?: number; y?: number; name?: string;
+  target?: string; count?: number; actor?: string; delay?: number; lines?: SceneItem[];
+}
+export interface StoryQuest {
+  id: string; chapter: string; name: string; reqLv: number; steps: StoryStep[]; chapterEnd?: boolean;
+  reward: { exp?: number; jexp?: number; zeny?: number; statPts?: number; charm?: number; items?: [string, number][] };
+}
+export interface StoryConfig {
+  speakers: Record<string, { name: string; color?: string; icon?: string; npc?: string }>;
+  chapters: { id: string; name: string; summary: string; todo?: boolean }[];
+  quests: StoryQuest[];
+}
+export const STORY = storyJson as unknown as StoryConfig;
 
 export interface MercType {
   id: string; name: string; title: string; desc: string; look: Look;

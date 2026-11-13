@@ -7,6 +7,7 @@ export interface GuideTarget {
   sub?: string;            // 補充（路線）
   x: number; y: number;    // 箭頭指向的世界座標（格）；null 時不畫箭頭
   arrow: boolean;
+  main?: boolean;           // 主線（金色）
 }
 
 /** 任務引導：告訴玩家「下一步要去哪裡、找誰」，並提供畫面上的方向箭頭 */
@@ -55,7 +56,7 @@ export class Guide {
     const out: Record<string, { bang: number; ask: number }> = {}, seen = new Set<string>();
     for (const q of QUESTS) {
       if (seen.has(q.npc)) continue; seen.add(q.npc);
-      const mk = this.g.quests.mark(q.npc); if (!mk) continue;
+      const mk = this.g.story.wantsNpc(q.npc) ? '!' : this.g.quests.mark(q.npc); if (!mk) continue;
       const at = this.npcAt(q.npc); if (!at) continue;
       const o = (out[at.map] ||= { bang: 0, ask: 0 }); if (mk === '!') o.bang++; else o.ask++;
     }
@@ -63,9 +64,34 @@ export class Guide {
   }
   /** 某個任務的接取／回報 NPC 在哪（「名字（地圖）」） */
   whereNpc(npc: string) { const at = this.npcAt(npc); return `${DB.npc[npc]?.name || npc}${at ? `（${this.mapName(at.map)}）` : ''}`; }
+  /** 主線的下一步（等級還沒到就回傳 null，留給支線） */
+  mainTarget(): GuideTarget | null {
+    const g = this.g, t = g.story.target(), cur = g.map.def.id; if (!t || t.wait) return null;
+    const go = (map: string, x: number, y: number): GuideTarget => {
+      if (map === cur) return { text: t.text, sub: '就在這張地圖', x, y, arrow: true, main: true };
+      const h = this.hop(map);
+      return { text: t.text, sub: `去 ${this.mapName(map)}` + (h ? '　路線：' + this.routeText(h.route) : ''), x: h?.x ?? 0, y: h?.y ?? 0, arrow: !!h, main: true };
+    };
+    if (t.npc) { const at = this.npcAt(t.npc); if (at) return go(at.map, at.x, at.y); }
+    if (t.map && t.x !== undefined) return go(t.map, t.x, t.y!);
+    if (t.mon) {
+      const maps = this.monsterMaps(t.mon);
+      if (maps.includes(cur)) {
+        const m = g.monsters.find((o: Monster) => !o.dead && o.def.id === t.mon);
+        const mv = DB.map[cur].mvp;
+        const x = m?.x ?? (mv ? mv.x + 0.5 : g.player.x), y = m?.y ?? (mv ? mv.y + 0.5 : g.player.y);
+        return { text: t.text, sub: m ? '就在這張地圖' : `就在這張地圖（${g.mvpStatus(t.mon) || '等牠出現'}）`, x, y, arrow: !!(m || mv), main: true };
+      }
+      const r = maps.map((mp) => this.route(cur, mp)).filter((x): x is string[] => !!x).sort((a, b) => a.length - b.length)[0];
+      if (r) return go(r[r.length - 1], 0, 0);
+    }
+    if (t.map) return go(t.map, g.player.x, g.player.y);
+    return { text: t.text, x: 0, y: 0, arrow: false, main: true };
+  }
   /** 玩家目前最該做的事 */
   compute(): GuideTarget | null {
     const g = this.g, qs = g.quests, cur = g.map.def.id;
+    const mainT = !g.flags.guidePin ? this.mainTarget() : null; if (mainT) return mainT;
     const active = QUESTS.filter((q) => qs.isActive(q.id));
     const ready = active.find((q) => qs.complete(q));
     const toNpc = (q: QuestDef, verb: string): GuideTarget | null => {
@@ -97,12 +123,14 @@ export class Guide {
     if (avail[0]) return toNpc(avail[0], '可接');
     // 還沒解鎖：下一個等級門檻
     const locked = QUESTS.filter((q) => !qs.s[q.id] && (!q.prev || qs.isDone(q.prev)) && (q.reqLv || 0) > g.player.ch.baseLv && !q.trial).sort((a, b) => (a.reqLv || 0) - (b.reqLv || 0))[0];
+    const mw = g.story.target();
+    if (mw?.wait && (!locked || mw.wait <= (locked.reqLv || 0))) return { text: mw.text, sub: '先去練功吧', x: 0, y: 0, arrow: false, main: true };
     if (locked) return { text: `下一個任務：Lv${locked.reqLv} 解鎖「${locked.name}」（${DB.npc[locked.npc]?.name}）`, sub: '先去練功吧', x: 0, y: 0, arrow: false };
     return null;
   }
   /** 取得（快取的）引導目標；任務／等級／地圖改變或過一小段時間才重算 */
   get(dt = 0): GuideTarget | null {
-    const g = this.g, key = `${g.map.def.id}|${g.player.ch.baseLv}|${JSON.stringify(g.quests.s)}|${g.inv.items.length}`;
+    const g = this.g, key = `${g.map.def.id}|${g.player.ch.baseLv}|${JSON.stringify(g.quests.s)}|${g.inv.items.length}|${JSON.stringify(g.flags.story || '')}`;
     this.t += dt;
     if (key !== this.key || this.t > 0.6) { this.key = key; this.t = 0; this.cache = this.compute(); }
     return this.cache;

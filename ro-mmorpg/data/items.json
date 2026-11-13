@@ -5727,5 +5727,217 @@
    "crit": 6
   },
   "reqLv": 85
+ },
+ {
+  "id": "dawn_charm1",
+  "name": "晨曦護符・微弱",
+  "type": "armor",
+  "slot": "acc",
+  "price": 10,
+  "weight": 10,
+  "def": 0,
+  "desc": "晨曦石之靈給你的護符（第 1 階）。跟著主線一起成長，完成章節會自動升級。",
+  "icon": {
+   "k": "brooch",
+   "c": "#ffd860"
+  },
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "str": 1,
+   "agi": 1,
+   "vit": 1,
+   "int": 1,
+   "dex": 1,
+   "luk": 1
+  }
+ },
+ {
+  "id": "dawn_charm2",
+  "name": "晨曦護符・初醒",
+  "type": "armor",
+  "slot": "acc",
+  "price": 10,
+  "weight": 10,
+  "def": 0,
+  "desc": "晨曦石之靈給你的護符（第 2 階）。跟著主線一起成長，完成章節會自動升級。",
+  "icon": {
+   "k": "brooch",
+   "c": "#ffd860"
+  },
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "str": 1,
+   "agi": 1,
+   "vit": 1,
+   "int": 1,
+   "dex": 1,
+   "luk": 1,
+   "hp": 100
+  }
+ },
+ {
+  "id": "dawn_charm3",
+  "name": "晨曦護符・甦醒",
+  "type": "armor",
+  "slot": "acc",
+  "price": 10,
+  "weight": 10,
+  "def": 0,
+  "desc": "晨曦石之靈給你的護符（第 3 階）。跟著主線一起成長，完成章節會自動升級。",
+  "icon": {
+   "k": "brooch",
+   "c": "#ffd860"
+  },
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "str": 2,
+   "agi": 2,
+   "vit": 2,
+   "int": 2,
+   "dex": 2,
+   "luk": 2,
+   "hp": 200
+  }
+ },
+ {
+  "id": "dawn_charm4",
+  "name": "晨曦護符・明亮",
+  "type": "armor",
+  "slot": "acc",
+  "price": 10,
+  "weight": 10,
+  "def": 0,
+  "desc": "晨曦石之靈給你的護符（第 4 階）。跟著主線一起成長，完成章節會自動升級。",
+  "icon": {
+   "k": "brooch",
+   "c": "#ffd860"
+  },
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "str": 3,
+   "agi": 3,
+   "vit": 3,
+   "int": 3,
+   "dex": 3,
+   "luk": 3,
+   "hp": 350,
+   "sp": 60
+  }
+ },
+ {
+  "id": "dawn_charm5",
+  "name": "晨曦護符・耀眼",
+  "type": "armor",
+  "slot": "acc",
+  "price": 10,
+  "weight": 10,
+  "def": 0,
+  "desc": "晨曦石之靈給你的護符（第 5 階）。跟著主線一起成長，完成章節會自動升級。",
+  "icon": {
+   "k": "brooch",
+   "c": "#ffd860"
+  },
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "str": 4,
+   "agi": 4,
+   "vit": 4,
+   "int": 4,
+   "dex": 4,
+   "luk": 4,
+   "hp": 600,
+   "sp": 120
+  }
+ },
+ {
+  "id": "dawn_charm6",
+  "name": "晨曦護符・晨曦",
+  "type": "armor",
+  "slot": "acc",
+  "price": 10,
+  "weight": 10,
+  "def": 0,
+  "desc": "晨曦石之靈給你的護符（第 6 階）。跟著主線一起成長，完成章節會自動升級。",
+  "icon": {
+   "k": "brooch",
+   "c": "#ffd860"
+  },
+  "jobs": [
+   "novice",
+   "swordsman",
+   "paladin",
+   "templar",
+   "mage",
+   "elementalist",
+   "archmage",
+   "archer",
+   "ranger",
+   "sniper"
+  ],
+  "bonus": {
+   "str": 5,
+   "agi": 5,
+   "vit": 5,
+   "int": 5,
+   "dex": 5,
+   "luk": 5,
+   "hp": 900,
+   "sp": 200
+  }
  }
 ]

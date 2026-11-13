@@ -799,5 +799,31 @@
     ]
    }
   }
+ },
+ {
+  "id": "crow",
+  "name": "夜鴉",
+  "title": "？？？",
+  "look": {
+   "skin": "#e0c8b0",
+   "hair": "#1c1c28",
+   "cloth": "#1a1a26",
+   "cloth2": "#4a3a6a",
+   "pants": "#1a1a26",
+   "hairStyle": 2,
+   "body": "robe",
+   "cape": "#14121e",
+   "style": "knight",
+   "armor": "#2a2438",
+   "trim": "#6a5a8a",
+   "face": "mask"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "……"
+    ]
+   }
+  }
  }
 ]

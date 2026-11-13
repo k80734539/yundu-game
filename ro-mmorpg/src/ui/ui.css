@@ -425,3 +425,13 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 #win-bestiary .win-body { max-height: calc(100vh - 150px); overflow-y: auto; } #ui.mobile .dex-list { max-height: none; overflow: visible; } #ui.mobile .dex-info { font-size: 12px; }
 /* 任務視窗：可接的任務 */
 .q-avail { border-left: 3px solid #e0b020; }
+/* 主線劇情 */
+#banner .b.story { color: #ffe27a; font-size: 20px; letter-spacing: 2px; background: linear-gradient(90deg, transparent, rgba(40,28,10,.78) 20%, rgba(40,28,10,.78) 80%, transparent); }
+#banner .b.story small { color: #fff2c8; letter-spacing: 1px; }
+#dialog.story { border-color: #d8b860; }
+#dialog.story .win-title { text-shadow: 0 1px 0 #000; }
+.q-box.q-main { border-color: #e0b850; background: #fff8e0; }
+.lbl.q-main-lbl { color: #b07a10; }
+.q-recap { margin-bottom: 6px; } .q-recap summary { cursor: pointer; color: #6a5a30; font-size: 12px; margin-bottom: 4px; }
+#qtrack .qt-item.qt-main .qt-name { color: #ffd060; }
+#qtrack .qt-guide.main { color: #ffd060; border-top-color: rgba(255,200,80,.8); }

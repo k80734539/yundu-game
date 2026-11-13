@@ -23,7 +23,7 @@ import { playerVsMonster, monsterVsPlayer } from '../systems/Combat';
 import { StatKey, statCost, MAX_STAT } from '../systems/Stats';
 import { updateAI, onHurt, giveUp } from '../systems/AI';
 import { Telegraph, bossDamage, hasBossFight, fightTime, fmtTime } from '../systems/BossFight';
-import { BOSSFIGHT, BESTIARY } from '../data';
+import { BOSSFIGHT, BESTIARY, STORY } from '../data';
 import { Spawner } from '../systems/Spawner';
 import { Inventory } from '../systems/Inventory';
 import { GroundItem } from '../entities/GroundItem';
@@ -35,6 +35,7 @@ import { Merc } from '../entities/Merc';
 import type { HotSlot } from '../ui/Hotbar';
 import type { PropInst } from '../systems/MapLoader';
 import { Quests } from '../systems/Quests';
+import { Story } from '../systems/Story';
 import type { Dialog } from '../ui/Dialog';
 import { textImage } from '../render/Font';
 import { SkillSystem, ELEM } from '../systems/Skills';
@@ -74,6 +75,7 @@ export class Game {
   alpha = 1;
   private dl = new DrawList();
   hover: Entity | null = null;
+  spotTarget = false; // 正在走向主線調查點
   clickMark = { x: 0, y: 0, t: 0 };
   rnd = mulberry32(Date.now() & 0xffff);
   holdT = 0;
@@ -98,6 +100,7 @@ export class Game {
   skills: SkillSystem;
   mercs: MercSystem;
   guide: Guide;
+  story: Story;
   loot: Loot;
   buffT: Record<string, number> = {}; buffMax: Record<string, number> = {};
   projectiles: Projectile[] = [];
@@ -121,6 +124,7 @@ export class Game {
     this.ev.on('inv', () => { this.glow = equipGlow(this.inv.equipInfos()); });
     this.spawner = new Spawner(this);
     this.quests = new Quests(this);
+    this.story = new Story(this);
     this.skills = new SkillSystem(this);
     this.mercs = new MercSystem(this); this.bestiary = new Bestiary(this);
     this.guide = new Guide(this);
@@ -128,7 +132,7 @@ export class Game {
     this.save = new Save(this);
     this.tutorial = new Tutorial(this);
     window.addEventListener('beforeunload', () => { if (!this.inTitle) this.save.save(); });
-    this.ev.on('kill', (id: string) => this.quests.onKill(id));
+    this.ev.on('kill', (id: string) => { this.quests.onKill(id); this.story.onKill(id); });
     this.ev.on('pickup', (id: string) => this.quests.onPickup(id));
     this.spawner.init();
     this.ui = new UI(this, uiRoot);
@@ -136,7 +140,7 @@ export class Game {
     try { const v = localStorage.getItem('rom.perf'); this.perf = v === 'smooth' || v === 'auto' || v === 'saver' ? v : (window.matchMedia?.('(pointer: coarse)').matches ? 'auto' : 'smooth'); } catch { /* */ }
     try { const v = localStorage.getItem('rom.res'); this.r.low = v === 'low' || (v !== 'high' && !!window.matchMedia?.('(pointer: coarse)').matches); if (this.r.low) this.r.resize(); } catch { /* */ }
     this.loop = new Loop((dt) => this.update(dt), (a, dt) => this.render(a, dt));
-    (window as any).__game = this; (window as any).__DB = DB; (window as any).__LOOT = LOOT; (window as any).__GI = GroundItem; (window as any).__BOSSCFG = BOSSFIGHT; (window as any).__BESTIARY = BESTIARY;
+    (window as any).__game = this; (window as any).__DB = DB; (window as any).__LOOT = LOOT; (window as any).__GI = GroundItem; (window as any).__BOSSCFG = BOSSFIGHT; (window as any).__BESTIARY = BESTIARY; (window as any).__STORY = STORY;
   }
 
   /** 開機：先載入城鎮當標題背景 */
@@ -519,6 +523,7 @@ export class Game {
     npc.face(p.x, p.y); p.face(npc.x, npc.y);
     npc.talkT = 4;
     if (npc.def.id === 'guide') this.flags.talkedGuide = true;
+    if (this.story.onTalk(npc)) return; // 輪到這個 NPC 的主線劇情
     this.ui.talk(npc);
   }
   raiseStat(k: StatKey) {
@@ -624,6 +629,29 @@ export class Game {
     const L = this.cam.left(this.r.w), T = this.cam.top(this.r.h);
     return unIso(sx + L, sy + T);
   }
+  /** 有沒有點到某個世界座標上的調查點（手機的點擊範圍較大） */
+  spotHit(sx: number, sy: number, wx: number, wy: number) {
+    const L = this.cam.left(this.r.w), T = this.cam.top(this.r.h), r = this.ui.mobile ? 34 : 24;
+    const x = isoX(wx, wy) - L, y = isoY(wx, wy) - T - 14;
+    return Math.abs(sx - x) <= r && Math.abs(sy - y) <= r + 8;
+  }
+  /** 主線調查點：地上一圈脈動的金光＋浮著的金色「?」與名稱 */
+  drawSpot(c: CanvasRenderingContext2D, L: number, T: number) {
+    const sp = this.story.spotHere(); if (!sp) return;
+    const wx = sp.x! + 0.5, wy = sp.y! + 0.5, x = Math.round(isoX(wx, wy) - L), y = Math.round(isoY(wx, wy) - T);
+    const k = 0.5 + 0.5 * Math.sin(this.time * 3);
+    c.globalAlpha = 0.25 + 0.2 * k; c.fillStyle = '#ffd860'; c.beginPath(); c.ellipse(x, y, 30 + k * 4, 15 + k * 2, 0, 0, Math.PI * 2); c.fill();
+    c.globalAlpha = 0.9; c.strokeStyle = '#fff2b0'; c.lineWidth = 2; c.beginPath(); c.ellipse(x, y, 22 + k * 10, 11 + k * 5, 0, 0, Math.PI * 2); c.stroke();
+    c.globalAlpha = 1;
+    if (Math.random() < 0.08) this.fx.glow(wx + (Math.random() - 0.5) * 0.8, wy + (Math.random() - 0.5) * 0.8, 0, '#ffe27a', 1, 2, 50);
+  }
+  /** 調查點的「?」與名稱：畫在建築與角色上面，才不會被路燈、攤位擋住 */
+  drawSpotTop(c: CanvasRenderingContext2D, L: number, T: number) {
+    const sp = this.story.spotHere(); if (!sp) return;
+    const wx = sp.x! + 0.5, wy = sp.y! + 0.5, x = Math.round(isoX(wx, wy) - L), y = Math.round(isoY(wx, wy) - T);
+    const img = textImage('?', '#ffe040', 3); c.drawImage(img, Math.round(x - img.width / 2), Math.round(y - 46 + Math.sin(this.time * 4) * 3));
+    this.label(c, sp.name || '', x, y - 66, '#ffe27a');
+  }
   /** 滑鼠下的實體（依繪製順序由前到後） */
   pick(sx: number, sy: number): Entity | null {
     const L = this.cam.left(this.r.w), T = this.cam.top(this.r.h);
@@ -657,6 +685,11 @@ export class Game {
     if (this.slowT > 0) { this.slowT -= dt; dt *= this.slowScale; if (this.slowT <= 0) this.slowScale = 1; } // 慢動作（只在擊敗 Boss 時）
     this.time += dt;
     for (const e of this.entities) e.savePrev();
+    if (this.story.scene) { // 劇情播放中：世界暫停（怪物不動、不會被打），只播特效與介面
+      for (const n of this.npcs) n.updateAnim(dt);
+      this.player.updateAnim(dt); this.fx.update(dt); this.cam.updateShake(dt); this.ui.update(dt); this.updatePerf(dt);
+      return;
+    }
     this.updatePlayer(dt);
     if (!this.player.dead) this.checkPortals();
     for (const m of this.monsters) this.updateMonster(m, dt);
@@ -671,7 +704,7 @@ export class Game {
     this.updateTelegraphs(dt);
     this.updateBuffs(dt);
     this.updateRegen(dt);
-    if (!this.inTitle) this.tutorial.update(dt);
+    if (!this.inTitle) { this.tutorial.update(dt); this.story.update(dt); }
     if (!this.inTitle) this.save.update(dt);
     if (this.shout) { this.shout.t -= dt; if (this.shout.t <= 0) this.shout = null; }
     if (this.timers.length) { const due = this.timers.filter((t) => (t.t -= dt) <= 0); if (due.length) { this.timers = this.timers.filter((t) => t.t > 0); for (const t of due) t.fn(); } }
@@ -728,8 +761,10 @@ export class Game {
     this.skills.pending = null;
     if (e instanceof Monster) { p.chase = e; p.repathT = 0; this.pickTarget = null; return; }
     if (e instanceof GroundItem) { p.chase = null; this.pickTarget = e; this.talkTarget = null; this.walkTo(e.x, e.y, false); return; }
-    if (e instanceof Npc) { p.chase = null; this.pickTarget = null; this.talkTarget = e; p.setPath(this.pf.find(p.x, p.y, e.x, e.y, 3000, 1)); return; }
-    p.chase = null; this.pickTarget = null; this.talkTarget = null;
+    if (e instanceof Npc) { p.chase = null; this.pickTarget = null; this.talkTarget = e; this.spotTarget = false; p.setPath(this.pf.find(p.x, p.y, e.x, e.y, 3000, 1)); return; }
+    p.chase = null; this.pickTarget = null; this.talkTarget = null; this.spotTarget = false;
+    const sp = hold ? null : this.story.spotHere();
+    if (sp && this.spotHit(sx, sy, sp.x! + 0.5, sp.y! + 0.5)) { this.spotTarget = true; p.setPath(this.pf.find(p.x, p.y, sp.x! + 0.5, sp.y! + 0.5, 3000, 1)); return; }
     const w = this.screenToWorld(sx, sy);
     this.walkTo(w.x, w.y, !hold);
   }
@@ -778,6 +813,14 @@ export class Game {
       const n = this.talkTarget;
       if (Math.max(Math.abs(n.x - p.x), Math.abs(n.y - p.y)) <= 2.2) { p.path = []; this.talkTarget = null; this.talkTo(n); }
       else if (!p.path.length) this.talkTarget = null;
+    }
+    { // 主線調查點：走到旁邊就觸發（點了它，或剛好走過去）
+      const sp = this.story.spotHere();
+      if (sp && !this.ui.dialog.isOpen) {
+        const d = Math.max(Math.abs(sp.x! + 0.5 - p.x), Math.abs(sp.y! + 0.5 - p.y));
+        if (d <= 1.6 && (this.spotTarget || d <= 1.1)) { p.path = []; this.spotTarget = false; this.story.investigate(); }
+        else if (this.spotTarget && !p.path.length) this.spotTarget = false;
+      }
     }
     if (this.pickTarget) {
       const it = this.pickTarget;
@@ -1085,6 +1128,7 @@ export class Game {
       c.beginPath(); c.moveTo(x, y - s * 0.5); c.lineTo(x + s, y); c.lineTo(x, y + s * 0.5); c.lineTo(x - s, y); c.closePath(); c.stroke(); c.globalAlpha = 1;
     }
     this.drawPortals(c, L, T);
+    this.drawSpot(c, L, T);
     for (const t of this.telegraphs) { // 預警區：紅色，越接近出招越亮
       if (t.t < 0) continue;
       const k = Math.min(1, t.t / t.dur), flash = k > 0.75 && Math.floor(this.time * 14) % 2 === 0;
@@ -1167,6 +1211,7 @@ export class Game {
       else { drawProp(c, d.ref, L, T, d.kind === K_STRIP ? d.aux : -1); if (d.ref.def.anim && d.kind === K_PROP) this.drawPropAnim(c, d.ref, L, T); }
     }
     this.fx.drawParticles(c, L, T);
+    this.drawSpotTop(c, L, T);
     // 頭上資訊（血條、名稱）
     for (const e of this.entities) if (e instanceof Actor) this.drawOverhead(c, e, L, T);
     this.drawGuideArrow(c, L, T);
@@ -1276,7 +1321,9 @@ export class Game {
     }
     if (e.dead) c.globalAlpha = e === this.player ? 0.45 : Math.max(0, 1 - e.deadT);
     if (e === this.player && !e.dead) this.drawGlow(c, s, sx, sy, x, y);
+    if (e instanceof Npc && e.fade !== undefined) c.globalAlpha = Math.max(0, Math.min(1, e.fade));
     c.drawImage(s.c, sx, sy, s.fw, s.fh, x, y, s.fw, s.fh);
+    if (e instanceof Npc && e.fade !== undefined) c.globalAlpha = 1;
     if (e instanceof Monster && e.frozenT > 0) { c.globalAlpha = 0.45; c.drawImage(whiteOf(s), sx, sy, s.fw, s.fh, x, y, s.fw, s.fh); c.globalAlpha = 0.25; c.fillStyle = '#60b0ff'; c.fillRect(x + s.ax + e.bbox.x0, y + s.ay + e.bbox.y0, e.bbox.x1 - e.bbox.x0, e.bbox.y1 - e.bbox.y0); c.globalAlpha = 1; }
     if (e instanceof Monster && e.boss && !e.dead) { // Boss：狂暴時身體變紅；蓄力時閃白並微微顫動
       const b = e.boss;
@@ -1408,8 +1455,9 @@ export class Game {
     if (e instanceof Merc) { const lm = Math.max(0, Math.ceil(this.mercs.left / 60)); this.label(c, `${e.name}（剩 ${lm} 分）`, x, y + 14, '#ffe8a0'); }
     if (e instanceof Npc) {
       this.label(c, e.name, x, y + 14, '#a8e8ff');
-      const mk = this.quests.mark(e.def.id);
-      if (mk) { const img = textImage(mk, mk === '?' ? '#60ff80' : '#ffe040', 3); c.drawImage(img, Math.round(x - img.width / 2), Math.round(y + e.bbox.y0 - 30 + Math.sin(this.time * 4) * 3)); }
+      const mk = this.story.wantsNpc(e.def.id) ? '!' : this.quests.mark(e.def.id);
+      if (this.story.wantsNpc(e.def.id)) { const img = textImage('!', '#ffb020', 4); c.drawImage(img, Math.round(x - img.width / 2), Math.round(y + e.bbox.y0 - 34 + Math.sin(this.time * 5) * 3)); }
+      else if (mk) { const img = textImage(mk, mk === '?' ? '#60ff80' : '#ffe040', 3); c.drawImage(img, Math.round(x - img.width / 2), Math.round(y + e.bbox.y0 - 30 + Math.sin(this.time * 4) * 3)); }
       return;
     }
     if (e instanceof Monster && !mvp) { // 怪物名字：滑鼠移上、正在打的、或在附近（手機沒有滑鼠，所以靠近就會顯示）；顏色表示強弱

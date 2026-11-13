@@ -1,7 +1,8 @@
 import type { UI } from './UI';
 import { h } from './Window';
 import type { Npc } from '../entities/Npc';
-import { DB, MAPS, MERCS } from '../data';
+import { DB, MAPS, MERCS, STORY, SceneItem } from '../data';
+import { humanSheet } from '../render/SpriteFactory';
 
 export interface Choice { label: string; fn: () => void; cls?: string }
 /** NPC 對話框：打字機效果、分頁、選項（點擊或數字鍵選擇） */
@@ -10,6 +11,8 @@ export class Dialog {
   npc: Npc | null = null;
   private pages: string[] = []; private page = 0; private shown = 0; private full = ''; private then: (() => void) | null = null;
   private choices: Choice[] = [];
+  /** 主線劇情：每一頁的說話者（null＝一般 NPC 對話）；sceneEnd 在劇情結束或被關掉時呼叫一次 */
+  private who: (string | null)[] = []; private sceneEnd: (() => void) | null = null;
   constructor(private ui: UI) {
     this.el = h('div', 'win hidden'); this.el.id = 'dialog';
     this.nameEl = h('div', 'win-title');
@@ -26,7 +29,7 @@ export class Dialog {
   }
   get isOpen() { return !this.el.classList.contains('hidden'); }
   open(npc: Npc) {
-    this.npc = npc;
+    this.npc = npc; this.who = []; this.sceneEnd = null; this.el.classList.remove('story'); this.nameEl.style.color = ''; this.face.style.visibility = 'visible';
     this.nameEl.textContent = npc.def.name + (npc.def.title ? `（${npc.def.title}）` : '');
     const c = this.face.getContext('2d')!; c.imageSmoothingEnabled = false; c.clearRect(0, 0, 72, 72);
     c.fillStyle = '#dde6f6'; c.fillRect(0, 0, 72, 72);
@@ -34,14 +37,67 @@ export class Dialog {
     this.el.classList.remove('hidden'); this.el.style.zIndex = '5000';
     this.runNode('start');
   }
-  close() { this.el.classList.add('hidden'); this.npc = null; this.choices = []; this.then = null; this.ui.g.dialogClosed(); }
+  close() {
+    this.el.classList.add('hidden'); this.el.classList.remove('story'); this.npc = null; this.choices = []; this.then = null; this.who = [];
+    const e = this.sceneEnd; this.sceneEnd = null; if (e) e();
+    this.ui.g.dialogClosed();
+  }
+  /** 主線劇情：多人輪流說話＋選項（選項只換回應，劇情最後都會接回來）。按 × 或 Esc 等於跳過，劇情仍算看完 */
+  scene(items: SceneItem[], end: () => void) {
+    this.npc = null; this.sceneEnd = end;
+    this.el.classList.remove('hidden'); this.el.classList.add('story'); this.el.style.zIndex = '5000';
+    const run = (list: SceneItem[], i: number, done: () => void): void => {
+      // 把連續的台詞收成一段，碰到選項就停下來讓玩家選
+      const pages: string[] = [], who: string[] = [];
+      let k = i;
+      while (k < list.length && Array.isArray(list[k])) { const [sp, tx] = list[k] as [string, string]; pages.push(tx); who.push(sp); k++; }
+      const next = () => {
+        if (k >= list.length) { done(); return; }
+        const c = list[k] as { choose: { label: string; lines: SceneItem[] }[] };
+        this.setSpeaker(this.who[this.page] ?? 'sys');
+        this.choose(c.choose.map((o) => ({ label: o.label, fn: () => run(o.lines, 0, () => run(list, k + 1, done)) })));
+      };
+      if (!pages.length) { next(); return; }
+      this.who = who; this.say(pages, next);
+    };
+    run(items, 0, () => this.close());
+  }
+  /** 依說話者換名字與頭像 */
+  private setSpeaker(sp: string | null) {
+    if (sp === null) return;
+    const g = this.ui.g, info = STORY.speakers[sp], npcId = info?.npc || (DB.npc[sp] ? sp : '');
+    const name = info ? info.name : DB.npc[sp]?.name || sp;
+    this.nameEl.textContent = name || '　'; this.nameEl.style.color = info?.color || '';
+    const c = this.face.getContext('2d')!; c.imageSmoothingEnabled = false; c.clearRect(0, 0, 72, 72);
+    this.face.style.visibility = info?.icon === 'none' ? 'hidden' : 'visible';
+    if (npcId) { c.fillStyle = '#dde6f6'; c.fillRect(0, 0, 72, 72); c.drawImage(humanSheet(DB.npc[npcId].look).c, 60, 66, 72, 72, 0, 0, 72, 72); return; }
+    if (info?.icon === 'stone') { // 晨曦石：淡金色的寶石＋光暈
+      const t = g.time;
+      c.fillStyle = '#2a2440'; c.fillRect(0, 0, 72, 72);
+      for (let r = 30; r > 0; r -= 3) { c.globalAlpha = 0.07; c.fillStyle = '#ffe27a'; c.beginPath(); c.arc(36, 38, r + Math.sin(t * 3) * 2, 0, Math.PI * 2); c.fill(); }
+      c.globalAlpha = 1; c.fillStyle = '#ffd860'; c.beginPath(); c.moveTo(36, 18); c.lineTo(50, 36); c.lineTo(36, 56); c.lineTo(22, 36); c.closePath(); c.fill();
+      c.fillStyle = '#fff6c8'; c.beginPath(); c.moveTo(36, 22); c.lineTo(44, 34); c.lineTo(36, 36); c.lineTo(28, 34); c.closePath(); c.fill();
+      c.strokeStyle = '#8a6a20'; c.lineWidth = 1; c.beginPath(); c.moveTo(39, 30); c.lineTo(34, 40); c.lineTo(37, 46); c.stroke();
+      return;
+    }
+    if (info?.icon === 'note') { // 手記：皮面小本子
+      c.fillStyle = '#3a2a20'; c.fillRect(0, 0, 72, 72);
+      c.fillStyle = '#8a5a30'; c.fillRect(16, 14, 40, 46); c.fillStyle = '#f0e2c0'; c.fillRect(20, 16, 34, 42);
+      c.fillStyle = '#a89870'; for (let y = 22; y < 54; y += 6) c.fillRect(24, y, 26, 1);
+      c.fillStyle = '#c03030'; c.fillRect(44, 12, 4, 14);
+      return;
+    }
+    c.fillStyle = '#dde6f6'; c.fillRect(0, 0, 72, 72);
+    c.drawImage(g.player.sheet.c, 60, 66, 72, 72, 0, 0, 72, 72);
+  }
   /** 顯示幾頁文字，結束後呼叫 then */
   say(lines: string | string[], then?: () => void) {
+    if (!this.sceneEnd) this.who = [];
     this.pages = Array.isArray(lines) ? lines : [lines]; this.page = 0; this.then = then || (() => this.close());
     this.choices = []; this.optsEl.innerHTML = '';
     this.startPage();
   }
-  private startPage() { this.full = this.pages[this.page]; this.shown = 0; this.textEl.textContent = ''; this.hint.style.visibility = 'hidden'; this.ui.sfx('talk'); }
+  private startPage() { if (this.who.length) this.setSpeaker(this.who[this.page] ?? null); this.full = this.pages[this.page]; this.shown = 0; this.textEl.textContent = ''; this.hint.style.visibility = 'hidden'; this.ui.sfx('talk'); }
   choose(list: Choice[]) {
     this.choices = list; this.optsEl.innerHTML = ''; this.hint.style.visibility = 'hidden';
     list.forEach((c, i) => {
