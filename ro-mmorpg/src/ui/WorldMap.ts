@@ -25,7 +25,9 @@ export class WorldMap extends Win {
     const mons = (d.spawns || []).map((s) => DB.monster[s.m]?.name).filter(Boolean).join('、');
     const bt = (this.ui.g.flags.bossBest || {})[d.mvp?.m || ''];
     const mvp = d.mvp ? `　<b style="color:#c0302a">MVP：${DB.monster[d.mvp.m]?.name}</b>（${this.ui.g.mvpStatus(id)}${bt !== undefined ? '，最快擊殺 ' + Math.floor(bt / 60) + ':' + (bt % 60).toFixed(1).padStart(4, '0') : ''}）` : '';
-    return `<b>${d.name}</b>　${lv}${mvp}<br><span class="dim">${mons ? '出沒：' + mons : d.type === 'town' ? '有商店、旅館、轉職官' : ''}</span>`;
+    const mk = this.ui.g.guide.mapMarks()[id];
+    const qtxt = mk ? `<br><b style="color:#b07a00">任務：${mk.bang ? `有 ${mk.bang} 位 NPC 有任務可接（頭上「!」）` : ''}${mk.bang && mk.ask ? '；' : ''}${mk.ask ? '有任務可以回報（頭上「?」）' : ''}</b>` : '';
+    return `<b>${d.name}</b>　${lv}${mvp}${qtxt}<br><span class="dim">${mons ? '出沒：' + mons : d.type === 'town' ? '有商店、旅館、轉職官' : ''}</span>`;
   }
   render() {
     if (!this.isOpen) return;
@@ -55,10 +57,18 @@ export class WorldMap extends Win {
     c.setLineDash([]);
     const cur = this.ui.g.map.def.id;
     const plv = this.ui.g.player.ch.baseLv;
+    const marks = this.ui.g.guide.mapMarks();
     for (const n of this.nodes) {
       const d = DB.map[n.id]; const img = miniBase(mapData(n.id), 1);
       c.drawImage(img, n.x, n.y);
       if (n.id === cur) { const k = Math.floor(performance.now() / 400) % 2; c.strokeStyle = k ? '#ff3030' : '#ffe040'; c.lineWidth = 2; c.strokeRect(n.x - 3, n.y - 3, n.w + 6, n.h + 6); }
+      const mk = marks[n.id];
+      if (mk) { // 這張地圖有任務 NPC：右上角的徽章（黃「!」可接、綠「?」可回報）
+        const bx = n.x + n.w - 4, by = n.y + 2, ask = mk.ask > 0;
+        c.fillStyle = '#3a2a1a'; c.beginPath(); c.arc(bx, by, 9, 0, Math.PI * 2); c.fill();
+        c.fillStyle = ask ? '#50e070' : '#ffd830'; c.beginPath(); c.arc(bx, by, 7.5, 0, Math.PI * 2); c.fill();
+        c.fillStyle = '#3a2a1a'; c.font = 'bold 12px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(ask ? '?' : '!', bx, by + 1);
+      }
       c.font = 'bold 12px "Noto Sans TC", sans-serif'; c.textAlign = 'center'; c.textBaseline = 'top';
       const tx = n.x + n.w / 2, ty = n.y + n.h + 2;
       c.fillStyle = '#fff8e0'; for (const [ox, oy] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) c.fillText(d.name, tx + ox, ty + oy);

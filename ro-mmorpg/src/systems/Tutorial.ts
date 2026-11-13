@@ -42,6 +42,7 @@ export class Tutorial {
   update(dt: number) {
     this.t += dt; if (this.t < 0.5) return; this.t = 0;
     const g = this.g;
+    if (!g.flags.qAnn) g.quests.announceNew(true);   // 記下開局時已經可以接的任務，之後只提示「新的」
     let s = this.step, changed = false;
     while (s < STEPS.length && STEPS[s].done(g)) { s++; changed = true; }
     if (s >= STEPS.length) { const id = this.tip()?.id || ''; if (id !== this.lastTip) { this.lastTip = id; g.ui.tutorialHint(); if (id && !this.off) g.audio.sfx('quest'); } }

@@ -39,6 +39,16 @@ export class Quests {
     if (f.avail.length) return '!';
     return '';
   }
+  /** 有新任務可以接了就提示一次（升級、完成任務後呼叫）；第一次呼叫只是記下現有的，不提示 */
+  announceNew(silent = false) {
+    const g = this.g, first = !g.flags.qAnn; if (first) g.flags.qAnn = {};
+    const fresh = QUESTS.filter((q) => !q.trial && this.canAccept(q) && !g.flags.qAnn[q.id]);
+    for (const q of fresh) g.flags.qAnn[q.id] = 1;
+    if (first || silent || !fresh.length) return;
+    for (const q of fresh.slice(0, 2)) g.msg(`新任務可以接了：「${q.name}」→ ${g.guide.whereNpc(q.npc)}`, 'quest');
+    if (fresh.length > 2) g.msg(`還有 ${fresh.length - 2} 個新任務，打開任務視窗（Alt+U）看看。`, 'quest');
+    g.audio?.sfx('quest');
+  }
   accept(id: string) {
     const q = this.def(id); if (!q || !this.canAccept(q)) return;
     this.s[id] = { st: 'active', n: 0 };
@@ -58,6 +68,7 @@ export class Quests {
     this.g.audio?.sfx('questdone');
     this.g.fx.dmg(this.g.player.x, this.g.player.y, 'CLEAR', 'skill', 150);
     this.g.ev.emit('quest'); this.g.ev.emit('stats');
+    this.g.after(0.6, () => this.announceNew());
     return true;
   }
   abandon(id: string) { if (this.isActive(id)) { delete this.s[id]; this.g.msg(`放棄任務：${this.def(id).name}`, 'warn'); this.g.ev.emit('quest'); } }

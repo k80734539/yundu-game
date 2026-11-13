@@ -41,8 +41,16 @@ export class Minimap {
       c.fillStyle = col; c.fillRect(X - r, Y - r, r * 2, r * 2);
     };
     for (const p of m.def.portals) dot(p.x + 0.5, p.y + 0.5, '#ff6ad0', 2);
-    for (const n of g.npcs) dot(n.x, n.y, '#40e070', 1.5);
     const blink = Math.floor(performance.now() / 300) % 2 === 0;
+    for (const n of g.npcs) {
+      const mk = g.quests.mark(n.def.id);
+      if (!mk) { dot(n.x, n.y, '#40e070', 1.5); continue; }
+      // 有任務的 NPC：黃色「!」（可接）或綠色「?」（可回報），閃爍
+      const [px, py] = miniPos(m, n.x, n.y); const X = Math.round(px) + 2, Y = Math.round(py) + 2, col = mk === '!' ? '#ffd830' : '#50ff70';
+      c.fillStyle = '#000'; c.fillRect(X - 4, Y - 7, 8, 12); c.fillStyle = blink ? col : '#ffffff'; c.fillRect(X - 3, Y - 6, 6, 10);
+      c.fillStyle = '#000';
+      if (mk === '!') { c.fillRect(X - 1, Y - 5, 2, 5); c.fillRect(X - 1, Y + 1, 2, 2); } else { c.fillRect(X - 2, Y - 5, 4, 1); c.fillRect(X + 1, Y - 4, 1, 2); c.fillRect(X - 1, Y - 2, 2, 1); c.fillRect(X - 1, Y, 1, 1); c.fillRect(X - 1, Y + 2, 1, 1); }
+    }
     for (const mv of g.monsters) if (mv.isMvp && !mv.dead) { // MVP 標記
       const [px, py] = miniPos(m, mv.x, mv.y); const X = Math.round(px) + 2, Y = Math.round(py) + 2;
       c.fillStyle = '#000'; c.fillRect(X - 5, Y - 5, 10, 10); c.fillStyle = blink ? '#ff3030' : '#ffd040'; c.fillRect(X - 4, Y - 4, 8, 8);

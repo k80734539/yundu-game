@@ -50,6 +50,19 @@ export class Guide {
     return { x: p.x + 0.5, y: p.y + 0.5, next: r[1], route: r };
   }
   private routeText(r: string[]) { return r.map((m) => this.mapName(m)).join(' → '); }
+  /** 每張地圖上有幾個「!」（可接）和「?」（可回報）的任務 NPC，世界地圖用 */
+  mapMarks(): Record<string, { bang: number; ask: number }> {
+    const out: Record<string, { bang: number; ask: number }> = {}, seen = new Set<string>();
+    for (const q of QUESTS) {
+      if (seen.has(q.npc)) continue; seen.add(q.npc);
+      const mk = this.g.quests.mark(q.npc); if (!mk) continue;
+      const at = this.npcAt(q.npc); if (!at) continue;
+      const o = (out[at.map] ||= { bang: 0, ask: 0 }); if (mk === '!') o.bang++; else o.ask++;
+    }
+    return out;
+  }
+  /** 某個任務的接取／回報 NPC 在哪（「名字（地圖）」） */
+  whereNpc(npc: string) { const at = this.npcAt(npc); return `${DB.npc[npc]?.name || npc}${at ? `（${this.mapName(at.map)}）` : ''}`; }
   /** 玩家目前最該做的事 */
   compute(): GuideTarget | null {
     const g = this.g, qs = g.quests, cur = g.map.def.id;
@@ -62,6 +75,8 @@ export class Guide {
       return { text: `${verb}「${q.name}」→ ${nm}（${this.mapName(at.map)}）`, sub: h ? '路線：' + this.routeText(h.route) : undefined, x: h?.x ?? 0, y: h?.y ?? 0, arrow: !!h };
     };
     if (ready) return toNpc(ready, '回報');
+    const pin = g.flags.guidePin && DB.quest[g.flags.guidePin];                           // 玩家在任務視窗按了「追蹤」的可接任務
+    if (pin) { if (qs.canAccept(pin)) return toNpc(pin, '前往接取'); g.flags.guidePin = null; }
     // 進行中的任務：去哪裡打／收集
     for (const q of active) {
       let maps: string[] = [], mons: string[] = [];

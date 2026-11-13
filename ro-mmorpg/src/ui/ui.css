@@ -423,3 +423,5 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 .dex-drops { display: flex; flex-wrap: wrap; gap: 3px 8px; margin-top: 2px; }
 .dex-drop { display: inline-flex; align-items: center; gap: 2px; padding: 0 5px; background: #eef1f8; border-radius: 8px; } .dex-drop img { width: 16px; height: 16px; image-rendering: pixelated; } .dex-drop.unk { color: #8a93a8; }
 #win-bestiary .win-body { max-height: calc(100vh - 150px); overflow-y: auto; } #ui.mobile .dex-list { max-height: none; overflow: visible; } #ui.mobile .dex-info { font-size: 12px; }
+/* 任務視窗：可接的任務 */
+.q-avail { border-left: 3px solid #e0b020; }

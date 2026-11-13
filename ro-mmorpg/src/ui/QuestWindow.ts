@@ -4,13 +4,13 @@ import { DB, QUESTS } from '../data';
 
 /** 任務視窗（Alt+U）＋右側任務追蹤欄 */
 export class QuestWindow extends Win {
-  constructor(ui: UI) { super(ui, 'quests', '任務（Alt+U）', { x: 300, y: 100, w: 340 }); ui.g.ev.on('quest', () => this.render()); ui.g.ev.on('inv', () => this.render()); }
+  constructor(ui: UI) { super(ui, 'quests', '任務（Alt+U）', { x: 300, y: 100, w: 340 }); ui.g.ev.on('quest', () => this.render()); ui.g.ev.on('inv', () => this.render()); ui.g.ev.on('stats', () => this.render()); }
   render() {
     if (!this.isOpen) return;
     const qs = this.ui.g.quests;
     this.body.innerHTML = '';
     const act = qs.activeList();
-    if (!act.length) this.body.appendChild(h('div', 'dim', '目前沒有進行中的任務。找頭上有「!」的 NPC 談談吧。'));
+    if (!act.length) this.body.appendChild(h('div', 'dim', '目前沒有進行中的任務。看下面「可以接的任務」，或找頭上有「!」的 NPC。'));
     for (const q of act) {
       const box = h('div', 'q-box');
       const done = qs.complete(q);
@@ -21,6 +21,21 @@ export class QuestWindow extends Win {
       box.prepend(b);
       this.body.appendChild(box);
     }
+    const g = this.ui.g;
+    // 可以接的任務：在哪裡、找誰；「追蹤」會讓📍指向它
+    const avail = QUESTS.filter((q) => !q.trial && qs.canAccept(q)).sort((a, b) => (a.reqLv || 0) - (b.reqLv || 0));
+    this.body.appendChild(h('div', 'lbl', `可以接的任務（${avail.length}）`));
+    if (!avail.length) this.body.appendChild(h('div', 'dim', '目前沒有可以接的任務。升級或完成任務後會有新的。'));
+    for (const q of avail) {
+      const box = h('div', 'q-box q-avail');
+      const pinned = g.flags.guidePin === q.id;
+      const b = btn(pinned ? '追蹤中' : '📍追蹤', () => { g.flags.guidePin = pinned ? null : q.id; g.flags.guideSeen = true; this.render(); this.ui.qtrack.render(); }, 'sm' + (pinned ? ' dis' : '')); b.style.float = 'right';
+      box.innerHTML = `<b>${q.name}</b>${q.reqLv ? ` <span class="dim">Lv${q.reqLv}</span>` : ''}<br><span class="sk-desc">${q.desc}</span><br><span class="lbl">找：</span><span class="val">${g.guide.whereNpc(q.npc)}</span>`;
+      box.prepend(b); this.body.appendChild(box);
+    }
+    // 還沒解鎖的（只差等級）：預告
+    const soon = QUESTS.filter((q) => !q.trial && !qs.s[q.id] && (!q.prev || qs.isDone(q.prev)) && (q.reqLv || 0) > g.player.ch.baseLv).sort((a, b) => (a.reqLv || 0) - (b.reqLv || 0)).slice(0, 4);
+    if (soon.length) { this.body.appendChild(h('div', 'lbl', '快解鎖的任務')); for (const q of soon) this.body.appendChild(h('div', 'dim', `Lv${q.reqLv}　${q.name}（${g.guide.whereNpc(q.npc)}）`)); }
     const done = QUESTS.filter((q) => qs.isDone(q.id));
     if (done.length) { this.body.appendChild(h('div', 'lbl', `已完成（${done.length}/${QUESTS.length}）`)); this.body.appendChild(h('div', 'dim', done.map((q) => q.name).join('、'))); }
   }

@@ -16,6 +16,7 @@ export function gainExp(g: Game, base: number, job: number, quiet = false) {
       p.recalc(true);
       g.levelUpFx('base');
       g.msg(`基本等級提升到 ${ch.baseLv}！獲得能力點數。`, 'sys');
+      g.after(0.8, () => g.quests.announceNew());
     }
   }
   if (job > 0) {
