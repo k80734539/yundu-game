@@ -1237,10 +1237,10 @@ export class Game {
     const dx = tx - px, dy = ty - py, dist = Math.hypot(gd.x - p.x, gd.y - p.y); if (dist < 4) return;
     const ang = Math.atan2(dy, dx), r = 62 + Math.sin(this.time * 4) * 3, ax = px + Math.cos(ang) * r, ay = py + Math.sin(ang) * r;
     c.save(); c.translate(Math.round(ax), Math.round(ay)); c.rotate(ang);
-    c.fillStyle = '#ffd860'; c.strokeStyle = '#3a2a10'; c.lineWidth = 2;
+    c.fillStyle = gd.main ? '#ffb020' : '#6fe0ff'; c.strokeStyle = gd.main ? '#3a2a10' : '#0c2a3a'; // 主線橘金、支線青色 c.lineWidth = 2;
     c.beginPath(); c.moveTo(11, 0); c.lineTo(-7, -8); c.lineTo(-3, 0); c.lineTo(-7, 8); c.closePath(); c.stroke(); c.fill();
     c.restore();
-    c.font = 'bold 10px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 3; c.strokeStyle = '#2a1c08'; c.fillStyle = '#ffe9a0';
+    c.font = 'bold 10px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 3; c.strokeStyle = gd.main ? '#2a1c08' : '#08202a'; c.fillStyle = gd.main ? '#ffe9a0' : '#c8f4ff';
     const lt = `${Math.round(dist)} 格`; c.strokeText(lt, ax, ay + 14); c.fillText(lt, ax, ay + 14);
   }
   drawPortals(c: CanvasRenderingContext2D, L: number, T: number) {

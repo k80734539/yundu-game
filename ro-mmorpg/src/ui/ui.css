@@ -435,3 +435,10 @@ canvas#game { display: block; image-rendering: pixelated; image-rendering: crisp
 .q-recap { margin-bottom: 6px; } .q-recap summary { cursor: pointer; color: #6a5a30; font-size: 12px; margin-bottom: 4px; }
 #qtrack .qt-item.qt-main .qt-name { color: #ffd060; }
 #qtrack .qt-guide.main { color: #ffd060; border-top-color: rgba(255,200,80,.8); }
+/* 支線：青色（主線是橘金色） */
+#qtrack .qt-item:not(.qt-main) .qt-name { color: #7fe4ff; }
+#qtrack .qt-item:not(.qt-main).done .qt-name { color: #8aff9a; }
+#qtrack .qt-guide:not(.main) { color: #aeeeff; border-top-color: rgba(120,220,255,.6); }
+.q-box.q-side { border-left: 3px solid #4ac8e8; }
+.lbl.q-side-lbl { color: #1a7a9a; }
+.q-avail { border-left-color: #4ac8e8; }

@@ -32,11 +32,11 @@ export class QuestWindow extends Win {
       for (const c of read) { const d = h('div', 'q-box'); d.innerHTML = `<b>${c.name}</b><br><span class="sk-desc">${c.summary}</span>`; det.appendChild(d); }
       this.body.appendChild(det);
     }
-    this.body.appendChild(h('div', 'lbl', '支線任務'));
+    this.body.appendChild(h('div', 'lbl q-side-lbl', '◆ 支線任務'));
     const act = qs.activeList();
     if (!act.length) this.body.appendChild(h('div', 'dim', '目前沒有進行中的任務。看下面「可以接的任務」，或找頭上有「!」的 NPC。'));
     for (const q of act) {
-      const box = h('div', 'q-box');
+      const box = h('div', 'q-box q-side');
       const done = qs.complete(q);
       const tgt = q.type === 'kill' ? DB.monster[q.target]?.name : DB.item[q.target]?.name;
       box.innerHTML = `<b>${q.name}</b> ${done ? '<span class="q-ok">可回報</span>' : ''}<br><span class="sk-desc">${q.desc}</span><br>` +
