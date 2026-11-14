@@ -175,6 +175,17 @@
       5
      ]
     ]
+   },
+   "gimmick": {
+    "expose": {
+     "on": [
+      "stomp",
+      "quake"
+     ],
+     "sec": 4,
+     "mul": 2.2,
+     "armor": 0.7
+    }
    }
   },
   "serpent": {
@@ -257,6 +268,20 @@
       10
      ]
     ]
+   },
+   "gimmick": {
+    "pool": {
+     "moves": [
+      "spit"
+     ],
+     "r": 1.8,
+     "life": 9,
+     "warn": 0,
+     "mult": 0.18,
+     "tick": 0.5,
+     "max": 4,
+     "color": "#8a3ad0"
+    }
    }
   },
   "bandit_king": {
@@ -336,6 +361,15 @@
       3
      ]
     ]
+   },
+   "gimmick": {
+    "guard": {
+     "at": 0.7,
+     "minion": "bandit",
+     "n": 3,
+     "exposeSec": 6,
+     "exposeMul": 1.5
+    }
    }
   },
   "frost_king": {
@@ -431,6 +465,17 @@
       10
      ]
     ]
+   },
+   "gimmick": {
+    "blizzard": {
+     "firstAt": 12,
+     "every": 24,
+     "enrageMul": 0.75,
+     "sec": 8,
+     "safeR": 2.2,
+     "mult": 0.14,
+     "tick": 0.5
+    }
    }
   },
   "flame_wyrm": {
@@ -526,6 +571,21 @@
       15
      ]
     ]
+   },
+   "gimmick": {
+    "lava": {
+     "firstAt": 6,
+     "every": 9,
+     "enrageEvery": 6,
+     "n": 2,
+     "r": 1.7,
+     "warn": 1.3,
+     "life": 8,
+     "mult": 0.2,
+     "tick": 0.5,
+     "max": 7,
+     "color": "#ff6a20"
+    }
    }
   },
   "trial_templar": {

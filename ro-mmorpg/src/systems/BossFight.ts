@@ -2,6 +2,7 @@ import type { Game } from '../core/Game';
 import type { Monster } from '../entities/Monster';
 import { BOSSFIGHT, BossMove, DB } from '../data';
 import { cellDist, dist } from '../core/math';
+import { gimmickOnMove, gimmickUpdate } from './BossGimmick';
 
 /** 地上的預警區：圓形（範圍技）或矩形（衝刺路線）。到時間才結算傷害，玩家在區外就完全不受傷 */
 export interface Telegraph {
@@ -14,6 +15,7 @@ export interface BossState {
   active: boolean; phase: 0 | 1 | 2; state: 'idle' | 'windup' | 'roar' | 'recover'; t: number; dur: number;
   move: BossMove | null; last: string; repeat: number; gapT: number; startT: number | null;
   dashTo: { x: number; y: number } | null;
+  gm?: Record<string, any>; // 專屬機制的狀態（systems/BossGimmick.ts）
 }
 const G = BOSSFIGHT.global;
 export const hasBossFight = (m: Monster) => m.isMvp && !!BOSSFIGHT.bosses[m.def.id];
@@ -22,7 +24,7 @@ const newState = (): BossState => ({ active: false, phase: 0, state: 'idle', t: 
 /** 離開戰鬥（玩家死亡、跑太遠）：Boss 回滿血、回到一般階段、計時歸零 */
 export function resetBoss(g: Game, m: Monster) {
   m.boss = newState(); m.hp = m.maxHp; m.speed = m.def.speed;
-  g.telegraphs = g.telegraphs.filter((t) => t.owner !== m);
+  g.telegraphs = g.telegraphs.filter((t) => t.owner !== m); g.hazards = g.hazards.filter((h) => h.owner !== m);
 }
 export function bossDamage(m: Monster, mult: number, g: Game): number {
   const p = g.player, a = m.def.atk, atk = (a[0] + g.rnd() * (a[1] - a[0])) * mult;
@@ -75,7 +77,7 @@ function startMove(g: Game, m: Monster, b: BossState, mv: BossMove) {
   b.repeat = b.last === mv.id ? b.repeat + 1 : 1; b.last = mv.id;
   const col = '#ff2a1a', mult = mv.mult ?? 1;
   if (mv.type === 'aoe') {
-    const c = mv.center === 'self' ? m : p;
+    const c = mv.center === 'self' ? m : p; (b.gm ||= {}).aoeAt = { x: c.x, y: c.y }; // 專屬機制要知道範圍技落在哪
     g.telegraphs.push({ kind: 'circle', x: c.x, y: c.y, r: mv.radius!, x2: 0, y2: 0, width: 0, t: 0, dur: w, owner: m, mult, color: col });
   } else if (mv.type === 'barrage') {
     const n = mv.count!, step = mv.interval!;
@@ -110,6 +112,7 @@ function execute(g: Game, m: Monster, b: BossState) {
     const to = b.dashTo; m.slide = { fx: m.x, fy: m.y, tx: to.x, ty: to.y, t: 0, dur: mv.dashTime ?? 0.3 };
     g.fx.burst(m.x, m.y, 4, '#d8c8a0', 16, 120, 'dot', 0.5, 3); b.dashTo = null;
   } else if (mv.type === 'summon') g.monsterSkill(m, 'summon');
+  gimmickOnMove(g, m, mv);
   b.state = 'recover'; b.t = 0; b.dur = mv.recover + (mv.type === 'charge' ? mv.dashTime ?? 0.3 : 0);
 }
 /** 戰鬥中的 Boss 行為；沒有進入戰鬥（aggroOn 為空）時回傳 false，交給一般 AI 處理閒晃／發現玩家 */
@@ -124,6 +127,7 @@ export function bossUpdate(g: Game, m: Monster, dt: number): boolean {
   const ratio = m.hp / m.maxHp;
   if (b.phase < 2 && ratio <= G.frenzyAt && b.state !== 'roar') setPhase(g, m, b, 2);
   else if (b.phase < 1 && ratio <= G.enrageAt && b.state !== 'roar') setPhase(g, m, b, 1);
+  if (gimmickUpdate(g, m, dt)) return true; // 專屬機制（山賊王躲起來時不出招）
   if (b.state === 'windup') {
     b.t += dt; m.path = []; if (b.move!.type !== 'charge') m.face(p.x, p.y);
     if (b.t >= b.dur) execute(g, m, b);

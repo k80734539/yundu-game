@@ -23,6 +23,7 @@ import { playerVsMonster, monsterVsPlayer } from '../systems/Combat';
 import { StatKey, statCost, MAX_STAT } from '../systems/Stats';
 import { updateAI, onHurt, giveUp } from '../systems/AI';
 import { Telegraph, bossDamage, hasBossFight, fightTime, fmtTime } from '../systems/BossFight';
+import { Hazard, updateHazards, gimmickDmgMul, gimmickAura, blizzard } from '../systems/BossGimmick';
 import { BOSSFIGHT, BESTIARY, STORY } from '../data';
 import { Spawner } from '../systems/Spawner';
 import { Inventory } from '../systems/Inventory';
@@ -88,6 +89,7 @@ export class Game {
   items: GroundItem[] = [];
   pickTarget: GroundItem | null = null;
   telegraphs: Telegraph[] = [];
+  hazards: Hazard[] = [];   // 毒沼、熔岩池（Boss 專屬機制）
   perf: 'smooth' | 'auto' | 'saver' = 'smooth'; private calmT = 0;
   slowT = 0; slowScale = 1;   // 擊敗 Boss 的慢動作
   safeUntil = 0;
@@ -575,7 +577,7 @@ export class Game {
     const start = this.map.nearestWalkable(x ?? def.w / 2, y ?? def.h / 2) || [def.w / 2, def.h / 2];
     p.x = p.px = start[0] + 0.5; p.y = p.py = start[1] + 0.5;
     p.stop(); p.chase = null;
-    this.items = []; this.pickTarget = null; this.telegraphs = []; this.projectiles = []; this.timers = [];
+    this.items = []; this.pickTarget = null; this.telegraphs = []; this.hazards = []; this.projectiles = []; this.timers = [];
     this.skills.cast = null; this.skills.pending = null; this.skills.targeting = null;
     this.safeUntil = this.time + 2; // 剛換地圖 2 秒內主動怪不會追
     this.spawner.onMapLoad();
@@ -645,6 +647,42 @@ export class Game {
     c.globalAlpha = 1;
     if (Math.random() < 0.08) this.fx.glow(wx + (Math.random() - 0.5) * 0.8, wy + (Math.random() - 0.5) * 0.8, 0, '#ffe27a', 1, 2, 50);
   }
+  /** Boss 專屬機制的地面效果：毒沼／熔岩池、篝火圈、Boss 身上的狀態光圈 */
+  drawHazards(c: CanvasRenderingContext2D, L: number, T: number) {
+    const ell = (wx: number, wy: number, r: number) => [Math.round(isoX(wx, wy) - L), Math.round(isoY(wx, wy) - T), r * 45.25, r * 22.6] as const;
+    for (const h of this.hazards) {
+      const [x, y, rx, ry] = ell(h.x, h.y, h.r), warn = h.age < h.warn, pulse = 0.5 + 0.5 * Math.sin(this.time * 6);
+      if (warn) { // 預警：細框＋逐漸填滿，還不會傷人
+        const k = h.age / h.warn;
+        c.globalAlpha = 0.25 + 0.2 * pulse; c.strokeStyle = h.color; c.lineWidth = 2; c.setLineDash([6, 4]); c.beginPath(); c.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); c.stroke(); c.setLineDash([]);
+        c.globalAlpha = 0.15 + 0.3 * k; c.fillStyle = h.color; c.beginPath(); c.ellipse(x, y, rx * k, ry * k, 0, 0, Math.PI * 2); c.fill();
+      } else {
+        const fade = Math.min(1, (h.warn + h.life - h.age) / 1.5);
+        c.globalAlpha = (0.38 + 0.12 * pulse) * fade; c.fillStyle = h.color; c.beginPath(); c.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); c.fill();
+        c.globalAlpha = 0.7 * fade; c.strokeStyle = '#ffffff'; c.lineWidth = 1; c.beginPath(); c.ellipse(x, y, rx * (0.55 + 0.1 * pulse), ry * (0.55 + 0.1 * pulse), 0, 0, Math.PI * 2); c.stroke();
+        if (Math.random() < 0.05) this.fx.glow(h.x + (Math.random() - 0.5) * h.r, h.y + (Math.random() - 0.5) * h.r, 0, h.color, 0.8, 2, 40);
+      }
+      c.globalAlpha = 1;
+    }
+    for (const m of this.monsters) { // Boss 身上的狀態光圈與文字
+      if (m.dead || !m.boss) continue;
+      const a = gimmickAura(m), bz = blizzard(m);
+      if (a) {
+        const [x, y, rx, ry] = ell(m.x, m.y, 1.4), pulse = 0.5 + 0.5 * Math.sin(this.time * 8);
+        c.globalAlpha = 0.5 + 0.3 * pulse; c.strokeStyle = a.color; c.lineWidth = 3; c.beginPath(); c.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); c.stroke(); c.globalAlpha = 1;
+        this.label(c, a.text, x, y + m.bbox.y0 - 44, a.color);
+      }
+      if (bz) { // 暴風雪：篝火圈＋整個畫面泛冷色
+        const [x, y, rx, ry] = ell(bz.x, bz.y, bz.r), pulse = 0.5 + 0.5 * Math.sin(this.time * 5);
+        c.globalAlpha = 0.28 + 0.12 * pulse; c.fillStyle = '#ff9a30'; c.beginPath(); c.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); c.fill();
+        c.globalAlpha = 0.9; c.strokeStyle = '#ffe0a0'; c.lineWidth = 2; c.beginPath(); c.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); c.stroke();
+        c.globalAlpha = 0.14 + 0.05 * pulse; c.fillStyle = '#c8e4ff'; c.fillRect(0, 0, this.r.w, this.r.h); c.globalAlpha = 1;
+        this.label(c, '篝火圈', x, y - 26, '#ffe0a0');
+        const left = Math.ceil(m.boss.gm!.bOn); this.label(c, `暴風雪 ${left}`, this.r.w / 2, 70, '#c8e4ff');
+        if (Math.random() < 0.3) this.fx.glow(bz.x + (Math.random() - 0.5) * 1.5, bz.y + (Math.random() - 0.5) * 1.5, 0, '#ffb060', 0.9, 2, 50);
+      }
+    }
+  }
   /** 調查點的「?」與名稱：畫在建築與角色上面，才不會被路燈、攤位擋住 */
   drawSpotTop(c: CanvasRenderingContext2D, L: number, T: number) {
     const sp = this.story.spotHere(); if (!sp) return;
@@ -701,7 +739,7 @@ export class Game {
       this.entities = this.entities.filter((e) => !e.remove);
       this.monsters = this.monsters.filter((m) => !m.remove);
     }
-    this.updateTelegraphs(dt);
+    this.updateTelegraphs(dt); updateHazards(this, dt);
     this.updateBuffs(dt);
     this.updateRegen(dt);
     if (!this.inTitle) { this.tutorial.update(dt); this.story.update(dt); }
@@ -993,6 +1031,7 @@ export class Game {
       const pd = this.player.d; let bonus = 0;
       for (const [el, v] of Object.entries(pd.elem)) if (ELEM[el]?.includes(d.def.look.body || '')) bonus += v;
       if (bonus) dmg = Math.round(dmg * (1 + bonus / 100));
+      if (d.boss) { const gmul = gimmickDmgMul(d); if (gmul !== 1) { dmg = Math.round(dmg * gmul); if (dmg <= 0) { d.flashT = 0.05; this.fx.dmg(d.x, d.y, 'GUARD', 'miss', h); this.audio.sfx('miss'); return; } } } // Boss 專屬機制：核心外露加倍、護衛中無敵
       // 吸血詞條
       if (pd.lifesteal > 0 && !this.player.dead) { const heal = Math.floor(Math.min(dmg, d.hp) * pd.lifesteal / 100); if (heal > 0) this.player.hp = Math.min(this.player.maxHp, this.player.hp + heal); }
     }
@@ -1129,6 +1168,7 @@ export class Game {
     }
     this.drawPortals(c, L, T);
     this.drawSpot(c, L, T);
+    this.drawHazards(c, L, T);
     for (const t of this.telegraphs) { // 預警區：紅色，越接近出招越亮
       if (t.t < 0) continue;
       const k = Math.min(1, t.t / t.dur), flash = k > 0.75 && Math.floor(this.time * 14) % 2 === 0;

@@ -130,7 +130,7 @@ export interface BossFightConfig {
     minWindup: Record<BossMoveType, number>; roar: { enrage: number; frenzy: number }; respawn: number;
     victory: { hitStop: number; slowScale: number; slowTime: number };
   };
-  bosses: Record<string, { moves: BossMove[]; enrageMoves: BossMove[]; firstKill: { exp: number; jexp: number; zeny: number; items: [string, number][] } }>;
+  bosses: Record<string, { gimmick?: Record<string, any>; moves: BossMove[]; enrageMoves: BossMove[]; firstKill: { exp: number; jexp: number; zeny: number; items: [string, number][] } }>;
 }
 export const BOSSFIGHT = bossJson as unknown as BossFightConfig;
 
