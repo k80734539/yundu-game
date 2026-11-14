@@ -825,5 +825,31 @@
     ]
    }
   }
+ },
+ {
+  "id": "herman",
+  "name": "老守衛 赫曼",
+  "title": "遺跡守望者",
+  "look": {
+   "skin": "#e0c0a0",
+   "hair": "#d8d8d8",
+   "cloth": "#6a5a3a",
+   "cloth2": "#c0c8d8",
+   "pants": "#4a4030",
+   "hairStyle": 2,
+   "body": "armor",
+   "hat": "helm",
+   "weapon": "sword",
+   "cape": "#5a4a2a",
+   "beard": true
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "這座遺跡我看了四十年了。",
+     "想聽故事的話，等你再強一點吧。"
+    ]
+   }
+  }
  }
 ]

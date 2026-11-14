@@ -50,9 +50,21 @@ const out2 = await page.evaluate(() => {
   const G = window.__game, p = G.player, ch = p.ch, D = G.ui.dialog, R = {};
   const step = (n = 30) => { for (let i = 0; i < n; i++) G.update(1 / 60); };
   const finish = () => { let k = 0; while (D.isOpen && k++ < 400) { if (D.choices.length) D.onKey('1'); else D.advance(); } return !D.isOpen; };
+  const talk = (id) => { const n = G.npcs.find((o) => o.def.id === id); if (!n) return 'no npc ' + id; G.talkTo(n); return D.isOpen && D.el.classList.contains('story'); };
+  const walkSpot = () => { const s = G.story.spotHere(); if (!s) return 'no spot'; p.x = p.px = s.x + 0.5; p.y = p.py = s.y + 1.5; step(5); return D.isOpen; };
   G.loop.running = false; if (p.dead) { p.state = 'idle'; p.hp = p.maxHp; } R.wasDead = p.hp; finish(); step(120); R.crowGone = !G.npcs.some((n) => n.def.id === 'crow');
   G.loadMap('aurora', 25, 30); step(); const s = G.story.spotHere(); p.x = p.px = s.x + 0.5; p.y = p.py = s.y + 1.5; step(5); finish();
   R.state = [JSON.stringify(G.flags.story), G.map.def.id, D.isOpen, G.story.scene, !!G.warp, G.player.x, G.player.y, G.player.dead]; R.c1c = G.story.isDone('m_1c'); R.charm = G.inv.items.filter((i) => i.id.startsWith('dawn_charm')).map((i) => [i.id, G.inv.isEquipped(i.uid)]);
+  // 第二章
+  p.recalc(); p.hp = p.maxHp = 99999; ch.baseLv = 30; step(); R.c2start = [G.story.st.q, G.story.st.started];
+  talk('captain'); finish(); G.loadMap('canyon', 7, 9); step(); walkSpot(); finish();
+  G.ev.emit('kill', 'bandit_king'); step(); R.c2kill = G.story.st.step; walkSpot(); finish(); R.c2a = G.story.isDone('m_2a');
+  ch.baseLv = 38; step(); G.loadMap('ruins', 11, 49); step(); R.herman = G.guide.get().text; R.c2talk = talk('herman'); finish();
+  step(); walkSpot(); finish(); R.c2b = G.story.isDone('m_2b');
+  ch.baseLv = 50; step(); G.loadMap('ruins', 11, 49); step(); G.ev.emit('kill', 'serpent'); step(10); step(160);
+  R.c2crow = D.isOpen && G.story.scene; finish(); step(120);
+  G.loadMap('aurora', 25, 30); step(); walkSpot(); finish(); R.c2c = G.story.isDone('m_2c');
+  R.charm3 = G.inv.items.filter((i) => i.id.startsWith('dawn_charm')).map((i) => i.id);
   R.after = [G.story.st.q, G.story.finished, G.guide.get()?.text];
   R.saved = JSON.parse(JSON.stringify(G.flags.story)).done.length;
   // 舊存檔：沒有 flags.story → 從序章開始
