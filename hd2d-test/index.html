@@ -1,10 +1,10 @@
 <!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>HD-2D 小鎮測試</title>
 <style>html,body{margin:0;height:100%;background:#0c0a12;overflow:hidden;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif}canvas{display:block;image-rendering:pixelated;touch-action:none}
 #panel{position:fixed;top:8px;right:8px;width:190px;padding:8px 10px;background:rgba(20,18,30,.72);color:#e8e4f4;font-size:12px;border:1px solid rgba(255,255,255,.18);border-radius:6px;backdrop-filter:blur(4px)}
-#panel b{display:block;margin-bottom:6px;color:#ffe08a}#panel label{display:flex;justify-content:space-between;align-items:center;margin:5px 0;gap:6px}#panel input[type=range]{width:100px}#panel select{background:#2a2640;color:#fff;border:1px solid #555;border-radius:3px}
+#panel b{display:block;margin-bottom:6px;color:#ffe08a}#panel.c #pb{display:none}#panel.c b{margin-bottom:0}#panel label{display:flex;justify-content:space-between;align-items:center;margin:5px 0;gap:6px}#panel input[type=range]{width:100px}#panel select{background:#2a2640;color:#fff;border:1px solid #555;border-radius:3px}
 #clock{position:fixed;left:10px;top:8px;color:#fff;font-size:13px;text-shadow:0 1px 2px #000}#hint{position:fixed;left:10px;bottom:8px;color:#d8d4e8;font-size:11px;text-shadow:0 1px 2px #000}</style></head><body>
 <div id="clock"></div>
-<div id="panel"><b>光影設定</b>
+<div id="panel"><b id="ph" style="cursor:pointer">光影設定 ▾</b><div id="pb">
 <label>時間 <input id="time" type="range" min="0" max="24" step="0.05" value="16.5"></label>
 <label>季節 <select id="season"><option value="spring">春</option><option value="summer">夏</option><option value="autumn">秋</option></select></label>
 <label>風力 <input id="wind" type="range" min="0" max="2" step="0.05" value="0.8"></label>
@@ -13,6 +13,6 @@
 <label>泛光 <input id="bloom" type="checkbox" checked></label>
 <label>像素化 <input id="pixel" type="checkbox" checked></label>
 <label>畫質 <select id="quality"><option value="">自動</option><option value="low">低</option><option value="high">高</option></select></label>
-<label>自動運鏡 <input id="auto" type="checkbox" checked></label></div>
+<label>自動運鏡 <input id="auto" type="checkbox" checked></label></div></div>
 <div id="hint">拖曳旋轉・滾輪縮放・右鍵平移</div>
 <script type="module" src="./src/main.js"></script></body></html>

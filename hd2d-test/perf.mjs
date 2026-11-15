@@ -10,7 +10,7 @@ for (const [name, qs, vp, touch] of cases) {
   const page = await browser.newPage({ viewport: vp, hasTouch: !!touch, isMobile: !!touch, deviceScaleFactor: touch ? 2 : 1 }); const errs = [];
   page.on('pageerror', (e) => errs.push(String(e))); page.on('console', (m) => { if (m.type() === 'error') errs.push(m.text()); });
   await page.goto(`http://localhost:${port}/?${qs}`); await page.waitForFunction(() => window.__frames > 20, null, { timeout: 180000 });
-  const f0 = await page.evaluate(() => window.__frames); const t0 = Date.now(); await page.waitForTimeout(4000); const f1 = await page.evaluate(() => window.__frames);
+  const f0 = await page.evaluate(() => window.__frames); const t0 = Date.now(); await page.waitForTimeout(1500); const f1 = await page.evaluate(() => window.__frames);
   const info = await page.evaluate(() => window.__info); await page.screenshot({ path: `shots/${name}.png` });
   console.log(name, 'fps(軟體渲染)=', ((f1 - f0) / ((Date.now() - t0) / 1000)).toFixed(1), JSON.stringify({ calls: info.calls, tris: info.tris, low: info.low }), errs.length ? errs.slice(0, 2) : 'no errors'); await page.close();
 }

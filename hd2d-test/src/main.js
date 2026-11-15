@@ -16,7 +16,7 @@ const LOW = q.get('q') === 'low' || (q.get('q') !== 'high' && (matchMedia('(poin
 
 // ---------- 渲染器與場景 ----------
 const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance' });
-renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.info.autoReset = false; renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
 document.body.appendChild(renderer.domElement);
 const scene = new THREE.Scene();
@@ -50,15 +50,16 @@ class Voxels {
 
 // ---------- 地形 ----------
 const N = 64, H = N / 2;
-const hgt = (x, z) => Math.floor(1.6 * (Math.sin(x * 0.13) * Math.cos(z * 0.11) + 0.5 * Math.sin(x * 0.31 + z * 0.27)) + 1.6 * Math.max(0, (Math.hypot(x, z) - 20) / 16));
+const hgt = (x, z) => { const h = Math.floor(1.6 * (Math.sin(x * 0.13) * Math.cos(z * 0.11) + 0.5 * Math.sin(x * 0.31 + z * 0.27)) + 1.6 * Math.max(0, (Math.hypot(x, z) - 20) / 16)); return x + z > 10 ? Math.min(h, Math.max(0, 1 - Math.floor((x + z - 10) / 8))) : h; };
 const ground = new Voxels({ rough: 1 });
 const isPlaza = (x, z) => Math.hypot(x, z * 1.1) < 7;
 const isPath = (x, z) => Math.abs(z - 9 - Math.sin(x * 0.2) * 1.4) < 1.5 && x > -10 || Math.abs(x + 6 + Math.sin(z * 0.2)) < 1.1 && z > -8 && z < 10;
 const pond = (x, z) => Math.hypot(x + 15, z - 9) < 4.2;
 const grassCells = [];
+const cellH = (x, z) => { let h = hgt(x, z); if (isPlaza(x, z) || isPath(x, z)) h = Math.min(h, 0); if (pond(x, z)) h = -1; return h; };
 for (let x = -H; x < H; x++) for (let z = -H; z < H; z++) {
-  let h = hgt(x, z); if (isPlaza(x, z) || isPath(x, z)) h = Math.min(h, 0); if (pond(x, z)) h = -1;
-  for (let y = Math.min(h, 0) - 1; y <= h; y++) {
+  const h = cellH(x, z), nh = Math.min(cellH(x + 1, z), cellH(x - 1, z), cellH(x, z + 1), cellH(x, z - 1));
+  for (let y = Math.min(h, nh); y <= h; y++) { // 只畫看得到的：最上面一層，加上露出側面的那幾層（被埋住的方塊不畫，省三角形）
     const top = y === h; let c;
     if (pond(x, z) && top) c = hsl(0.55, 0.45, 0.32 + rnd() * 0.03);
     else if (isPlaza(x, z) && top) c = hsl(0.1, 0.06, 0.4 + rnd() * 0.08);
@@ -71,6 +72,7 @@ for (let x = -H; x < H; x++) for (let z = -H; z < H; z++) {
 }
 ground.build();
 
+const flowers = new Voxels({ cast: false });
 // ---------- 建築與小物 ----------
 const wood = () => hsl(0.08, 0.4, 0.3 + rnd() * 0.06), plaster = () => hsl(0.12, 0.25, 0.7 + rnd() * 0.06), stone = () => hsl(0.1, 0.05, 0.45 + rnd() * 0.1), dark = () => hsl(0.07, 0.3, 0.16);
 const solid = new Voxels(), glowWin = new Voxels({ emissive: 0xffc060, cast: false }), blueFlame = [];
@@ -82,7 +84,7 @@ function house(x0, z0, w, d, h, roof, rotChim = true) {
     const y = h + k; for (let x = -1 + k; x <= w - k; x++) for (let z = -1; z <= d; z++) if (k * 2 < w + 1) solid.add(x0 + x, y, z0 + z, hsl(roof[0], roof[1], roof[2] + rnd() * 0.05 - k * 0.012));
   }
   const dx = x0 + Math.floor(w / 2); solid.add(dx, 1, z0 + d - 1, dark()); solid.add(dx, 2, z0 + d - 1, dark());
-  for (const wx of [x0 + 1, x0 + w - 2]) { glowWin.add(wx, 2, z0 + d - 1 + 0.02, 0xffd890, 0.9, 0.9, 1.05); }
+  for (const wx of [x0 + 1, x0 + w - 2]) { solid.add(wx, 2, z0 + d - 1 + 0.03, 0x3a2a20, 1.18, 1.18, 1.0); glowWin.add(wx, 2, z0 + d - 1 + 0.06, 0xffd890, 0.82, 0.82, 1.05); solid.add(wx, 1.05, z0 + d - 0.2, wood(), 1.2, 0.25, 0.5); }
   if (rotChim) { for (let y = h; y < h + 4; y++) solid.add(x0 + w - 2, y + 1, z0 + 1, stone()); smokeSources.push([x0 + w - 2, h + 5.5, z0 + 1]); }
 }
 const smokeSources = [];
@@ -119,8 +121,30 @@ lamps.forEach(([x, z]) => { for (let y = 0; y < 4; y++) solid.add(x, y + 0.5, z,
 [[10.5, 2], [11.5, 2.5], [-1, 14], [14, -1]].forEach(([x, z]) => solid.add(x, 0.5, z, wood(), 0.9));
 for (let x = -20; x < -9; x++) { solid.add(x, 0.6, 13, wood(), 0.2, 0.9, 0.2); solid.add(x, 0.9, 13, wood(), 1, 0.15, 0.15); }
 for (let k = 0; k < 4; k++) for (let x = -k; x <= k; x++) solid.add(-14 + x, 0.6 + (3 - k) * 0.9, -3, hsl(0.1, 0.25, 0.72), 0.95, 0.95, 4);
+
+// ---- 更多細節：松樹、灌木、石頭、市集攤位、水井、石橋、乾草、路標、墊腳石 ----
+function pine(x, z, h = 8) { const gy = Math.max(0, hgt(x, z)); for (let y = 0; y < 3; y++) solid.add(x, gy + y + 0.5, z, hsl(0.07, 0.4, 0.17)); for (let k = 0; k < h - 2; k++) { const r = Math.max(0, 3.4 - k * 0.5); for (let i = -4; i <= 4; i++) for (let j = -4; j <= 4; j++) if (Math.hypot(i, j) + rnd() * 0.5 < r) leaves.add(x + i, gy + 3 + k + 0.5, z + j, new THREE.Color(), 1, 1, 1, 0.9 + rnd() * 0.1); } }
+[[-31, 2], [-30, -14], [24, -22], [-17, -27], [34, -14], [36, 4], [-34, 10]].forEach(([x, z]) => pine(x, z, 8 + Math.floor(rnd() * 3)));
+function bush(x, z, r = 1.6) { const gy = Math.max(0, hgt(x, z)); for (let i = -2; i <= 2; i++) for (let j = -1; j <= 1; j++) for (let k = -2; k <= 2; k++) if (Math.hypot(i, j * 1.4, k) + rnd() * 0.6 < r) leaves.add(x + i, gy + j + 1, z + k, new THREE.Color(), 1, 1, 1, rnd()); }
+[[-9, 6], [-1, 16], [15, 4], [-17, 4], [9, -8], [-4, -4], [18, 8], [-12, 16], [2, 20]].forEach(([x, z]) => bush(x, z, 1.5 + rnd() * 0.6));
+function rock(x, z, n = 4) { const gy = Math.max(0, hgt(x, z)); for (let i = 0; i < n; i++) solid.add(x + rr(-1, 1), gy + 0.4 + (i > 2 ? 0.7 : 0), z + rr(-1, 1), hsl(0.1, 0.04, 0.38 + rnd() * 0.12), rr(0.7, 1.3), rr(0.6, 1.1), rr(0.7, 1.3)); }
+[[-11, 13], [17, -2], [-1, 18], [20, 6], [-18, -5], [3, -9]].forEach(([x, z]) => rock(x, z, 4));
+// 市集攤位（條紋遮陽）
+{ const x0 = -10, z0 = 4; for (const dx of [0, 4]) for (let y = 0; y < 3; y++) solid.add(x0 + dx, y + 0.5, z0, wood(), 0.3, 1, 0.3); for (let x = 0; x < 5; x++) for (let z = -1; z < 3; z++) solid.add(x0 + x - 0.5, 3.2 + z * 0.1, z0 + z * 0.9, (x + z) % 2 ? 0xd84a3a : 0xf4ecd8, 1, 0.2, 0.9); for (let x = 0; x < 4; x++) solid.add(x0 + 0.5 + x, 1.1, z0 + 0.2, wood(), 1, 0.9, 0.9); for (let i = 0; i < 6; i++) solid.add(x0 + 0.4 + i * 0.6, 1.75, z0 + 0.2, [0xd8333a, 0xe8c040, 0x6ab04a, 0xe8873a][i % 4], 0.45); }
+// 水井
+{ const wx = -2, wz = 14; for (let a = 0; a < 8; a++) { const ang = a / 8 * Math.PI * 2; solid.add(wx + Math.cos(ang) * 1.2, 0.5, wz + Math.sin(ang) * 1.2, stone()); solid.add(wx + Math.cos(ang) * 1.2, 1.4, wz + Math.sin(ang) * 1.2, stone(), 1, 0.8, 1); } solid.add(wx - 1.2, 2.5, wz, wood(), 0.25, 2.2, 0.25); solid.add(wx + 1.2, 2.5, wz, wood(), 0.25, 2.2, 0.25); for (let x = -1; x <= 1; x++) solid.add(wx + x * 0.9, 3.8, wz, 0xa84a30, 1.1, 0.3, 2.4); }
+// 乾草堆、路標、墊腳石、石橋
+for (let i = 0; i < 4; i++) solid.add(16 + (i % 2) * 1.1, 0.5 + Math.floor(i / 2) * 0.9, 9 + (i % 2) * 0.2, 0xd8b050, 1.05, 0.9, 1.05);
+solid.add(9.5, 1.5, 11, wood(), 0.2, 3, 0.2); solid.add(9.5, 2.7, 11, wood(), 1.8, 0.7, 0.18); solid.add(9.5, 1.8, 11, wood(), 1.5, 0.6, 0.18);
+for (let i = 0; i < 9; i++) solid.add(-8 + i * 1.4, 0.05, 11.5 + Math.sin(i) * 0.5, stone(), 0.9, 0.12, 0.9);
+for (let i = 0; i < 6; i++) { solid.add(-19 + i * 1.5, 0.35 + Math.sin(i / 5 * Math.PI) * 0.4, 9, stone(), 1.5, 0.3, 3.2); }
+// 木牌與花圃
+for (let x = 0; x < 4; x++) for (let z = 0; z < 2; z++) flowers.add(12 + x * 0.6, 0.5, 13 + z * 0.6, [0xe070b0, 0xf0f0f0, 0xe8c040, 0xb070e0][(x + z) % 4], 0.3);
 solid.build(); glowWin.build(); const leafMesh = leaves.build();
 
+// ---------- 雲（會在地面投下影子）----------
+const cloudMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.85, fog: false });
+const clouds = []; for (let i = 0; i < 7; i++) { const g = new THREE.Group(); const n = 5 + Math.floor(rnd() * 5); for (let k = 0; k < n; k++) { const b = new THREE.Mesh(box, cloudMat); b.scale.set(rr(4, 8), rr(1.4, 2.4), rr(3, 6)); b.position.set(k * 3.2 - n * 1.6, rr(-0.4, 0.5), rr(-2, 2)); b.castShadow = true; g.add(b); } g.position.set(rr(-60, 60), rr(34, 40), rr(-50, 20)); scene.add(g); clouds.push(g); }
 // ---------- 草與花（風吹）----------
 const windU = { value: 0.8 }, timeU = { value: 0 };
 const grassGeo = new THREE.BoxGeometry(0.12, 0.7, 0.12); grassGeo.translate(0, 0.35, 0);
@@ -141,12 +165,12 @@ for (let i = 0; i < GN; i++) {
   grass.setMatrixAt(i, gm); const c = hsl(0.27 + rnd() * 0.07, 0.6, 0.26 + rnd() * 0.14); grassBase.push(c); grass.setColorAt(i, c);
 }
 grass.castShadow = false; grass.receiveShadow = true; scene.add(grass);
-const flowers = new Voxels({ cast: false });
 for (let i = 0; i < 160; i++) { const [cx, h, cz] = grassCells[Math.floor(rnd() * grassCells.length)]; flowers.add(cx + rnd() - 0.5, h + 0.55, cz + rnd() - 0.5, [0xd8333a, 0xe8c040, 0xf0f0f0, 0xe070b0][Math.floor(rnd() * 4)], 0.22); }
 flowers.build();
 // 池塘水面
 const water = new THREE.Mesh(new THREE.CylinderGeometry(4.2, 4.2, 0.1, 24), new THREE.MeshStandardMaterial({ color: 0x4a9ac8, roughness: 0.08, metalness: 0.5, transparent: true, opacity: 0.82 }));
 water.position.set(-15, -0.55, 9); scene.add(water);
+for (let i = 0; i < 7; i++) { const p = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 0.06, 8), new THREE.MeshStandardMaterial({ color: 0x4a9a50 })); p.position.set(-15 + rr(-3, 3), -0.48, 9 + rr(-3, 3)); scene.add(p); }
 
 // ---------- 角色（2 頭身像素小人，面向鏡頭的看板）----------
 function chibi(hair, cloth, cloth2, accent) {
@@ -174,10 +198,11 @@ function person(x, z, tex, h = 4.4) {
 person(-1.8, 3.4, chibi('#f0d070', '#fdfdfd', '#e8d8a8', '#c8a850'));
 person(8.4, 3.2, chibi('#e88a40', '#58a860', '#e8e0b0', '#a07040'));
 person(3.2, 10.4, chibi('#4a5a8a', '#c86878', '#f0e0e0', '#a84858'));
+person(-7.5, 7.2, chibi('#8a5a3a', '#e8c040', '#fdf4d8', '#a07828'), 4.0);
 
 // ---------- 光源 ----------
 const sun = new THREE.DirectionalLight(0xfff0d0, 3); sun.castShadow = true; sun.shadow.mapSize.set(LOW ? 1024 : 2048, LOW ? 1024 : 2048);
-Object.assign(sun.shadow.camera, { left: -42, right: 42, top: 42, bottom: -42, near: 1, far: 160 }); sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.04; scene.add(sun, sun.target);
+Object.assign(sun.shadow.camera, { left: -42, right: 42, top: 42, bottom: -42, near: 1, far: 220 }); sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.04; scene.add(sun, sun.target);
 const hemi = new THREE.HemisphereLight(0xbcd8ff, 0x4a5a3a, 0.7); scene.add(hemi);
 const fireLight = new THREE.PointLight(0xff8a30, 0, 22, 1.6); fireLight.position.set(fire.x, 1.8, fire.z); fireLight.castShadow = false; scene.add(fireLight);
 const lampLights = lamps.slice(0, 4).map(([x, z]) => { const l = new THREE.PointLight(0xffd090, 0, 16, 1.6); l.position.set(x, 4.8, z); scene.add(l); return l; });
@@ -223,7 +248,7 @@ function atTime(t) { let i = 0; while (i < KEYS.length - 2 && t > KEYS[i + 1][0]
 function applyTime(t) {
   const k = atTime(t), elev = Math.sin((t - 6) / 12 * Math.PI), day = Math.max(0, elev), night = Math.min(1, Math.max(0, 0.5 - elev * 2.2));
   scene.background = k.sky; scene.fog.color.copy(k.sky); scene.fog.density = 0.005 + night * 0.004 + (rain.visible ? 0.01 : 0);
-  const ang = (t - 6) / 12 * Math.PI; sun.position.set(Math.cos(ang) * 55, Math.max(8, Math.sin(ang) * 55), 28); sun.target.position.set(0, 0, 0);
+  const ang = (t - 6) / 12 * Math.PI; sun.position.set(Math.cos(ang) * 70, Math.max(10, Math.sin(ang) * 70), 30); sun.target.position.set(0, 0, 0);
   sun.color.copy(k.sunC); sun.intensity = k.sunI * (rain.visible ? 0.45 : 1); hemi.intensity = 0.25 + day * 0.65; hemi.color.copy(k.sky).lerp(new THREE.Color(0xbcd8ff), 0.4);
   fireLight.userData.k = 0.25 + night * 1.2; lampLights.forEach((l) => (l.userData.k = night * 1.6)); blueLights.forEach((l) => (l.userData.k = 0.4 + night * 2.2)); steleLight.userData.k = 0.3 + night * 2;
   scene.traverse((o) => { if (o.isInstancedMesh && o.material.emissive && o.material.emissive.getHex() === 0xffc060) o.material.emissiveIntensity = 0.1 + night * 1.6; });
@@ -238,6 +263,8 @@ $('rain').onchange = (e) => { rain.visible = e.target.checked; applyTime(+$('tim
 if (q.get('t')) $('time').value = q.get('t'); if (q.get('season')) $('season').value = q.get('season'); if (q.get('rain')) $('rain').checked = true;
 if (LOW && q.get('dof') !== '1') $('dof').checked = false; if (q.get('dof') === '0') $('dof').checked = false; if (q.get('bloom') === '0') $('bloom').checked = false; if (q.get('auto') === '0') $('auto').checked = false; if (q.get('pixel') === '0') $('pixel').checked = false;
 $('quality').value = q.get('q') || ''; $('quality').onchange = (e) => { const u = new URL(location.href); if (e.target.value) u.searchParams.set('q', e.target.value); else u.searchParams.delete('q'); location.href = u.toString(); };
+$('ph').onclick = () => { $('panel').classList.toggle('c'); $('ph').textContent = '光影設定 ' + ($('panel').classList.contains('c') ? '▸' : '▾'); };
+if (LOW && q.get('panel') !== '1') $('ph').onclick();
 rain.visible = $('rain').checked; applySeason($('season').value); resize(); applyTime(+$('time').value);
 if (q.get('cam')) { const c = q.get('cam').split(',').map(Number); camera.position.set(c[0], c[1], c[2]); controls.target.set(c[3], c[4], c[5]); }
 
@@ -261,6 +288,8 @@ function frame() {
   const fp = flies.geometry.attributes.position; for (let i = 0; i < FN; i++) { fp.array[i * 3] += Math.sin(T * 0.7 + fph[i]) * dt * 0.6; fp.array[i * 3 + 1] += Math.cos(T * 0.9 + fph[i] * 2) * dt * 0.4; fp.array[i * 3 + 2] += Math.cos(T * 0.5 + fph[i]) * dt * 0.6; } fp.needsUpdate = true;
   fall.forEach((f) => { f.m.position.y -= f.v * dt; f.m.position.x += (0.9 * windU.value + Math.sin(T * 1.5 + f.ph) * 0.6) * dt; f.m.position.z += Math.cos(T + f.ph) * 0.3 * dt; f.m.rotation.set(T * 2 + f.ph, T + f.ph, 0); if (f.m.position.y < 0.2) { f.m.position.set(rr(-30, 30), rr(14, 20), rr(-30, 24)); } });
   if (rain.visible) { const a = rainGeo.attributes.position.array; for (let i = 0; i < RN; i++) { const y = (a[i * 6 + 1] - dt * 38); const ny = y < 0 ? y + 40 : y; const dy = ny - a[i * 6 + 1]; a[i * 6 + 1] += dy; a[i * 6 + 4] += dy; } rainGeo.attributes.position.needsUpdate = true; }
+  clouds.forEach((c, i) => { c.position.x += dt * (0.8 + i * 0.12) * (0.5 + windU.value * 0.5); if (c.position.x > 75) c.position.x = -75; });
+  water.material.opacity = 0.78 + Math.sin(T * 1.3) * 0.04;
   // 角色待機（輕微上下，永遠面向鏡頭）
   for (const p of people) { p.m.position.y = p.h / 2 + Math.abs(Math.sin(T * 2.2 + p.ph)) * 0.12; p.m.rotation.y = Math.atan2(camera.position.x - p.m.position.x, camera.position.z - p.m.position.z); }
   // 運鏡
@@ -269,6 +298,6 @@ function frame() {
   // 景深焦點：對準角色
   const fd = camera.position.distanceTo(new THREE.Vector3(1.5, 2, 4)); bokeh.uniforms.focus.value = fd; bokeh.uniforms.aperture.value = $('dof').checked ? 0.00007 : 0; bokeh.uniforms.maxblur.value = $('dof').checked ? 0.007 : 0;
   bloom.enabled = $('bloom').checked;
-  composer.render(); window.__info = { calls: renderer.info.render.calls, tris: renderer.info.render.triangles, low: LOW, dt }; window.__frames = (window.__frames || 0) + 1; requestAnimationFrame(frame);
+  renderer.info.reset(); composer.render(); window.__info = { calls: renderer.info.render.calls, tris: renderer.info.render.triangles, low: LOW, dt }; window.__frames = (window.__frames || 0) + 1; requestAnimationFrame(frame);
 }
 frame();
