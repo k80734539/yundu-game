@@ -37,6 +37,7 @@ import type { HotSlot } from '../ui/Hotbar';
 import type { PropInst } from '../systems/MapLoader';
 import { Quests } from '../systems/Quests';
 import { Story } from '../systems/Story';
+import { Atmos } from '../render/Atmos';
 import type { Dialog } from '../ui/Dialog';
 import { textImage } from '../render/Font';
 import { SkillSystem, ELEM } from '../systems/Skills';
@@ -103,6 +104,7 @@ export class Game {
   mercs: MercSystem;
   guide: Guide;
   story: Story;
+  atmos: Atmos;   // 氛圍渲染：時間色調、光照、光暈、移軸模糊（render/Atmos.ts）
   loot: Loot;
   buffT: Record<string, number> = {}; buffMax: Record<string, number> = {};
   projectiles: Projectile[] = [];
@@ -127,6 +129,7 @@ export class Game {
     this.spawner = new Spawner(this);
     this.quests = new Quests(this);
     this.story = new Story(this);
+    this.atmos = new Atmos(this);
     this.skills = new SkillSystem(this);
     this.mercs = new MercSystem(this); this.bestiary = new Bestiary(this);
     this.guide = new Guide(this);
@@ -1251,6 +1254,7 @@ export class Game {
       else { drawProp(c, d.ref, L, T, d.kind === K_STRIP ? d.aux : -1); if (d.ref.def.anim && d.kind === K_PROP) this.drawPropAnim(c, d.ref, L, T); }
     }
     this.fx.drawParticles(c, L, T);
+    this.atmos.draw(c, L, T, W, H, dt);
     this.drawSpotTop(c, L, T);
     // 頭上資訊（血條、名稱）
     for (const e of this.entities) if (e instanceof Actor) this.drawOverhead(c, e, L, T);
