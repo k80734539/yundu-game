@@ -1,0 +1,20 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>晨曦鎮 3D</title>
+<style>html,body{margin:0;height:100%;background:#0c0a12;overflow:hidden;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;-webkit-user-select:none;user-select:none}canvas{display:block;image-rendering:pixelated;touch-action:none}
+#panel{position:fixed;top:8px;right:8px;width:190px;padding:8px 10px;background:rgba(20,18,30,.72);color:#e8e4f4;font-size:12px;border:1px solid rgba(255,255,255,.18);border-radius:6px;backdrop-filter:blur(4px);z-index:5}
+#panel b{display:block;margin-bottom:6px;color:#ffe08a}#panel.c #pb{display:none}#panel.c b{margin-bottom:0}#panel label{display:flex;justify-content:space-between;align-items:center;margin:5px 0;gap:6px}#panel input[type=range]{width:100px}#panel select{background:#2a2640;color:#fff;border:1px solid #555;border-radius:3px}
+#clock{position:fixed;left:10px;top:8px;color:#fff;font-size:14px;text-shadow:0 1px 2px #000;z-index:5}#hint{position:fixed;left:10px;bottom:8px;color:#d8d4e8;font-size:11px;text-shadow:0 1px 2px #000;z-index:5}
+#labels{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:2}.lab{position:absolute;left:0;top:0;white-space:nowrap;font-size:12px;color:#a8e8ff;text-shadow:0 0 3px #000,0 0 3px #000,1px 1px 0 #000;will-change:transform}.lab.me{color:#fff2a0}.lab.portal{color:#ff9ae8}.lab.mark{color:#ffe040;font-size:22px;font-weight:bold}
+#dlg{display:none;position:fixed;left:50%;bottom:14px;transform:translateX(-50%);width:min(560px,94vw);background:linear-gradient(#fbfcff,#eef1f8);border:1px solid #5d6a8a;border-radius:6px;box-shadow:0 6px 18px #0008;z-index:6;color:#1e2236;cursor:pointer}
+#dname{background:linear-gradient(#9ab8e8,#5c82c4 55%,#4c70b0);color:#fff;font-size:13px;font-weight:bold;padding:3px 10px;border-radius:5px 5px 0 0;text-shadow:0 1px #2a3a6a}#dtext{padding:10px 14px;font-size:15px;line-height:23px;min-height:46px}#dopts{padding:0 12px 10px}.opt{background:linear-gradient(#fff,#e4eaf6);border:1px solid #8a9ac0;border-radius:3px;padding:6px 10px;margin-top:5px;font-size:14px}
+#toast{position:fixed;left:50%;top:60px;transform:translateX(-50%);background:rgba(20,18,30,.85);color:#fff;padding:6px 14px;border-radius:14px;font-size:13px;opacity:0;transition:opacity .3s;z-index:7;pointer-events:none;max-width:90vw;text-align:center}</style></head><body>
+<div id="clock"></div>
+<div id="panel"><b id="ph" style="cursor:pointer">光影設定 ▾</b><div id="pb">
+<label>時間 <input id="time" type="range" min="0" max="24" step="0.05" value="15.5"></label>
+<label>風力 <input id="wind" type="range" min="0" max="2" step="0.05" value="0.8"></label>
+<label>景深 <input id="dof" type="checkbox" checked></label>
+<label>泛光 <input id="bloom" type="checkbox" checked></label>
+<label>像素化 <input id="pixel" type="checkbox" checked></label>
+<label>畫質 <select id="quality"><option value="">自動</option><option value="low">低</option><option value="high">高</option></select></label></div></div>
+<div id="hint">點地面走路・點 NPC 對話・滾輪／雙指縮放</div>
+<div id="dlg"><div id="dname"></div><div id="dtext"></div><div id="dopts"></div></div><div id="toast"></div>
+<script type="module" src="./src/town.js"></script></body></html>
