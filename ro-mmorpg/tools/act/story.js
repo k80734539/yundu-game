@@ -65,6 +65,12 @@ const out2 = await page.evaluate(() => {
   R.c2crow = D.isOpen && G.story.scene; finish(); step(120);
   G.loadMap('aurora', 25, 30); step(); walkSpot(); finish(); R.c2c = G.story.isDone('m_2c');
   R.charm3 = G.inv.items.filter((i) => i.id.startsWith('dawn_charm')).map((i) => i.id);
+  // 第三章
+  ch.baseLv = 55; step(); G.loadMap('snowfield', 8, 52); step(); walkSpot(); finish(); G.loadMap('ruins', 11, 49); step(); talk('herman'); finish(); R.c3a = G.story.isDone('m_3a');
+  ch.baseLv = 62; step(); G.loadMap('snowfield', 8, 52); step(); G.ev.emit('kill', 'frost_king'); step(); walkSpot(); finish(); R.c3b = G.story.isDone('m_3b');
+  ch.baseLv = 70; step(); G.loadMap('volcano', 8, 52); step(); G.ev.emit('kill', 'flame_wyrm'); step(10); step(160); R.c3crow = D.isOpen && G.story.scene; finish(); step(120);
+  walkSpot(); finish(); G.loadMap('starfall', 8, 23); step(); R.c3guide = G.guide.get().text; R.c3kane = talk('captain2'); finish(); R.c3c = G.story.isDone('m_3c');
+  R.charm4 = G.inv.items.filter((i) => i.id.startsWith('dawn_charm')).map((i) => i.id);
   R.after = [G.story.st.q, G.story.finished, G.guide.get()?.text];
   R.saved = JSON.parse(JSON.stringify(G.flags.story)).done.length;
   // 舊存檔：沒有 flags.story → 從序章開始
