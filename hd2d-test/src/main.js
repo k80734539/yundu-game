@@ -12,6 +12,7 @@ const rr = (a, b) => a + rnd() * (b - a);
 const hsl = (h, s, l) => new THREE.Color().setHSL(h, s, l);
 const q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
+const LOW = q.get('q') === 'low' || (q.get('q') !== 'high' && (matchMedia('(pointer:coarse)').matches || Math.min(innerWidth, innerHeight) < 600));
 
 // ---------- 渲染器與場景 ----------
 const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance' });
@@ -131,7 +132,7 @@ grassMat.onBeforeCompile = (s) => {
   float sway = sin(uTime * 2.2 + wp.x * 0.7 + wp.z * 0.5) * 0.22 * uWind * position.y;
   transformed.x += sway; transformed.z += sway * 0.6;`);
 };
-const GN = 9000, grass = new THREE.InstancedMesh(grassGeo, grassMat, GN), gm = new THREE.Matrix4();
+const GN = LOW ? 3800 : 9000, grass = new THREE.InstancedMesh(grassGeo, grassMat, GN), gm = new THREE.Matrix4();
 const grassBase = [];
 for (let i = 0; i < GN; i++) {
   const [cx, h, cz] = grassCells[Math.floor(rnd() * grassCells.length)]; const x = cx + rnd() - 0.5, z = cz + rnd() - 0.5;
@@ -175,7 +176,7 @@ person(8.4, 3.2, chibi('#e88a40', '#58a860', '#e8e0b0', '#a07040'));
 person(3.2, 10.4, chibi('#4a5a8a', '#c86878', '#f0e0e0', '#a84858'));
 
 // ---------- 光源 ----------
-const sun = new THREE.DirectionalLight(0xfff0d0, 3); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
+const sun = new THREE.DirectionalLight(0xfff0d0, 3); sun.castShadow = true; sun.shadow.mapSize.set(LOW ? 1024 : 2048, LOW ? 1024 : 2048);
 Object.assign(sun.shadow.camera, { left: -42, right: 42, top: 42, bottom: -42, near: 1, far: 160 }); sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.04; scene.add(sun, sun.target);
 const hemi = new THREE.HemisphereLight(0xbcd8ff, 0x4a5a3a, 0.7); scene.add(hemi);
 const fireLight = new THREE.PointLight(0xff8a30, 0, 22, 1.6); fireLight.position.set(fire.x, 1.8, fire.z); fireLight.castShadow = false; scene.add(fireLight);
@@ -190,12 +191,12 @@ const sprites = [];
 function spawnSprite(tex, additive, life, pos, vel, size0, size1, op) { const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, blending: additive ? THREE.AdditiveBlending : THREE.NormalBlending, opacity: 0 })); s.position.copy(pos); scene.add(s); sprites.push({ s, life, t: 0, vel, size0, size1, op }); }
 function stepSprites(dt) { for (let i = sprites.length - 1; i >= 0; i--) { const p = sprites[i]; p.t += dt; const k = p.t / p.life; if (k >= 1) { scene.remove(p.s); p.s.material.dispose(); sprites.splice(i, 1); continue; } p.s.position.addScaledVector(p.vel, dt); const sz = p.size0 + (p.size1 - p.size0) * k; p.s.scale.set(sz, sz, 1); p.s.material.opacity = p.op * Math.sin(Math.PI * Math.min(1, k * 1.15)); } }
 const flies = new THREE.Points(new THREE.BufferGeometry(), new THREE.PointsMaterial({ map: flyTex, size: 0.7, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 }));
-const FN = 70, fpos = new Float32Array(FN * 3), fph = []; for (let i = 0; i < FN; i++) { fpos[i * 3] = rr(-24, 24); fpos[i * 3 + 1] = rr(0.8, 4); fpos[i * 3 + 2] = rr(-14, 22); fph.push(rnd() * 6); }
+const FN = LOW ? 30 : 70, fpos = new Float32Array(FN * 3), fph = []; for (let i = 0; i < FN; i++) { fpos[i * 3] = rr(-24, 24); fpos[i * 3 + 1] = rr(0.8, 4); fpos[i * 3 + 2] = rr(-14, 22); fph.push(rnd() * 6); }
 flies.geometry.setAttribute('position', new THREE.BufferAttribute(fpos, 3)); scene.add(flies);
-const RN = 900, rainGeo = new THREE.BufferGeometry(), rpos = new Float32Array(RN * 6);
+const RN = LOW ? 350 : 900, rainGeo = new THREE.BufferGeometry(), rpos = new Float32Array(RN * 6);
 for (let i = 0; i < RN; i++) { const x = rr(-40, 40), y = rr(0, 40), z = rr(-40, 40); rpos.set([x, y, z, x - 0.1, y - 1.3, z], i * 6); }
 rainGeo.setAttribute('position', new THREE.BufferAttribute(rpos, 3)); const rain = new THREE.LineSegments(rainGeo, new THREE.LineBasicMaterial({ color: 0xaac8e8, transparent: true, opacity: 0.45 })); rain.visible = false; scene.add(rain);
-const FALL = 60, fall = []; for (let i = 0; i < FALL; i++) { const m = new THREE.Mesh(box, new THREE.MeshBasicMaterial({ color: 0xffffff })); m.scale.setScalar(0.18); m.position.set(rr(-30, 30), rr(2, 18), rr(-30, 24)); fall.push({ m, v: rr(0.5, 1.2), ph: rnd() * 6 }); scene.add(m); }
+const FALL = LOW ? 24 : 60, fall = []; for (let i = 0; i < FALL; i++) { const m = new THREE.Mesh(box, new THREE.MeshBasicMaterial({ color: 0xffffff })); m.scale.setScalar(0.18); m.position.set(rr(-30, 30), rr(2, 18), rr(-30, 24)); fall.push({ m, v: rr(0.5, 1.2), ph: rnd() * 6 }); scene.add(m); }
 
 // ---------- 後製 ----------
 const composer = new EffectComposer(renderer); composer.addPass(new RenderPass(scene, camera));
@@ -203,7 +204,7 @@ const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.35, 0.5, 0.92);
 const bokeh = new BokehPass(scene, camera, { focus: 44, aperture: 0.0002, maxblur: 0.012 }); composer.addPass(bokeh);
 composer.addPass(new OutputPass());
 function resize() {
-  const w = innerWidth, h = innerHeight, pr = $('pixel').checked ? Math.min(devicePixelRatio, 2) * 0.5 : Math.min(devicePixelRatio, 2);
+  const w = innerWidth, h = innerHeight, pr = $('pixel').checked ? Math.min(devicePixelRatio, 2) * (LOW ? 0.4 : 0.5) : Math.min(devicePixelRatio, LOW ? 1.5 : 2);
   renderer.setPixelRatio(pr); renderer.setSize(w, h); composer.setPixelRatio(pr); composer.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix();
 }
 addEventListener('resize', resize); $('pixel').onchange = resize;
@@ -235,7 +236,8 @@ $('season').onchange = (e) => applySeason(e.target.value);
 $('wind').oninput = (e) => (windU.value = +e.target.value);
 $('rain').onchange = (e) => { rain.visible = e.target.checked; applyTime(+$('time').value); };
 if (q.get('t')) $('time').value = q.get('t'); if (q.get('season')) $('season').value = q.get('season'); if (q.get('rain')) $('rain').checked = true;
-if (q.get('dof') === '0') $('dof').checked = false; if (q.get('bloom') === '0') $('bloom').checked = false; if (q.get('auto') === '0') $('auto').checked = false; if (q.get('pixel') === '0') $('pixel').checked = false;
+if (LOW && q.get('dof') !== '1') $('dof').checked = false; if (q.get('dof') === '0') $('dof').checked = false; if (q.get('bloom') === '0') $('bloom').checked = false; if (q.get('auto') === '0') $('auto').checked = false; if (q.get('pixel') === '0') $('pixel').checked = false;
+$('quality').value = q.get('q') || ''; $('quality').onchange = (e) => { const u = new URL(location.href); if (e.target.value) u.searchParams.set('q', e.target.value); else u.searchParams.delete('q'); location.href = u.toString(); };
 rain.visible = $('rain').checked; applySeason($('season').value); resize(); applyTime(+$('time').value);
 if (q.get('cam')) { const c = q.get('cam').split(',').map(Number); camera.position.set(c[0], c[1], c[2]); controls.target.set(c[3], c[4], c[5]); }
 
@@ -267,6 +269,6 @@ function frame() {
   // 景深焦點：對準角色
   const fd = camera.position.distanceTo(new THREE.Vector3(1.5, 2, 4)); bokeh.uniforms.focus.value = fd; bokeh.uniforms.aperture.value = $('dof').checked ? 0.00007 : 0; bokeh.uniforms.maxblur.value = $('dof').checked ? 0.007 : 0;
   bloom.enabled = $('bloom').checked;
-  composer.render(); window.__frames = (window.__frames || 0) + 1; requestAnimationFrame(frame);
+  composer.render(); window.__info = { calls: renderer.info.render.calls, tris: renderer.info.render.triangles, low: LOW, dt }; window.__frames = (window.__frames || 0) + 1; requestAnimationFrame(frame);
 }
 frame();
