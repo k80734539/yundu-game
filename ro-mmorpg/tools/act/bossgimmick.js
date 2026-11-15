@@ -36,3 +36,16 @@ const R = await page.evaluate(() => {
   G.hazards = []; return out;
 });
 console.log(JSON.stringify(R, null, 1));
+// Boss 戰字幕：狂暴、瀕死、倒下時各出現一句，並在幾秒後消失
+const S = await page.evaluate(async () => {
+  const G = window.__game, out = {}, step = 1 / 60; G.loop.running = false;
+  G.loadMap('mine2', 29, 26); const p = G.player; p.maxHp = p.hp = 1e7; p.d.def = 0; p.recalc = () => {};
+  const b = G.monsters.find((m) => m.def.id === 'golem'); G.applyDamage(p, b, 1, 'deal'); G.hitStop = 0;
+  const sub = G.ui.bossbar.sub, run = (n) => { for (let i = 0; i < n; i++) { G.update(step); p.hp = p.maxHp; G.ui.bossbar.update(); } };
+  run(30); b.hp = b.maxHp * 0.45; run(10); out.p1 = [sub.style.display, sub.textContent];
+  b.hp = b.maxHp * 0.15; run(150); out.p2 = sub.textContent;
+  b.hp = 1; G.applyDamage(p, b, 99999, 'deal'); run(10); out.down = sub.textContent; out.name = G.ui.bossbar.name.textContent;
+  await new Promise((r) => setTimeout(r, 4300)); G.ui.bossbar.update(); out.gone = sub.style.display;
+  return out;
+});
+console.log(JSON.stringify(S));

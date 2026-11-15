@@ -150,6 +150,7 @@ export interface StoryQuest {
 export interface StoryConfig {
   speakers: Record<string, { name: string; color?: string; icon?: string; npc?: string }>;
   chapters: { id: string; name: string; summary: string; todo?: boolean }[];
+  bossLines?: Record<string, { p1: string; p2: string; down: string }>; // Boss 戰字幕：狂暴、瀕死、倒下時的殘念（不暫停）
   quests: StoryQuest[];
 }
 export const STORY = storyJson as unknown as StoryConfig;

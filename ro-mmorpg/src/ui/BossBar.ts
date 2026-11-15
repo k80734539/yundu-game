@@ -1,11 +1,13 @@
 import type { UI } from './UI';
 import { h } from './Window';
 import { fightTime, fmtTime } from '../systems/BossFight';
+import { STORY } from '../data';
 
 /** 畫面上方的 Boss 名稱與大血條；狂暴時血條變紅，並標出 50% 與 20% 的階段位置 */
 export class BossBar {
   el: HTMLDivElement; name: HTMLSpanElement; pct: HTMLSpanElement; time: HTMLSpanElement; fill: HTMLElement; tag: HTMLSpanElement;
   private shown = false;
+  sub: HTMLDivElement; private subUntil = 0;
   constructor(private ui: UI) {
     this.el = h('div'); this.el.id = 'bossbar'; this.el.style.display = 'none';
     const top = h('div', 'bb-top'); this.name = h('span', 'bb-name'); this.tag = h('span', 'bb-tag'); this.time = h('span', 'bb-time'); top.append(this.name, this.tag, this.time);
@@ -13,12 +15,26 @@ export class BossBar {
     bar.append(this.fill, h('b', 'bb-mark m50'), h('b', 'bb-mark m20'), this.pct);
     this.el.append(top, bar);
     ui.root.appendChild(this.el);
+    this.sub = h('div'); this.sub.id = 'bosssub'; this.sub.style.display = 'none'; ui.root.appendChild(this.sub);
+    // Boss 戰字幕：狂暴、瀕死、倒下時說一句話，不暫停戰鬥
+    ui.g.ev.on('bossphase', (e: { id: string; phase: number }) => { const l = STORY.bossLines?.[e.id]; if (l) this.say(e.id, e.phase === 1 ? l.p1 : l.p2); });
+    ui.g.ev.on('bossdown', (e: { id: string }) => { const l = STORY.bossLines?.[e.id]; if (l) this.say(e.id, l.down, 4); });
+  }
+  say(id: string, text: string, sec = 3) {
+    const name = this.ui.g.monsters.find((m) => m.def.id === id)?.def.name || '';
+    this.sub.innerHTML = ''; this.sub.append(h('b', '', name + '：'), document.createTextNode(`「${text}」`));
+    this.sub.style.display = 'block'; this.subUntil = performance.now() + sec * 1000;
   }
   update() {
+    if (this.subUntil && performance.now() > this.subUntil) { this.subUntil = 0; this.sub.style.display = 'none'; }
+    this.update2();
+  }
+  private update2() {
     const g = this.ui.g;
     const m = g.monsters.find((x) => x.boss && x.boss.active && !x.dead && x.aggroOn) || null;
     if (!m) { if (this.shown) { this.shown = false; this.el.style.display = 'none'; this.ui.root.classList.remove('bossfight'); } return; }
-    if (!this.shown) { this.shown = true; this.el.style.display = 'block'; this.ui.root.classList.add('bossfight'); this.name.textContent = `【MVP】${m.def.name}　Lv${m.def.lv}`; }
+    if (!this.shown) { this.shown = true; this.el.style.display = 'block'; this.ui.root.classList.add('bossfight'); }
+    this.name.textContent = `【MVP】${m.def.name}　Lv${m.def.lv}`; // 每次都更新，換 Boss 時才不會顯示上一隻的名字
     const b = m.boss!, r = Math.max(0, m.hp / m.maxHp);
     this.fill.style.width = r * 100 + '%';
     this.el.classList.toggle('enraged', b.phase === 1); this.el.classList.toggle('frenzy', b.phase === 2);

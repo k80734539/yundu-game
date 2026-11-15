@@ -646,3 +646,4 @@
 - 共用：`Game.hazards`（持續傷害區，`drawHazards` 繪製）；離開戰鬥或 Boss 倒下時自動清除。
 - 測試：`tools/act/bossgimmick.js`（五個機制的數值：巨像 ×0.7／×2.2、毒沼傷害、山賊王無敵→手下倒後 ×1.5、暴風雪圈內 0／圈外有傷、熔岩先預警後傷人）、`bossgimmick_shots.js`（截圖 `Boss_巨像核心暴露／巨蛇毒沼／山賊王躲手下／狼王暴風雪／地龍熔岩.png`）；`boss_bandit.js` 已配合躲手下調整，boss／skyboss／volcano／canyon／snowfield／story 回歸通過。
 - 還沒做（等你決定）：其餘 6 隻 Boss（啵啵王、三個轉職試煉、蒼雷守護者、深淵領主）、守護者劇情演出（血量一半時的殘念字幕）。
+- Boss 戰字幕（不暫停）：狂暴、瀕死、倒下時在血條下方出現守護者的殘念，台詞在 `data/story.json` 的 `bossLines`（5 隻主線 Boss；山賊王是人，台詞不同）。`ui/BossBar.ts` 的 `say()`。順便修正 Boss 血條換 Boss 時還顯示上一隻名字的小問題。測試在 `bossgimmick.js` 後半段。
