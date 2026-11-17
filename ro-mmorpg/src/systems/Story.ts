@@ -122,7 +122,7 @@ export class Story {
     if (q.chapterEnd) {
       const c = this.chapter(q.chapter);
       g.after(1.4, () => {
-        g.ui.showBanner(`${c?.name || ''} 完`, next ? '' : '主線待續', 'story', 3.6);
+        g.ui.showBanner(`${c?.name || ''} 完`, next ? '' : STORY.chapters.some((x) => x.todo) ? '主線待續' : '全劇終', 'story', 3.6);
         const nc = next ? this.chapter(next.chapter) : STORY.chapters.find((c) => c.todo);
         if (!next && nc) g.msg(`【主線】${nc.name}——製作中，敬請期待！`, 'quest');
       });

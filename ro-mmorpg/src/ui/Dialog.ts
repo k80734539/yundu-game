@@ -53,9 +53,11 @@ export class Dialog {
       while (k < list.length && Array.isArray(list[k])) { const [sp, tx] = list[k] as [string, string]; pages.push(tx); who.push(sp); k++; }
       const next = () => {
         if (k >= list.length) { done(); return; }
-        const c = list[k] as { choose: { label: string; lines: SceneItem[] }[] };
+        const it = list[k] as { choose?: { label: string; lines: SceneItem[]; set?: [string, string] }[]; if?: [string, string]; lines?: SceneItem[] };
+        if (it.if) { const ok = this.ui.g.flags[it.if[0]] === it.if[1]; if (ok) run(it.lines || [], 0, () => run(list, k + 1, done)); else run(list, k + 1, done); return; } // 條件台詞
+        const c = it as { choose: { label: string; lines: SceneItem[]; set?: [string, string] }[] };
         this.setSpeaker(this.who[this.page] ?? 'sys');
-        this.choose(c.choose.map((o) => ({ label: o.label, fn: () => run(o.lines, 0, () => run(list, k + 1, done)) })));
+        this.choose(c.choose.map((o) => ({ label: o.label, fn: () => { if (o.set) this.ui.g.flags[o.set[0]] = o.set[1]; run(o.lines, 0, () => run(list, k + 1, done)); } })));
       };
       if (!pages.length) { next(); return; }
       this.who = who; this.say(pages, next);

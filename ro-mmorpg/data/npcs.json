@@ -851,5 +851,32 @@
     ]
    }
   }
+ },
+ {
+  "id": "vik",
+  "name": "副隊長 維克",
+  "title": "星落遠征隊",
+  "look": {
+   "skin": "#e0c8b0",
+   "hair": "#1c1c28",
+   "cloth": "#1a1a26",
+   "cloth2": "#4a3a6a",
+   "pants": "#1a1a26",
+   "hairStyle": 2,
+   "body": "robe",
+   "cape": "#14121e",
+   "style": "knight",
+   "armor": "#2a2438",
+   "trim": "#6a5a8a"
+  },
+  "dialog": {
+   "start": {
+    "text": [
+     "……隊長罵了我一整晚。然後請我喝了酒。",
+     "門已經關上了。現在換我教新人怎麼守夜。",
+     "謝謝你當時叫我回來。"
+    ]
+   }
+  }
  }
 ]

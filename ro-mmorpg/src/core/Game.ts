@@ -486,6 +486,9 @@ export class Game {
       this.ensureNpcVisible(npc);
       this.npcs.push(npc); this.entities.push(npc);
     }
+    if (this.map.def.id === 'starfall' && this.flags.vikEnd === 'home' && DB.npc.vik) { // 主線結局：維克回到星落鎮，站在凱恩旁邊
+      const v = new Npc(DB.npc.vik, 36.5, 24.5, 0); this.npcs.push(v); this.entities.push(v);
+    }
   }
   /** NPC 不能被建築擋住：若在建築後方且重疊，就移到附近不被擋的格子 */
   npcHiddenBy(npc: Npc): PropInst | null {

@@ -24,7 +24,7 @@ export class QuestWindow extends Win {
     this.body.appendChild(h('div', 'lbl q-main-lbl', '★ 主線'));
     const mb = h('div', 'q-box q-main');
     if (ml) mb.innerHTML = `<span class="dim">${ml.chapter}</span><br><b>${ml.name}</b>${ml.wait ? ` <span class="dim">Lv${ml.wait}</span>` : ''}<br><span class="sk-desc">${ml.hint}</span>`;
-    else { const todo = STORY.chapters.find((c) => c.todo); mb.innerHTML = `<b>主線待續</b><br><span class="sk-desc">${todo ? todo.name + '——製作中，敬請期待！' : '你已經看完所有主線了。'}</span>`; }
+    else { const todo = STORY.chapters.find((c) => c.todo); mb.innerHTML = `<b>${todo ? '主線待續' : '主線完成'}</b><br><span class="sk-desc">${todo ? todo.name + '——製作中，敬請期待！' : '你已經看完所有主線了。'}</span>`; }
     this.body.appendChild(mb);
     const read = STORY.chapters.filter((c) => !c.todo && STORY.quests.filter((q) => q.chapter === c.id).every((q) => g0.story.isDone(q.id)));
     if (read.length) {

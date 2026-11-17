@@ -52,6 +52,7 @@ const out2 = await page.evaluate(() => {
   const finish = () => { let k = 0; while (D.isOpen && k++ < 400) { if (D.choices.length) D.onKey('1'); else D.advance(); } return !D.isOpen; };
   const talk = (id) => { const n = G.npcs.find((o) => o.def.id === id); if (!n) return 'no npc ' + id; G.talkTo(n); return D.isOpen && D.el.classList.contains('story'); };
   const walkSpot = () => { const s = G.story.spotHere(); if (!s) return 'no spot'; p.x = p.px = s.x + 0.5; p.y = p.py = s.y + 1.5; step(5); return D.isOpen; };
+  { const ad = G.applyDamage.bind(G); G.applyDamage = (x, d, ...r) => (d === p ? undefined : ad(x, d, ...r)); } // 測試角色不受傷（不然低等角色在高等地圖會被怪打倒，劇情步驟就不會觸發）
   G.loop.running = false; if (p.dead) { p.state = 'idle'; p.hp = p.maxHp; } R.wasDead = p.hp; finish(); step(120); R.crowGone = !G.npcs.some((n) => n.def.id === 'crow');
   G.loadMap('aurora', 25, 30); step(); const s = G.story.spotHere(); p.x = p.px = s.x + 0.5; p.y = p.py = s.y + 1.5; step(5); finish();
   R.state = [JSON.stringify(G.flags.story), G.map.def.id, D.isOpen, G.story.scene, !!G.warp, G.player.x, G.player.y, G.player.dead]; R.c1c = G.story.isDone('m_1c'); R.charm = G.inv.items.filter((i) => i.id.startsWith('dawn_charm')).map((i) => [i.id, G.inv.isEquipped(i.uid)]);
@@ -71,6 +72,15 @@ const out2 = await page.evaluate(() => {
   ch.baseLv = 70; step(); G.loadMap('volcano', 8, 52); step(); G.ev.emit('kill', 'flame_wyrm'); step(10); step(160); R.c3crow = D.isOpen && G.story.scene; finish(); step(120);
   walkSpot(); finish(); G.loadMap('starfall', 8, 23); step(); R.c3guide = G.guide.get().text; R.c3kane = talk('captain2'); finish(); R.c3c = G.story.isDone('m_3c');
   R.charm4 = G.inv.items.filter((i) => i.id.startsWith('dawn_charm')).map((i) => i.id);
+  // 第四章＋終章
+  ch.baseLv = 78; step(); G.loadMap('starfall', 8, 23); step(); talk('captain2'); finish(); G.loadMap('sky', 48, 49); step(); walkSpot(); finish(); R.c4a = G.story.isDone('m_4a');
+  ch.baseLv = 85; step(); G.ev.emit('kill', 'sky_guardian'); step(); walkSpot(); finish(); R.c4b = G.story.isDone('m_4b');
+  ch.baseLv = 92; step(); G.loadMap('abyss', 11, 10); step(); walkSpot(); finish(); G.ev.emit('kill', 'abyss_lord'); step(10); step(160); R.c4crow = D.isOpen && G.story.scene; finish(); step(120);
+  R.c4c = G.story.isDone('m_4c'); R.vikEnd = G.flags.vikEnd; step();
+  G.loadMap('aurora', 25, 30); step(); R.endGuide = G.guide.get().text; walkSpot(); finish(); R.end = G.story.isDone('m_end');
+  R.charm6 = G.inv.items.filter((i) => i.id.startsWith('dawn_charm')).map((i) => i.id);
+  G.loadMap('starfall', 8, 23); step(); R.vikNpc = G.npcs.some((n) => n.def.id === 'vik');
+  G.flags.vikEnd = 'stay'; G.loadMap('starfall', 8, 23); step(); R.vikNpcStay = G.npcs.some((n) => n.def.id === 'vik'); G.flags.vikEnd = 'home';
   R.after = [G.story.st.q, G.story.finished, G.guide.get()?.text];
   R.saved = JSON.parse(JSON.stringify(G.flags.story)).done.length;
   // 舊存檔：沒有 flags.story → 從序章開始

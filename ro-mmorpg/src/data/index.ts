@@ -136,8 +136,8 @@ export const BOSSFIGHT = bossJson as unknown as BossFightConfig;
 
 /** 主線劇情（data/story.json）。台詞：[說話者, 文字]；說話者是 NPC id 或 speakers 裡的 key */
 export type SceneLine = [string, string];
-export interface SceneChoice { label: string; lines: SceneItem[] }
-export type SceneItem = SceneLine | { choose: SceneChoice[] };
+export interface SceneChoice { label: string; lines: SceneItem[]; set?: [string, string] } // set：選了之後記到 flags（例如夜鴉的結局）
+export type SceneItem = SceneLine | { choose: SceneChoice[] } | { if: [string, string]; lines: SceneItem[] }; // if：flags 符合才播這幾句
 export interface StoryStep {
   type: 'talk' | 'spot' | 'kill' | 'auto';
   hint?: string; npc?: string; map?: string; x?: number; y?: number; name?: string;
