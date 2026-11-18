@@ -49,3 +49,20 @@ const S = await page.evaluate(async () => {
   return out;
 });
 console.log(JSON.stringify(S));
+
+// ---- 其餘 6 隻 Boss：啵啵王分裂回血、鋼心舉盾／破綻、湮魔力屏障、影隱身、蒼雷追蹤雷擊、深淵領主虛空牽引 ----
+const R2 = await page.evaluate(() => {
+  const G = window.__game, out = {}, step = 1 / 60; G.loop.running = false; G.skipStory && G.skipStory(); G.flags.tutOff = true;
+  const setup = (map, id) => { const mv = window.__DB.map[map].mvp; G.loadMap(map, mv.x - 2, mv.y + 2); const p = G.player; p.maxHp = p.hp = 1e7; p.d.def = 0; p.recalc = () => {}; p.ch.job = 'novice'; const b = G.monsters.find((m) => m.def.id === id); G.applyDamage(p, b, 1, 'deal'); G.hitStop = 0; for (let k = 0; k < 6; k++) G.update(step); return { p, b }; };
+  const calm = (b) => { b.boss.state = 'recover'; b.boss.t = 0; b.boss.dur = 1e9; };
+  const hit = (p, b, n = 1000) => { const h0 = b.hp; G.applyDamage(p, b, n, 'deal'); const lost = h0 - b.hp; b.hp = h0; G.hitStop = 0; return lost; };
+  const run = (secs, f) => { for (let i = 0; i < secs * 60; i++) { G.update(step); G.player.hp = G.player.maxHp; G.hitStop = 0; if (f && f(i) === 'stop') break; } };
+  { const { p, b } = setup('forest', 'kingjelly'); b.hp = b.maxHp * 0.6; run(1); const links = b.boss.gm.links.length; const h0 = b.hp; run(3, () => { calm(b); }); const healing = b.hp - h0; for (const k of b.boss.gm.links) G.kill(k, p); run(0.5); const h1 = b.hp; run(3, () => { calm(b); }); out.jelly = { links, healing: Math.round(healing), afterKill: Math.round(b.hp - h1) }; }
+  { const { p, b } = setup('trial_templar', 'trial_templar'); let guard = null, open = null; run(60, () => { const st = b.boss.state; if (st === 'windup' && guard === null) guard = hit(p, b) / 1000; if (st === 'recover' && open === null) open = hit(p, b) / 1000; if (guard !== null && open !== null) return 'stop'; }); out.templar = { guardMul: guard, openMul: open }; }
+  { const { p, b } = setup('trial_archmage', 'trial_archmage'); calm(b); const sh0 = b.boss.gm.shieldHP, hp0 = b.hp; const soft = hit(p, b, 5000); const sh1 = b.boss.gm.shieldHP; G.applyDamage(p, b, sh1 + 20000, 'deal'); const broke = b.boss.gm.shieldHP === 0 && b.boss.gm.stagT > 0; const lostAfter = hp0 - b.hp; b.hp = hp0; const staggerMul = hit(p, b) / 1000; out.archmage = { shield: Math.round(sh0), bodyDmgWhileShield: soft, broke, stateAfterBreak: b.boss.state, staggerMul, lostAfterBreak: lostAfter }; }
+  { const { p, b } = setup('trial_sniper', 'trial_sniper'); let cloaked = false, mulCloaked = null, back = null; run(40, () => { const s = b.boss.gm; if (s?.cloakOn > 0) { cloaked = true; if (mulCloaked === null) mulCloaked = hit(p, b); } else if (cloaked && back === null) { back = Math.hypot(b.x - p.x, b.y - p.y); return 'stop'; } }); out.sniper = { cloaked, dmgWhileCloaked: mulCloaked, appearDistance: back && +back.toFixed(1) }; }
+  { const { p, b } = setup('sky', 'sky_guardian'); let strikes = 0, dmg = 0; run(60, () => { calm(b); const s = b.boss.gm; if (s.trN > 0 || G.hazards.some((h) => h.label === '雷擊')) { strikes = Math.max(strikes, G.hazards.filter((h) => h.label === '雷擊').length); const before = p.hp; G.update(step); if (p.hp < before) dmg += before - p.hp; if (dmg > 0 && s.trN === 0) return 'stop'; } }); out.sky = { strikesSeen: strikes, damageWhenStanding: Math.round(dmg) }; }
+  { const { p, b } = setup('abyss', 'abyss_lord'); let pulled = null, d0 = null, burst = false, dmg = 0; run(90, () => { const s = b.boss.gm || {}; if (s.pullT > 0 || burst) calm(b); if (s.pullT > 0) { const d = Math.hypot(b.x - p.x, b.y - p.y); if (d0 === null) d0 = d; pulled = d; } if (G.hazards.some((h) => h.label === '虛空爆裂')) burst = true; if (burst) { const before = p.hp; G.update(step); if (p.hp < before) dmg += before - p.hp; if (G.hazards.length === 0) return 'stop'; } }); out.abyss = { distBefore: d0 && +d0.toFixed(1), distAfterPull: pulled && +pulled.toFixed(1), burst, burstDamageWhenStaying: Math.round(dmg) }; }
+  G.hazards = []; return out;
+});
+console.log(JSON.stringify(R2, null, 1));

@@ -23,7 +23,7 @@ import { playerVsMonster, monsterVsPlayer } from '../systems/Combat';
 import { StatKey, statCost, MAX_STAT } from '../systems/Stats';
 import { updateAI, onHurt, giveUp } from '../systems/AI';
 import { Telegraph, bossDamage, hasBossFight, fightTime, fmtTime } from '../systems/BossFight';
-import { Hazard, updateHazards, gimmickDmgMul, gimmickAura, blizzard } from '../systems/BossGimmick';
+import { Hazard, updateHazards, gimmickDmgMul, gimmickAura, gimmickAbsorb, isCloaked, blizzard } from '../systems/BossGimmick';
 import { BOSSFIGHT, BESTIARY, STORY } from '../data';
 import { Spawner } from '../systems/Spawner';
 import { Inventory } from '../systems/Inventory';
@@ -1037,7 +1037,8 @@ export class Game {
       const pd = this.player.d; let bonus = 0;
       for (const [el, v] of Object.entries(pd.elem)) if (ELEM[el]?.includes(d.def.look.body || '')) bonus += v;
       if (bonus) dmg = Math.round(dmg * (1 + bonus / 100));
-      if (d.boss) { const gmul = gimmickDmgMul(d); if (gmul !== 1) { dmg = Math.round(dmg * gmul); if (dmg <= 0) { d.flashT = 0.05; this.fx.dmg(d.x, d.y, 'GUARD', 'miss', h); this.audio.sfx('miss'); return; } } } // Boss 專屬機制：核心外露加倍、護衛中無敵
+      if (d.boss) { const gmul = gimmickDmgMul(d); if (gmul !== 1) { dmg = Math.round(dmg * gmul); if (dmg <= 0) { d.flashT = 0.05; this.fx.dmg(d.x, d.y, 'GUARD', 'miss', h); this.audio.sfx('miss'); return; } } } if (d.boss) { dmg = gimmickAbsorb(this, d, dmg); if (dmg <= 0) { d.flashT = 0.05; return; } } // 魔力屏障先吃傷害
+      // Boss 專屬機制：核心外露加倍、護衛中無敵
       // 吸血詞條
       if (pd.lifesteal > 0 && !this.player.dead) { const heal = Math.floor(Math.min(dmg, d.hp) * pd.lifesteal / 100); if (heal > 0) this.player.hp = Math.min(this.player.maxHp, this.player.hp + heal); }
     }
@@ -1367,6 +1368,7 @@ export class Game {
       return;
     }
     if (e.dead) c.globalAlpha = e === this.player ? 0.45 : Math.max(0, 1 - e.deadT);
+    else if (e instanceof Monster && e.boss && isCloaked(e)) c.globalAlpha = 0.18; // 影隱身
     if (e === this.player && !e.dead) this.drawGlow(c, s, sx, sy, x, y);
     if (e instanceof Npc && e.fade !== undefined) c.globalAlpha = Math.max(0, Math.min(1, e.fade));
     c.drawImage(s.c, sx, sy, s.fw, s.fh, x, y, s.fw, s.fh);

@@ -105,6 +105,18 @@
       5
      ]
     ]
+   },
+   "gimmick": {
+    "link": {
+     "at": [
+      0.75,
+      0.5,
+      0.25
+     ],
+     "n": 2,
+     "minion": "jelly",
+     "healPct": 0.012
+    }
    }
   },
   "golem": {
@@ -652,6 +664,12 @@
       10
      ]
     ]
+   },
+   "gimmick": {
+    "stance": {
+     "guardMul": 0.2,
+     "openMul": 1.7
+    }
    }
   },
   "trial_archmage": {
@@ -730,6 +748,14 @@
       20
      ]
     ]
+   },
+   "gimmick": {
+    "barrier": {
+     "hp": 0.12,
+     "regenAfter": 14,
+     "stagger": 3.5,
+     "staggerMul": 1.6
+    }
    }
   },
   "trial_sniper": {
@@ -796,6 +822,14 @@
       10
      ]
     ]
+   },
+   "gimmick": {
+    "cloak": {
+     "firstAt": 9,
+     "every": 16,
+     "sec": 3.5,
+     "appearDist": 3.2
+    }
    }
   },
   "sky_guardian": {
@@ -891,6 +925,18 @@
       20
      ]
     ]
+   },
+   "gimmick": {
+    "tracker": {
+     "firstAt": 9,
+     "every": 17,
+     "strikes": 6,
+     "interval": 0.85,
+     "r": 1.5,
+     "warn": 0.9,
+     "mult": 0.55,
+     "color": "#ffe060"
+    }
    }
   },
   "abyss_lord": {
@@ -986,6 +1032,18 @@
       20
      ]
     ]
+   },
+   "gimmick": {
+    "pull": {
+     "firstAt": 12,
+     "every": 22,
+     "sec": 2.5,
+     "speed": 2.4,
+     "burstR": 3.2,
+     "mult": 2.4,
+     "warn": 3.2,
+     "color": "#a040e0"
+    }
    }
   }
  }
